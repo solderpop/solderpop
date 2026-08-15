@@ -143,6 +143,9 @@ const rawItems = {
   toggleInspector: {
     label: 'Toggle Inspector',
   },
+  themeSettings: {
+    label: 'Theme Settings...',
+  },
   panToOrigin: {
     label: 'Pan to Origin',
     command: COMMAND.PAN_TO_ORIGIN,

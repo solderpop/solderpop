@@ -15,6 +15,9 @@ import * as ProcessActions from './processes/actions';
 import * as ProjectBrowserActions from './projectBrowser/actions';
 import * as PopupActions from './popups/actions';
 import * as DebuggerActions from './debugger/actions';
+import * as ThemeActions from './theme/actions';
+import * as ThemeActionTypes from './theme/actionTypes';
+import * as ThemeSelectors from './theme/selectors';
 
 import {
   INSTALL_ARDUINO_DEPENDENCIES,
@@ -78,6 +81,10 @@ import {
 
 import initialState from './core/state';
 import { default as deriveProjectName } from './utils/deriveProjectName';
+
+import themeReducer from './theme/reducer';
+import { INITIAL_STATE as themeInitialState } from './theme/state';
+import ThemeSettingsPopup from './theme/components/ThemeSettingsPopup';
 
 export * from './editor/actions';
 export * from './project/actions';
@@ -212,6 +219,15 @@ export default Object.assign(
     DEBUGGER_LOG_ADD_MESSAGES,
     DEBUG_SESSION_STARTED,
     TETHERING_INET_CREATED,
+    theme: {
+      actions: ThemeActions,
+      actionTypes: ThemeActionTypes,
+      selectors: ThemeSelectors,
+      reducer: themeReducer,
+      state: themeInitialState,
+      components: { ThemeSettingsPopup },
+    },
+    ThemeSettingsPopup,
   },
   UserSelectors,
   EditorSelectors,
@@ -229,6 +245,8 @@ export default Object.assign(
   ProjectBrowserActions,
   PopupActions,
   DebuggerActions,
+  ThemeActions,
+  ThemeSelectors,
 
   EditorConstants,
   MessageConstants,

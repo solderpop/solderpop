@@ -11,13 +11,13 @@ $font-size-l: 16px;
 
 $color-success: #4ecdc4; // Electric Teal
 
-$color-canvas-background: $dark-deep;
-$color-canvas-background-gridlines: $dark-light;
-$color-canvas-face: #646464;
-$color-canvas-face-light: $chalk-bright;
-$color-canvas-face-text: #a7a7a7;
-$color-canvas-selected: #ff6b6b; // SolderPop Coral
-$color-highlight: #eeeeee;
+$color-canvas-background: var(--theme-canvas-bg, $dark-deep);
+$color-canvas-background-gridlines: var(--theme-canvas-gridlines, $dark-light);
+$color-canvas-face: var(--theme-canvas-face, #646464);
+$color-canvas-face-light: var(--theme-canvas-face-light, $chalk-bright);
+$color-canvas-face-text: var(--theme-canvas-face-text, #a7a7a7);
+$color-canvas-selected: var(--theme-selected, $coral); // SolderPop Coral
+$color-highlight: var(--theme-highlight, #eeeeee);
 
 $color-datatype-string: $apricot-shadow;
 $color-datatype-number: $emerald;
@@ -29,9 +29,9 @@ $color-datatype-generic: $chalk;
 $color-datatype-custom: $terracotta;
 $color-datatype-dead: $error;
 
-$color-node-fill: #22303f;
-$color-node-outline: $light-grey-bright;
-$color-pin-fill: #263443;
+$color-node-fill: var(--theme-node-fill, #22303f);
+$color-node-outline: var(--theme-node-outlines, $light-grey-bright);
+$color-pin-fill: var(--theme-pin-bg, #263443);
 
 $color-watch-node-text: $color-canvas-face-text;
 $color-watch-node-fill: $color-node-fill;
@@ -41,53 +41,53 @@ $color-watch-node-active-fill: #3d4931;
 $color-watch-node-active-outline: #86cc23;
 $color-watch-node-highlight-outline: #bce88e;
 
-$color-comment-text: #d0ccc0;
-$color-comment-handle: #605f5b;
+$color-comment-text: var(--theme-comment-text, #d0ccc0);
+$color-comment-handle: var(--theme-comment-handle, #605f5b);
 
-$color-pinlabel: $light-grey-bright;
+$color-pinlabel: var(--theme-pin-label, $light-grey-bright);
 
 $color-toolbar-background: #b3b3b3;
 $color-toolbar-foreground: #000;
 
-$color-tabs-background: $chrome-outlines;
-$color-tabs-unactive-background: $coal-bright;
-$color-tabs-hover-background: $grey;
-$color-tabs-active-background: $color-canvas-background;
-$color-tabs-unactive-text: $chalk;
-$color-tabs-active-text: $color-canvas-selected;
-$color-tabs-hover-text: $white;
+$color-tabs-background: var(--theme-tab-bg, $chrome-outlines);
+$color-tabs-unactive-background: var(--theme-tab-item-bg, $coal-bright);
+$color-tabs-hover-background: var(--theme-tab-item-hover, $grey);
+$color-tabs-active-background: var(--theme-canvas-bg, $dark-deep);
+$color-tabs-unactive-text: var(--theme-tab-text, $chalk);
+$color-tabs-active-text: var(--theme-selected, $coral);
+$color-tabs-hover-text: var(--theme-tab-text, $white);
 
 $color-tabs-debugger-background: #3d4931;
 $color-tabs-debugger-text: #82b948;
 
 $sidebar-width: 202px;
 
-$sidebar-color-bg: $chrome-bg;
-$sidebar-color-bg-even: $chrome-bg;
-$sidebar-color-bg-hover: $grey;
-$sidebar-color-bg-selected: $blackberry;
-$sidebar-color-bg-selected-hover: $blackberry-light;
-$sidebar-color-text: $chalk;
-$sidebar-color-text-hover: $chalk;
-$sidebar-color-border: $chrome-outlines;
-$sidebar-color-subtitle: $light-grey;
+$sidebar-color-bg: var(--theme-sidebar-bg, $dark);
+$sidebar-color-bg-even: var(--theme-sidebar-bg, $dark);
+$sidebar-color-bg-hover: var(--theme-sidebar-hover-bg, $grey);
+$sidebar-color-bg-selected: var(--theme-sidebar-selected-bg, $blackberry);
+$sidebar-color-bg-selected-hover: var(--theme-sidebar-selected-hover-bg, $blackberry-light);
+$sidebar-color-text: var(--theme-sidebar-text, $chalk);
+$sidebar-color-text-hover: var(--theme-sidebar-text, $chalk);
+$sidebar-color-border: var(--theme-chrome-outlines, $coal);
+$sidebar-color-subtitle: var(--theme-sidebar-subtitle, $light-grey);
 
-$input-color-text: #c7cfd6;
-$input-color-bg: #2f3f4f;
-$input-color-border: #4c5f72;
-$input-color-border-focus: $color-canvas-selected;
+$input-color-text: var(--theme-input-text, #c7cfd6);
+$input-color-bg: var(--theme-input-bg, #2f3f4f);
+$input-color-border: var(--theme-input-border, #4c5f72);
+$input-color-border-focus: var(--theme-selected, $coral);
 
-$input-option-highlighted: #3d5468;
+$input-option-highlighted: var(--theme-input-active-bg, #3d5468);
 
-$button-bg-color-dark: #34495e;
-$button-bg-color-hover-dark: #3d5468;
-$button-bg-color-light: $dark-bright;
-$button-border-color: #5c6b7a;
-$button-border-color-active-dark: #8a97a3;
-$button-border-color-active-light: $coral;
-$button-fg-color-dark: #c7cfd6;
-$button-fg-color-light: $chalk-bright;
+$button-bg-color-dark: var(--theme-dark-button-bg, #34495e);
+$button-bg-color-hover-dark: var(--theme-dark-button-hover-bg, #3d5468);
+$button-bg-color-light: var(--theme-light-button-bg, $dark-bright);
+$button-border-color: var(--theme-input-border, #5c6b7a);
+$button-border-color-active-dark: var(--theme-selected, #8a97a3);
+$button-border-color-active-light: var(--theme-selected, $coral);
+$button-fg-color-dark: var(--theme-dark-button-text, #c7cfd6);
+$button-fg-color-light: var(--theme-light-button-text, $chalk-bright);
 
-$modal-fg-color: #cccccc;
-$modal-fg-color-light: black;
-$modal-bg-color-light: #cccccc;
+$modal-fg-color: var(--theme-text, #cccccc);
+$modal-fg-color-light: var(--theme-text, black);
+$modal-bg-color-light: var(--theme-chrome-light-bg, #cccccc);

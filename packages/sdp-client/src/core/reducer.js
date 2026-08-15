@@ -12,6 +12,7 @@ import popupsReducer from '../popups/reducer';
 import debuggerReducer from '../debugger/reducer';
 import hintingReducer from '../hinting/reducer';
 import workersReducer from '../workers/reducer';
+import themeReducer from '../theme/reducer';
 
 import keepIntegrityAfterNavigatingHistory from './keepIntegrityAfterNavigatingHistory';
 import trackLastSavedChanges from './trackLastSavedChanges';
@@ -43,6 +44,7 @@ const combineRootReducers = extraReducers => {
       debugger: debuggerReducer,
       hinting: hintingReducer,
       workers: workersReducer,
+      theme: themeReducer,
       lastActions: lastActionsReducer,
     },
     extraReducers
