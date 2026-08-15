@@ -1,0 +1,3 @@
+export const SET_THEME = 'THEME/SET_THEME';
+export const TOGGLE_THEME = 'THEME/TOGGLE_THEME';
+export const SET_THEME_COLOR = 'THEME/SET_THEME_COLOR';

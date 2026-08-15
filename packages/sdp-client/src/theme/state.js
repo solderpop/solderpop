@@ -1,0 +1,53 @@
+export const INITIAL_STATE = {
+  currentTheme: 'light',
+  themes: {
+    light: {
+      name: 'Light',
+      colors: {
+        primary: '#007bff',
+        secondary: '#6c757d',
+        success: '#28a745',
+        danger: '#dc3545',
+        warning: '#ffc107',
+        info: '#17a2b8',
+        dark: '#343a40',
+        light: '#f8f9fa',
+        text: '#212529',
+        background: '#ffffff',
+        border: '#dee2e6',
+      },
+    },
+    dark: {
+      name: 'Dark',
+      colors: {
+        primary: '#0d6efd',
+        secondary: '#6c757d',
+        success: '#198754',
+        danger: '#dc3545',
+        warning: '#ffc107',
+        info: '#0dcaf0',
+        dark: '#212529',
+        light: '#f8f9fa',
+        text: '#f8f9fa',
+        background: '#212529',
+        border: '#495057',
+      },
+    },
+    blue: {
+      name: 'Blue',
+      colors: {
+        primary: '#007bff',
+        secondary: '#6c757d',
+        success: '#28a745',
+        danger: '#dc3545',
+        warning: '#ffc107',
+        info: '#17a2b8',
+        dark: '#343a40',
+        light: '#f8f9fa',
+        text: '#212529',
+        background: '#e6f2ff',
+        border: '#b3d9ff',
+      },
+    },
+  },
+};
