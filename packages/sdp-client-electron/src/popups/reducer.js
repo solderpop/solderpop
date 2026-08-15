@@ -29,6 +29,13 @@ import {
   ARDUPACKAGES_UPGRADE_PROCEED,
 } from '../arduinoDependencies/actionTypes';
 
+import {
+  MANAGE_LOCAL_SIMULATION_REQUEST,
+  MANAGE_LOCAL_SIMULATION_CLOSE,
+  WELCOME_POPUP_CLOSE,
+  FIRST_LAUNCH_DETECTED,
+} from '../emsdkInstaller/actionTypes';
+
 export default (state, action) => {
   switch (action.type) {
     case UPLOAD:
@@ -72,6 +79,16 @@ export default (state, action) => {
     case ARDUPACKAGES_UPGRADE_PROCEED:
     case ARDUPACKAGES_UPDATE_POPUP_CLOSE:
       return hideOnePopup(POPUP_ID.UPDATE_ARDUINO_PACKAGES_POPUP, state);
+
+    case MANAGE_LOCAL_SIMULATION_REQUEST:
+      return showOnlyPopup(POPUP_ID.MANAGE_LOCAL_SIMULATION, {}, state);
+    case MANAGE_LOCAL_SIMULATION_CLOSE:
+      return hideOnePopup(POPUP_ID.MANAGE_LOCAL_SIMULATION, state);
+
+    case FIRST_LAUNCH_DETECTED:
+      return showOnlyPopup(POPUP_ID.WELCOME, {}, state);
+    case WELCOME_POPUP_CLOSE:
+      return hideOnePopup(POPUP_ID.WELCOME, state);
 
     default:
       return popupsReducer(state, action);

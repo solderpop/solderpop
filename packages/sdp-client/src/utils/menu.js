@@ -119,6 +119,9 @@ const rawItems = {
   runSimulation: {
     label: 'Simulate',
   },
+  manageLocalSimulation: {
+    label: 'Manage Local Simulation...',
+  },
 
   view: {
     label: 'View',

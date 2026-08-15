@@ -81,12 +81,12 @@ $input-option-highlighted: #3d5468;
 
 $button-bg-color-dark: #34495e;
 $button-bg-color-hover-dark: #3d5468;
-$button-bg-color-light: #cccccc;
+$button-bg-color-light: $dark-bright;
 $button-border-color: #5c6b7a;
 $button-border-color-active-dark: #8a97a3;
-$button-border-color-active-light: #555555;
+$button-border-color-active-light: $coral;
 $button-fg-color-dark: #c7cfd6;
-$button-fg-color-light: black;
+$button-fg-color-light: $chalk-bright;
 
 $modal-fg-color: #cccccc;
 $modal-fg-color-light: black;

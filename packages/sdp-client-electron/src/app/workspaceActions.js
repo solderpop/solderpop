@@ -254,6 +254,8 @@ const openBundledProject = R.curry((send, updateProjectPath, oldPath) => {
     // TODO: better pass it along the project with REQUEST_SHOW_PROJECT event
     if (!isFirstLaunch) {
       send(EVENTS.PAN_TO_CENTER);
+    } else {
+      send(EVENTS.FIRST_LAUNCH);
     }
   });
 });

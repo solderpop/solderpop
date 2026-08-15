@@ -74,6 +74,17 @@ _self.onmessage = e => {
       const { suite, runtimeUrl, wasmUrl } = e.data.payload;
       _self.importScripts(runtimeUrl);
       const opts = Object.assign(suite, {
+        // Serial/Time must be reachable via `Module.Serial`/`Module.Time`
+        // from the moment the compiled program's main()/setup() runs, not
+        // assigned afterward: modern Emscripten's MODULARIZE output
+        // instantiates asynchronously (the factory below returns a Promise,
+        // not a ready-to-use instance), and main() can run as soon as the
+        // wasm finishes compiling — potentially before any code after the
+        // factory call would get a chance to run. Passing them in `opts`
+        // (which Emscripten merges onto its internal Module object up
+        // front) guarantees they're already there.
+        Serial,
+        Time,
         // Make possible downloading of wasmFile from dedicated webserver:
         locateFile: () => wasmUrl,
         onAbort: x =>
@@ -96,18 +107,26 @@ _self.onmessage = e => {
             type: 'quit',
             payload: exitCode,
           }),
-        postRun: () => wasmInstance.quit(0),
+        // NOTE: deliberately no `postRun` handler here. postRun fires once
+        // main() returns, which — for a live Simulation build — happens
+        // right after registering emscripten_set_main_loop(), not when the
+        // simulation is actually done running. Calling `quit()` there would
+        // end the session immediately after it starts. `quit` is still
+        // wired above for the case the runtime genuinely exits (a fatal
+        // internal error); normal session teardown goes through
+        // `worker.terminate()` in editor/actions.js's abortSimulation,
+        // matching the browser Worker API, not this callback.
       });
 
       // Module is defined in `importScripts(...)`
       // eslint-disable-next-line no-undef
-      wasmInstance = new Module(opts);
-      wasmInstance.Serial = Serial;
-      wasmInstance.Time = Time;
-      // Make Time updating each millisecond
-      setInterval(() => {
-        wasmInstance.Time.value += 1;
-      }, 1);
+      Promise.resolve(Module(opts)).then(instance => {
+        wasmInstance = instance;
+        // Make Time updating each millisecond
+        setInterval(() => {
+          wasmInstance.Time.value += 1;
+        }, 1);
+      });
       return;
     }
     case 'serial:send': {

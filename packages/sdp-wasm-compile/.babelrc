@@ -1,0 +1,20 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "node": "12"
+        }
+      }
+    ]
+  ],
+  "plugins": [
+    ["babel-plugin-inline-import", {
+      "extensions": [
+        ".cpp",
+        ".h"
+      ]
+    }]
+  ]
+}

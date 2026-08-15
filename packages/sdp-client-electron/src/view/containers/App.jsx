@@ -39,6 +39,7 @@ import packageJson from '../../../package.json';
 import * as actions from '../actions';
 import * as uploadActions from '../../upload/actions';
 import { listBoards, upload } from '../../upload/arduinoCli';
+import { compileSimulation } from '../../upload/wasmCompile';
 import * as debuggerIPC from '../../debugger/ipcActions';
 import {
   getUploadProcess,
@@ -62,6 +63,15 @@ import {
   closePackageUpdatePopup,
   proceedPackageUpgrade,
 } from '../../arduinoDependencies/actions';
+import {
+  requestManageLocalSimulation,
+  closeManageLocalSimulation,
+  closeWelcomeDialog,
+  firstLaunchDetected,
+  clickInstallEmsdk,
+} from '../../emsdkInstaller/actions';
+import WelcomeDialog from '../../emsdkInstaller/components/WelcomeDialog';
+import ManageLocalSimulationPopup from '../../emsdkInstaller/components/ManageLocalSimulationPopup';
 import { loadWorkspacePath } from '../../app/workspaceActions';
 import { getPathToBundledWorkspace, IS_DEV } from '../../app/utils';
 
@@ -100,6 +110,12 @@ const stopDebuggerSession = () =>
 class App extends client.App {
   constructor(props) {
     super(props);
+
+    // Run Simulate's C++->WASM compile locally via IPC to a bundled
+    // Emscripten toolchain instead of sdp-cloud-compile's network call —
+    // see sdp-client's App base class for the default (null) and
+    // packages/sdp-wasm-compile for the local compiler itself.
+    this.compileSimulationLocally = compileSimulation;
 
     this.state = R.clone(defaultState);
 
@@ -149,6 +165,9 @@ class App extends client.App {
     );
 
     this.onUpdatePackagesClicked = this.onUpdatePackagesClicked.bind(this);
+    this.onManageLocalSimulationClicked = this.onManageLocalSimulationClicked.bind(
+      this
+    );
 
     this.initNativeMenu();
 
@@ -225,6 +244,10 @@ class App extends client.App {
     ipcRenderer.on(
       EVENTS.PAN_TO_CENTER,
       this.props.actions.setCurrentPatchOffsetToCenter
+    );
+    ipcRenderer.on(
+      EVENTS.FIRST_LAUNCH,
+      this.props.actions.firstLaunchDetected
     );
 
     // Notify about errors in the Main Process
@@ -607,6 +630,10 @@ class App extends client.App {
     this.props.actions.updateArdupackages();
   }
 
+  onManageLocalSimulationClicked() {
+    this.props.actions.requestManageLocalSimulation();
+  }
+
   onArduinoPathChange(newPath) {
     ipcRenderer.send('SET_ARDUINO_IDE', { path: newPath });
     ipcRenderer.once('SET_ARDUINO_IDE', (event, payload) => {
@@ -719,6 +746,10 @@ class App extends client.App {
         ),
         items.separator,
         onClick(items.updatePackages, this.onUpdatePackagesClicked),
+        onClick(
+          items.manageLocalSimulation,
+          this.onManageLocalSimulationClicked
+        ),
       ]),
       submenu(items.help, [
         {
@@ -985,6 +1016,26 @@ class App extends client.App {
     ) : null;
   }
 
+  renderWelcomeDialog() {
+    return this.props.popups.welcome ? (
+      <WelcomeDialog
+        isVisible={this.props.popups.welcome}
+        onClose={this.props.actions.closeWelcomeDialog}
+        onInstallClick={this.props.actions.clickInstallEmsdk}
+      />
+    ) : null;
+  }
+
+  renderManageLocalSimulationPopup() {
+    return this.props.popups.manageLocalSimulation ? (
+      <ManageLocalSimulationPopup
+        isVisible={this.props.popups.manageLocalSimulation}
+        onClose={this.props.actions.closeManageLocalSimulation}
+        onInstallClick={this.props.actions.clickInstallEmsdk}
+      />
+    ) : null;
+  }
+
   render() {
     return (
       <HotKeys
@@ -1012,6 +1063,8 @@ class App extends client.App {
         {this.renderPopupPublishProject()}
         {this.renderPopupCreateNewProject()}
         {this.renderPopupCheckArduinoPackageUpdates()}
+        {this.renderWelcomeDialog()}
+        {this.renderManageLocalSimulationPopup()}
         {this.renderPatchCreatingPopup()}
         <PopupSetWorkspace
           workspace={this.state.workspace}
@@ -1127,6 +1180,10 @@ const mapStateToProps = R.applySpec({
       client.POPUP_ID.UPDATE_ARDUINO_PACKAGES_POPUP
     ),
     createPatch: client.getPopupVisibility(client.POPUP_ID.CREATING_PATCH),
+    welcome: client.getPopupVisibility(client.POPUP_ID.WELCOME),
+    manageLocalSimulation: client.getPopupVisibility(
+      client.POPUP_ID.MANAGE_LOCAL_SIMULATION
+    ),
   },
   popupsData: {
     projectSelection: client.getPopupData(client.POPUP_ID.OPENING_PROJECT),
@@ -1161,6 +1218,11 @@ const mapDispatchToProps = dispatch => ({
       closePackageUpdatePopup,
       proceedPackageUpgrade,
       checkDeps,
+      requestManageLocalSimulation,
+      closeManageLocalSimulation,
+      closeWelcomeDialog,
+      firstLaunchDetected,
+      clickInstallEmsdk,
     }),
     dispatch
   ),

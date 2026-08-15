@@ -13,6 +13,7 @@ import sendToSerialMiddleware from './debugger/sendToSerialMiddleware';
 import autoupdateMiddleware from './view/autoupdateMiddleware';
 import installLibMiddleware from './view/installLibMiddleware';
 import arduinoDependenciesMiddleware from './arduinoDependencies/middleware';
+import emsdkInstallerMiddleware from './emsdkInstaller/middleware';
 
 const extraReducers = {
   popups: popupsReducer,
@@ -25,6 +26,7 @@ const extraMiddlewares = [
   installLibMiddleware,
   autoupdateMiddleware,
   arduinoDependenciesMiddleware,
+  emsdkInstallerMiddleware,
   tetheringInetMiddleware,
 ];
 

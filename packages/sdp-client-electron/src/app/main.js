@@ -30,6 +30,12 @@ import {
   subscribeCheckUpdates,
   subscribeUpgradeArduinoPackages,
 } from './arduinoCli';
+import { subscribeCompileSimulation } from './wasmCompile';
+import {
+  subscribeOnCheckEmsdkInstalled,
+  subscribeOnInstallEmsdk,
+  subscribeOnUninstallEmsdk,
+} from './emsdkInstaller';
 import migrateArduinoPackages from './migrateArduinoPackages';
 import * as settings from './settings';
 import {
@@ -232,6 +238,10 @@ const onReady = () => {
   };
 
   WA.subscribeToWorkspaceEvents(ipcMain, store);
+  subscribeCompileSimulation();
+  subscribeOnCheckEmsdkInstalled();
+  subscribeOnInstallEmsdk();
+  subscribeOnUninstallEmsdk();
   ipcMain.on(
     EVENTS.START_DEBUG_SESSION,
     startDebugSessionHandler(
