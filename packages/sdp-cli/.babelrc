@@ -1,7 +1,7 @@
 {
   "presets": [
     [
-      "env",
+      "@babel/preset-env",
       {
         "targets": {
           "node": "12"
@@ -9,6 +9,5 @@
       }
     ]
   ],
-  "plugins": ["babel-plugin-transform-object-rest-spread"],
   "retainLines": true
 }

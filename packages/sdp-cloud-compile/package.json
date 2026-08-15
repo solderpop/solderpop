@@ -24,7 +24,10 @@
     "sdp-tabtest": "^0.38.0"
   },
   "devDependencies": {
-    "babel-plugin-inline-import": "^2.0.4",
+    "@babel/cli": "^7.29.7",
+    "@babel/core": "^7.29.7",
+    "@babel/preset-env": "^7.29.7",
+    "babel-plugin-inline-import": "^3.0.0",
     "chai": "^4.1.2",
     "sdp-fs": "^0.38.0"
   },

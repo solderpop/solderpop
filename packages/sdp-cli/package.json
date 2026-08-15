@@ -32,6 +32,10 @@
     "sdp-tabtest": "^0.38.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.29.7",
+    "@babel/core": "^7.29.7",
+    "@babel/preset-env": "^7.29.7",
+    "@babel/register": "^7.29.7",
     "@oclif/dev-cli": "^1.19.4",
     "@oclif/test": "^1.2.2",
     "chai": "^4.2.0",
