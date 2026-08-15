@@ -1,5 +1,6 @@
 {
   "name": "sdp-project",
+  "type": "commonjs",
   "version": "0.38.0",
   "description": "API functions to work on XOD project state",
   "keywords": [],
@@ -17,7 +18,7 @@
     "dev": "yarn run build:js --watch",
     "refmt": "find src/ test/ -name '*.re' -or -name '*.rei' -type f -exec refmt --in-place {} +",
     "doc": "documentation build --format html --output doc --sort-order alpha src/",
-    "test": "mocha test/**/*.spec.js",
+    "test": "mocha --require ../../tools/babel-register.js --color --timeout 10000 test/**/*.spec.js",
     "clean:dist": "rimraf ./dist ./lib ./src/**/*.bs.js",
     "test:watch": "yarn run test --watch"
   },

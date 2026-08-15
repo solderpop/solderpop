@@ -1,3 +1,0 @@
---require ../../tools/babel-register.js
---colors
---timeout 30000

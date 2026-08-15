@@ -1,4 +1,0 @@
---require ../../tools/babel-register.js
---colors
---timeout=60000
---bail

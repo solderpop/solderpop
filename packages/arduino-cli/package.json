@@ -1,5 +1,6 @@
 {
   "name": "arduino-cli",
+  "type": "commonjs",
   "version": "0.37.0",
   "description": "JS-wrapper over arduino-cli",
   "main": "dist/index.js",
@@ -10,8 +11,8 @@
   "scripts": {
     "build": "babel src/ -d dist/ --source-maps",
     "clean:dist": "rimraf ./bin ./__lib__",
-    "test": "BABEL_DISABLE_CACHE=1 mocha test/**/*.spec.js",
-    "test-func": "BABEL_DISABLE_CACHE=1 mocha --opts test-func/mocha.opts test-func/**/*.spec.js"
+    "test": "BABEL_DISABLE_CACHE=1 mocha --require ../../tools/babel-register.js --color --timeout 120000 test/**/*.spec.js",
+    "test-func": "BABEL_DISABLE_CACHE=1 mocha --require ../../tools/babel-register.js --color --timeout 3600000 test-func/**/*.spec.js"
   },
   "keywords": [
     "arduino-cli"

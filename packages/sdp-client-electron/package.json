@@ -5,6 +5,7 @@
   "license": "AGPL-3.0",
   "main": "src-babel/app/main.js",
   "name": "sdp-client-electron",
+  "type": "commonjs",
   "version": "0.38.0",
   "scripts": {
     "build:workspace": "cpx \"../../workspace/**/*\" \"src-babel/workspace\"",
@@ -15,7 +16,7 @@
     "start": "electron . --no-sandbox --ozone-platform=x11",
     "postinstall": "electron-builder install-app-deps",
     "test": "electron-mocha --no-sandbox --require ../../tools/babel-register.js --timeout 60000 ./test",
-    "test-func": "mocha --opts test-func/mocha.opts test-func/**/*.spec.js"
+    "test-func": "mocha --require ../../tools/babel-register.js --color --timeout 60000 --bail test-func/**/*.spec.js"
   },
   "dependencies": {
     "@electron/remote": "^2.1.3",

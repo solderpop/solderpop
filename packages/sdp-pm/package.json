@@ -1,14 +1,15 @@
 {
   "name": "sdp-pm",
+  "type": "commonjs",
   "version": "0.38.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
     "build": "babel src -d dist",
     "dev": "yarn run build --watch",
-    "test": "mocha test/**/*.spec.js",
+    "test": "mocha --require ../../tools/babel-register.js --color test/**/*.spec.js",
     "clean:dist": "rimraf ./dist",
-    "test-func": "mocha --opts test-func/mocha.opts test-func/**/*.spec.js"
+    "test-func": "mocha --require ../../tools/babel-register.js --color --timeout 30000 test-func/**/*.spec.js"
   },
   "repository": {
     "type": "git",

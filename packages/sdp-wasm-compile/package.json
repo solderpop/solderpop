@@ -1,13 +1,13 @@
 {
   "name": "sdp-wasm-compile",
+  "type": "commonjs",
   "version": "0.1.0",
   "description": "Local Emscripten-based C++ to WASM compiler for Simulate, replacing the old xod.io cloud compile service",
   "main": "dist/index.js",
   "scripts": {
     "build": "babel src/ -d dist/ --source-maps",
     "clean:dist": "rimraf ./dist",
-    "dev": "yarn run build --watch",
-    "test": "BABEL_DISABLE_CACHE=1 mocha test/**/*.spec.js"
+    "dev": "yarn run build --watch"
   },
   "keywords": [
     "xod",

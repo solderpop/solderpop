@@ -1,5 +1,6 @@
 {
   "name": "sdp-arduino",
+  "type": "commonjs",
   "version": "0.38.0",
   "description": "SolderPop IDE: Arduino transpiler",
   "scripts": {
@@ -12,7 +13,7 @@
     "doc": "documentation build --format html --output doc --sort-order alpha src/",
     "refmt": "find src/ test/ -name '*.re*' -exec refmt --in-place {} +",
     "clean:dist": "rimraf ./dist ./lib ./src/**/*.bs.js",
-    "test": "BABEL_DISABLE_CACHE=1 mocha test/**/*.spec.js",
+    "test": "BABEL_DISABLE_CACHE=1 mocha --require ../../tools/babel-register.js --color --timeout 240000 test/**/*.spec.js",
     "test-cpp": "./tools/test-cpp.sh && ./tools/test-avr-size.sh"
   },
   "repository": {},

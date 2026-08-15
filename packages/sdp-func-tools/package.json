@@ -1,5 +1,6 @@
 {
   "name": "sdp-func-tools",
+  "type": "commonjs",
   "version": "0.34.0",
   "description": "",
   "keywords": [],
@@ -13,7 +14,7 @@
     "build": "yarn build:re && yarn build:js",
     "clean:dist": "rimraf ./dist ./lib ./src/**/*.bs.js",
     "dev": "yarn run build --watch",
-    "test": "mocha test/**/*.spec.js"
+    "test": "mocha --require ../../tools/babel-register.js --color test/**/*.spec.js"
   },
   "dependencies": {
     "hm-def": "^0.3.2",

@@ -1,5 +1,6 @@
 {
   "name": "sdp-deploy-bin",
+  "type": "commonjs",
   "version": "0.38.0",
   "description": "SolderPop wrapper over arduino-cli wrapper",
   "main": "dist/index.js",

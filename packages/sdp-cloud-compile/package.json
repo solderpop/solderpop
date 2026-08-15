@@ -1,5 +1,6 @@
 {
   "name": "sdp-cloud-compile",
+  "type": "commonjs",
   "version": "0.38.0",
   "description": "",
   "main": "dist/index.js",
