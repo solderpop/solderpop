@@ -69,7 +69,7 @@ const its = wd => {
 
   stdMock
     .env({ XOD_WORKSPACE: myWSPath })
-    .env({ XOD_ARDUINO_CLI: '/nonexistent' })
+    .env({ SDP_ARDUINO_CLI: '/nonexistent' })
     .command(['boards'])
     .it(
       `arduino-cli not found, stdout is empty, stderr with error, non-zero exit code`,
@@ -88,7 +88,7 @@ const its = wd => {
 
   stdMock
     .env({ XOD_WORKSPACE: myWSPath })
-    .env({ XOD_ARDUINO_CLI: '/nonexistent' })
+    .env({ SDP_ARDUINO_CLI: '/nonexistent' })
     .command(['boards', '-q'])
     .it(
       `arduino-cli not found, quiet flag, stdout is empty, stderr is empty, non-zero exit code`,

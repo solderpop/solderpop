@@ -4,7 +4,7 @@ set -e
 
 echo "Testing size of fixtures compiled for AVR platform..."
 
-ARDUINO_CLI=${XOD_ARDUINO_CLI:-"arduino-cli"}
+ARDUINO_CLI=${SDP_ARDUINO_CLI:-"arduino-cli"}
 
 SELF_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 

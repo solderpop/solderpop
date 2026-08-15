@@ -148,7 +148,7 @@ jobs:
     docker: *docker-custom-nodejs
     environment:
       DISPLAY: ":99.0"
-      XOD_ARDUINO_CLI: /tmp/arduino-cli/arduino-cli
+      SDP_ARDUINO_CLI: /tmp/arduino-cli/arduino-cli
     steps:
       - run:
           name: Running X virtual framebuffer
@@ -175,7 +175,7 @@ jobs:
       xcode: "11.2.1"
     environment:
       YARN_CACHE_FOLDER: /tmp/yarn-cache
-      XOD_ARDUINO_CLI: /tmp/arduino-cli/arduino-cli
+      SDP_ARDUINO_CLI: /tmp/arduino-cli/arduino-cli
     steps:
       - checkout
       - restore_cache: *restore-node_modules
@@ -210,7 +210,7 @@ jobs:
     docker: *docker-custom-nodejs
     environment:
       XOD_OUTPUT: /tmp/tabtests-cpp
-      XOD_ARDUINO_CLI: /tmp/arduino-cli/arduino-cli
+      SDP_ARDUINO_CLI: /tmp/arduino-cli/arduino-cli
     steps:
       - checkout
       - restore_cache: *restore-node_modules
@@ -219,7 +219,7 @@ jobs:
       - restore_cache: *restore-arduino15
       - run:
           name: Install arduino:avr platform for arduino-cli
-          command: $XOD_ARDUINO_CLI core install arduino:avr
+          command: $SDP_ARDUINO_CLI core install arduino:avr
       - save_cache: *cache-arduino15
       - run:
           name: Test AVR Size
@@ -246,7 +246,7 @@ jobs:
     docker: *docker-custom-nodejs
     environment:
       NODE_ENV: production
-      XOD_ARDUINO_CLI: /tmp/arduino-cli/arduino-cli
+      SDP_ARDUINO_CLI: /tmp/arduino-cli/arduino-cli
     steps:
       - checkout
       - restore_cache: *restore-node_modules
@@ -275,7 +275,7 @@ jobs:
       xcode: "11.2.1"
     environment:
       NODE_ENV: production
-      XOD_ARDUINO_CLI: /tmp/arduino-cli/arduino-cli
+      SDP_ARDUINO_CLI: /tmp/arduino-cli/arduino-cli
     steps:
       - checkout
       - restore_cache: *restore-node_modules

@@ -49,7 +49,7 @@ export default {
       ? `Tried to find arduino-cli on the path: ${path}`
       : 'Tried to find arduino-cli on $PATH',
     solution: isDev
-      ? 'When running in the development mode `arduino-cli` should be available on $PATH or explicitly set with $XOD_ARDUINO_CLI environment variable'
+      ? 'When running in the development mode `arduino-cli` should be available on $PATH or explicitly set with $SDP_ARDUINO_CLI environment variable'
       : 'This is a bug, report it to SolderPop developers',
   }),
 

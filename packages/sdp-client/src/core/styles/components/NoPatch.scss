@@ -4,14 +4,23 @@
   justify-content: center;
   flex-grow: 1;
 
-  background-color: #373737;
+  background-color: $dark-deep;
 
   .logo {
     width: 25%;
 
-    path {
-      fill: #333333;
+    circle {
+      opacity: 0.15;
       filter: url(#inset-shadow);
+    }
+
+    .logo-main {
+      fill: $coral;
+    }
+
+    .logo-ring {
+      fill: none;
+      stroke: $coral;
     }
   }
 }

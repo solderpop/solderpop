@@ -38,8 +38,8 @@ const getArduinoCliPath = (isDev = false) =>
       return;
     }
 
-    if (process.env.XOD_ARDUINO_CLI) {
-      resolve(process.env.XOD_ARDUINO_CLI);
+    if (process.env.SDP_ARDUINO_CLI) {
+      resolve(process.env.SDP_ARDUINO_CLI);
       return;
     }
 
