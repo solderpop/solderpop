@@ -14,7 +14,7 @@
     "clean:dist": "rimraf ./src-babel",
     "start": "electron . --no-sandbox --ozone-platform=x11",
     "postinstall": "electron-builder install-app-deps",
-    "test": "electron-mocha --no-sandbox --require babel-register --timeout 60000 ./test",
+    "test": "electron-mocha --no-sandbox --require ../../tools/babel-register.js --timeout 60000 ./test",
     "test-func": "mocha --opts test-func/mocha.opts test-func/**/*.spec.js"
   },
   "dependencies": {
@@ -55,7 +55,11 @@
     "sdp-wasm-compile": "^0.1.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.16.0",
+    "@babel/cli": "^7.29.7",
+    "@babel/core": "^7.29.7",
+    "@babel/preset-env": "^7.29.7",
+    "@babel/register": "^7.29.7",
+    "babel-loader": "^8.4.1",
     "chai": "^4.1.2",
     "chai-as-promised": "^6.0.0",
     "devtron": "^1.3.0",

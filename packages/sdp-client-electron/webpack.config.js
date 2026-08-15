@@ -34,8 +34,7 @@ module.exports = merge.smart(getBaseConfig(__dirname), {
         test: /\.js$/,
         loader: 'babel-loader',
         options: {
-          presets: ['es2015'],
-          plugins: ['transform-object-rest-spread'],
+          presets: ['@babel/preset-env'],
         },
       },
       {

@@ -71,8 +71,7 @@ module.exports = pkgDir => ({
         test: /\.jsx?$/,
         loader: 'babel-loader',
         options: {
-          presets: ['react', 'es2015'],
-          plugins: ['transform-object-rest-spread'],
+          presets: ['@babel/preset-react', '@babel/preset-env'],
         },
       },
       {

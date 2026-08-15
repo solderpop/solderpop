@@ -73,8 +73,14 @@
     "sdp-tabtest": "^0.38.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.29.7",
+    "@babel/core": "^7.29.7",
+    "@babel/preset-env": "^7.29.7",
+    "@babel/preset-react": "^7.29.7",
+    "@babel/register": "^7.29.7",
     "@storybook/addon-actions": "^3.2.17",
     "@storybook/react": "^3.2.17",
+    "babel-loader": "^8.4.1",
     "chai": "^4.1.2",
     "redux-mock-store": "^1.2.3"
   }

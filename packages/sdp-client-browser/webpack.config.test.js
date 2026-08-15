@@ -9,8 +9,7 @@ const pkgpath = subpath => path.join(__dirname, subpath);
 const babelLoader = {
   loader: 'babel-loader',
   options: {
-    presets: ['react', 'es2015'],
-    plugins: ['transform-object-rest-spread'],
+    presets: ['@babel/preset-react', '@babel/preset-env'],
   },
 };
 
