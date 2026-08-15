@@ -1,0 +1,33 @@
+image_resource:
+  source:
+    repository: node
+    tag: 8.6.0
+  type: docker-image
+inputs:
+  - name: xod
+outputs:
+  - name: ide
+platform: linux
+run:
+  args:
+    - '-exc'
+    - |
+      IDE=$(realpath ide)
+      XOD=$(realpath xod)
+
+      cd "$XOD" || exit 1
+      DESCRIBE=$(git describe --tags)
+      OFFSET=$(node -p "'$DESCRIBE'.match(/-(\d+)-(?:\w{8})$/)[1]")
+      yarn install --no-progress
+      NODE_ENV=production yarn run build
+
+      cd "$XOD/packages/sdp-client-browser" || exit 1
+      echo 'xodio/ide' >IMAGE_NAME
+      node -p "require('./package.json').version + '-$OFFSET'" >VERSION
+
+      cp -at "$IDE"  \
+       "$XOD/packages/sdp-client-browser/dist"  \
+       "$XOD/packages/sdp-client-browser/Dockerfile"  \
+       "$XOD/packages/sdp-client-browser/IMAGE_NAME"  \
+       "$XOD/packages/sdp-client-browser/VERSION"
+  path: sh

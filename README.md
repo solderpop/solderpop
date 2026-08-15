@@ -1,20 +1,16 @@
-# XOD
+# SolderPop IDE
 
-[![CircleCI](https://circleci.com/gh/xodio/xod/tree/master.svg?style=shield)](https://circleci.com/gh/xodio/xod/tree/master)
-
-XOD is a visual programming language for microcontrollers. This repository contains sources for XOD language core, XOD IDE and XOD standard library.
+SolderPop IDE is a visual programming environment for microcontrollers, built on top of [XOD](https://xod.io), an open-source visual programming language. This repository is a fork of [xodio/xod](https://github.com/xodio/xod), rebranded and retargeted at SolderPop's own ClickClack hardware line, with the XOD language core and standard library retained under their original AGPL license.
 
 ![Xoding demo](./.github/xoding.gif)
 
 ## Installation & Quick start
 
-Download the latest IDE version for desktop or run the browser-based IDE at <https://xod.io>.
-
-Documentation and tutorials are at <https://xod.io/docs/>.
+Currently source-only — build from source below to get a desktop or browser-based IDE. There is no hosted build yet.
 
 ## Building from source
 
-XOD is written in JavaScript and ReasonML. You need Node.js and Yarn to build from source. Make sure they are available on your system.
+SolderPop IDE is written in JavaScript and ReasonML. You need Node.js and Yarn to build from source. Make sure they are available on your system.
 
 Clone the repository and set working directory to its root. Then run:
 
@@ -22,7 +18,7 @@ Clone the repository and set working directory to its root. Then run:
 # Install all JavaScript and ReasonML dependencies
 yarn
 
-# Build all packages of XOD
+# Build all packages
 yarn build
 ```
 
@@ -71,16 +67,16 @@ Note that dependencies between tasks are not resolved. `test` and `start:*` expe
 
 ### Scoping
 
-Many commands (notably `build`, `dev`, `test`) support package scoping to save development time. To rebuild only `xod-project`:
+Many commands (notably `build`, `dev`, `test`) support package scoping to save development time. To rebuild only `sdp-project`:
 
 ```bash
-yarn build --scope xod-project
+yarn build --scope sdp-project
 ```
 
-To rebuild `xod-project` and its dependencies:
+To rebuild `sdp-project` and its dependencies:
 
 ```bash
-yarn build --scope xod-project --include-filtered-dependencies
+yarn build --scope sdp-project --include-filtered-dependencies
 ```
 
 Those are standard [Lerna flags](https://github.com/lerna/lerna#flags).
@@ -100,6 +96,8 @@ You need `gcc` and `avr-gcc` to be installed system-wide to run C++ code tests. 
 ## License
 
 Copyright 2017-2019 XOD Inc.
+
+Portions Copyright 2026 SolderPop. This is a modified, rebranded fork of [xodio/xod](https://github.com/xodio/xod) (base version 0.38.x), retargeted at SolderPop's ClickClack hardware. See individual file headers for per-file modification notices.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation.
 

@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-Please, use XOD [forum](https://forum.xod.io) to discuss a feature prior to creating it here. Features come from the [Roadmap](https://github.com/xodio/xod/wiki/Roadmap) and community brainstorms. GitHub issues are things to be scheduled, tracked, and implemented, they are _not_ a place for discussions.
+Please discuss a feature prior to creating it here. GitHub issues are things to be scheduled, tracked, and implemented, they are _not_ a place for discussions.
 
 ### Rationale
 

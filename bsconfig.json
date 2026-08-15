@@ -9,19 +9,19 @@
       "subdirs": true
     },
     {
-      "dir": "packages/xod-arduino/src",
+      "dir": "packages/sdp-arduino/src",
       "subdirs": true
     },
     {
-      "dir": "packages/xod-func-tools/src",
+      "dir": "packages/sdp-func-tools/src",
       "subdirs": true
     },
     {
-      "dir": "packages/xod-project/src",
+      "dir": "packages/sdp-project/src",
       "subdirs": true
     },
     {
-      "dir": "packages/xod-tabtest/src",
+      "dir": "packages/sdp-tabtest/src",
       "subdirs": true
     }
   ],
@@ -32,10 +32,10 @@
   "suffix": ".bs.js",
   "bs-dependencies": [
     "belt-holes",
-    "xod-func-tools",
-    "xod-arduino",
-    "xod-project",
-    "xod-tabtest"
+    "sdp-func-tools",
+    "sdp-arduino",
+    "sdp-project",
+    "sdp-tabtest"
   ],
   "warnings": {
     "error": "+101"

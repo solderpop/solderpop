@@ -67,13 +67,13 @@ module.exports = {
     'import/no-extraneous-dependencies': ['error', {
       devDependencies: [
         '**/*.spec.js',
-        '**/xod-client-electron/**/*.js',
-        '**/xod-client-electron/**/*.jsx',
-        '**/xod-client/stories/*.jsx',
-        '**/xod-client-browser/tools/*.js',
-        '**/xod-tabtest/tools/*.js',
-        '**/xod-client-browser/test-func/*.js',
-        '**/xod-client-browser/benchmark/*.js'
+        '**/sdp-client-electron/**/*.js',
+        '**/sdp-client-electron/**/*.jsx',
+        '**/sdp-client/stories/*.jsx',
+        '**/sdp-client-browser/tools/*.js',
+        '**/sdp-tabtest/tools/*.js',
+        '**/sdp-client-browser/test-func/*.js',
+        '**/sdp-client-browser/benchmark/*.js'
       ]
     }],
     'mocha/no-skipped-tests': 'error',

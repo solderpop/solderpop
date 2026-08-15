@@ -1,0 +1,33 @@
+{
+  "name": "sdp-pm",
+  "version": "0.38.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "babel src -d dist",
+    "dev": "yarn run build --watch",
+    "test": "mocha test/**/*.spec.js",
+    "clean:dist": "rimraf ./dist",
+    "test-func": "mocha --opts test-func/mocha.opts test-func/**/*.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/solderpop/solderpop.git"
+  },
+  "author": "SolderPop <dev@solderpop.io>",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/solderpop/solderpop/issues"
+  },
+  "homepage": "https://solderpop.io/",
+  "dependencies": {
+    "ramda": "^0.24.1",
+    "ramda-fantasy": "^0.8.0",
+    "swagger-client": "^3.4.3",
+    "sdp-func-tools": "^0.34.0",
+    "sdp-project": "^0.38.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2"
+  }
+}

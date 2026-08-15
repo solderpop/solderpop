@@ -4,39 +4,39 @@
   "workspaces": [
     "packages/*"
   ],
-  "description": "XOD monorepo package",
+  "description": "SolderPop IDE monorepo (XOD-based)",
   "license": "AGPL-3.0",
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "benchmark:browser": "lerna run benchmark --scope xod-client-browser --stream",
+    "benchmark:browser": "lerna run benchmark --scope sdp-client-browser --stream",
     "build": "lerna run build --stream",
-    "build:browser": "lerna run build --scope xod-client-browser --include-filtered-dependencies --stream",
-    "build:cli": "lerna run build --scope xod-cli --include-filtered-dependencies --stream",
-    "build:electron": "lerna run build --scope xod-client-electron --include-filtered-dependencies --stream",
+    "build:browser": "lerna run build --scope sdp-client-browser --include-filtered-dependencies --stream",
+    "build:cli": "lerna run build --scope sdp-cli --include-filtered-dependencies --stream",
+    "build:electron": "lerna run build --scope sdp-client-electron --include-filtered-dependencies --stream",
     "clean": "yarn run clean:dist && yarn run clean:node_modules",
     "clean:dist": "lerna run clean:dist",
     "clean:node_modules": "rimraf node_modules packages/*/node_modules",
-    "dev:browser": "lerna run --stream --parallel dev --scope xod-client-browser --include-filtered-dependencies",
-    "dev:cli": "lerna run --stream --parallel dev --scope xod-cli --include-filtered-dependencies",
-    "dev:electron": "lerna run --stream --parallel dev --scope xod-client-electron --include-filtered-dependencies",
-    "dist:electron": "electron-builder --publish always --projectDir ./packages/xod-client-electron",
+    "dev:browser": "CHOKIDAR_USEPOLLING=1 lerna run --stream --parallel dev --scope sdp-client-browser --include-filtered-dependencies",
+    "dev:cli": "CHOKIDAR_USEPOLLING=1 lerna run --stream --parallel dev --scope sdp-cli --include-filtered-dependencies",
+    "dev:electron": "CHOKIDAR_USEPOLLING=1 lerna run --stream --parallel dev --scope sdp-client-electron --include-filtered-dependencies",
+    "dist:electron": "electron-builder --publish always --projectDir ./packages/sdp-client-electron",
     "doc": "lerna run doc",
     "doc:fz": "cd docs && make",
-    "dockerize:browser": "docker build packages/xod-client-browser",
+    "dockerize:browser": "docker build packages/sdp-client-browser",
     "lerna": "lerna",
     "lint": "eslint packages/*/src packages/*/test packages/*/test-func tools packages/*/tools packages/*/stories packages/*/benchmark --ext js,jsx --max-warnings 0",
     "prettier-md-check": "prettier --list-different '**/*.md'",
     "prettier-md-format": "prettier --write '**/*.md'",
-    "start:electron": "lerna run start --scope xod-client-electron --stream",
+    "start:electron": "lerna run start --scope sdp-client-electron --stream",
     "start:spectron-repl": "./tools/spectron-repl",
-    "storybook": "lerna run storybook --stream --scope xod-client",
+    "storybook": "lerna run storybook --stream --scope sdp-client",
     "test": "XOD_HM_DEF=true lerna run test",
     "test-strict": "XOD_HM_DEF=strict lerna run test",
     "test-func": "lerna run test-func",
     "test-cpp": "lerna run test-cpp",
     "tabtest": "ls -d workspace/__lib__/xod/* workspace/test/* | xargs -n 1 yarn xodc tabtest",
     "verify": "yarn prettier-md-check && yarn build && yarn lint && yarn test && yarn test-cpp && yarn test-func",
-    "xodc": "node packages/xod-cli/bin/run"
+    "xodc": "node packages/sdp-cli/bin/run"
   },
   "devDependencies": {
     "@google-cloud/storage": "^1.1.0",
@@ -67,14 +67,14 @@
     "imports-loader": "^0.7.1",
     "lerna": "2.11.0",
     "mocha": "^3.3.0",
-    "node-gyp": "^7.1.0",
-    "node-sass": "^4.12.0",
+    "node-gyp": "^13.0.1",
     "postcss": "^6.0.16",
     "postcss-loader": "^2.0.10",
     "prettier": "^1.11.1",
     "puppeteer": "^1.20.0",
     "rimraf": "^2.5.4",
-    "sass-loader": "^6.0.6",
+    "sass": "^1.102.0",
+    "sass-loader": "^7.3.1",
     "source-map-loader": "^0.2.3",
     "spectron": "^12.0.0",
     "style-loader": "^0.19.1",
@@ -85,9 +85,11 @@
     "worker-loader": "^2.0.0"
   },
   "resolutions": {
-    "**/ramda-fantasy/ramda": "^0.24.1"
+    "**/ramda-fantasy/ramda": "^0.24.1",
+    "**/electron-is-dev": "^2.0.0",
+    "**/spdy": "file:./tools/spdy-shim"
   },
   "engines": {
-    "node": "12.16.3"
+    "node": ">=12.16.3"
   }
 }

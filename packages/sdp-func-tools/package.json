@@ -1,0 +1,34 @@
+{
+  "name": "sdp-func-tools",
+  "version": "0.34.0",
+  "description": "",
+  "keywords": [],
+  "author": "SolderPop <dev@solderpop.io>",
+  "license": "AGPL-3.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "doc": "documentation build --format html --output doc --sort-order alpha src/",
+    "build:js": "babel src/ -d dist/ --source-maps",
+    "build:re": "bsb -make-world",
+    "build": "yarn build:re && yarn build:js",
+    "clean:dist": "rimraf ./dist ./lib ./src/**/*.bs.js",
+    "dev": "yarn run build --watch",
+    "test": "mocha test/**/*.spec.js"
+  },
+  "dependencies": {
+    "hm-def": "^0.3.2",
+    "ramda": "^0.24.1",
+    "ramda-fantasy": "^0.8.0",
+    "sanctuary-def": "^0.14.0",
+    "sanctuary-type-identifiers": "^2.0.1"
+  },
+  "devDependencies": {
+    "bs-platform": "7.1.1",
+    "chai": "^4.1.2"
+  },
+  "files": [
+    "dist",
+    "src",
+    "bsconfig.json"
+  ]
+}

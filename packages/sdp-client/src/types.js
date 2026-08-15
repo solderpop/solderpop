@@ -1,0 +1,80 @@
+import * as R from 'ramda';
+import $ from 'sanctuary-def';
+
+import * as XF from 'sdp-func-tools';
+import * as XP from 'sdp-project';
+
+import { SELECTION_ENTITY_TYPE } from './editor/constants';
+
+/* Types are by convention starts with a capital leter, so: */
+/* eslint-disable new-cap */
+
+const packageName = 'sdp-client';
+const docUrl = 'http://solderpop.io/docs/dev/sdp-client/#';
+
+const Model = XF.Model(packageName, docUrl);
+const OneOfType = XF.OneOfType(packageName, docUrl);
+const EnumType = XF.EnumType(packageName, docUrl);
+const ExtendedModel = XF.ExtendedModel(packageName, docUrl);
+
+export const Point = Model('Point', {
+  x: $.Number,
+  y: $.Number,
+});
+
+export const Size = Model('Point', {
+  width: $.Number,
+  height: $.Number,
+});
+
+export const RenderablePin = ExtendedModel('RenderablePin', XP.Pin, {
+  nodeId: XP.NodeId,
+  isConnected: $.Boolean,
+  isBindable: $.Boolean,
+  position: Point,
+});
+
+export const RenderableNode = ExtendedModel('RenderableNode', XP.Node, {
+  pins: $.StrMap(RenderablePin),
+  label: $.String,
+  pxPosition: Point,
+  pxSize: Size,
+});
+
+export const RenderableLink = ExtendedModel('RenderableLink', XP.Link, {
+  type: XP.DataType,
+  from: Point,
+  to: Point,
+});
+
+export const RenderableComment = ExtendedModel(
+  'RenderableComment',
+  XP.Comment,
+  {
+    pxPosition: Point,
+    pxSize: Size,
+  }
+);
+
+const RenderableEntity = OneOfType('RenderableEntity', [
+  RenderableNode,
+  RenderableLink,
+  RenderableComment,
+]);
+
+export const SelectionEntityType = EnumType(
+  'SelectionEntityType',
+  R.values(SELECTION_ENTITY_TYPE)
+);
+
+export const RenderableSelection = Model('RenderableSelection', {
+  entityType: SelectionEntityType,
+  data: RenderableEntity,
+});
+
+export const ClipboardEntities = Model('ClipboardEntities', {
+  nodes: $.Array(XP.Node),
+  links: $.Array(XP.Link),
+  comments: $.Array(XP.Comment),
+  attachments: $.Array(XF.Pair(XP.PatchPath, XP.Source)),
+});

@@ -11,7 +11,7 @@
   "keywords": [
     "BuckleScript"
   ],
-  "author": "XOD",
+  "author": "SolderPop",
   "license": "AGPL-3.0",
   "main": "src/BeltHoles.bs.js",
   "devDependencies": {

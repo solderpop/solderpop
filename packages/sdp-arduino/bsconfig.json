@@ -1,0 +1,22 @@
+{
+  "name": "sdp-arduino",
+  "version": "0.33.0",
+  "sources": [
+    "src"
+  ],
+  "package-specs": {
+    "module": "commonjs",
+    "in-source": true
+  },
+  "suffix": ".bs.js",
+  "bs-dependencies": [
+    "belt-holes",
+    "sdp-func-tools",
+    "sdp-project"
+  ],
+  "warnings": {
+    "error" : "+a"
+  },
+  "namespace": true,
+  "refmt": 3
+}

@@ -1,0 +1,37 @@
+import * as R from 'ramda';
+import React from 'react';
+import PropTypes from 'prop-types';
+import * as XP from 'sdp-project';
+import { noop } from 'sdp-func-tools';
+
+import RegularNodeBody from './RegularNodeBody';
+
+export const getConstantValue = ({ pins }) =>
+  R.compose(
+    R.ifElse(
+      // because for pulse nodes value will always be 'Never'
+      R.pipe(XP.getPinType, R.equals(XP.PIN_TYPE.PULSE)),
+      R.always(null),
+      R.prop('value')
+    ),
+    R.head,
+    R.values
+  )(pins);
+
+const ConstantNodeBody = props => (
+  <RegularNodeBody
+    {...props}
+    label={props.label || getConstantValue(props) || XP.getBaseName(props.type)}
+    isResizable
+  />
+);
+
+ConstantNodeBody.defaultProps = {
+  onVariadicHandleDown: noop,
+};
+
+ConstantNodeBody.propTypes = R.merge(RegularNodeBody.propTypes, {
+  pins: PropTypes.any,
+});
+
+export default ConstantNodeBody;

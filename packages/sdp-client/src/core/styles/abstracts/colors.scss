@@ -1,0 +1,142 @@
+// Monochromes — SolderPop Navy-tinted ramp (was neutral gray)
+$black: #0b1119;
+$white: #fff;
+
+$coal: #1e2a38; // Iron Night (ClickClack base dark)
+$coal-light: #22303f;
+$coal-bright: #283748;
+
+$dark: #2c3e50; // SolderPop Navy
+$dark-deep: #24333f;
+$dark-light: #34495e;
+$dark-bright: #3d5468;
+
+$grey: #4c5f72;
+$grey-light: #5c6b7a; // Fjord Slate
+$grey-bright: #71808f;
+
+$light-grey: #8a97a3;
+$light-grey-bright: #a9b4bd;
+
+$chalk: #c7cfd6;
+$chalk-light: #d8dee3;
+$chalk-bright: #eef1f3;
+
+// Colored — SolderPop / ClickClack accents (was generic hues)
+$coral: #ff6b6b; // SolderPop Coral — primary brand accent
+$blue: #5c6b7a; // Fjord Slate
+$cyan: #7b8db5; // Nordic Blue
+$yellow: #ffe66d; // Sunflower
+
+$red: #c33d3d;
+$red-bright: #fd6161;
+
+$green: #3dbfb0;
+$green-bright: #4ecdc4; // Electric Teal (success)
+
+$magenta: #a78bfa; // Lavender
+$magenta-light: #b7a0fb;
+$magenta-shadow: #8f6ef0;
+
+$violet: #ff6b6b; // SolderPop Coral (pulse)
+$violet-light: #ff8787;
+$violet-shadow: #e85555;
+
+$orange: #e89530; // Molten Amber
+$orange-light: #f0a94f;
+$orange-shadow: #cf7f22;
+
+$blackberry: #3d5468;
+$blackberry-light: #4a6883;
+$blackberry-shadow: #2f4356;
+
+$blueberry: #7b8db5; // Nordic Blue
+
+$olive: #c97d2e;
+$olive-light: #db9142;
+$olive-shadow: #a8661f;
+
+$emerald: #2ec4b6; // Live Teal
+$emerald-light: #4fd4c8;
+$emerald-shadow: #22a99d;
+
+$apricot: #ffe66d; // Sunflower
+$apricot-light: #fff0a3;
+$apricot-shadow: #e8c94a;
+
+$brown: #584b22;
+$brown-light: #8e5f35;
+$brown-shadow: #69421e;
+
+$terracotta: #7b8db5; // Nordic Blue (datatype-custom)
+
+// Associated colors
+
+$selected: $coral;
+$error: $red;
+$error-text: $red-bright;
+
+$chrome-bg: $dark;
+$chrome-title-bg: $coal-bright;
+$chrome-title-button-hover: $dark;
+$chrome-outlines: $coal;
+
+$chrome-light-bg: $chalk;
+
+$menu-bg: $dark-deep;
+$menu-hover: $dark-bright;
+$menu-active: $coal;
+$menu-item-bg: $coal;
+$menu-item-hover: $dark-deep;
+$menu-separator: $grey;
+
+$tab-bg: $coal;
+$tab-item-bg: $dark-deep;
+$tab-item-hover: $grey;
+$tab-button-hover: $dark;
+
+$canvas: $dark-deep;
+$canvas-outlines: $dark-light;
+
+$node-label: $chalk;
+$node-outlines: $light-grey-bright;
+$node-hover-outlines: $chalk;
+$pin-bg: $coal-light;
+$pin-label: $light-grey-bright;
+
+$input-bg: $chrome-bg;
+$input-outlines: $light-grey;
+$input-disabled-outlines: $dark-bright;
+$input-disabled-text: $grey-light;
+$input-active-bg: $grey-light;
+
+$dark-button-text: $coal;
+$dark-button-bg: $chrome-bg;
+$dark-button-outlines: $input-outlines;
+$dark-button-hover-bg: $tab-item-hover;
+$dark-button-hover-outlines: $grey-light;
+$dark-button-disabled-text: $grey;
+$dark-button-disabled-outlines: $grey;
+
+$light-button-text: $coal;
+$light-button-bg: $chrome-light-bg;
+$light-button-outlines: $input-outlines;
+$light-button-hover-bg: $light-button-bg;
+$light-button-hover-outlines: $grey-bright;
+$light-button-disabled-text: rgba($light-button-text, .5);
+$light-button-disabled-outlines: rgba($light-button-outlines, .5);
+
+$menubar-bg: $dark-deep;
+$menubar-text: $chalk;
+$menubar-active-bg: $coal;
+$menubar-active-text: $green-bright;
+$menubar-hover-bg: $dark-bright;
+$menubar-hover-text: $chalk;
+$menubar-border: $coal;
+
+$menubar-submenu-text: $chalk;
+$menubar-submenu-bg: $coal;
+$menubar-submenu-hover-bg: $dark-deep;
+$menubar-submenu-separator: $grey;
+$menubar-submenu-disabled-text: $grey;
+$menubar-submenu-hotkey-text: $grey;
