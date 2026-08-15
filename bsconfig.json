@@ -1,7 +1,5 @@
-// @see https://reasonml.chat/t/best-practices-for-using-reasonml-in-a-monorepo/161/4
 {
   "name": "xod",
-  "version": "0.33.0",
   "namespace": false,
   "sources": [
     {
@@ -10,10 +8,6 @@
     },
     {
       "dir": "packages/sdp-arduino/src",
-      "subdirs": true
-    },
-    {
-      "dir": "packages/sdp-func-tools/src",
       "subdirs": true
     },
     {
@@ -30,15 +24,13 @@
     "in-source": true
   },
   "suffix": ".bs.js",
-  "bs-dependencies": [
+  "dependencies": [
     "belt-holes",
-    "sdp-func-tools",
     "sdp-arduino",
     "sdp-project",
     "sdp-tabtest"
   ],
   "warnings": {
     "error": "+101"
-  },
-  "refmt": 3
+  }
 }
