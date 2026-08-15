@@ -86,7 +86,7 @@ export const listPorts = () => {
   // using CLI for things not related to serial port.
   //
   // eslint-disable-next-line global-require
-  const SerialPort = require('serialport');
+  const { SerialPort } = require('serialport');
 
   return SerialPort.list();
 };
@@ -95,12 +95,11 @@ export const listPorts = () => {
 export const openPort = (portName, opts = {}) =>
   new Promise((resolve, reject) => {
     // eslint-disable-next-line global-require
-    const SerialPort = require('serialport');
+    const { SerialPort } = require('serialport');
 
     try {
       const port = new SerialPort(
-        portName,
-        opts,
+        Object.assign({ path: portName }, opts),
         err => (err ? reject(err) : resolve(port))
       );
     } catch (err) {
@@ -117,15 +116,13 @@ export const closePort = port =>
 // :: PortName -> Boolean -> (String -> *) -> (* -> *) -> Promise Port Error
 export const openAndReadPort = (portName, disableRts, onData, onClose) => {
   // eslint-disable-next-line global-require
-  const SerialPort = require('serialport');
+  const { ReadlineParser } = require('serialport');
 
   return openPort(portName, {
     baudRate: 115200,
   }).then(
     R.tap(port => {
-      const parser = port.pipe(
-        new SerialPort.parsers.Readline({ delimiter: '\n' })
-      );
+      const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
 
       parser.on('data', onData);
       port.on('close', onClose);

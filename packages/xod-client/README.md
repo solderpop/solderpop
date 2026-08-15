@@ -1,12 +1,12 @@
 # xod-client
 
-This package is a part of the [XOD](https://github.com/xodio/xod) project.
+This package is a part of the [SolderPop IDE](https://github.com/solderpop/solderpop) project.
 
 The package contains the most of code related to the XOD IDE user interface. `xod-client` is build on React + Redux stack.
 
 `xod-client` is neutral to platform. That means it doesn’t contain code specific to a particular execution environment like browser or electron.
 
-To make it alive a bootstrapping wrapper is required that would embed the `xod-client` in a platform specific container. See [`xod-client-browser`](https://github.com/xodio/xod/tree/master/packages/xod-client-browser) [`xod-client-electron`](https://github.com/xodio/xod/tree/master/packages/xod-client-electron) for example.
+To make it alive a bootstrapping wrapper is required that would embed the `xod-client` in a platform specific container. See [`xod-client-browser`](https://github.com/solderpop/solderpop/tree/main/packages/xod-client-browser) [`xod-client-electron`](https://github.com/solderpop/solderpop/tree/main/packages/xod-client-electron) for example.
 
 ## Source code structure
 
@@ -22,7 +22,7 @@ Each pod could contain:
 * `selectors.js` — functions to query presentational data from state subtree (see below)
 * `state.js` — initial state for the pod’s subtree
 
-To work with XOD project state a separate package [`xod-project`](https://github.com/xodio/xod/tree/master/packages/xod-project) is used. Reducers simply delegate state update to `xod-project`’s functions, selectors, and components use functions from `xod-project` to access project data. This distincion is done because project state is complex and keeping all machinery inside standard pod layout would make it messy.
+To work with XOD project state a separate package [`xod-project`](https://github.com/solderpop/solderpop/tree/main/packages/xod-project) is used. Reducers simply delegate state update to `xod-project`’s functions, selectors, and components use functions from `xod-project` to access project data. This distincion is done because project state is complex and keeping all machinery inside standard pod layout would make it messy.
 
 ## Environment variables
 

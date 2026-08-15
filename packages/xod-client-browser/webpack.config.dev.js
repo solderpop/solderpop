@@ -12,12 +12,21 @@ module.exports = merge.smart(baseConfig, {
   output: {
     publicPath: 'http://localhost:8080/',
   },
+  // Native fs events are unreliable on some filesystems (containers,
+  // network/overlay mounts) and can make webpack's watcher retrigger
+  // an identical rebuild in a tight loop. Polling avoids that.
+  watchOptions: {
+    poll: 1000,
+  },
   devServer: {
     hot: true,
     host: 'localhost',
     port: 8080,
     contentBase: pkgpath('dist'),
     compress: true,
+    watchOptions: {
+      poll: 1000,
+    },
   },
   plugins: [
     new webpack.DefinePlugin({

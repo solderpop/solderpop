@@ -20,7 +20,7 @@ export const WASM_BINARY_NOT_FOUND = 'Unable to get URL of WASM binary file';
 export const WASM_BUILDING_ERROR = `The generated C++ code contains errors. It can be due to a bad node implementation
 or if your board is not compatible with XOD runtime code. The original compiler error
 message is above. Fix C++ errors to continue. If you believe it is a bug, report the
-problem to XOD developers.`;
+problem to SolderPop developers.`;
 
 export const WASM_NETWORK_ERROR =
   'Network error: can not compile in the cloud. Check your internet connection.';
@@ -46,7 +46,7 @@ export const DO_NOT_USE_TETHERING_INTERNET_IN_BROWSER = {
   note:
     'The internet tethering requires OS features which are not available to the web-browser.',
   solution:
-    'Install the desktop version of the XOD IDE to reveal all features of XOD',
+    'Install the desktop version of SolderPop IDE to reveal all features of XOD',
 };
 
 export const LOG_COPIED = {
@@ -60,11 +60,11 @@ export const LOG_COPY_NOT_SUPPORTED = {
 export const logCopyError = error => ({
   title: `Cannot copy log`,
   note: error.message,
-  solution: 'Please, report the issue to the XOD developers ',
+  solution: 'Please, report the issue to the SolderPop developers ',
 });
 
 export const logSaveError = error => ({
   title: `Cannot save log`,
   note: error.message,
-  solution: 'Please, report the issue to the XOD developers ',
+  solution: 'Please, report the issue to the SolderPop developers ',
 });

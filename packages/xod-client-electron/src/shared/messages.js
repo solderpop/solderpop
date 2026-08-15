@@ -30,7 +30,7 @@ export const DEBUG_LOST_CONNECTION = 'Lost connection with the device.';
 export const updateAvailableMessage = version =>
   composeMessage(
     'Update available',
-    `New version ${version} of XOD\u00A0IDE is available`,
+    `New version ${version} of SolderPop\u00A0IDE is available`,
     'Download & Install',
     true
   );

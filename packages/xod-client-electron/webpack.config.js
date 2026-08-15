@@ -38,6 +38,16 @@ module.exports = merge.smart(getBaseConfig(__dirname), {
           plugins: ['transform-object-rest-spread'],
         },
       },
+      {
+        // Scoped strictly to this package's own assets. The base config
+        // (xod-client/webpack.config.js) already has file-loader rules for
+        // its own assets, each scoped with its own `include`. An unscoped
+        // rule here would double-process those same files (file-loader
+        // running on file-loader's own JS output), corrupting them.
+        include: [pkgpath('src/view/assets')],
+        test: /\.(jpe?g|png|gif|svg)$/,
+        loader: 'file-loader',
+      },
     ],
   },
   plugins: [

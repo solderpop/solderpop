@@ -25,12 +25,12 @@ const transformDialogFileFilters = filters =>
 
 export const getSaveDialogFileFilters = () =>
   transformDialogFileFilters([
-    { name: 'Packed XOD Project', extensions: ['xodball'] },
-    { name: 'Multifile XOD Project', extensions: [''] },
+    { name: 'Packed SolderPop Project', extensions: ['xodball'] },
+    { name: 'Multifile SolderPop Project', extensions: [''] },
   ]);
 export const getOpenDialogFileFilters = () =>
   transformDialogFileFilters([
-    { name: 'Any XOD File', extensions: ['xodball', 'xod', 'xodp'] },
+    { name: 'Any SolderPop File', extensions: ['xodball', 'xod', 'xodp'] },
   ]);
 
 export const createSaveDialogOptions = (title, defaultPath, buttonLabel) => ({
@@ -39,8 +39,8 @@ export const createSaveDialogOptions = (title, defaultPath, buttonLabel) => ({
   buttonLabel,
   properties: ['createDirectory'],
   message: [
-    'To save as packed XOD project add ".xodball" extension,',
-    'To save as multifile XOD project add no extension',
+    'To save as packed SolderPop project add ".xodball" extension,',
+    'To save as multifile SolderPop project add no extension',
   ].join('\n'),
   filters: getSaveDialogFileFilters(),
 });

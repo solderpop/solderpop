@@ -1,0 +1,96 @@
+// `#App` (from xod-client) is a flex column. Its `.Editor` child sets its own
+// `height: 100%`, which becomes an unshrinkable flex-basis under the default
+// `min-height: auto` — so it ignores TitleBar's 32px and overflows the
+// window by that much. min-height: 0 is the standard fix for flex children
+// that refuse to shrink.
+#App > .Editor {
+  min-height: 0;
+}
+
+.TitleBar {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  height: 32px;
+  flex: 0 0 32px;
+  background: #1e2a38;
+  border-bottom: 1px solid #14202c;
+  -webkit-app-region: drag;
+  user-select: none;
+
+  & .TitleBar-drag {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    min-width: 0;
+    padding-left: 10px;
+  }
+
+  & .TitleBar-icon {
+    width: 15px;
+    height: 15px;
+    flex: 0 0 auto;
+  }
+
+  & .TitleBar-menu {
+    display: flex;
+    flex: 0 0 auto;
+    margin-left: 6px;
+    -webkit-app-region: no-drag;
+  }
+
+  & .TitleBar-menuItem {
+    padding: 0 8px;
+    height: 24px;
+    line-height: 24px;
+    border: 0;
+    border-radius: 3px;
+    background: transparent;
+    color: #c7cfd6;
+    font-size: 12px;
+    cursor: pointer;
+
+    &:hover {
+      background: #283748;
+      color: #eef1f3;
+    }
+  }
+
+  & .TitleBar-title {
+    margin-left: 10px;
+    font-size: 12px;
+    color: #71808f;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  & .TitleBar-controls {
+    display: flex;
+    flex: 0 0 auto;
+    -webkit-app-region: no-drag;
+  }
+
+  & .TitleBar-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #a9b4bd;
+    cursor: pointer;
+
+    &:hover {
+      background: #283748;
+      color: #eef1f3;
+    }
+
+    &.TitleBar-button--close:hover {
+      background: #ff6b6b;
+      color: #1e2a38;
+    }
+  }
+}

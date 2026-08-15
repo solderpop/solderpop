@@ -1,77 +1,78 @@
-// Monochromes
-$black: #000;
+// Monochromes — SolderPop Navy-tinted ramp (was neutral gray)
+$black: #0b1119;
 $white: #fff;
 
-$coal: #222;
-$coal-light: #252525;
-$coal-bright: #2b2b2b;
+$coal: #1e2a38; // Iron Night (ClickClack base dark)
+$coal-light: #22303f;
+$coal-bright: #283748;
 
-$dark: #363636;
-$dark-deep: #303030;
-$dark-light: #3e3e3e;
-$dark-bright: #404040;
+$dark: #2c3e50; // SolderPop Navy
+$dark-deep: #24333f;
+$dark-light: #34495e;
+$dark-bright: #3d5468;
 
-$grey: #444;
-$grey-light: #555;
-$grey-bright: #666;
+$grey: #4c5f72;
+$grey-light: #5c6b7a; // Fjord Slate
+$grey-bright: #71808f;
 
-$light-grey: #777;
-$light-grey-bright: #999;
+$light-grey: #8a97a3;
+$light-grey-bright: #a9b4bd;
 
-$chalk: #ccc;
-$chalk-light: #ddd;
-$chalk-bright: #eee;
+$chalk: #c7cfd6;
+$chalk-light: #d8dee3;
+$chalk-bright: #eef1f3;
 
-// Colored
-$blue: #2d83b4;
-$cyan: #4ed5ed;
-$yellow: #f6dd0d;
+// Colored — SolderPop / ClickClack accents (was generic hues)
+$coral: #ff6b6b; // SolderPop Coral — primary brand accent
+$blue: #5c6b7a; // Fjord Slate
+$cyan: #7b8db5; // Nordic Blue
+$yellow: #ffe66d; // Sunflower
 
 $red: #c33d3d;
 $red-bright: #fd6161;
 
-$green: #579205;
-$green-bright: #86cc23;
+$green: #3dbfb0;
+$green-bright: #4ecdc4; // Electric Teal (success)
 
-$magenta: #9f5497;
-$magenta-light: #af62a7;
-$magenta-shadow: #8c4a85;
+$magenta: #a78bfa; // Lavender
+$magenta-light: #b7a0fb;
+$magenta-shadow: #8f6ef0;
 
-$violet: #6965bd;
-$violet-light: #7570cb;
-$violet-shadow: #5c59a6;
+$violet: #ff6b6b; // SolderPop Coral (pulse)
+$violet-light: #ff8787;
+$violet-shadow: #e85555;
 
-$orange: #c76530;
-$orange-light: #d9733c;
-$orange-shadow: #af592a;
+$orange: #e89530; // Molten Amber
+$orange-light: #f0a94f;
+$orange-shadow: #cf7f22;
 
-$blackberry: #4a4a57;
-$blackberry-light: #616077;
-$blackberry-shadow: #3a3a40;
+$blackberry: #3d5468;
+$blackberry-light: #4a6883;
+$blackberry-shadow: #2f4356;
 
-$blueberry: #77a0ff;
+$blueberry: #7b8db5; // Nordic Blue
 
-$olive: #827a22;
-$olive-light: #988f34;
-$olive-shadow: #726b1e;
+$olive: #c97d2e;
+$olive-light: #db9142;
+$olive-shadow: #a8661f;
 
-$emerald: #2e8f6c;
-$emerald-light: #3fa37e;
-$emerald-shadow: #287e5f;
+$emerald: #2ec4b6; // Live Teal
+$emerald-light: #4fd4c8;
+$emerald-shadow: #22a99d;
 
-$apricot: #d8a53a;
-$apricot-light: #e9b445;
-$apricot-shadow: #be9133;
+$apricot: #ffe66d; // Sunflower
+$apricot-light: #fff0a3;
+$apricot-shadow: #e8c94a;
 
 $brown: #584b22;
 $brown-light: #8e5f35;
 $brown-shadow: #69421e;
 
-$terracotta: #d77230;
+$terracotta: #7b8db5; // Nordic Blue (datatype-custom)
 
 // Associated colors
 
-$selected: $cyan;
+$selected: $coral;
 $error: $red;
 $error-text: $red-bright;
 

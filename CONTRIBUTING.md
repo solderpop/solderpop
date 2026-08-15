@@ -1,46 +1,46 @@
-There are several ways you can contribute to XOD. This document is dedicated to contributing to code and issues. Other ways are described in the [Contributor’s guide](https://xod.io/docs/contributing/).
+There are several ways you can contribute to SolderPop IDE. This document is dedicated to contributing to code and issues.
 
 ## Improving issues
 
-Review the [issues](https://github.com/xodio/xod/issues) and use the GitHub reactions to show your attitude. Issues with most reactions take a higher development priority.
+Review the [issues](https://github.com/solderpop/solderpop/issues) and use the GitHub reactions to show your attitude. Issues with most reactions take a higher development priority.
 
 Read the issues. If you see some flaws, inconsistencies, or ambiguities point to them in the issue’s comments.
 
-See what’s coming next in the [milestones](https://github.com/xodio/xod/milestones) section. If an issue is already there, you have a final chance to say “no-oooo!”
+See what’s coming next in the [milestones](https://github.com/solderpop/solderpop/milestones) section. If an issue is already there, you have a final chance to say “no-oooo!”
 
 ## Creating issues
 
 Before creating an issue check if a similar issue already exists.
 
-There are few categories of issues in the XOD GitHub repository:
+There are few categories of issues in this GitHub repository:
 
-* [Bugs](https://github.com/xodio/xod/issues?q=is%3Aissue+is%3Aopen+label%3At%3Abug): things that are definitely broken;
-* [Features](https://github.com/xodio/xod/issues?q=is%3Aissue+is%3Aopen+label%3At%3Afeat): new functionality for end-users;
-* [Tweaks](https://github.com/xodio/xod/issues?q=is%3Aissue+is%3Aopen+label%3At%3Atweak): an inconvenient, annoying behavior that more looks like a bug than a missing feature;
-* [Refactoring](https://github.com/xodio/xod/issues?q=is%3Aissue+is%3Aopen+label%3At%3Arefactor): notes on code improvements without changes in functionality;
-* [Chore](https://github.com/xodio/xod/issues?q=is%3Aissue+is%3Aopen+label%3At%3Achore): repository building, testing, maintenance, and DX improvements.
+* [Bugs](https://github.com/solderpop/solderpop/issues?q=is%3Aissue+is%3Aopen+label%3At%3Abug): things that are definitely broken;
+* [Features](https://github.com/solderpop/solderpop/issues?q=is%3Aissue+is%3Aopen+label%3At%3Afeat): new functionality for end-users;
+* [Tweaks](https://github.com/solderpop/solderpop/issues?q=is%3Aissue+is%3Aopen+label%3At%3Atweak): an inconvenient, annoying behavior that more looks like a bug than a missing feature;
+* [Refactoring](https://github.com/solderpop/solderpop/issues?q=is%3Aissue+is%3Aopen+label%3At%3Arefactor): notes on code improvements without changes in functionality;
+* [Chore](https://github.com/solderpop/solderpop/issues?q=is%3Aissue+is%3Aopen+label%3At%3Achore): repository building, testing, maintenance, and DX improvements.
 
-Classify issue you want to create in advance. If it’s more like a feature or an opinionated tweak, use XOD [forum](https://forum.xod.io) to discuss it. Features come from the [Roadmap](https://github.com/xodio/xod/wiki/Roadmap) and community brainstorms. GitHub issues are things to be scheduled, tracked, and implemented, they are _not_ a place for discussions.
+Classify issue you want to create in advance. GitHub issues are things to be scheduled, tracked, and implemented, they are _not_ a place for discussions.
 
-If sure, [start a new issue using the proper template](https://github.com/xodio/xod/issues/new/choose).
+If sure, [start a new issue using the proper template](https://github.com/solderpop/solderpop/issues/new/choose).
 
 ## Making changes in the code
 
-Generally, any change in code should be related to a concrete issue. The common pipeline to get your changes into the master branch is:
+Generally, any change in code should be related to a concrete issue. The common pipeline to get your changes into the main branch is:
 
 1.  Create a new topic branch to work on the issue
 2.  Write the code, do a series of commits
-3.  Rebase on the `master`
+3.  Rebase on the `main`
 4.  Test and lint the code
-5.  Create a pull request to the `master`
+5.  Create a pull request to the `main`
 6.  Wait for the code review, fix the code, rebase, force push
-7.  Merge to the `master` and delete the topic branch
+7.  Merge to the `main` and delete the topic branch
 
 These steps are described below in details.
 
 ### Creating a topic branch
 
-Any changes are delivered to XOD via pull requests. So any work should be done in a topic branch. Create a new branch like following:
+Any changes are delivered via pull requests. So any work should be done in a topic branch. Create a new branch like following:
 
     $ git checkout -b fix-101-delete-empty-patch
 
@@ -80,28 +80,28 @@ For the `<subject>` text:
 
 Try to keep the whole subject line under 72 symbols.
 
-### Rebasing on master
+### Rebasing on main
 
-To keep history clean we rebase topic branches rather than merge. Once you want to synchronize with the `master` going ahead do:
+To keep history clean we rebase topic branches rather than merge. Once you want to synchronize with the `main` going ahead do:
 
-    $ git checkout master
+    $ git checkout main
     $ git pull
     $ git checkout <feature-branch-name>
-    $ git rebase master
+    $ git rebase main
 
 Follow Git hints to resolve any conflicts.
 
 ### Testing and linting changes
 
-There is a series of checks that should be passed for the code to have a chance to be merged into `master`. They are unit tests, linting and possibly other things.
+There is a series of checks that should be passed for the code to have a chance to be merged into `main`. They are unit tests, linting and possibly other things.
 
 Run `yarn run verify` to make sure your code doesn’t break anything.
 
-The checks are performed by [Circle CI](https://circleci.com/gh/xodio/xod/tree/master) in any case, but ensuring your PR would not break anything in advance is a good habit.
+These checks are expected to run in CI, but ensuring your PR would not break anything in advance is a good habit.
 
 ### Creating pull request
 
-Use GitHub interface to create a pull request from the topic branch to the `master` branch.
+Use GitHub interface to create a pull request from the topic branch to the `main` branch.
 
 Fill in the proposed [PULL_REQUEST_TEMPLATE](.github/PULL_REQUEST_TEMPLATE.md).
 
@@ -111,10 +111,10 @@ We strive to review any PR in one day. To be approved a PR should sustain a revi
 
 Very likely, there will be code issues that should be fixed before the merge. We’ll try to describe them as friendly as possible. Fix the issues and add the commits to the same PR.
 
-It could also happen that the PR is no longer can be merged into the `master` automatically because the HEAD went ahead. In this case, rebase on master again and push with `--force`. Yes, you’ll rewrite a history, but as an author of the topic branch, you’re the king of your changes.
+It could also happen that the PR is no longer can be merged into the `main` automatically because the HEAD went ahead. In this case, rebase on main again and push with `--force`. Yes, you’ll rewrite a history, but as an author of the topic branch, you’re the king of your changes.
 
 ### Merging
 
-Once the PR is good, it would be merged into the master branch.
+Once the PR is good, it would be merged into the main branch.
 
 It’s better to delete the merged branch to keep the repository clean. Any new contributions related to the same topic may be performed by passing the whole pipeline again.

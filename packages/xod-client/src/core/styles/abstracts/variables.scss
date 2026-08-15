@@ -9,14 +9,14 @@ $font-size-s: 10px;
 $font-size-m: 12px;
 $font-size-l: 16px;
 
-$color-success: #579205;
+$color-success: #4ecdc4; // Electric Teal
 
 $color-canvas-background: $dark-deep;
 $color-canvas-background-gridlines: $dark-light;
 $color-canvas-face: #646464;
 $color-canvas-face-light: $chalk-bright;
 $color-canvas-face-text: #a7a7a7;
-$color-canvas-selected: #4ed5ed;
+$color-canvas-selected: #ff6b6b; // SolderPop Coral
 $color-highlight: #eeeeee;
 
 $color-datatype-string: $apricot-shadow;
@@ -24,14 +24,14 @@ $color-datatype-number: $emerald;
 $color-datatype-boolean: $magenta;
 $color-datatype-pulse: $violet;
 $color-datatype-byte: $olive;
-$color-datatype-port: $green;
+$color-datatype-port: #7a9e8e; // Arctic Sage
 $color-datatype-generic: $chalk;
 $color-datatype-custom: $terracotta;
 $color-datatype-dead: $error;
 
-$color-node-fill: #222222;
+$color-node-fill: #22303f;
 $color-node-outline: $light-grey-bright;
-$color-pin-fill: #262626;
+$color-pin-fill: #263443;
 
 $color-watch-node-text: $color-canvas-face-text;
 $color-watch-node-fill: $color-node-fill;
@@ -72,20 +72,20 @@ $sidebar-color-text-hover: $chalk;
 $sidebar-color-border: $chrome-outlines;
 $sidebar-color-subtitle: $light-grey;
 
-$input-color-text: #cccccc;
-$input-color-bg: #373737;
-$input-color-border: #666666;
+$input-color-text: #c7cfd6;
+$input-color-bg: #2f3f4f;
+$input-color-border: #4c5f72;
 $input-color-border-focus: $color-canvas-selected;
 
-$input-option-highlighted: #555555;
+$input-option-highlighted: #3d5468;
 
-$button-bg-color-dark: #444444;
-$button-bg-color-hover-dark: #555555;
+$button-bg-color-dark: #34495e;
+$button-bg-color-hover-dark: #3d5468;
 $button-bg-color-light: #cccccc;
-$button-border-color: #777777;
-$button-border-color-active-dark: #999999;
+$button-border-color: #5c6b7a;
+$button-border-color-active-dark: #8a97a3;
 $button-border-color-active-light: #555555;
-$button-fg-color-dark: #cccccc;
+$button-fg-color-dark: #c7cfd6;
 $button-fg-color-light: black;
 
 $modal-fg-color: #cccccc;

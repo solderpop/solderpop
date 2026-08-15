@@ -1,4 +1,6 @@
+import path from 'path';
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import * as remoteMain from '@electron/remote/main';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import contextMenu from 'electron-context-menu';
@@ -57,9 +59,11 @@ import { STATES, getEventNameWithState } from '../shared/eventStates';
 //
 // =============================================================================
 
-const DEFAULT_APP_TITLE = 'XOD IDE';
+const DEFAULT_APP_TITLE = 'SolderPop IDE';
 
 app.setName('xod');
+
+remoteMain.initialize();
 
 configureAutoUpdater(autoUpdater, log);
 
@@ -107,13 +111,15 @@ function createWindow() {
     minWidth: 700,
     minHeight: 600,
     title: DEFAULT_APP_TITLE,
+    icon: path.join(__dirname, '../../build/icon.png'),
+    frame: false,
     show: false,
-    // Explicit opaque white is required for subpixel antialiasing to work
-    backgroundColor: '#FFF',
+    // Matches the app's navy chrome so there's no white flash before the
+    // stylesheet loads
+    backgroundColor: '#24333F',
     webPreferences: {
       partition: 'persist:main',
       nodeIntegration: true,
-      enableRemoteModule: true,
       contextIsolation: false,
       additionalArguments: [
         IS_DEV ? 'ELECTRON_IS_DEV' : 'ELECTRON_IS_PACKAGED',
@@ -121,6 +127,8 @@ function createWindow() {
       ],
     },
   });
+
+  remoteMain.enable(win.webContents);
 
   // Register listeners on the window, so it can update the state automatically
   // (the listeners will be removed when the window is closed) and restore the

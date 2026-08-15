@@ -1,6 +1,6 @@
 # xod-arduino
 
-This package is a part of the [XOD](https://github.com/xodio/xod) project.
+This package is a part of the [SolderPop IDE](https://github.com/solderpop/solderpop) project.
 
 The package provides functions that transpile a Project into Arduino C++ code.
 

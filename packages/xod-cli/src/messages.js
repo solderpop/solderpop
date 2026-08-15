@@ -3,14 +3,14 @@ export default {
     title: 'Error',
     note: message,
     solution:
-      'The error has no formatter, which is a bug. Report the issue to XOD developers.',
+      'The error has no formatter, which is a bug. Report the issue to SolderPop developers.',
   }),
 
   ARDUINO_CLI_ERROR: ({ message }) => ({
     title: 'Launch arduino-cli failed',
     note: message,
     solution:
-      'The error was not properly handled or formatted. This is a bug. Report it to XOD developers.',
+      'The error was not properly handled or formatted. This is a bug. Report it to SolderPop developers.',
   }),
 
   TRIED_TO_OPEN_NOT_XOD_FILE: ({ path }) => ({

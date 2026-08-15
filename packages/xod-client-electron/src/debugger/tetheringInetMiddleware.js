@@ -12,7 +12,7 @@ const ACK = String.fromCharCode(6); // acknowledge
 const formatUnhandledTetheringErrorMessage = err => ({
   title: 'Tethering Internet Error',
   note: err.message,
-  solution: 'If you believe this is a bug, report it to XOD developers.',
+  solution: 'If you believe this is a bug, report it to SolderPop developers.',
 });
 
 // Places the new chunks in the end of mutable `chunksToSend` list (SIDE-EFFECT)

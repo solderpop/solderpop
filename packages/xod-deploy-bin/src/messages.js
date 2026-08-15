@@ -50,7 +50,7 @@ export default {
       : 'Tried to find arduino-cli on $PATH',
     solution: isDev
       ? 'When running in the development mode `arduino-cli` should be available on $PATH or explicitly set with $XOD_ARDUINO_CLI environment variable'
-      : 'This is a bug, report it to XOD developers',
+      : 'This is a bug, report it to SolderPop developers',
   }),
 
   ARDUINO_CLI_EXITED_WITH_CODE: ({ path, message, stdout, stderr }) => ({
@@ -68,7 +68,7 @@ export default {
     title: 'Compilation failed',
     note: `Command ${message}`,
     solution:
-      'The generated C++ code contains errors. It can be due to a bad node implementation or if your board is not compatible with XOD runtime code. The original compiler error message is above. Fix C++ errors to continue. If you believe it is a bug, report the problem to XOD developers.',
+      'The generated C++ code contains errors. It can be due to a bad node implementation or if your board is not compatible with XOD runtime code. The original compiler error message is above. Fix C++ errors to continue. If you believe it is a bug, report the problem to SolderPop developers.',
   }),
 
   UPLOAD_TOOL_ERROR: ({ message }) => ({

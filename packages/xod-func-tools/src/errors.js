@@ -72,7 +72,7 @@ export const composeErrorFormatters = def(
           title: 'Error',
           note: err.message,
           solution:
-            'The error has no formatter, which is a bug. Report the issue to XOD developers.',
+            'The error has no formatter, which is a bug. Report the issue to SolderPop developers.',
         };
       }
       return formatter(err.payload);

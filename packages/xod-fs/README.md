@@ -1,6 +1,6 @@
 # xod-fs
 
-This package is a part of the [XOD](https://github.com/xodio/xod) project.
+This package is a part of the [SolderPop IDE](https://github.com/solderpop/solderpop) project.
 
 The package provides API to work with workspaces, libraries and projects that are stored as different files on the file system. It lets converting between normal (split files), xodball (single project monolith), and RAM representation.
 

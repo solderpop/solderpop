@@ -1,6 +1,6 @@
 # xod-cli
 
-This package is a part of the [XOD](https://github.com/xodio/xod) project.
+This package is a part of the [SolderPop IDE](https://github.com/solderpop/solderpop) project.
 
 The package contains implemetation of `xodc` command line utility.
 
@@ -83,7 +83,7 @@ OPTIONS
   -w, --workspace=path  [default: ~/xod] use the workspace specified, defaults to $HOME/xod
 ```
 
-_See code: [src/commands/boards.js](https://github.com/xodio/xod/blob/master/packages/xod-cli/src/commands/boards.js)_
+_See code: [src/commands/boards.js](https://github.com/solderpop/solderpop/blob/main/packages/xod-cli/src/commands/boards.js)_
 
 ## `xodc compile [options] [entrypoint]`
 
@@ -126,7 +126,7 @@ EXAMPLES
   $ xodc compile -b arduino:arv:uno foo.xodball main -o bin/uno.hex
 ```
 
-_See code: [src/commands/compile.js](https://github.com/xodio/xod/blob/master/packages/xod-cli/src/commands/compile.js)_
+_See code: [src/commands/compile.js](https://github.com/solderpop/solderpop/blob/main/packages/xod-cli/src/commands/compile.js)_
 
 ## `xodc help [COMMAND]`
 
@@ -163,7 +163,7 @@ OPTIONS
   -w, --workspace=path  [default: ~/xod] use the workspace specified, defaults to $HOME/xod
 ```
 
-_See code: [src/commands/install/arch.js](https://github.com/xodio/xod/blob/master/packages/xod-cli/src/commands/install/arch.js)_
+_See code: [src/commands/install/arch.js](https://github.com/solderpop/solderpop/blob/main/packages/xod-cli/src/commands/install/arch.js)_
 
 ## `xodc publish [options] [project]`
 
@@ -200,7 +200,7 @@ EXAMPLES
   $ xodc publish foo.xodball
 ```
 
-_See code: [src/commands/publish.js](https://github.com/xodio/xod/blob/master/packages/xod-cli/src/commands/publish.js)_
+_See code: [src/commands/publish.js](https://github.com/solderpop/solderpop/blob/main/packages/xod-cli/src/commands/publish.js)_
 
 ## `xodc resave [options] [project]`
 
@@ -240,7 +240,7 @@ EXAMPLES
   $ xodc resave foo.xodball -o /some/new/dir
 ```
 
-_See code: [src/commands/resave.js](https://github.com/xodio/xod/blob/master/packages/xod-cli/src/commands/resave.js)_
+_See code: [src/commands/resave.js](https://github.com/solderpop/solderpop/blob/main/packages/xod-cli/src/commands/resave.js)_
 
 ## `xodc tabtest [options] [entrypoint]`
 
@@ -277,7 +277,7 @@ EXAMPLES
   $ xodc tabtest --no-build --output-dir=/tmp/xod-tabtest ./workspace/__lib__/xod/net
 ```
 
-_See code: [src/commands/tabtest.js](https://github.com/xodio/xod/blob/master/packages/xod-cli/src/commands/tabtest.js)_
+_See code: [src/commands/tabtest.js](https://github.com/solderpop/solderpop/blob/main/packages/xod-cli/src/commands/tabtest.js)_
 
 ## `xodc transpile [options] [entrypoint]`
 
@@ -317,7 +317,7 @@ EXAMPLES
   $ xodc transpile foo.xodball main
 ```
 
-_See code: [src/commands/transpile.js](https://github.com/xodio/xod/blob/master/packages/xod-cli/src/commands/transpile.js)_
+_See code: [src/commands/transpile.js](https://github.com/solderpop/solderpop/blob/main/packages/xod-cli/src/commands/transpile.js)_
 
 ## `xodc upload [options] [entrypoint]`
 
@@ -352,5 +352,5 @@ EXAMPLE
   $ xodc upload -b arduino:avr:uno -p /dev/ttyACM1
 ```
 
-_See code: [src/commands/upload.js](https://github.com/xodio/xod/blob/master/packages/xod-cli/src/commands/upload.js)_
+_See code: [src/commands/upload.js](https://github.com/solderpop/solderpop/blob/main/packages/xod-cli/src/commands/upload.js)_
 <!-- commandsstop -->

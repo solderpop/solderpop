@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { HotKeys } from 'react-hotkeys';
 import EventListener from 'react-event-listener';
-import { ipcRenderer, remote as remoteElectron, shell } from 'electron';
+import { ipcRenderer, shell } from 'electron';
+import * as remoteElectron from '@electron/remote';
 
 import client from 'xod-client';
 import { Project, getProjectName, getPatchByPath } from 'xod-project';
@@ -50,6 +51,7 @@ import PopupCreateWorkspace from '../../settings/components/PopupCreateWorkspace
 import PopupUploadConfig from '../../upload/components/PopupUploadConfig';
 import PopupConnectSerial from '../../upload/components/PopupConnectSerial';
 import { SaveProgressBar } from '../components/SaveProgressBar';
+import TitleBar from '../components/TitleBar';
 
 import formatError from '../../shared/errorFormatter';
 import * as EVENTS from '../../shared/events';
@@ -995,6 +997,7 @@ class App extends client.App {
           onResize={this.onResize}
           onKeyDown={this.constructor.onKeyDown}
         />
+        <TitleBar projectPath={this.state.projectPath} />
         <client.Editor
           size={this.state.size}
           stopDebuggerSession={this.onStopDebuggerSessionClicked}
@@ -1030,7 +1033,7 @@ class App extends client.App {
         {/* TODO: Refactor this mess: */}
         {this.state.downloadProgressPopup ? (
           <client.PopupAlert
-            title="Downloading update for XOD IDE"
+            title="Downloading update for SolderPop IDE"
             closeText="Close"
             onClose={() => {
               this.setState(R.assoc('downloadProgressPopup', false));
@@ -1051,7 +1054,7 @@ class App extends client.App {
               </div>
             ) : (
               <div>
-                <p>Downloading of the update for XOD IDE is in progress.</p>
+                <p>Downloading of the update for SolderPop IDE is in progress.</p>
                 <p>
                   After download, we will automatically install it and restart
                   the application.<br />
