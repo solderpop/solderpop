@@ -38,7 +38,7 @@ import {
   bulkMoveNodesAndComments,
   bulkDeleteNodesAndComments,
 } from '../project/actions';
-import { addError, addConfirmation } from '../messages/actions';
+import { addError, addConfirmation, addNotification } from '../messages/actions';
 import composeMessage from '../messages/composeMessage';
 
 import * as Selectors from './selectors';
@@ -815,6 +815,13 @@ export const runSimulationRequested = () => ({
   type: ActionType.SIMULATION_RUN_REQUESTED,
 });
 
+// Well-known message id — sdp-client-electron's emsdkInstaller middleware
+// listens for MESSAGE_BUTTON_CLICKED with this id to start the actual
+// install. Only ever dispatched below when compileSimulationLocally
+// (electron-only, see App.jsx) rejects with EMCC_NOT_FOUND — the browser
+// build never produces that error, since it never uses the local path.
+export const INSTALL_EMSDK_MSG = 'INSTALL_EMSDK_MSG';
+
 export const abortSimulation = () => (dispatch, getState) => {
   const worker = Selectors.simulationWorker(getState());
   if (worker) worker.terminate();
@@ -832,7 +839,8 @@ export const runSimulation = (
   code,
   pinsAffectedByErrorRaisers,
   globals,
-  tetheringInetNodeId
+  tetheringInetNodeId,
+  compileSimulationLocally
 ) => (dispatch, getState) => {
   dispatch({ type: ActionType.SIMULATION_GENERATED_CPP });
   const state = getState();
@@ -847,7 +855,15 @@ export const runSimulation = (
 
   const accessToken = foldMaybe(null, R.identity, getAccessToken(state));
 
-  XCC.compileSimulation(HOSTNAME, accessToken, code)
+  // sdp-client-electron's App overrides `compileSimulationLocally` to run
+  // this through a bundled Emscripten toolchain via IPC instead — see
+  // App.jsx's `this.compileSimulationLocally`. sdp-client-browser has no
+  // Node/child_process access to do that, so it stays on the cloud path.
+  const compile = compileSimulationLocally
+    ? compileSimulationLocally(code)
+    : XCC.compileSimulation(HOSTNAME, accessToken, code);
+
+  compile
     .then(
       abortOrPass(
         R.tap(() => dispatch({ type: ActionType.SIMULATION_COMPILED }))
@@ -894,6 +910,20 @@ export const runSimulation = (
     .catch(err => {
       if (err.type === ABORT_ERROR_TYPE) return;
       if (err.worker) err.worker.terminate();
+      if (err.type === 'EMCC_NOT_FOUND') {
+        dispatch(
+          addNotification(
+            {
+              title: 'Local Simulate not installed',
+              solution:
+                'Simulate needs the Emscripten toolchain (~300 MB) to compile locally.',
+              button: 'Download & Install',
+              persistent: true,
+            },
+            INSTALL_EMSDK_MSG
+          )
+        );
+      }
       dispatch({
         type: ActionType.SIMULATION_ERROR,
         payload: err,

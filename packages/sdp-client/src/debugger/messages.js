@@ -14,6 +14,10 @@ export const UPDATING_ARDUINO_DEPENDECIES = 'Updating Arduino packages…';
 export const UPDATING_ARDUINO_DEPENDECIES_SUCCESS =
   'All Arduino packages are updated successfully';
 
+export const INSTALLING_EMSDK = 'Installing Emscripten toolchain…';
+export const INSTALLING_EMSDK_SUCCESS =
+  'Emscripten toolchain installed successfully';
+
 export const WASM_NO_RUNTIME_FOUND = 'Unable to get URL of WASM runtime script';
 export const WASM_BINARY_NOT_FOUND = 'Unable to get URL of WASM binary file';
 

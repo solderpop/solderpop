@@ -71,6 +71,13 @@ export default class App extends React.Component {
 
     this.appRef = null;
     this.isBrowser = false; // by default
+    // Overridden by sdp-client-electron's App subclass to run Simulate's
+    // C++->WASM compile locally (via Electron IPC to a bundled Emscripten
+    // toolchain) instead of the sdp-cloud-compile network call. Staying
+    // null here means "no local compiler available" — sdp-client-browser
+    // doesn't override this, since it has no Node/child_process access to
+    // run one.
+    this.compileSimulationLocally = null;
 
     this.transformProjectForTranspiler = this.transformProjectForTranspiler.bind(
       this
@@ -253,7 +260,8 @@ export default class App extends React.Component {
             code,
             pinsAffectedByErrorRaisers,
             sessionGlobals,
-            tetheringInetNodeId
+            tetheringInetNodeId,
+            this.compileSimulationLocally
           )
       )
       .catch(

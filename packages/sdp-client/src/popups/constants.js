@@ -22,4 +22,7 @@ export const POPUP_ID = {
 
   PUBLISHING_PROJECT: 'publishingProject',
   UPDATE_ARDUINO_PACKAGES_POPUP: 'UPDATE_ARDUINO_PACKAGES_POPUP',
+
+  WELCOME: 'welcome',
+  MANAGE_LOCAL_SIMULATION: 'manageLocalSimulation',
 };
