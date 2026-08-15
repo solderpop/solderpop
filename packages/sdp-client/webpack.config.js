@@ -23,10 +23,9 @@ const fs = require('fs');
 const path = require('path');
 /* eslint-disable import/no-extraneous-dependencies */
 const findup = require('findup-sync');
-const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const autoprefixer = require('autoprefixer');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 /* eslint-enable import/no-extraneous-dependencies */
 
 const pkgpath = (pkgDir, subpath) => path.join(pkgDir, subpath);
@@ -39,6 +38,7 @@ const IS_DEV = (
 );
 
 module.exports = pkgDir => ({
+  mode: IS_DEV ? 'development' : 'production',
   devtool: 'source-map',
   entry: [
     'babel-polyfill',
@@ -86,14 +86,18 @@ module.exports = pkgDir => ({
           {
             loader: 'postcss-loader',
             options: {
-              plugins: [autoprefixer()],
+              postcssOptions: {
+                plugins: [autoprefixer()],
+              },
             },
           },
           {
             loader: 'sass-loader',
             options: {
               implementation: require('sass'),
-              outputStyle: 'expanded',
+              sassOptions: {
+                style: 'expanded',
+              },
             },
           },
         ],
@@ -106,7 +110,9 @@ module.exports = pkgDir => ({
           {
             loader: 'postcss-loader',
             options: {
-              plugins: [autoprefixer()],
+              postcssOptions: {
+                plugins: [autoprefixer()],
+              },
             },
           },
         ],
@@ -116,7 +122,13 @@ module.exports = pkgDir => ({
         test: /\.(jpe?g|png|gif|svg|ttf|eot|woff|woff2)$/,
         loader: 'file-loader',
         options: {
-          name: 'assets/[path][name].[ext]?[hash:6]',
+          // Was 'assets/[path][name].[ext]?[hash:6]' (cache-busting hash as
+          // a URL query string) -- modern file-loader/webpack resolve that
+          // template literally instead of treating '?' as a query
+          // delimiter, so the hash silently stopped appearing anywhere.
+          // Embedding it in the filename itself is the supported
+          // equivalent: same cache-busting-on-content-change behavior.
+          name: 'assets/[path][name].[hash:6].[ext]',
           context: assetsPath,
         },
       },
@@ -125,23 +137,27 @@ module.exports = pkgDir => ({
         test: /\.(jpe?g|png|gif|svg|ttf|eot|woff|woff2)(\?\S*)?$/,
         loader: 'file-loader',
         options: {
-          name: 'assets/font-awesome/[name].[ext]?[hash:6]',
+          // Same fix as the assetsPath rule above: hash moved into the
+          // filename since the old '?[hash:6]' query-string form stopped
+          // being honored.
+          name: 'assets/font-awesome/[name].[hash:6].[ext]',
         },
       },
     ],
   },
   plugins: [
-    new webpack.NoEmitOnErrorsPlugin(),
-    new CopyWebpackPlugin([
-      { from: findup('node_modules/sdp-client/src/core/assets/index.html') },
-      { from: findup('node_modules/sdp-client/src/core/assets/favicon.ico') },
-    ]),
-  ].concat(
-    IS_DEV ? [] : [
-      new UglifyJSPlugin({
-        sourceMap: true,
-        parallel: true,
-        uglifyOptions: {
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: findup('node_modules/sdp-client/src/core/assets/index.html') },
+        { from: findup('node_modules/sdp-client/src/core/assets/favicon.ico') },
+      ],
+    }),
+  ],
+  optimization: {
+    minimize: !IS_DEV,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
           mangle: false,
           toplevel: true,
           output: {
@@ -149,6 +165,6 @@ module.exports = pkgDir => ({
           },
         },
       }),
-    ]
-  ),
+    ],
+  },
 });

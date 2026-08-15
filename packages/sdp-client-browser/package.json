@@ -4,11 +4,11 @@
   "description": "SolderPop IDE: Client browser application",
   "scripts": {
     "build:tutorial-project": "node ./tools/loadTutorialProject.js",
-    "build": "yarn run build:tutorial-project && webpack --colors",
+    "build": "yarn run build:tutorial-project && NODE_OPTIONS=--openssl-legacy-provider webpack --color",
     "clean:dist": "rimraf ./dist ./tutorialProject.json",
     "benchmark": "node -r babel-register ./benchmark/index.js",
     "test-func": "mocha test-func/bootstrap.js --opts test-func/mocha.opts test-func/**/*.spec.js",
-    "dev": "yarn run build:tutorial-project && webpack-dev-server --watch --colors --inline --hot --config webpack.config.dev.js"
+    "dev": "yarn run build:tutorial-project && NODE_OPTIONS=--openssl-legacy-provider webpack-dev-server --watch --color --hot --config webpack.config.dev.js"
   },
   "dependencies": {
     "babel-polyfill": "^6.16.0",
@@ -33,10 +33,22 @@
     "@babel/core": "^7.29.7",
     "@babel/preset-env": "^7.29.7",
     "@babel/preset-react": "^7.29.7",
-    "babel-loader": "^8.4.1",
+    "babel-loader": "^10.1.1",
     "chai": "^4.1.2",
-    "expose-loader": "^1.0.3",
+    "css-loader": "^7.1.4",
+    "expose-loader": "^5.0.1",
+    "file-loader": "^6.2.0",
     "node-static": "^0.7.10",
+    "postcss": "^8.5.26",
+    "postcss-loader": "^8.2.1",
+    "sass-loader": "^17.0.0",
+    "source-map-loader": "^5.0.0",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.109.2",
+    "webpack-cli": "^7.2.2",
+    "webpack-dev-server": "^6.0.0",
+    "webpack-merge": "^6.0.1",
+    "worker-loader": "^3.0.8",
     "why-did-you-update": "^0.1.0",
     "sdp-fs": "^0.38.0"
   },

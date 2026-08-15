@@ -1,10 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const webpack = require('webpack');
 /* eslint-enable import/no-extraneous-dependencies */
 const getBaseConfig = require('sdp-client/webpack.config');
 
-module.exports = merge.smart(getBaseConfig(__dirname), {
+module.exports = merge(getBaseConfig(__dirname), {
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),

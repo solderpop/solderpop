@@ -1,13 +1,13 @@
 const path = require('path');
 /* eslint-disable import/no-extraneous-dependencies */
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const webpack = require('webpack');
 /* eslint-enable import/no-extraneous-dependencies */
 const getBaseConfig = require('sdp-client/webpack.config');
 
 const pkgpath = subpath => path.resolve(__dirname, subpath);
 
-module.exports = merge.smart(getBaseConfig(__dirname), {
+module.exports = merge(getBaseConfig(__dirname), {
   target: 'electron-renderer',
   node: {
     __dirname: false,
@@ -67,6 +67,6 @@ module.exports = merge.smart(getBaseConfig(__dirname), {
     // It happens, cause `ws` is server-side only package
     // But webpack bundles client-side code
     // And `ws` should be never used on client-size (use native `WebSocket`)
-    new webpack.IgnorePlugin(/bufferutil|utf-8-validate/),
+    new webpack.IgnorePlugin({ resourceRegExp: /bufferutil|utf-8-validate/ }),
   ],
 });
