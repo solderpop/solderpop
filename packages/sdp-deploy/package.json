@@ -36,10 +36,10 @@
     "sdp-func-tools": "^0.34.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.29.7",
-    "@babel/core": "^7.29.7",
-    "@babel/preset-env": "^7.29.7",
-    "@babel/register": "^7.29.7",
+    "@babel/cli": "^8.0.4",
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
+    "@babel/register": "^8.0.1",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "chai-fs": "^2.0.0"
