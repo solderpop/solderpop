@@ -3,8 +3,8 @@ import path from 'path';
 import R from 'ramda';
 import { assert } from 'chai';
 
-import { explode, foldEither, explodeEither } from 'xod-func-tools';
-import { loadProject } from 'xod-fs';
+import { explode, foldEither, explodeEither } from 'sdp-func-tools';
+import { loadProject } from 'sdp-fs';
 import {
   transpile,
   transformProject,
@@ -17,7 +17,7 @@ import { LIVENESS } from '../src/constants';
 const wsPath = (...subpath) =>
   path.resolve(__dirname, '../../../workspace', ...subpath);
 
-describe('xod-arduino transpiler', () => {
+describe('sdp-arduino transpiler', () => {
   describe('correctly transpiles workspace fixture', () => {
     const testFixture = projName => {
       const expectedCpp = fs.readFileSync(

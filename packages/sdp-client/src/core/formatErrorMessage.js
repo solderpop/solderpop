@@ -1,6 +1,6 @@
-import { composeErrorFormatters } from 'xod-func-tools';
-import { messages as xpMessages } from 'xod-project';
-import { messages as xardMessages } from 'xod-arduino';
+import { composeErrorFormatters } from 'sdp-func-tools';
+import { messages as xpMessages } from 'sdp-project';
+import { messages as xardMessages } from 'sdp-arduino';
 
 import formatUnexpectedError from '../messages/formatUnexpectedError';
 

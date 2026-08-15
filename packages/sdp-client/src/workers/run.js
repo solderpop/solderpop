@@ -1,6 +1,6 @@
 import * as R from 'ramda';
-import { noop, createError } from 'xod-func-tools';
-import { prepareModuleOptions, ERROR_CODES } from 'xod-cloud-compile';
+import { noop, createError } from 'sdp-func-tools';
+import { prepareModuleOptions, ERROR_CODES } from 'sdp-cloud-compile';
 
 const getRuntimeUrl = suite => R.path(['artifactUrls', 'main.js'], suite);
 const getWasmUrl = suite => R.path(['artifactUrls', 'main.wasm'], suite);

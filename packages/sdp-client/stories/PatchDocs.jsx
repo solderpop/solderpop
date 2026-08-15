@@ -1,13 +1,13 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 
 import '../src/core/styles/main.scss';
 import PatchDocs from '../src/editor/components/PatchDocs';
 
 // TODO: fragile import
-import tutorialProject from '../../xod-client-browser/tutorialProject.json';
+import tutorialProject from '../../sdp-client-browser/tutorialProject.json';
 
 const emptyProject = XP.createProject();
 

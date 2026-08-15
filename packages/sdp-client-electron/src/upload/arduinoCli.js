@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { noop, isAmong } from 'xod-func-tools';
+import { noop, isAmong } from 'sdp-func-tools';
 
 import promisifyIpc from '../view/promisifyIpc';
 import { LIST_BOARDS, UPLOAD_TO_ARDUINO } from '../shared/events';

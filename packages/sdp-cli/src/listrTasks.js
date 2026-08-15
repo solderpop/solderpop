@@ -1,9 +1,9 @@
 /* eslint-disable no-param-reassign */
 import { compose, filter, identity, last, map, startsWith } from 'ramda';
-import { transformProject, transpile, LIVENESS } from 'xod-arduino';
-import { loadProject } from 'xod-fs';
-import { createError, foldEither } from 'xod-func-tools';
-import * as xdb from 'xod-deploy-bin';
+import { transformProject, transpile, LIVENESS } from 'sdp-arduino';
+import { loadProject } from 'sdp-fs';
+import { createError, foldEither } from 'sdp-func-tools';
+import * as xdb from 'sdp-deploy-bin';
 
 import { resolveBundledWorkspacePath } from './paths';
 

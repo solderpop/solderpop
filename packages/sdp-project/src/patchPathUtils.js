@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import { Maybe } from 'ramda-fantasy';
-import { failOnFalse, maybePath, isAmong } from 'xod-func-tools';
+import { failOnFalse, maybePath, isAmong } from 'sdp-func-tools';
 
 import { def } from './types';
 import * as CONST from './constants';

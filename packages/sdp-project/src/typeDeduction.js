@@ -7,7 +7,7 @@ import {
   catMaybies,
   setOf,
   inSet,
-} from 'xod-func-tools';
+} from 'sdp-func-tools';
 
 import * as Link from './link';
 import * as Node from './node';

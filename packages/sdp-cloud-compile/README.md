@@ -1,4 +1,4 @@
-# xod-cloud-compile
+# sdp-cloud-compile
 
 This package is a part of the [SolderPop IDE](https://github.com/solderpop/solderpop) project.
 

@@ -8,8 +8,8 @@ import EventListener from 'react-event-listener';
 import { ipcRenderer, shell } from 'electron';
 import * as remoteElectron from '@electron/remote';
 
-import client from 'xod-client';
-import { Project, getProjectName, getPatchByPath } from 'xod-project';
+import client from 'sdp-client';
+import { Project, getProjectName, getPatchByPath } from 'sdp-project';
 import {
   foldEither,
   foldMaybe,
@@ -19,7 +19,7 @@ import {
   tapP,
   eitherToPromise,
   createError,
-} from 'xod-func-tools';
+} from 'sdp-func-tools';
 import {
   transpile,
   getNodeIdsMap,
@@ -31,8 +31,8 @@ import {
   extendTProjectWithGlobals,
   getTetheringInetNodeId,
   LIVENESS,
-} from 'xod-arduino';
-import { messages as xdbMessages } from 'xod-deploy-bin';
+} from 'sdp-arduino';
+import { messages as xdbMessages } from 'sdp-deploy-bin';
 
 import packageJson from '../../../package.json';
 
@@ -1046,7 +1046,7 @@ class App extends client.App {
                 <p>
                   Error occured during downloading or installing the update.<br />
                   Please report the bug on our{' '}
-                  <a href="https://forum.xod.io/" rel="noopener noreferrer">
+                  <a href="https://forum.solderpop.io/" rel="noopener noreferrer">
                     forum
                   </a>.
                 </p>

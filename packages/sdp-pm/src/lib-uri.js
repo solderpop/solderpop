@@ -1,4 +1,4 @@
-// TODO: duplicates xod-cli/lib-uri.js
+// TODO: duplicates sdp-cli/lib-uri.js
 
 import { Maybe } from 'ramda-fantasy';
 

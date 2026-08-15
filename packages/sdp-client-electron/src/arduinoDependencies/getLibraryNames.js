@@ -1,6 +1,6 @@
 import * as R from 'ramda';
-import { catMaybies } from 'xod-func-tools';
-import { getLibraryNameFromUrl } from 'xod-deploy';
+import { catMaybies } from 'sdp-func-tools';
+import { getLibraryNameFromUrl } from 'sdp-deploy';
 
 /**
  * Returns a comma separated and wrapped with quotes library names.

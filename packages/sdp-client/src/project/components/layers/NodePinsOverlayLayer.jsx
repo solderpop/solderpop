@@ -3,7 +3,7 @@ import cn from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { getBaseName } from 'xod-project';
+import { getBaseName } from 'sdp-project';
 
 import pureDeepEqual from '../../../utils/pureDeepEqual';
 

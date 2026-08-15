@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ContextMenuTrigger } from 'react-contextmenu';
 import CustomScroll from 'react-custom-scroll';
-import { noop } from 'xod-func-tools';
+import { noop } from 'sdp-func-tools';
 
 import { PANEL_CONTEXT_MENU_ID, PANEL_IDS, SIDEBAR_IDS } from '../constants';
 

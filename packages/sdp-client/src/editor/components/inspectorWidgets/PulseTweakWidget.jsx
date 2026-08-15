@@ -1,6 +1,6 @@
 import React from 'react';
 import PT from 'prop-types';
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 
 import PinWidget from './pinWidgets/PinWidget';
 

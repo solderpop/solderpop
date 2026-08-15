@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 
 import { NODE_PROPERTY_KIND } from '../../project/constants';
 import { Widget, getNodeWidgetConfig } from './inspectorWidgets';

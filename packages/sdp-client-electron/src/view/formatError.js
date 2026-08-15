@@ -1,9 +1,9 @@
-import { composeErrorFormatters } from 'xod-func-tools';
-import { messages as xpMessages } from 'xod-project';
-import { messages as xdMessages } from 'xod-deploy';
-import { messages as xdbMessages } from 'xod-deploy-bin';
-import { messages as xardMessages } from 'xod-arduino';
-import { messages as xfMessages } from 'xod-fs';
+import { composeErrorFormatters } from 'sdp-func-tools';
+import { messages as xpMessages } from 'sdp-project';
+import { messages as xdMessages } from 'sdp-deploy';
+import { messages as xdbMessages } from 'sdp-deploy-bin';
+import { messages as xardMessages } from 'sdp-arduino';
+import { messages as xfMessages } from 'sdp-fs';
 
 import uploadMessages from '../upload/messages';
 

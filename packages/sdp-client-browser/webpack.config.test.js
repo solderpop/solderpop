@@ -29,7 +29,7 @@ module.exports = merge.smart(baseConfig, {
   module: {
     rules: [
       {
-        test: /xod-client\/.+(components|containers)\/.+\.js$/,
+        test: /sdp-client\/.+(components|containers)\/.+\.js$/,
         use: [
           {
             loader: 'expose-loader',

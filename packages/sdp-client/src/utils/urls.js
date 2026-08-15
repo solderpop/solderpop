@@ -34,7 +34,7 @@ export const getUtmForumUrl = getUtmUrl(
   'forum'
 );
 
-export const HOSTNAME = process.env.XOD_HOSTNAME || 'xod.io';
+export const HOSTNAME = process.env.XOD_HOSTNAME || 'solderpop.io';
 
 // :: () -> String
 export const getPmSwaggerUrl = () => `https://pm.${HOSTNAME}/swagger/`;

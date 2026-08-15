@@ -4,8 +4,8 @@ import which from 'which';
 import * as R from 'ramda';
 import * as fse from 'fs-extra';
 import arduinoCli from 'arduino-cli';
-import { createError } from 'xod-func-tools';
-import { isWorkspaceValid, spawnWorkspaceFile } from 'xod-fs';
+import { createError } from 'sdp-func-tools';
+import { isWorkspaceValid, spawnWorkspaceFile } from 'sdp-fs';
 
 import {
   ARDUINO_LIBRARIES_DIRNAME,

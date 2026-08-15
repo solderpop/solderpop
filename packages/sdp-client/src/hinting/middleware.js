@@ -1,4 +1,4 @@
-import { notEquals } from 'xod-func-tools';
+import { notEquals } from 'sdp-func-tools';
 
 import { getProject } from '../project/selectors';
 

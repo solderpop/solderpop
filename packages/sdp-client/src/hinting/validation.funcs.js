@@ -1,6 +1,6 @@
 import * as R from 'ramda';
-import * as XP from 'xod-project';
-import { foldEither, mergeAllWithConcat, failOnNothing } from 'xod-func-tools';
+import * as XP from 'sdp-project';
+import { foldEither, mergeAllWithConcat, failOnNothing } from 'sdp-func-tools';
 
 // =============================================================================
 //
@@ -115,7 +115,7 @@ export const getTerminalsErrorMap = (patch, _project) =>
     XP.validatePinLabels
   )(patch);
 
-// TODO: Use validator from xod-project after refactoring
+// TODO: Use validator from sdp-project after refactoring
 // :: Patch -> Project -> Map NodeId (Map ErrorType [Error])
 export const getDeadRefErrorMap = (patch, project) =>
   R.compose(

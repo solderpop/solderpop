@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { PopupForm } from 'xod-client';
+import { PopupForm } from 'sdp-client';
 
 import PortSelect from './PortSelect';
 

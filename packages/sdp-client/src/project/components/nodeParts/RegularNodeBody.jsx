@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as XP from 'xod-project';
-import { noop } from 'xod-func-tools';
+import * as XP from 'sdp-project';
+import { noop } from 'sdp-func-tools';
 
 import { NODE_CORNER_RADIUS } from '../../nodeLayout';
 import NodeLabel from './NodeLabel';

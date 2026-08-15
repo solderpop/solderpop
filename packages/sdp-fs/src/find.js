@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import { statSync } from 'fs';
 import { resolve, dirname } from 'path';
-import { rejectWithCode } from 'xod-func-tools';
+import { rejectWithCode } from 'sdp-func-tools';
 
 import { isBasename, isExtname, isDirectory } from './utils';
 import * as ERROR_CODES from './errorCodes';

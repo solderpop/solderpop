@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import { Either } from 'ramda-fantasy';
-import { fail } from 'xod-func-tools';
+import { fail } from 'sdp-func-tools';
 
 export function findVertexesWithNoIncomingEdges(vertexes, edges) {
   return R.difference(vertexes, R.map(R.nth(1), edges));

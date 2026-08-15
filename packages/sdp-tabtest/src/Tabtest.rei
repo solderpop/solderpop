@@ -1,8 +1,8 @@
 open Belt;
 
-open XodFuncTools;
+open SdpFuncTools;
 
-open XodProject;
+open SdpProject;
 
 /** 'Filename -> Content' map of all C++ files comprising the test suite.
      The catch.hpp and Arduino.* stubs are omitted here and should be

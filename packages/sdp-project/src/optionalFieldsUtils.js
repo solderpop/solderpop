@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { subtractObject } from 'xod-func-tools';
+import { subtractObject } from 'sdp-func-tools';
 
 import { def } from './types';
 

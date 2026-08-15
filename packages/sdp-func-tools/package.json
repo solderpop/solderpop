@@ -1,9 +1,9 @@
 {
-  "name": "xod-func-tools",
+  "name": "sdp-func-tools",
   "version": "0.34.0",
   "description": "",
   "keywords": [],
-  "author": "XOD Team <dev@xod.io>",
+  "author": "SolderPop <dev@solderpop.io>",
   "license": "AGPL-3.0",
   "main": "dist/index.js",
   "scripts": {

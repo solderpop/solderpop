@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import * as xdb from 'xod-deploy-bin';
+import * as xdb from 'sdp-deploy-bin';
 
 import subscribeIpc from './subscribeIpc';
 import { loadWorkspacePath } from './workspaceActions';

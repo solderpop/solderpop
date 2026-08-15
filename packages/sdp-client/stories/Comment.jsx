@@ -44,7 +44,7 @@ be wrapped
 
 http://this-should-be-autolinked.com
 
-![cirquit](https://xod.io/docs/tutorial/02-deploy/circuit.fz.png)
+![cirquit](https://solderpop.io/docs/tutorial/02-deploy/circuit.fz.png)
 `;
 
 storiesOf('Comment', module)

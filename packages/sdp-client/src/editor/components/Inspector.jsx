@@ -2,8 +2,8 @@ import * as R from 'ramda';
 import PropTypes from 'prop-types';
 import $ from 'sanctuary-def';
 import React from 'react';
-import { Patch } from 'xod-project';
-import { $Maybe } from 'xod-func-tools';
+import { Patch } from 'sdp-project';
+import { $Maybe } from 'sdp-func-tools';
 
 import { SELECTION_ENTITY_TYPE, PANEL_IDS, SIDEBAR_IDS } from '../constants';
 

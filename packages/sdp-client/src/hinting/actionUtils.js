@@ -1,6 +1,6 @@
 import * as R from 'ramda';
-import * as XP from 'xod-project';
-import { maybePath, isAmong } from 'xod-func-tools';
+import * as XP from 'sdp-project';
+import { maybePath, isAmong } from 'sdp-func-tools';
 
 // :: Action -> Maybe PatchPath
 export const getActingPatchPath = maybePath(['payload', 'patchPath']);

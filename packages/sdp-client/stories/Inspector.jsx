@@ -3,7 +3,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import { PIN_TYPE } from 'xod-project';
+import { PIN_TYPE } from 'sdp-project';
 
 import '../src/core/styles/main.scss';
 import Inspector from '../src/editor/components/Inspector';

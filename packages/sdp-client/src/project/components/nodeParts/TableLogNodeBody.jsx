@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 
 import { NODE_CORNER_RADIUS } from '../../nodeLayout';
 import NodeLabel from './NodeLabel';

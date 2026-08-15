@@ -1,10 +1,10 @@
 import { assert } from 'chai';
-import { listGenuinePatches } from 'xod-project';
-import { defaultizeProject } from 'xod-project/test/helpers';
+import { listGenuinePatches } from 'sdp-project';
+import { defaultizeProject } from 'sdp-project/test/helpers';
 
 import createPatchIndexData from '../src/mapper';
 
-describe('xod-patch-search/mapper', () => {
+describe('sdp-patch-search/mapper', () => {
   const fixture = {
     patches: {
       'xod/core/constant-number': {

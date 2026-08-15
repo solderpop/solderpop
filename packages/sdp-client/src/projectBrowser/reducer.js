@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { isAmong } from 'xod-func-tools';
+import { isAmong } from 'sdp-func-tools';
 import initialState from './state';
 
 import {

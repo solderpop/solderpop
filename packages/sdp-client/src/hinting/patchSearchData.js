@@ -1,8 +1,8 @@
 import * as R from 'ramda';
 import { Maybe } from 'ramda-fantasy';
-import * as XP from 'xod-project';
-import { isAmong, foldMaybe, notNil } from 'xod-func-tools';
-import { createIndexData } from 'xod-patch-search';
+import * as XP from 'sdp-project';
+import { isAmong, foldMaybe, notNil } from 'sdp-func-tools';
+import { createIndexData } from 'sdp-patch-search';
 
 import * as PAT from '../project/actionTypes';
 import { RECOVER_STATE } from '../core/actionTypes';

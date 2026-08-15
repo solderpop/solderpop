@@ -11,7 +11,7 @@ export const version = flags.version({
 export const api = flags.string({
   description: 'XOD API hostname',
   env: 'XOD_API',
-  default: 'xod.io',
+  default: 'solderpop.io',
   helpValue: 'hostname',
 });
 

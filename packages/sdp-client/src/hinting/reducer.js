@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { notNil } from 'xod-func-tools';
+import { notNil } from 'sdp-func-tools';
 
 import initialState from './state';
 import UPDATE_HINTING from './actionType';

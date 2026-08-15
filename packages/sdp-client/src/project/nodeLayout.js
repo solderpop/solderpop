@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import { Maybe } from 'ramda-fantasy';
-import * as XP from 'xod-project';
-import { foldMaybe } from 'xod-func-tools';
+import * as XP from 'sdp-project';
+import { foldMaybe } from 'sdp-func-tools';
 
 // SVG elements with thin stroke has to be moved by 0.5px
 // to make pixel perfect stroke instead of blurred one

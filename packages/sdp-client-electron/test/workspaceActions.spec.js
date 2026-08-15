@@ -8,8 +8,8 @@ import {
   spawnDefaultProject,
   getLocalProjects,
   resolvePath,
-} from 'xod-fs';
-import { getProjectName } from 'xod-project';
+} from 'sdp-fs';
+import { getProjectName } from 'sdp-project';
 
 import * as WA from '../src/app/workspaceActions';
 import * as ERROR_CODES from '../src/shared/errorCodes';

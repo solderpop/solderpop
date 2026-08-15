@@ -1,6 +1,6 @@
 import * as R from 'ramda';
-import * as XP from 'xod-project';
-import * as XF from 'xod-func-tools';
+import * as XP from 'sdp-project';
+import * as XF from 'sdp-func-tools';
 
 import { def } from './types';
 
@@ -12,7 +12,7 @@ export const convertProjectToProjectFileContents = def(
 export const convertProjectFileContentsToProject = def(
   'convertProjectFileContentsToProject :: ProjectFileContents -> Project',
   R.compose(
-    R.assoc('@@type', 'xod-project/Project'),
+    R.assoc('@@type', 'sdp-project/Project'),
     R.assoc('patches', {}),
     R.assoc('attachments', [])
   )
@@ -37,10 +37,10 @@ export const convertPatchFileContentsToPatch = def(
   fsPatch =>
     R.compose(
       XP.upsertLinks(
-        R.map(R.assoc('@@type', 'xod-project/Link'), R.values(fsPatch.links))
+        R.map(R.assoc('@@type', 'sdp-project/Link'), R.values(fsPatch.links))
       ),
       XP.upsertNodes(
-        R.map(R.assoc('@@type', 'xod-project/Node'), R.values(fsPatch.nodes))
+        R.map(R.assoc('@@type', 'sdp-project/Node'), R.values(fsPatch.nodes))
       ),
       XP.upsertComments(fsPatch.comments),
       XP.setPatchDescription(fsPatch.description),

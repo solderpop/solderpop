@@ -1,4 +1,4 @@
-// `#App` (from xod-client) is a flex column. Its `.Editor` child sets its own
+// `#App` (from sdp-client) is a flex column. Its `.Editor` child sets its own
 // `height: 100%`, which becomes an unshrinkable flex-basis under the default
 // `min-height: auto` — so it ignores TitleBar's 32px and overflows the
 // window by that much. min-height: 0 is the standard fix for flex children

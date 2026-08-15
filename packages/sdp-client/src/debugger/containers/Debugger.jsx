@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu';
 import { Icon } from 'react-fa';
-import { foldMaybe } from 'xod-func-tools';
+import { foldMaybe } from 'sdp-func-tools';
 import { Maybe } from 'ramda-fantasy';
 
 import { LOG_TAB_TYPE } from '../constants';

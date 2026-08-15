@@ -1,5 +1,5 @@
 {
-  "name": "xod-project",
+  "name": "sdp-project",
   "version": "0.33.0",
   "sources": [
     "src"
@@ -11,7 +11,7 @@
   "suffix": ".bs.js",
   "bs-dependencies": [
     "belt-holes",
-    "xod-func-tools"
+    "sdp-func-tools"
   ],
   "warnings": {
     "error" : "+a"

@@ -21,5 +21,5 @@ export const RESPONSE_TO_ERROR = {
 
 export const RETRY_DELAYS = [500, 1000, 1000, 2000, 5000];
 
-export const DEFAULT_UPLOAD_CONFIG_URL = 'https://compile.xod.io/upload/';
-export const DEFAULT_CLOUD_COMPILE_URL = 'wss://compile.xod.io/compile';
+export const DEFAULT_UPLOAD_CONFIG_URL = 'https://compile.solderpop.io/upload/';
+export const DEFAULT_CLOUD_COMPILE_URL = 'wss://compile.solderpop.io/compile';

@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { roundTo } from 'xod-func-tools';
+import { roundTo } from 'sdp-func-tools';
 
 // ProgressData :: { note: String, total: Number, current: Number, percentage: Number }
 

@@ -25,7 +25,7 @@ import { def } from './types';
 export const createLink = def(
   'createLink :: PinKey -> NodeOrId -> PinKey -> NodeOrId -> Link',
   (inputPinKey, inputNode, outputPinKey, outputNode) => ({
-    '@@type': 'xod-project/Link',
+    '@@type': 'sdp-project/Link',
     id: Utils.generateId(),
     output: {
       nodeId: Node.getNodeId(outputNode),

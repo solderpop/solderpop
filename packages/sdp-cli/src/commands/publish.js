@@ -1,13 +1,13 @@
 /* eslint-disable no-param-reassign */
 import { exit } from 'process';
 import { pick } from 'ramda';
-import * as xodFs from 'xod-fs';
+import * as xodFs from 'sdp-fs';
 import {
   getProjectName,
   getProjectDescription,
   getProjectVersion,
-} from 'xod-project';
-import { createError } from 'xod-func-tools';
+} from 'sdp-project';
+import { createError } from 'sdp-func-tools';
 import BaseCommand from '../baseCommand';
 import * as commonArgs from '../args';
 import * as myFlags from '../flags';

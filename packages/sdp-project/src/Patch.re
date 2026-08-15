@@ -1,6 +1,6 @@
 open Belt;
 
-open XodFuncTools;
+open SdpFuncTools;
 
 type t = Js.Types.obj_val;
 
@@ -21,7 +21,7 @@ let dissocNode = (patch, nodeId) => _dissocNode(nodeId, patch);
 [@bs.module ".."] external _listNodes: t => array(Node.t) = "listNodes";
 
 [@bs.module ".."]
-external _getNodeById: (Node.id, t) => XodFuncTools.Maybe.t(Node.t) =
+external _getNodeById: (Node.id, t) => SdpFuncTools.Maybe.t(Node.t) =
   "getNodeById";
 
 let getNodeById = (patch, nodeId) =>

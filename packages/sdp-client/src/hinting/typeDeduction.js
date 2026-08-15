@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 import {
   isAmong,
   foldMaybe,
@@ -7,7 +7,7 @@ import {
   maybeProp,
   maybePath,
   explodeMaybe,
-} from 'xod-func-tools';
+} from 'sdp-func-tools';
 
 import * as PAT from '../project/actionTypes';
 import { RECOVER_STATE } from '../core/actionTypes';

@@ -3,7 +3,7 @@ import os from 'os';
 import fs from 'fs-extra';
 
 export const createWorkingDirectory = prefix =>
-  fs.mkdtempSync(path.resolve(os.tmpdir(), `xod-cli-test-${prefix}-`));
+  fs.mkdtempSync(path.resolve(os.tmpdir(), `sdp-cli-test-${prefix}-`));
 
 export const bundledWorkspacePath = path.resolve(
   __dirname,

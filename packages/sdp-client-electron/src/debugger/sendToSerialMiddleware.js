@@ -1,8 +1,8 @@
 import * as R from 'ramda';
-import * as XP from 'xod-project';
-import client from 'xod-client';
-import { foldMaybe } from 'xod-func-tools';
-import { formatTweakMessage } from 'xod-arduino';
+import * as XP from 'sdp-project';
+import client from 'sdp-client';
+import { foldMaybe } from 'sdp-func-tools';
+import { formatTweakMessage } from 'sdp-arduino';
 import { ipcRenderer } from 'electron';
 
 import { DEBUG_SERIAL_SEND } from '../shared/events';

@@ -7,7 +7,7 @@ import {
   rejectWithCode,
   maybeToPromise,
   explodeMaybe,
-} from 'xod-func-tools';
+} from 'sdp-func-tools';
 
 import * as ERR_CODES from './errorCodes';
 import * as MSG from './messages';
@@ -120,7 +120,7 @@ export const getSwaggerClient = (() => {
   };
 })();
 
-// TODO: duplicate in xod-cli
+// TODO: duplicate in sdp-cli
 export const swaggerError = err => {
   if (err instanceof Error) {
     return Object.assign(new Error(MSG.SERVICE_UNAVAILABLE), {

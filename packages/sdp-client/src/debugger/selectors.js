@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import { Maybe } from 'ramda-fantasy';
-import { foldMaybe, isAmong, memoizeOnlyLast } from 'xod-func-tools';
+import { foldMaybe, isAmong, memoizeOnlyLast } from 'sdp-func-tools';
 import { createSelector } from 'reselect';
 import {
   getCurrentTabId,

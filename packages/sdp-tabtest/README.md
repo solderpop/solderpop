@@ -1,4 +1,4 @@
-# xod-tabtest
+# sdp-tabtest
 
 The package implements tabular test features for XOD patches. A patch may include a `patch.test.tsv` spreadsheet file which defines several “input and expected output” lines.
 

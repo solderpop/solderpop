@@ -11,7 +11,7 @@ module ResultsMap: {
   type t_Js =
     Js.Dict.t(
       Js.Dict.t(
-        XodFuncTools.Either.t(Js.Array.t(Pin.dataType), Pin.dataType),
+        SdpFuncTools.Either.t(Js.Array.t(Pin.dataType), Pin.dataType),
       ),
     );
   /** convert from Js representation */

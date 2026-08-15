@@ -66,7 +66,7 @@ Try to keep changes granular. One commit is a single completed portion of an imp
 
 We use simplified [Angular](https://gist.github.com/stephenparish/9941e89d80e2bc58a153)-alike convention for commit messages. Subject line should have a form `<type><scope>: <subject>`, e.g.
 
-    fix(xod-fs): allow empty node lists to be loaded correctly
+    fix(sdp-fs): allow empty node lists to be loaded correctly
 
 The `<type>` should be one of `fix` (bug fix), `feat` (new functionality), `tweak`, `refactor`, `doc`, or `chore` (general code maintenance).
 

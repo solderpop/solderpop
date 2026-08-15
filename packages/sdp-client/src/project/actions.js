@@ -1,8 +1,8 @@
 import * as R from 'ramda';
-import * as XP from 'xod-project';
-import { publish } from 'xod-pm';
+import * as XP from 'sdp-project';
+import { publish } from 'sdp-pm';
 
-import { foldMaybe, rejectWithCode } from 'xod-func-tools';
+import { foldMaybe, rejectWithCode } from 'sdp-func-tools';
 
 import { NODE_KIND } from './constants';
 import { addConfirmation, addError } from '../messages/actions';

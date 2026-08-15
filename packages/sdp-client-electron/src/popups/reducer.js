@@ -4,7 +4,7 @@ import {
   hideOnePopup,
   POPUP_ID,
   SERIAL_SESSION_STARTED,
-} from 'xod-client';
+} from 'sdp-client';
 
 import {
   UPLOAD,

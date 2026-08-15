@@ -1,7 +1,7 @@
 import R from 'ramda';
 import { assert } from 'chai';
 import { Maybe } from 'ramda-fantasy';
-import { explodeEither } from 'xod-func-tools';
+import { explodeEither } from 'sdp-func-tools';
 
 import * as Helper from './helpers';
 import * as Project from '../src/project';

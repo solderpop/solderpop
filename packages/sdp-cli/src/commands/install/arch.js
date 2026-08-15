@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { exit } from 'process';
 import fs from 'fs-extra';
-import * as xdb from 'xod-deploy-bin';
+import * as xdb from 'sdp-deploy-bin';
 import BaseCommand from '../../baseCommand';
 import { resolveBundledWorkspacePath } from '../../paths';
 

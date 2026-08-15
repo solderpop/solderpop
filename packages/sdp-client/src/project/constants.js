@@ -1,4 +1,4 @@
-import { getLocalPath } from 'xod-project';
+import { getLocalPath } from 'sdp-project';
 
 export const MAIN_PATCH_PATH = getLocalPath('main');
 

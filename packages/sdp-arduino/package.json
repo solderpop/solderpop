@@ -1,7 +1,7 @@
 {
-  "name": "xod-arduino",
+  "name": "sdp-arduino",
   "version": "0.38.0",
-  "description": "XOD project: Arduino transpiler",
+  "description": "SolderPop IDE: Arduino transpiler",
   "scripts": {
     "build:nearley": "nearleyc src/implementationGrammar.ne -o src/implementationGrammar.ne.js",
     "build:js": "babel src/ -d dist/ --source-maps",
@@ -17,7 +17,7 @@
   },
   "repository": {},
   "keywords": [],
-  "author": "XOD Team <dev@xod.io>",
+  "author": "SolderPop <dev@solderpop.io>",
   "license": "AGPL-3.0",
   "main": "dist/index.js",
   "dependencies": {
@@ -30,15 +30,15 @@
     "ramda": "^0.24.1",
     "ramda-fantasy": "^0.8.0",
     "sanctuary-def": "^0.14.0",
-    "xod-func-tools": "^0.34.0",
-    "xod-project": "^0.38.0"
+    "sdp-func-tools": "^0.34.0",
+    "sdp-project": "^0.38.0"
   },
   "devDependencies": {
     "babel-plugin-inline-import": "^2.0.4",
     "bs-platform": "7.1.1",
     "chai": "^4.1.2",
     "onchange": "^5.2.0",
-    "xod-fs": "^0.38.0"
+    "sdp-fs": "^0.38.0"
   },
   "files": [
     "dist",

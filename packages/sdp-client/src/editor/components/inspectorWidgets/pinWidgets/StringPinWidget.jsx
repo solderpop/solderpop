@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { enquote, unquote } from 'xod-func-tools';
+import { enquote, unquote } from 'sdp-func-tools';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import cls from 'classnames';
 

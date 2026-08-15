@@ -7,7 +7,7 @@ import {
   PIN_TYPE,
   isGenericType,
   isBuiltInType,
-} from 'xod-project';
+} from 'sdp-project';
 
 import PinIcon from './PinIcon';
 

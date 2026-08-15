@@ -33,7 +33,7 @@ export const createPin = def(
     isBindable,
     defaultValue
   ) => ({
-    '@@type': 'xod-project/Pin',
+    '@@type': 'sdp-project/Pin',
     key,
     type,
     direction,

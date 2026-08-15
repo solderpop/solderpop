@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SkyLight from 'react-skylight';
 
-import { getUtmSiteUrl } from 'xod-client';
+import { getUtmSiteUrl } from 'sdp-client';
 
 class PopupInstallApp extends React.PureComponent {
   constructor(props) {

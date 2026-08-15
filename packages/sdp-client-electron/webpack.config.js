@@ -3,7 +3,7 @@ const path = require('path');
 const merge = require('webpack-merge');
 const webpack = require('webpack');
 /* eslint-enable import/no-extraneous-dependencies */
-const getBaseConfig = require('xod-client/webpack.config');
+const getBaseConfig = require('sdp-client/webpack.config');
 
 const pkgpath = subpath => path.resolve(__dirname, subpath);
 
@@ -40,7 +40,7 @@ module.exports = merge.smart(getBaseConfig(__dirname), {
       },
       {
         // Scoped strictly to this package's own assets. The base config
-        // (xod-client/webpack.config.js) already has file-loader rules for
+        // (sdp-client/webpack.config.js) already has file-loader rules for
         // its own assets, each scoped with its own `include`. An unscoped
         // rule here would double-process those same files (file-loader
         // running on file-loader's own JS output), corrupting them.
@@ -55,16 +55,16 @@ module.exports = merge.smart(getBaseConfig(__dirname), {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       'process.env.XOD_HM_DEF': JSON.stringify(process.env.XOD_HM_DEF || false),
 
-      'process.env.XOD_HOSTNAME': JSON.stringify(process.env.XOD_HOSTNAME || 'xod.io'),
-      'process.env.XOD_SITE_DOMAIN': JSON.stringify('https://xod.io/'),
-      'process.env.XOD_FORUM_DOMAIN': JSON.stringify('https://forum.xod.io/'),
+      'process.env.XOD_HOSTNAME': JSON.stringify(process.env.XOD_HOSTNAME || 'solderpop.io'),
+      'process.env.XOD_SITE_DOMAIN': JSON.stringify('https://solderpop.io/'),
+      'process.env.XOD_FORUM_DOMAIN': JSON.stringify('https://forum.solderpop.io/'),
       'process.env.XOD_UTM_SOURCE': JSON.stringify('ide'),
     }),
     // Workaround to remove iconv warning:
     // "Critical dependency: the request of a dependency is an expression"
     // See: https://github.com/andris9/encoding/issues/16
     new webpack.NormalModuleReplacementPlugin(/iconv-loader$/, 'node-noop'),
-    // Disable warnings produced by `ws` that used in the `xod-deploy`
+    // Disable warnings produced by `ws` that used in the `sdp-deploy`
     // It happens, cause `ws` is server-side only package
     // But webpack bundles client-side code
     // And `ws` should be never used on client-size (use native `WebSocket`)

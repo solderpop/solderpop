@@ -3,7 +3,7 @@ import fse from 'fs-extra';
 import path from 'path';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { resolveLibPath } from 'xod-fs';
+import { resolveLibPath } from 'sdp-fs';
 
 // Spectron is hoisted at the root of monorepo
 // eslint-disable-next-line import/no-extraneous-dependencies

@@ -2,7 +2,7 @@ import * as R from 'ramda';
 import EventEmitter from 'events';
 import path from 'path';
 
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 import {
   getPathToXodProject,
   spawnWorkspaceFile,
@@ -14,14 +14,14 @@ import {
   ensureWorkspacePath,
   saveLibraryEntirely,
   ERROR_CODES as FS_ERROR_CODES,
-} from 'xod-fs';
+} from 'sdp-fs';
 import {
   isAmong,
   rejectWithCode,
   allPromises,
   notNil,
   foldMaybeWith,
-} from 'xod-func-tools';
+} from 'sdp-func-tools';
 
 import * as settings from './settings';
 import * as ERROR_CODES from '../shared/errorCodes';

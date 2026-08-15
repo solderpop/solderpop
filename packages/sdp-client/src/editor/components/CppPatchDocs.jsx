@@ -1,8 +1,8 @@
 import React from 'react';
 import PT from 'prop-types';
 import * as R from 'ramda';
-import * as XP from 'xod-project';
-import { cppEscape } from 'xod-func-tools';
+import * as XP from 'sdp-project';
+import { cppEscape } from 'sdp-func-tools';
 import Icon from 'react-fa';
 
 import { getUtmSiteUrl } from '../../utils/urls';

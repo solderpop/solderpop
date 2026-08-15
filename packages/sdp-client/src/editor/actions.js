@@ -1,20 +1,20 @@
 import * as R from 'ramda';
 import { Maybe } from 'ramda-fantasy';
 
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 import {
   fetchLibsWithDependencies,
   stringifyLibQuery,
   getLibName,
-} from 'xod-pm';
-import { generatePatchSuite } from 'xod-tabtest';
-import * as XCC from 'xod-cloud-compile';
+} from 'sdp-pm';
+import { generatePatchSuite } from 'sdp-tabtest';
+import * as XCC from 'sdp-cloud-compile';
 import {
   foldMaybe,
   eitherToPromise,
   explodeMaybe,
   createError,
-} from 'xod-func-tools';
+} from 'sdp-func-tools';
 
 import {
   SELECTION_ENTITY_TYPE,

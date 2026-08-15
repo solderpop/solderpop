@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { maybePath, foldMaybe, maybeProp } from 'xod-func-tools';
+import { maybePath, foldMaybe, maybeProp } from 'sdp-func-tools';
 
 // :: { errors: StrMap [Error] } -> [Error]
 export const getErrors = R.pipe(R.prop('errors'), R.values, R.flatten);

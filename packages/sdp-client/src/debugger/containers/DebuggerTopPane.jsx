@@ -2,7 +2,7 @@ import * as R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import $ from 'sanctuary-def';
-import { $Maybe, foldMaybe, noop } from 'xod-func-tools';
+import { $Maybe, foldMaybe, noop } from 'sdp-func-tools';
 import { Icon } from 'react-fa';
 import { shouldUpdate } from 'recompose';
 

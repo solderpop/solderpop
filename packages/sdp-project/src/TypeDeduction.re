@@ -6,7 +6,7 @@ module ResultsMap = {
   type t_Js =
     Js.Dict.t(
       Js.Dict.t(
-        XodFuncTools.Either.t(Js.Array.t(Pin.dataType), Pin.dataType),
+        SdpFuncTools.Either.t(Js.Array.t(Pin.dataType), Pin.dataType),
       ),
     );
   let fromJsDict: t_Js => t =
@@ -16,7 +16,7 @@ module ResultsMap = {
       |. Map.String.map(nodeTypesDict =>
            nodeTypesDict
            |. BeltHoles.Map.String.fromDict
-           |. Map.String.map(XodFuncTools.Either.toResult)
+           |. Map.String.map(SdpFuncTools.Either.toResult)
          );
   let toJsDict: t => t_Js =
     drs =>
@@ -25,7 +25,7 @@ module ResultsMap = {
       |> Js.Dict.map((. nodeTypesMap) =>
            nodeTypesMap
            |> BeltHoles.Map.String.toDict
-           |> Js.Dict.map((. r) => XodFuncTools.Either.fromResult(r))
+           |> Js.Dict.map((. r) => SdpFuncTools.Either.fromResult(r))
          );
   let get: (t, Node.id, Pin.key) => option(result) =
     (drs, nodeId, pinKey) =>

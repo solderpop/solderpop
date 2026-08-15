@@ -2,7 +2,7 @@ import * as R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { mapIndexed } from 'xod-func-tools';
+import { mapIndexed } from 'sdp-func-tools';
 
 import { noop } from '../../utils/ramda';
 import { PIN_RADIUS, LINK_HOTSPOT_SIZE } from '../nodeLayout';

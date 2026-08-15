@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { noop } from 'xod-func-tools';
+import { noop } from 'sdp-func-tools';
 
 import * as selectors from '../selectors';
 import * as actions from '../actions';

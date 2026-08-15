@@ -1,6 +1,6 @@
 import * as R from 'ramda';
-import * as XP from 'xod-project';
-import { foldMaybeWith } from 'xod-func-tools';
+import * as XP from 'sdp-project';
+import { foldMaybeWith } from 'sdp-func-tools';
 
 import { defaultValidateFunctions } from './validation.funcs';
 import { getActingPatchPath } from './actionUtils';

@@ -3,9 +3,9 @@ import * as R from 'ramda';
 import { assert } from 'chai';
 import thunk from 'redux-thunk';
 import { createStore, applyMiddleware } from 'redux';
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 
-import { loadXodball } from 'xod-project/test/helpers';
+import { loadXodball } from 'sdp-project/test/helpers';
 
 import initialState from '../src/core/state';
 import generateReducers from '../src/core/reducer';
@@ -126,7 +126,7 @@ describe('Hinting', () => {
     });
 
     it('validates all patches on open a new project', () => {
-      // Path to xodball resolves from `xod-project/test`
+      // Path to xodball resolves from `sdp-project/test`
       const proj = loadXodball('./fixtures/broken-project.xodball');
       store.dispatch(openProject(proj));
       const project = getProject(store.getState());

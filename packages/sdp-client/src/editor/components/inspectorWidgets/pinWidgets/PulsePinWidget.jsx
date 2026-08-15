@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { INPUT_PULSE_PIN_BINDING_OPTIONS } from 'xod-project';
+import { INPUT_PULSE_PIN_BINDING_OPTIONS } from 'sdp-project';
 
 import PinWidget from './PinWidget';
 

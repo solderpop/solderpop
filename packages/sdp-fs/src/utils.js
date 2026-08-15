@@ -9,7 +9,7 @@ import {
   foldEither,
   validateSanctuaryType,
   omitTypeHints,
-} from 'xod-func-tools';
+} from 'sdp-func-tools';
 
 import { PatchFileContents, Path, def } from './types';
 

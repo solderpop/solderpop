@@ -1,6 +1,6 @@
 import * as R from 'ramda';
-import * as XP from 'xod-project';
-import { foldMaybe, catMaybies } from 'xod-func-tools';
+import * as XP from 'sdp-project';
+import { foldMaybe, catMaybies } from 'sdp-func-tools';
 
 import * as PAT from '../project/actionTypes';
 import * as EAT from '../editor/actionTypes';
@@ -60,7 +60,7 @@ import { bulkActionChangesTerminalNodes } from './actionUtils';
  *    shortValidator for this ActionType.
  *    Each Function in a list should return a `Map EntityID (Map ErrorType [Error])`.
  *    Pay attention to the `ErrorType`. Conventionally, it should be equal to
- *    validate function name from `xod-project`. And it should be unique for
+ *    validate function name from `sdp-project`. And it should be unique for
  *    each validate function.
  *
  * I HAVE ADDED NEW VALIDATOR INTO XOD-PROJECT, HOW TO ADD IT HERE?

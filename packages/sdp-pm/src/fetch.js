@@ -5,8 +5,8 @@ import {
   rejectWithCode,
   eitherToPromise,
   isAmong,
-} from 'xod-func-tools';
-import { fromXodballData, listMissingLibraryNames } from 'xod-project';
+} from 'sdp-func-tools';
+import { fromXodballData, listMissingLibraryNames } from 'sdp-project';
 
 import * as ERR_CODES from './errorCodes';
 import * as MSG from './messages';

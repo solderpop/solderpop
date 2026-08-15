@@ -99,7 +99,7 @@ describe('Test FS things', () => {
     });
   });
 
-  // TODO: move most of this to xod-client-browser tests.
+  // TODO: move most of this to sdp-client-browser tests.
   describe('Add library in the IDE', () => {
     it('opens an "Add Library" suggester', () =>
       ide.app.electron.ipcRenderer

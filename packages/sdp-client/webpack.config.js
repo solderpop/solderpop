@@ -9,7 +9,7 @@
  * Usage:
  * ```
  * const merge = require('webpack-merge');
- * const getBaseConfig = require('xod-client/webpack.config');
+ * const getBaseConfig = require('sdp-client/webpack.config');
  *
  * merge.smart(getBaseConfig(__dirname), {
  *   entry: [
@@ -30,7 +30,7 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 /* eslint-enable import/no-extraneous-dependencies */
 
 const pkgpath = (pkgDir, subpath) => path.join(pkgDir, subpath);
-const assetsPath = fs.realpathSync(findup('node_modules/xod-client/src/core/assets'));
+const assetsPath = fs.realpathSync(findup('node_modules/sdp-client/src/core/assets'));
 const fontAwesomePath = fs.realpathSync(findup('node_modules/font-awesome'));
 
 const IS_DEV = (
@@ -42,7 +42,7 @@ module.exports = pkgDir => ({
   devtool: 'source-map',
   entry: [
     'babel-polyfill',
-    findup('node_modules/xod-client/src/core/styles/main.scss'),
+    findup('node_modules/sdp-client/src/core/styles/main.scss'),
     pkgpath(pkgDir, 'src/shim.js'),
     pkgpath(pkgDir, 'src/index.jsx'),
   ],
@@ -134,8 +134,8 @@ module.exports = pkgDir => ({
   plugins: [
     new webpack.NoEmitOnErrorsPlugin(),
     new CopyWebpackPlugin([
-      { from: findup('node_modules/xod-client/src/core/assets/index.html') },
-      { from: findup('node_modules/xod-client/src/core/assets/favicon.ico') },
+      { from: findup('node_modules/sdp-client/src/core/assets/index.html') },
+      { from: findup('node_modules/sdp-client/src/core/assets/favicon.ico') },
     ]),
   ].concat(
     IS_DEV ? [] : [

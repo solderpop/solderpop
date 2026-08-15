@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { DragLayer } from 'react-dnd';
 
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 
 import * as ProjectSelectors from '../../project/selectors';
 import { patchToNodeProps } from '../../project/utils';

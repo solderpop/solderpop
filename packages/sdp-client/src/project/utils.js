@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import { Maybe } from 'ramda-fantasy';
-import * as XP from 'xod-project';
-import { maybeProp, foldMaybe, foldEither } from 'xod-func-tools';
+import * as XP from 'sdp-project';
+import { maybeProp, foldMaybe, foldEither } from 'sdp-func-tools';
 
 import {
   getOptimalPanningOffset,

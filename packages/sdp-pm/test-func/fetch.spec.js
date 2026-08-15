@@ -1,6 +1,6 @@
 import R from 'ramda';
 import { assert } from 'chai';
-import { getProjectName } from 'xod-project';
+import { getProjectName } from 'sdp-project';
 import * as F from '../src/fetch';
 import * as ERR_CODES from '../src/errorCodes';
 

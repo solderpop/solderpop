@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import { assert } from 'chai';
-import { defaultizeProject } from 'xod-project/test/helpers';
+import { defaultizeProject } from 'sdp-project/test/helpers';
 
 import { getTableLogSourceLabels } from '../src/debugger/utils';
 

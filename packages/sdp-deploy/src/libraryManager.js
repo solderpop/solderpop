@@ -9,7 +9,7 @@ import {
   allPromises,
   then,
   explodeMaybe,
-} from 'xod-func-tools';
+} from 'sdp-func-tools';
 
 import download from './download';
 import unpackZip from './unzip';

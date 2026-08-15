@@ -1,5 +1,5 @@
 {
-  "name": "xod-patch-search",
+  "name": "sdp-patch-search",
   "version": "0.38.0",
   "description": "",
   "main": "dist/index.js",
@@ -11,23 +11,23 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xodio/xod.git"
+    "url": "git+https://github.com/solderpop/solderpop.git"
   },
-  "author": "XOD Team <dev@xod.io>",
+  "author": "SolderPop <dev@solderpop.io>",
   "license": "AGPL-3.0",
   "bugs": {
-    "url": "https://github.com/xodio/xod/issues"
+    "url": "https://github.com/solderpop/solderpop/issues"
   },
-  "homepage": "https://github.com/xodio/xod#readme",
+  "homepage": "https://github.com/solderpop/solderpop#readme",
   "dependencies": {
     "fuse.js": "^3.0.5",
     "ramda": "^0.24.1",
     "ramda-fantasy": "^0.8.0",
-    "xod-func-tools": "^0.34.0",
-    "xod-project": "^0.38.0"
+    "sdp-func-tools": "^0.34.0",
+    "sdp-project": "^0.38.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
-    "xod-fs": "^0.38.0"
+    "sdp-fs": "^0.38.0"
   }
 }

@@ -1,12 +1,12 @@
 import * as R from 'ramda';
 
-import { rejectWithCode, delay } from 'xod-func-tools';
-import * as xd from 'xod-deploy';
+import { rejectWithCode, delay } from 'sdp-func-tools';
+import * as xd from 'sdp-deploy';
 import {
   createSystemMessage,
   parseDebuggerMessage,
   createErrorMessage,
-} from 'xod-client/dist/debugger/debugProtocol';
+} from 'sdp-client/dist/debugger/debugProtocol';
 
 import * as settings from './settings';
 import * as MESSAGES from '../shared/messages';

@@ -1,8 +1,8 @@
-# xod-client-electron
+# sdp-client-electron
 
 This package is a part of the [SolderPop IDE](https://github.com/solderpop/solderpop) project.
 
-The package is a thin wrapper around [`xod-client`](https://github.com/solderpop/solderpop/tree/main/packages/xod-client) which lifts it to a ready-to-use desktop based XOD IDE.
+The package is a thin wrapper around [`sdp-client`](https://github.com/solderpop/solderpop/tree/main/packages/sdp-client) which lifts it to a ready-to-use desktop based XOD IDE.
 
 It is based on [Electron](https://electron.atom.io/).
 
@@ -23,7 +23,7 @@ to properly build `serialport` native package when creating distributives. Other
 
 ### Dedicate dist directory to electron-builder
 
-All other packages use `dist/` as a target of transpilation, `xod-client-electron` is not because `dist` name used to be reserved for distro packaging. It uses `src-babel/` as a target for transpilation.
+All other packages use `dist/` as a target of transpilation, `sdp-client-electron` is not because `dist` name used to be reserved for distro packaging. It uses `src-babel/` as a target for transpilation.
 
 It have to be fixed since now `electron-builder` supports `directories/output` option.
 

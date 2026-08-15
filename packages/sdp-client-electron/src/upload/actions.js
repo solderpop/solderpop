@@ -1,4 +1,4 @@
-import client from 'xod-client';
+import client from 'sdp-client';
 
 import {
   UPLOAD,

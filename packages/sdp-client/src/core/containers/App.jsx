@@ -14,7 +14,7 @@ import {
   enquote,
   eitherToPromise,
   foldMaybeWith,
-} from 'xod-func-tools';
+} from 'sdp-func-tools';
 import {
   Project,
   isValidIdentifier,
@@ -23,7 +23,7 @@ import {
   PATCH_BASENAME_RULES,
   getPatchByPath,
   getProjectName,
-} from 'xod-project';
+} from 'sdp-project';
 import {
   transformProject,
   transpile,
@@ -36,7 +36,7 @@ import {
   hasTetheringInternetNode,
   getTetheringInetNodeId,
   LIVENESS,
-} from 'xod-arduino';
+} from 'sdp-arduino';
 
 import { isInputTarget, elementHasFocusFunction } from '../../utils/browser';
 import {

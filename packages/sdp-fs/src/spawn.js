@@ -1,7 +1,7 @@
 import { curry } from 'ramda';
 import path from 'path';
 import copy from 'recursive-copy';
-import { rejectWithCode } from 'xod-func-tools';
+import { rejectWithCode } from 'sdp-func-tools';
 
 import { writeFile } from './write';
 import { resolvePath, resolveDefaultProjectPath } from './utils';

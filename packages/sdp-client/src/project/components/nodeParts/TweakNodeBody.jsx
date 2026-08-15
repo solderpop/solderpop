@@ -1,8 +1,8 @@
 import * as R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as XP from 'xod-project';
-import { noop } from 'xod-func-tools';
+import * as XP from 'sdp-project';
+import { noop } from 'sdp-func-tools';
 
 import WatchNodeBody from './WatchNodeBody';
 import { getConstantValue } from './ConstantNodeBody';

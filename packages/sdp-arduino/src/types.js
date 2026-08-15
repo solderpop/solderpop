@@ -1,16 +1,16 @@
 import * as R from 'ramda';
 import $ from 'sanctuary-def';
 import HMDef from 'hm-def';
-import { env as xEnv, PinKey, PinLabel, NodeId } from 'xod-project';
-import * as XF from 'xod-func-tools';
+import { env as xEnv, PinKey, PinLabel, NodeId } from 'sdp-project';
+import * as XF from 'sdp-func-tools';
 
 import { LIVENESS } from './constants';
 
 /* Types are by convention starts with a capital leter, so: */
 /* eslint-disable new-cap */
 
-const packageName = 'xod-arduino';
-const docUrl = 'http://xod.io/docs/dev/xod-arduino/#';
+const packageName = 'sdp-arduino';
+const docUrl = 'http://solderpop.io/docs/dev/sdp-arduino/#';
 
 //-----------------------------------------------------------------------------
 //

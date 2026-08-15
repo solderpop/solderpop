@@ -1,8 +1,8 @@
 import R from 'ramda';
 import path from 'path';
 import { assert } from 'chai';
-import { listPatches } from 'xod-project';
-import { loadProject } from 'xod-fs';
+import { listPatches } from 'sdp-project';
+import { loadProject } from 'sdp-fs';
 
 import { createPatchSearcher, createIndexData } from '../src/index';
 
@@ -10,7 +10,7 @@ const workspace = path.resolve(__dirname, '../../../workspace');
 const getProjectPath = projectName => path.resolve(workspace, projectName);
 const fixture = p => path.resolve(__dirname, './fixtures/', p);
 
-describe('xod-patch-search/index', () => {
+describe('sdp-patch-search/index', () => {
   describe('general search', () => {
     let indexData = [];
     let search = {};

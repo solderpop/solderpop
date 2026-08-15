@@ -5,9 +5,9 @@ import {
   foldMaybe,
   maybePath,
   isAmong,
-} from 'xod-func-tools';
+} from 'sdp-func-tools';
 
-import { ERROR_CODES } from 'xod-cloud-compile';
+import { ERROR_CODES } from 'sdp-cloud-compile';
 
 import {
   UPLOAD,

@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const R = require('ramda');
 
-const { explodeEither } = require('xod-func-tools');
+const { explodeEither } = require('sdp-func-tools');
 const XP = require('..');
 
 const targetPath = path.resolve(__dirname, '../dist/built-in-patches.json');

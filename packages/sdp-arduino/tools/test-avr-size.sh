@@ -38,7 +38,7 @@ Global variables use $3 of dynamic memory, leaving $4 bytes for local variables.
     echo "$SIZE_OUTPUT"
     echo
     echo "If the size became better, fix expectation in"
-    echo "packages/xod-arduino/tools/test-avr-size.sh script,"
+    echo "packages/sdp-arduino/tools/test-avr-size.sh script,"
     echo "and if the size became worse, fix C++"
     exit 1
   fi

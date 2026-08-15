@@ -6,9 +6,9 @@ import R from 'ramda';
 import dircompare from 'dir-compare';
 import { assert } from 'chai';
 
-import { explodeEither } from 'xod-func-tools';
-import * as XP from 'xod-project';
-import { defaultizeProject } from 'xod-project/test/helpers';
+import { explodeEither } from 'sdp-func-tools';
+import * as XP from 'sdp-project';
+import { defaultizeProject } from 'sdp-project/test/helpers';
 
 import { loadProject, loadProjectFromXodball } from '../src/load';
 import { saveAll, saveProjectAsXodball } from '../src/save';
@@ -36,7 +36,7 @@ describe('Load/Save roundtrip', () => {
     );
 
     // save it to a brand-new workspace
-    const tmpDirPrefix = path.join(os.tmpdir(), 'xod-fs-test-');
+    const tmpDirPrefix = path.join(os.tmpdir(), 'sdp-fs-test-');
     const tmpWorkspace = fs.mkdtempSync(tmpDirPrefix);
     const tmpProject = path.join(tmpWorkspace, 'awesome-project');
     await saveAll(tmpWorkspace, tmpProject, emptyProject, project);

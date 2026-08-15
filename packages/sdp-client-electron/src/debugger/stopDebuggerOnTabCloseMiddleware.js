@@ -1,4 +1,4 @@
-import client from 'xod-client';
+import client from 'sdp-client';
 import { ipcRenderer } from 'electron';
 import { sendStopDebuggerSession } from './ipcActions';
 import { DEBUG_SESSION_STOPPED_ON_TAB_CLOSE } from '../shared/messages';

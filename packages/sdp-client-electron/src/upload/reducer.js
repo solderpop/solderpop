@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import client from 'xod-client';
+import client from 'sdp-client';
 import { SELECT_SERIAL_PORT, UPLOAD } from '../upload/actionTypes';
 import { UPGRADE_ARDUINO_DEPENDECIES } from '../shared/events';
 

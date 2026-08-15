@@ -9,7 +9,7 @@
  */
 
 import * as R from 'ramda';
-import { noop } from 'xod-func-tools';
+import { noop } from 'sdp-func-tools';
 import {
   CHECK_ARDUINO_DEPENDENCIES_INSTALLED,
   INSTALL_ARDUINO_DEPENDENCIES,

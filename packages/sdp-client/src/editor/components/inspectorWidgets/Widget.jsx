@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { noop } from 'xod-func-tools';
+import { noop } from 'sdp-func-tools';
 
 import { KEYCODE } from '../../../utils/constants';
 import deepSCU from '../../../utils/deepSCU';

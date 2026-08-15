@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { loadProject } = require('xod-fs');
+const { loadProject } = require('sdp-fs');
 
 const projectDir =
   process.env.XOD_BROWSER_INITIAL_PROJECT_DIR ||

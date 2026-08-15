@@ -1,9 +1,9 @@
 import os from 'os';
 import path from 'path';
 import * as R from 'ramda';
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 import fse from 'fs-extra';
-import { rejectWithCode, allPromises } from 'xod-func-tools';
+import { rejectWithCode, allPromises } from 'sdp-func-tools';
 
 import {
   resolvePath,

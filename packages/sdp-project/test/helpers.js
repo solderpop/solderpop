@@ -5,7 +5,7 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import R from 'ramda';
 import { Either, Maybe } from 'ramda-fantasy';
-import { foldEither, mapIndexed } from 'xod-func-tools';
+import { foldEither, mapIndexed } from 'sdp-func-tools';
 
 import * as XP from '../src';
 
@@ -71,14 +71,14 @@ export const defaultizeComment = R.merge({
 });
 
 export const defaultizeLink = R.merge({
-  '@@type': 'xod-project/Link',
+  '@@type': 'sdp-project/Link',
   id: '$$defaultLinkId',
   input: { nodeId: '$$defaultInputNodeId', pinKey: '$$defaultInputPin' },
   output: { nodeId: '$$defaultOutputNodeId', pinKey: '$$defaultOutputPin' },
 });
 
 export const defaultizeNode = R.merge({
-  '@@type': 'xod-project/Node',
+  '@@type': 'sdp-project/Node',
   id: '$$defaultNodeId',
   position: { x: 0, y: 0 },
   size: { width: 0, height: 0 },
@@ -90,7 +90,7 @@ export const defaultizeNode = R.merge({
 });
 
 export const defaultizePin = R.merge({
-  '@@type': 'xod-project/Pin',
+  '@@type': 'sdp-project/Pin',
   key: '$$defaultPinKey',
   direction: XP.PIN_DIRECTION.INPUT,
   label: '$$defaultLabel',
@@ -110,7 +110,7 @@ export const defaultizePatch = R.compose(
     comments: R.compose(assignIds, R.map(defaultizeComment)),
   }),
   R.merge({
-    '@@type': 'xod-project/Patch',
+    '@@type': 'sdp-project/Patch',
     nodes: {},
     links: {},
     comments: {},
@@ -130,7 +130,7 @@ export const defaultizeProject = R.compose(
     patches: R.map(defaultizePatch),
   }),
   R.merge({
-    '@@type': 'xod-project/Project',
+    '@@type': 'sdp-project/Project',
     authors: [],
     license: '',
     description: '',

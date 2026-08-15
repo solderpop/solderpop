@@ -1,4 +1,4 @@
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 
 export const EDITOR_MODE = {
   SELECTING: 'selecting',

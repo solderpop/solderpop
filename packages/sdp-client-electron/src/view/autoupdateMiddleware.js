@@ -1,4 +1,4 @@
-import client from 'xod-client';
+import client from 'sdp-client';
 import { ipcRenderer } from 'electron';
 
 import { UPDATE_IDE_MESSAGE_ID, downloadUpdate } from './autoupdate';

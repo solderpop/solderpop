@@ -1,8 +1,8 @@
 open Belt;
 
-open XodFuncTools;
+open SdpFuncTools;
 
-open XodProject;
+open SdpProject;
 
 /* Filename -> Content */
 type t = Map.String.t(string);
@@ -373,12 +373,12 @@ module TestCase = {
 };
 
 [@bs.module]
-external tabtestLibPatches: array(XodProject.Patch.t) =
+external tabtestLibPatches: array(SdpProject.Patch.t) =
   "../lib/tabtestLibPatches.json";
 
 let generatePatchSuite = (project, patchPathToTest): XResult.t(t) => {
   let projectWithTabtestLib =
-    XodProject.Project.upsertPatches(
+    SdpProject.Project.upsertPatches(
       project,
       Belt.List.fromArray(tabtestLibPatches),
     );
@@ -422,10 +422,10 @@ let generatePatchSuite = (project, patchPathToTest): XResult.t(t) => {
         let sketchFilename = safeBasename ++ ".sketch.cpp";
         let testFilename = safeBasename ++ ".catch.inl";
         let sketchFooter = {j|\n\n#include "$testFilename"\n|j};
-        let liveness: XodArduino.Transpiler.liveness = XodArduino.Transpiler.None;
-        let xodGlobals: XodArduino.Transpiler.xodGlobals = Map.String.empty;
+        let liveness: SdpArduino.Transpiler.liveness = SdpArduino.Transpiler.None;
+        let xodGlobals: SdpArduino.Transpiler.xodGlobals = Map.String.empty;
         Project.assocPatch(projectWithTabtestLib, benchPatchPath, bench.patch)
-        ->XodArduino.Transpiler.transpile(
+        ->SdpArduino.Transpiler.transpile(
             _,
             benchPatchPath,
             liveness,

@@ -2,7 +2,7 @@ import * as R from 'ramda';
 import path from 'path';
 import fse from 'fs-extra';
 import fetch from 'node-fetch';
-import { tapP } from 'xod-func-tools';
+import { tapP } from 'sdp-func-tools';
 
 /**
  * Downloads some file from the internet and put in the destination path.

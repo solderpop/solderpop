@@ -6,7 +6,7 @@ import {
   validateSanctuaryType,
   omitTypeHints,
   fail,
-} from 'xod-func-tools';
+} from 'sdp-func-tools';
 
 import { getPatchPath, resolveNodeTypesInPatch } from './patch';
 import {

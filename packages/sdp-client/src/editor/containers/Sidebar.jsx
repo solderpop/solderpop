@@ -7,8 +7,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FocusTrap } from 'react-hotkeys';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
-import * as XP from 'xod-project';
-import { $Maybe, mapIndexed, notEquals } from 'xod-func-tools';
+import * as XP from 'sdp-project';
+import { $Maybe, mapIndexed, notEquals } from 'sdp-func-tools';
 import debounce from 'throttle-debounce/debounce';
 
 import HelpPanel from './HelpPanel';

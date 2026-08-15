@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { defaultValueOfType, BINDABLE_CUSTOM_TYPES } from 'xod-project';
+import { defaultValueOfType, BINDABLE_CUSTOM_TYPES } from 'sdp-project';
 
 export default R.ifElse(
   R.test(/^#?([0-9a-f]{3}){1,2}$/i),

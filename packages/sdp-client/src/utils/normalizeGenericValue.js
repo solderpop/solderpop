@@ -1,9 +1,9 @@
 import * as R from 'ramda';
-import { notNil } from 'xod-func-tools';
+import { notNil } from 'sdp-func-tools';
 import {
   numberDataTypeRegExp,
   INPUT_PULSE_PIN_BINDING_OPTIONS,
-} from 'xod-project';
+} from 'sdp-project';
 
 import normalizeByte from './normalizeByte';
 import normalizeNumber from './normalizeNumber';

@@ -1,16 +1,16 @@
 import * as R from 'ramda';
 import $ from 'sanctuary-def';
 
-import * as XF from 'xod-func-tools';
-import * as XP from 'xod-project';
+import * as XF from 'sdp-func-tools';
+import * as XP from 'sdp-project';
 
 import { SELECTION_ENTITY_TYPE } from './editor/constants';
 
 /* Types are by convention starts with a capital leter, so: */
 /* eslint-disable new-cap */
 
-const packageName = 'xod-client';
-const docUrl = 'http://xod.io/docs/dev/xod-client/#';
+const packageName = 'sdp-client';
+const docUrl = 'http://solderpop.io/docs/dev/sdp-client/#';
 
 const Model = XF.Model(packageName, docUrl);
 const OneOfType = XF.OneOfType(packageName, docUrl);

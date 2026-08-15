@@ -67,16 +67,16 @@ Note that dependencies between tasks are not resolved. `test` and `start:*` expe
 
 ### Scoping
 
-Many commands (notably `build`, `dev`, `test`) support package scoping to save development time. To rebuild only `xod-project`:
+Many commands (notably `build`, `dev`, `test`) support package scoping to save development time. To rebuild only `sdp-project`:
 
 ```bash
-yarn build --scope xod-project
+yarn build --scope sdp-project
 ```
 
-To rebuild `xod-project` and its dependencies:
+To rebuild `sdp-project` and its dependencies:
 
 ```bash
-yarn build --scope xod-project --include-filtered-dependencies
+yarn build --scope sdp-project --include-filtered-dependencies
 ```
 
 Those are standard [Lerna flags](https://github.com/lerna/lerna#flags).

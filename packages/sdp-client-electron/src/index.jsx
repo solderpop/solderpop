@@ -1,7 +1,7 @@
 /* eslint-env browser */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Root, initialState } from 'xod-client';
+import { Root, initialState } from 'sdp-client';
 import App from './view/containers/App';
 
 import popupsReducer from './popups/reducer';

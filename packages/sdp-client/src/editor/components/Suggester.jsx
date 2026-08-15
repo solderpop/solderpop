@@ -7,7 +7,7 @@ import Autosuggest from 'react-autosuggest';
 import Highlighter from 'react-highlight-words';
 import regExpEscape from 'escape-string-regexp';
 
-import { isAmong, noop } from 'xod-func-tools';
+import { isAmong, noop } from 'sdp-func-tools';
 
 import { KEYCODE } from '../../utils/constants';
 import { restoreFocusOnApp } from '../../utils/browser';
@@ -153,7 +153,7 @@ class Suggester extends React.Component {
     const { item } = suggestion;
 
     // TODO: Move extracting words for highlighter
-    // into `xod-patch-search` as `matched` property
+    // into `sdp-patch-search` as `matched` property
     // for each result
     const searchWords = R.compose(
       R.map(regExpEscape),

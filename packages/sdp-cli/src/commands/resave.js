@@ -8,8 +8,8 @@ import {
   resolvePath,
   saveProjectAsXodball,
   saveProjectEntirely,
-} from 'xod-fs';
-import { toXodball } from 'xod-project';
+} from 'sdp-fs';
+import { toXodball } from 'sdp-project';
 import BaseCommand from '../baseCommand';
 import * as commonArgs from '../args';
 import * as myFlags from '../flags';

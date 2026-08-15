@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Root } from 'xod-client';
+import { Root } from 'sdp-client';
 
 import App from './containers/App';
 import tutorialProject from '../tutorialProject.json';

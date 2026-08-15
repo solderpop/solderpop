@@ -3,7 +3,7 @@ import {
   DEFAULT_VALUE_OF_TYPE,
   PIN_TYPE,
   isLikeCharLiteral,
-} from 'xod-project';
+} from 'sdp-project';
 
 const parseDec = x => parseInt(x, 10);
 const parseBin = x => parseInt(x, 2);

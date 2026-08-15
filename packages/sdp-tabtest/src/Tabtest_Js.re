@@ -1,6 +1,6 @@
 open Belt;
 
-open XodFuncTools;
+open SdpFuncTools;
 
 let generatePatchSuite = (project, patchPath) =>
   Tabtest.generatePatchSuite(project, patchPath)

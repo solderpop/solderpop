@@ -2,8 +2,8 @@ import fs from 'fs-extra';
 import path from 'path';
 import * as R from 'ramda';
 
-import * as XF from 'xod-func-tools';
-import * as XP from 'xod-project';
+import * as XF from 'sdp-func-tools';
+import * as XP from 'sdp-project';
 
 import pack from './pack';
 import { getPathToXodProject } from './find';
@@ -33,7 +33,7 @@ import {
 //
 // Validate loaded project
 //
-// xod-fs returns a `LoadResult` type, which contains a validated
+// sdp-fs returns a `LoadResult` type, which contains a validated
 // and probably patched with some fixes Project and a list of warnings
 //
 // =============================================================================
@@ -213,7 +213,7 @@ const resoliveLibraryPatches = R.compose(
  * - `xod/core` and `xod/common-hardware` will be loaded from workspaceDirs[0]
  * - `xod/awesome` will be loaded from workspaceDirs[1]
  *
- * Returns a Promise of complete `Project` (see `xod-project`).
+ * Returns a Promise of complete `Project` (see `sdp-project`).
  */
 // :: [Path] -> Path -> Promise Project Error
 export const loadProjectFromDir = R.curry((workspaceDirs, projectPath) =>

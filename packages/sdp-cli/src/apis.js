@@ -1,8 +1,8 @@
 import fetch from 'node-fetch';
-import { createError } from 'xod-func-tools';
+import { createError } from 'sdp-func-tools';
 
 const getProto = apiSuffix =>
-  ['xod.io', 'xod.show'].indexOf(apiSuffix) >= 0 ? 'https' : 'http';
+  ['solderpop.io', 'xod.show'].indexOf(apiSuffix) >= 0 ? 'https' : 'http';
 
 const myFetch = (input, init) =>
   fetch(input, init).then(res => {

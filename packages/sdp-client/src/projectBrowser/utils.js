@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 
 import { getProject } from '../project/selectors';
 

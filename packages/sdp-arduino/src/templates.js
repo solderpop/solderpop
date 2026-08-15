@@ -1,8 +1,8 @@
 import * as R from 'ramda';
 import Handlebars from 'handlebars';
 
-import { unquote } from 'xod-func-tools';
-import * as XP from 'xod-project';
+import { unquote } from 'sdp-func-tools';
+import * as XP from 'sdp-project';
 
 import { def } from './types';
 

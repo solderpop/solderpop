@@ -1,7 +1,7 @@
 import * as R from 'ramda';
-import * as client from 'xod-client';
-import { foldMaybe } from 'xod-func-tools';
-import { messages as xdbMessages } from 'xod-deploy-bin';
+import * as client from 'sdp-client';
+import { foldMaybe } from 'sdp-func-tools';
+import { messages as xdbMessages } from 'sdp-deploy-bin';
 import { INSTALL_ARDUINO_DEPENDENCIES_MSG } from './constants';
 import { installArduinoDependencies, updateArduinoPackages } from './runners';
 import { installDeps, updatePackages } from './actions';

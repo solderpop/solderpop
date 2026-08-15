@@ -2,7 +2,7 @@ import * as R from 'ramda';
 import shortid from 'shortid';
 
 import { Either } from 'ramda-fantasy';
-import { isAmong, fail, explodeEither, notNil } from 'xod-func-tools';
+import { isAmong, fail, explodeEither, notNil } from 'sdp-func-tools';
 
 import {
   BINDABLE_CUSTOM_TYPE_VALIDATORS,

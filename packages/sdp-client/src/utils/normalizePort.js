@@ -3,7 +3,7 @@ import {
   DEFAULT_VALUE_OF_TYPE,
   PIN_TYPE,
   isValidPortLiteral,
-} from 'xod-project';
+} from 'sdp-project';
 
 const LEADING_CHAR = 'D';
 

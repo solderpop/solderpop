@@ -10,7 +10,7 @@ import {
   prependTraceToError,
   foldMaybe,
   isAmong,
-} from 'xod-func-tools';
+} from 'sdp-func-tools';
 
 import * as CONST from './constants';
 import * as Project from './project';

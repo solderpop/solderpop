@@ -1,7 +1,7 @@
 import * as R from 'ramda';
-import AtNet from 'xod-tethering-inet';
-import client from 'xod-client';
-import { allPromises } from 'xod-func-tools';
+import AtNet from 'sdp-tethering-inet';
+import client from 'sdp-client';
+import { allPromises } from 'sdp-func-tools';
 import { ipcRenderer } from 'electron';
 
 import { DEBUG_SERIAL_SEND } from '../shared/events';

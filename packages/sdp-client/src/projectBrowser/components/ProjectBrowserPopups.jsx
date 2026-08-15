@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {
   isValidUserDefinedPatchBasename,
   PATCH_BASENAME_RULES,
-} from 'xod-project';
+} from 'sdp-project';
 import { POPUP_ID } from '../../popups/constants';
 import { isPopupVisible } from '../../popups/selectors';
 

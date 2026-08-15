@@ -1,6 +1,6 @@
 import * as R from 'ramda';
-import * as XP from 'xod-project';
-import { foldMaybe, isAmong } from 'xod-func-tools';
+import * as XP from 'sdp-project';
+import { foldMaybe, isAmong } from 'sdp-func-tools';
 import * as PAT from '../project/actionTypes';
 import * as EAT from '../editor/actionTypes';
 

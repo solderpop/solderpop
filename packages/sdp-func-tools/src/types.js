@@ -6,8 +6,8 @@ import HMDef from 'hm-def';
 /* Types are by convention starts with a capital leter, so: */
 /* eslint-disable new-cap */
 
-const pkgName = 'xod-func-tools';
-const dUrl = 'http://xod.io/docs/dev/xod-func-tools/#';
+const pkgName = 'sdp-func-tools';
+const dUrl = 'http://solderpop.io/docs/dev/sdp-func-tools/#';
 
 //-----------------------------------------------------------------------------
 //

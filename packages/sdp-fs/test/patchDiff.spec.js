@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { defaultizePatch } from 'xod-project/test/helpers';
+import { defaultizePatch } from 'sdp-project/test/helpers';
 
 import {
   calculateAdded,

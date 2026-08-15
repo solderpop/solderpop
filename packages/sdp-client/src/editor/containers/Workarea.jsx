@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import cn from 'classnames';
 import debounce from 'throttle-debounce/debounce';
-import { notEquals } from 'xod-func-tools';
+import { notEquals } from 'sdp-func-tools';
 
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import Debugger from '../../debugger/containers/Debugger';

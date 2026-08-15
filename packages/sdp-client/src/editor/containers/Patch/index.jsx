@@ -7,7 +7,7 @@ import $ from 'sanctuary-def';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ReactResizeDetector from 'react-resize-detector';
-import { noop } from 'xod-func-tools';
+import { noop } from 'sdp-func-tools';
 import normalizeWheel from 'normalize-wheel';
 
 import * as EditorActions from '../../actions';

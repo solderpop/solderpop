@@ -1,7 +1,7 @@
-import { enumerate } from 'xod-func-tools';
+import { enumerate } from 'sdp-func-tools';
 
 // Stanza creators.
-// See `xod-func-tools` package Stanza type
+// See `sdp-func-tools` package Stanza type
 export default {
   // Patch
   INVALID_PATCH_PATH: ({ patchPath }) => ({

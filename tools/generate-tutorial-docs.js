@@ -31,7 +31,7 @@ const fs = require('fs').promises;
 const fse = require('fs-extra');
 const exec = require('child_process').exec;
 const R = require('ramda');
-const { loadProject, saveProjectAsXodball } = require('xod-fs');
+const { loadProject, saveProjectAsXodball } = require('sdp-fs');
 
 // =============================================================================
 const PROJECT_NAME = 'welcome-to-xod';

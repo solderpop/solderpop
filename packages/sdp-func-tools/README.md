@@ -1,4 +1,4 @@
-# xod-func-tools
+# sdp-func-tools
 
 This package is a part of the [SolderPop IDE](https://github.com/solderpop/solderpop) project.
 

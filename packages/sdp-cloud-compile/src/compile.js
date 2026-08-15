@@ -2,10 +2,10 @@
 import * as R from 'ramda';
 import btoa from 'btoa';
 import fetch from 'node-fetch';
-import { createError, notNil } from 'xod-func-tools';
+import { createError, notNil } from 'sdp-func-tools';
 
-import arduinoH from 'xod-tabtest/cpp/Arduino.h';
-import arduinoCpp from 'xod-tabtest/cpp/Arduino.cpp';
+import arduinoH from 'sdp-tabtest/cpp/Arduino.h';
+import arduinoCpp from 'sdp-tabtest/cpp/Arduino.cpp';
 import xStringFormatInl from '../../../cpplib/catch2utils/XStringFormat.inl';
 
 import * as EC from './errorCodes';

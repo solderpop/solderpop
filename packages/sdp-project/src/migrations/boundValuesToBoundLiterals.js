@@ -1,6 +1,6 @@
 import R from 'ramda';
 import { Maybe } from 'ramda-fantasy';
-import { enquote, unquote, foldMaybe, catMaybies } from 'xod-func-tools';
+import { enquote, unquote, foldMaybe, catMaybies } from 'sdp-func-tools';
 
 import { def } from '../types';
 import { PIN_TYPE, INPUT_PULSE_PIN_BINDING_OPTIONS } from '../constants';

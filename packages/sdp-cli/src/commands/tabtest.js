@@ -7,9 +7,9 @@ import fs from 'fs-extra';
 import { flags } from '@oclif/command';
 
 import childProcess from 'child_process';
-import { createError, foldEither, allPromises } from 'xod-func-tools';
-import { loadProject, resolvePath } from 'xod-fs';
-import * as Tabtest from 'xod-tabtest';
+import { createError, foldEither, allPromises } from 'sdp-func-tools';
+import { loadProject, resolvePath } from 'sdp-fs';
+import * as Tabtest from 'sdp-tabtest';
 
 import BaseCommand from '../baseCommand';
 import * as commonArgs from '../args';
@@ -23,7 +23,7 @@ import {
   resolveBundledWorkspacePath,
 } from '../paths';
 
-const defaultOutputDir = path.resolve(tmpdir(), 'xod-tabtest');
+const defaultOutputDir = path.resolve(tmpdir(), 'sdp-tabtest');
 
 const spawn = (cmd, args, opts) =>
   new Promise((resolve, reject) => {
@@ -166,7 +166,7 @@ TabtestCommand.examples = [
   `Build tabtests for project in current working directory\n` +
     `$ xodc tabtest\n`,
   `Specify target directory and project, only generate tests\n` +
-    `$ xodc tabtest --no-build --output-dir=/tmp/xod-tabtest ./workspace/__lib__/xod/net`,
+    `$ xodc tabtest --no-build --output-dir=/tmp/sdp-tabtest ./workspace/__lib__/xod/net`,
 ];
 
 TabtestCommand.strict = false;

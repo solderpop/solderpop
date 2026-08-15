@@ -1,8 +1,8 @@
-import { isAmong } from 'xod-func-tools';
-import { GLOBALS_LITERALS } from 'xod-project';
+import { isAmong } from 'sdp-func-tools';
+import { GLOBALS_LITERALS } from 'sdp-project';
 
 // Stanza creators.
-// See `xod-func-tools` package Stanza type
+// See `sdp-func-tools` package Stanza type
 export default {
   TOO_MANY_OUTPUTS_FOR_NATIVE_NODE: ({ patchPath }) => ({
     title: 'Too many outputs',
@@ -15,7 +15,7 @@ export default {
       UNKNOWN_LITERAL: {
         title: 'Unknown literal',
         note: `The program uses an unknown \`=${key}\` literal.`,
-        solution: `Check the literal spelling. See globals reference: https://xod.io/docs/reference/globals/`,
+        solution: `Check the literal spelling. See globals reference: https://solderpop.io/docs/reference/globals/`,
       },
       VALUE_MISSING: {
         title: 'Value for the literal is missing',

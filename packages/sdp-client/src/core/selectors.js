@@ -2,8 +2,8 @@ import * as R from 'ramda';
 import { Maybe } from 'ramda-fantasy';
 import { createSelector } from 'reselect';
 
-import { maybeProp } from 'xod-func-tools';
-import * as XP from 'xod-project';
+import { maybeProp } from 'sdp-func-tools';
+import * as XP from 'sdp-project';
 
 import * as User from '../user/selectors';
 import * as Editor from '../editor/selectors';

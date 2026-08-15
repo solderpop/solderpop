@@ -12,8 +12,8 @@ import {
   fail,
   cppEscape,
   catMaybies,
-} from 'xod-func-tools';
-import * as XP from 'xod-project';
+} from 'sdp-func-tools';
+import * as XP from 'sdp-project';
 import { def } from './types';
 
 import { withTetheringInetNode, renderProject } from './templates';

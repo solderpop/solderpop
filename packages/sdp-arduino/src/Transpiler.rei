@@ -1,8 +1,8 @@
 open Belt;
 
-open XodFuncTools;
+open SdpFuncTools;
 
-open XodProject;
+open SdpProject;
 
 type program = {
   code: string,

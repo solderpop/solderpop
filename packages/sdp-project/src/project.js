@@ -16,7 +16,7 @@ import {
   failOnFalse,
   failOnNothing,
   prependTraceToError,
-} from 'xod-func-tools';
+} from 'sdp-func-tools';
 
 import * as CONST from './constants';
 
@@ -51,7 +51,7 @@ import BUILT_IN_PATCHES from '../dist/built-in-patches.json';
  * @returns {Project} newly created project
  */
 export const createProject = def('createProject :: () -> Project', () => ({
-  '@@type': 'xod-project/Project',
+  '@@type': 'sdp-project/Project',
   authors: [],
   description: '',
   license: '',
@@ -166,17 +166,17 @@ export const injectProjectTypeHints = def(
         R.compose(
           R.over(
             R.lensProp('nodes'),
-            R.map(R.assoc('@@type', 'xod-project/Node'))
+            R.map(R.assoc('@@type', 'sdp-project/Node'))
           ),
           R.over(
             R.lensProp('links'),
-            R.map(R.assoc('@@type', 'xod-project/Link'))
+            R.map(R.assoc('@@type', 'sdp-project/Link'))
           ),
-          R.assoc('@@type', 'xod-project/Patch')
+          R.assoc('@@type', 'sdp-project/Patch')
         )
       )
     ),
-    R.assoc('@@type', 'xod-project/Project')
+    R.assoc('@@type', 'sdp-project/Project')
   )
 );
 

@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { PopupForm } from 'xod-client';
+import { PopupForm } from 'sdp-client';
 
 import { ENUMERATING_BOARDS } from '../../shared/messages';
 import { updateIndexFiles } from '../../arduinoDependencies/runners';

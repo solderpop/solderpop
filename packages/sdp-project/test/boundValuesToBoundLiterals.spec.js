@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import { assert } from 'chai';
 import { Maybe } from 'ramda-fantasy';
-import { explode } from 'xod-func-tools';
+import { explode } from 'sdp-func-tools';
 
 import { PIN_TYPE } from '../src/constants';
 import {

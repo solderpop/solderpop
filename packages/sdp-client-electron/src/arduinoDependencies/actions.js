@@ -1,4 +1,4 @@
-import * as client from 'xod-client';
+import * as client from 'sdp-client';
 import { UPGRADE_ARDUINO_DEPENDECIES } from '../shared/events';
 import * as AT from './actionTypes';
 

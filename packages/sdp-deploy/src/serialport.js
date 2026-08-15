@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { tapP, delay as delayP } from 'xod-func-tools';
+import { tapP, delay as delayP } from 'sdp-func-tools';
 
 // =============================================================================
 //

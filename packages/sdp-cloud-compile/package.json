@@ -1,5 +1,5 @@
 {
-  "name": "xod-cloud-compile",
+  "name": "sdp-cloud-compile",
   "version": "0.38.0",
   "description": "",
   "main": "dist/index.js",
@@ -8,25 +8,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xodio/xod.git"
+    "url": "git+https://github.com/solderpop/solderpop.git"
   },
-  "author": "XOD Team <dev@xod.io>",
+  "author": "SolderPop <dev@solderpop.io>",
   "license": "AGPL-3.0",
   "bugs": {
-    "url": "https://github.com/xodio/xod/issues"
+    "url": "https://github.com/solderpop/solderpop/issues"
   },
   "dependencies": {
     "btoa": "^1.2.1",
     "node-fetch": "^2.3.0",
     "ramda": "^0.24.1",
     "string-to-arraybuffer": "^1.0.2",
-    "xod-func-tools": "^0.34.0",
-    "xod-tabtest": "^0.38.0"
+    "sdp-func-tools": "^0.34.0",
+    "sdp-tabtest": "^0.38.0"
   },
   "devDependencies": {
     "babel-plugin-inline-import": "^2.0.4",
     "chai": "^4.1.2",
-    "xod-fs": "^0.38.0"
+    "sdp-fs": "^0.38.0"
   },
   "files": [
     "dist",

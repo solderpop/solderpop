@@ -1,9 +1,9 @@
 import * as R from 'ramda';
 import { createSelector } from 'reselect';
 
-import * as XP from 'xod-project';
-import { foldMaybe, maybeProp } from 'xod-func-tools';
-import { createPatchSearcher } from 'xod-patch-search';
+import * as XP from 'sdp-project';
+import { foldMaybe, maybeProp } from 'sdp-func-tools';
+import { createPatchSearcher } from 'sdp-patch-search';
 
 import {
   addNodePositioning,

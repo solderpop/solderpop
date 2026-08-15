@@ -3,8 +3,8 @@ import React from 'react';
 import PT from 'prop-types';
 import cn from 'classnames';
 
-import * as XP from 'xod-project';
-import { foldEither, foldMaybe } from 'xod-func-tools';
+import * as XP from 'sdp-project';
+import { foldEither, foldMaybe } from 'sdp-func-tools';
 
 import Node from '../../project/components/Node';
 import { patchToNodeProps } from '../../project/utils';

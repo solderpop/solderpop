@@ -1,4 +1,4 @@
-import { maybeProp } from 'xod-func-tools';
+import { maybeProp } from 'sdp-func-tools';
 
 import * as AT from './actionTypes';
 import { tetheringInetChunksToSend } from './selectors';

@@ -1,4 +1,4 @@
-# xod-pm
+# sdp-pm
 
 This package is a part of the [SolderPop IDE](https://github.com/solderpop/solderpop) project.
 

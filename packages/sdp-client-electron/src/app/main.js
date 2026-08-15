@@ -7,13 +7,13 @@ import contextMenu from 'electron-context-menu';
 import windowStateKeeper from 'electron-window-state';
 import { URL } from 'url';
 import * as R from 'ramda';
-import * as xdb from 'xod-deploy-bin';
-import { tapP, createError } from 'xod-func-tools';
+import * as xdb from 'sdp-deploy-bin';
+import { tapP, createError } from 'sdp-func-tools';
 
 import {
   URL_ACTION_PROTOCOL,
   URL_ACTION_PREFIX,
-} from 'xod-client/dist/core/urlActions';
+} from 'sdp-client/dist/core/urlActions';
 
 import * as EVENTS from '../shared/events';
 import {
@@ -106,7 +106,7 @@ function createWindow() {
     y: winState.y,
     width: winState.width,
     height: winState.height,
-    // 700px is the content width on xod.io and Medium. Resizing down to it
+    // 700px is the content width on solderpop.io and Medium. Resizing down to it
     // lets make 1-to-1 screencasts and snapshots
     minWidth: 700,
     minHeight: 600,

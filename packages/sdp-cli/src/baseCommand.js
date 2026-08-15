@@ -29,10 +29,10 @@ import {
   isWorkspaceValid,
   resolvePath,
   spawnWorkspaceFile,
-} from 'xod-fs';
-import * as xP from 'xod-project';
-import * as xdb from 'xod-deploy-bin';
-import { createError } from 'xod-func-tools';
+} from 'sdp-fs';
+import * as xP from 'sdp-project';
+import * as xdb from 'sdp-deploy-bin';
+import { createError } from 'sdp-func-tools';
 import { resolveBundledWorkspacePath } from './paths';
 import * as myFlags from './flags';
 import localMsgs from './messages';
@@ -101,7 +101,7 @@ class BaseCommand extends Command {
     if (!this.flags.quiet) stderr.write(`${note}\n`);
   }
 
-  // patch errors from xod-deploy-bin and arduino-cli
+  // patch errors from sdp-deploy-bin and arduino-cli
   patchArduinoCliError(err, stacktrace = []) {
     return err.name === 'ChildProcessError'
       ? createError('ARDUINO_CLI_ERROR', {

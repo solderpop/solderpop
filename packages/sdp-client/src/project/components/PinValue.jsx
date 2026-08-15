@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cls from 'classnames';
-import { PIN_TYPE, INPUT_PULSE_PIN_BINDING_OPTIONS } from 'xod-project';
-import { unquote } from 'xod-func-tools';
+import { PIN_TYPE, INPUT_PULSE_PIN_BINDING_OPTIONS } from 'sdp-project';
+import { unquote } from 'sdp-func-tools';
 
 import { PINVALUE_WIDTH, getPinValueProps } from '../nodeLayout';
 import { getRenderablePinType } from '../utils';

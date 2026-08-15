@@ -1,6 +1,6 @@
 import * as R from 'ramda';
-import * as XP from 'xod-project';
-import { foldMaybe, mapIndexed } from 'xod-func-tools';
+import * as XP from 'sdp-project';
+import { foldMaybe, mapIndexed } from 'sdp-func-tools';
 
 import { UPLOAD_MSG_TYPE } from './constants';
 

@@ -7,7 +7,7 @@ export const BUNDLED_ADDITIONAL_URLS = [
 // [[OldURL, NewURL]]
 export const MIGRATE_BUNDLED_ADDITIONAL_URLS = [
   [
-    'https://storage.googleapis.com/releases.xod.io/packages/esp8266-2.4.3/package_esp8266com_index.json',
+    'https://storage.googleapis.com/releases.solderpop.io/packages/esp8266-2.4.3/package_esp8266com_index.json',
     'http://arduino.esp8266.com/stable/package_esp8266com_index.json',
   ],
 ];

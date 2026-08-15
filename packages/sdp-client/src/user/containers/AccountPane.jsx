@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { foldMaybe } from 'xod-func-tools';
+import { foldMaybe } from 'sdp-func-tools';
 
 import { PANEL_IDS, SIDEBAR_IDS } from '../../editor/constants';
 

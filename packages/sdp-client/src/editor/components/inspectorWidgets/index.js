@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import Big from 'big.js';
-import { unquote, enquote } from 'xod-func-tools';
-import { BINDABLE_CUSTOM_TYPES, PIN_TYPE, isGenericType } from 'xod-project';
+import { unquote, enquote } from 'sdp-func-tools';
+import { BINDABLE_CUSTOM_TYPES, PIN_TYPE, isGenericType } from 'sdp-project';
 
 import BoolWidget from './pinWidgets/BoolPinWidget';
 import NumberWidget from './pinWidgets/NumberPinWidget';

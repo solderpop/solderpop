@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import { createPatchSearcher } from 'xod-patch-search';
+import { createPatchSearcher } from 'sdp-patch-search';
 
 import Suggester from '../src/editor/components/Suggester';
 import '../src/core/styles/main.scss';

@@ -14,8 +14,8 @@ import {
   isPathLocal,
   getBaseName,
   PatchPath,
-} from 'xod-project';
-import { isAmong, notEquals, $Maybe, foldMaybe } from 'xod-func-tools';
+} from 'sdp-project';
+import { isAmong, notEquals, $Maybe, foldMaybe } from 'sdp-func-tools';
 
 import * as ProjectActions from '../../project/actions';
 import * as ProjectBrowserActions from '../actions';

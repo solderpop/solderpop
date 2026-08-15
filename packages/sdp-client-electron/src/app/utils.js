@@ -1,7 +1,7 @@
 import path from 'path';
 import * as R from 'ramda';
 import { Maybe } from 'ramda-fantasy';
-import { resolvePath } from 'xod-fs';
+import { resolvePath } from 'sdp-fs';
 import electron from 'electron';
 
 // see https://github.com/sindresorhus/electron-is-dev/issues/24#issuecomment-692379137

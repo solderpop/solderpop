@@ -1,6 +1,6 @@
 import R from 'ramda';
 import { assert } from 'chai';
-import * as XF from 'xod-func-tools';
+import * as XF from 'sdp-func-tools';
 
 import * as Pin from '../src/pin';
 import * as Patch from '../src/patch';
@@ -365,7 +365,7 @@ describe('Patch', () => {
 
     const expectedPins = {
       in: {
-        '@@type': 'xod-project/Pin',
+        '@@type': 'sdp-project/Pin',
         key: 'in',
         direction: CONST.PIN_DIRECTION.INPUT,
         type: 'boolean',
@@ -376,7 +376,7 @@ describe('Patch', () => {
         isBindable: true,
       },
       out: {
-        '@@type': 'xod-project/Pin',
+        '@@type': 'sdp-project/Pin',
         key: 'out',
         direction: CONST.PIN_DIRECTION.OUTPUT,
         type: 'boolean',

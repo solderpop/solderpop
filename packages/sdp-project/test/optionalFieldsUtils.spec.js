@@ -1,7 +1,7 @@
 import R from 'ramda';
 import { assert } from 'chai';
 
-import { validateSanctuaryType } from 'xod-func-tools';
+import { validateSanctuaryType } from 'sdp-func-tools';
 
 import { loadJSON } from './helpers';
 import {

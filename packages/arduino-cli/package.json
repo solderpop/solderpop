@@ -16,7 +16,7 @@
   "keywords": [
     "arduino-cli"
   ],
-  "author": "XOD Team <dev@xod.io>",
+  "author": "SolderPop <dev@solderpop.io>",
   "license": "AGPL-3.0",
   "dependencies": {
     "cross-spawn": "^7.0.1",

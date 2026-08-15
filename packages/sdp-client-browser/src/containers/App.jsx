@@ -7,10 +7,10 @@ import { bindActionCreators } from 'redux';
 import EventListener from 'react-event-listener';
 import { HotKeys } from 'react-hotkeys';
 
-import * as XP from 'xod-project';
-import client from 'xod-client';
-import { foldEither, notNil } from 'xod-func-tools';
-import { LIVENESS } from 'xod-arduino';
+import * as XP from 'sdp-project';
+import client from 'sdp-client';
+import { foldEither, notNil } from 'sdp-func-tools';
+import { LIVENESS } from 'sdp-arduino';
 
 import packageJson from '../../package.json';
 import PopupInstallApp from '../components/PopupInstallApp';
@@ -433,7 +433,7 @@ const mapStateToProps = R.applySpec({
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(
     R.merge(client.App.actions, {
-      // Put custom actions for xod-client-browser here
+      // Put custom actions for sdp-client-browser here
     }),
     dispatch
   ),

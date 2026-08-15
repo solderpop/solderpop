@@ -9,8 +9,8 @@ import Highlighter from 'react-highlight-words';
 import { Icon } from 'react-fa';
 import debounce from 'throttle-debounce/debounce';
 
-import { fetchLibData, searchLibraries, parseLibQuery } from 'xod-pm';
-import { foldMaybe, isAmong } from 'xod-func-tools';
+import { fetchLibData, searchLibraries, parseLibQuery } from 'sdp-pm';
+import { foldMaybe, isAmong } from 'sdp-func-tools';
 
 import { getPmSwaggerUrl } from '../../utils/urls';
 import { KEYCODE } from '../../utils/constants';

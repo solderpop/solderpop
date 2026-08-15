@@ -21,13 +21,13 @@ run:
       yarn install --no-progress
       NODE_ENV=production yarn run build
 
-      cd "$XOD/packages/xod-client-browser" || exit 1
+      cd "$XOD/packages/sdp-client-browser" || exit 1
       echo 'xodio/ide' >IMAGE_NAME
       node -p "require('./package.json').version + '-$OFFSET'" >VERSION
 
       cp -at "$IDE"  \
-       "$XOD/packages/xod-client-browser/dist"  \
-       "$XOD/packages/xod-client-browser/Dockerfile"  \
-       "$XOD/packages/xod-client-browser/IMAGE_NAME"  \
-       "$XOD/packages/xod-client-browser/VERSION"
+       "$XOD/packages/sdp-client-browser/dist"  \
+       "$XOD/packages/sdp-client-browser/Dockerfile"  \
+       "$XOD/packages/sdp-client-browser/IMAGE_NAME"  \
+       "$XOD/packages/sdp-client-browser/VERSION"
   path: sh

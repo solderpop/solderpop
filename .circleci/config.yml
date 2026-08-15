@@ -45,7 +45,7 @@ defs:
       command: |
         curl -L -s --create-dirs -o "$HOME/arduino-cli.tar.gz" "https://github.com/arduino/arduino-cli/releases/download/0.12.0/arduino-cli_0.12.0_macOS_64bit.tar.gz" \
         && tar xvf "$HOME/arduino-cli.tar.gz" -C "$HOME" \
-        && cp "$HOME/arduino-cli" "./packages/xod-client-electron/arduino-cli" \
+        && cp "$HOME/arduino-cli" "./packages/sdp-client-electron/arduino-cli" \
         && mkdir "/tmp/arduino-cli" \
         && cp "$HOME/arduino-cli" "/tmp/arduino-cli/arduino-cli"
 
@@ -54,7 +54,7 @@ defs:
       command: |
         curl -L -s --create-dirs -o "$HOME/arduino-cli.tar.gz" "https://github.com/arduino/arduino-cli/releases/download/0.12.0/arduino-cli_0.12.0_Linux_64bit.tar.gz" \
         && tar xvf "$HOME/arduino-cli.tar.gz" -C "$HOME" \
-        && cp "$HOME/arduino-cli" "./packages/xod-client-electron/arduino-cli" \
+        && cp "$HOME/arduino-cli" "./packages/sdp-client-electron/arduino-cli" \
         && mkdir "/tmp/arduino-cli" \
         && cp "$HOME/arduino-cli" "/tmp/arduino-cli/arduino-cli"
 
@@ -63,7 +63,7 @@ defs:
       command: |
         curl -L -s --create-dirs -o "$HOME/arduino-cli.zip" "https://github.com/arduino/arduino-cli/releases/download/0.12.0/arduino-cli_0.12.0_Windows_64bit.zip" \
         && unzip "$HOME/arduino-cli.zip" -d "$HOME" \
-        && cp "$HOME/arduino-cli.exe" "./packages/xod-client-electron/arduino-cli.exe"
+        && cp "$HOME/arduino-cli.exe" "./packages/sdp-client-electron/arduino-cli.exe"
       shell: bash
 
     step-configure-git-on-windows: &step-configure-git-on-windows
@@ -223,7 +223,7 @@ jobs:
       - save_cache: *cache-arduino15
       - run:
           name: Test AVR Size
-          command: ./packages/xod-arduino/tools/test-avr-size.sh
+          command: ./packages/sdp-arduino/tools/test-avr-size.sh
       - run:
           name: Build CLI
           command: yarn build:cli
@@ -258,12 +258,12 @@ jobs:
       - run:
           name: Store version tag
           command: |
-            PKG=./packages/xod-client-electron
+            PKG=./packages/sdp-client-electron
             QUERY="console.log('v' + require('$PKG/package.json').version)"
             node -e "$QUERY" > $PKG/dist/TAG
             echo "Tag set to: $PKG/dist/TAG"
       - persist_to_workspace:
-          root: packages/xod-client-electron/dist
+          root: packages/sdp-client-electron/dist
           paths:
             - TAG
             - latest-linux.yml
@@ -286,7 +286,7 @@ jobs:
       - run: *step-build-electron
       - run: *step-dist-electron
       - persist_to_workspace:
-          root: packages/xod-client-electron/dist
+          root: packages/sdp-client-electron/dist
           paths:
             - latest-mac.yml
             - "*.dmg"
@@ -314,7 +314,7 @@ jobs:
             yarn dist:electron
           no_output_timeout: 30m
       - persist_to_workspace:
-          root: packages/xod-client-electron/dist
+          root: packages/sdp-client-electron/dist
           paths:
             - latest.yml
             - "*.exe"
@@ -338,7 +338,7 @@ jobs:
           name: Upload to Google Cloud Storage
           command: |
             TAG=$(cat dist/TAG)
-            GS_PATH=gs://releases.xod.io/$TAG
+            GS_PATH=gs://releases.solderpop.io/$TAG
             echo "Uploading with tag: $TAG"
             gsutil -m cp -a public-read dist/* $GS_PATH
             # Adjust metadata to give proper filenames for download
@@ -354,7 +354,7 @@ jobs:
     environment:
       NODE_ENV: production
       IMAGE_NAME: "xodio/site-ide"
-      PKG: "./packages/xod-client-browser"
+      PKG: "./packages/sdp-client-browser"
     steps:
       - checkout
       - restore_cache: *restore-node_modules
@@ -383,7 +383,7 @@ jobs:
               --output $PKG/image/site-ide.tar \
               $(cat $PKG/image/IMAGE_TAG)
       - persist_to_workspace:
-          root: packages/xod-client-browser/image
+          root: packages/sdp-client-browser/image
           paths:
             - "IMAGE_TAG"
             - "*.tar"

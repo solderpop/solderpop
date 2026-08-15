@@ -4,8 +4,8 @@ import { Maybe } from 'ramda-fantasy';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Patch as PatchType } from 'xod-project';
-import { $Maybe } from 'xod-func-tools';
+import { Patch as PatchType } from 'sdp-project';
+import { $Maybe } from 'sdp-func-tools';
 
 import * as Actions from '../actions';
 import { isHelpboxVisible, getFocusedArea } from '../selectors';

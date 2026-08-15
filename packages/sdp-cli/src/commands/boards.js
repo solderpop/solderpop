@@ -12,7 +12,7 @@ import {
   startsWith,
 } from 'ramda';
 import asTable from 'as-table';
-import * as xdb from 'xod-deploy-bin';
+import * as xdb from 'sdp-deploy-bin';
 import BaseCommand from '../baseCommand';
 import { resolveBundledWorkspacePath } from '../paths';
 

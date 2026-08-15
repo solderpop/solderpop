@@ -2,7 +2,7 @@ import HMDef from 'hm-def';
 import * as R from 'ramda';
 import $ from 'sanctuary-def';
 
-import * as XF from 'xod-func-tools';
+import * as XF from 'sdp-func-tools';
 
 import * as C from './constants';
 import {
@@ -18,8 +18,8 @@ import { isValidVersion } from './versionUtils';
 /* Types are by convention starts with a capital leter, so: */
 /* eslint-disable new-cap */
 
-const packageName = 'xod-project';
-const docUrl = 'http://xod.io/docs/dev/xod-project/#';
+const packageName = 'sdp-project';
+const docUrl = 'http://solderpop.io/docs/dev/sdp-project/#';
 
 //-----------------------------------------------------------------------------
 //

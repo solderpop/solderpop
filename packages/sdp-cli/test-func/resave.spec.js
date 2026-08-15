@@ -170,7 +170,7 @@ describe('xodc resave', () => {
       .it(
         `shows version in stdout, doesn't print to stderr and exits with 0`,
         ctx => {
-          assert.include(ctx.stdout, 'xod-cli', 'version string not found');
+          assert.include(ctx.stdout, 'sdp-cli', 'version string not found');
           assert.equal(ctx.stderr, '', 'stderr should be emply');
         }
       );

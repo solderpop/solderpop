@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { maybePath } from 'xod-func-tools';
+import { maybePath } from 'sdp-func-tools';
 
 import * as Pin from './pin';
 import * as Utils from './utils';
@@ -53,7 +53,7 @@ import {
 export const createNode = def(
   'createNode :: Position -> PatchPath -> Node',
   (position, type) => ({
-    '@@type': 'xod-project/Node',
+    '@@type': 'sdp-project/Node',
     id: Utils.generateId(),
     type,
     position,
@@ -86,7 +86,7 @@ export const getNodeId = def(
 );
 
 /**
- * Only for using in `xod-project`
+ * Only for using in `sdp-project`
  * @function setNodeId
  * @param {NodeId} nodeId
  * @param {Node} node

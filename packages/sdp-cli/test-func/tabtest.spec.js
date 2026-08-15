@@ -6,7 +6,7 @@ import process from 'process';
 import fs from 'fs-extra';
 import { bundledWorkspacePath, createWorkingDirectory } from './helpers';
 
-const defaultOutputDir = path.resolve(os.tmpdir(), 'xod-tabtest');
+const defaultOutputDir = path.resolve(os.tmpdir(), 'sdp-tabtest');
 
 // save process.exit for unmocking
 const exit = process.exit;
@@ -259,7 +259,7 @@ describe('xodc tabtest', () => {
       .it(
         `shows version in stdout, doesn't print to stderr and exits with 0`,
         ctx => {
-          assert.include(ctx.stdout, 'xod-cli', 'version string not found');
+          assert.include(ctx.stdout, 'sdp-cli', 'version string not found');
           assert.equal(ctx.stderr, '', 'stderr should be emply');
         }
       );

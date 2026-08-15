@@ -3,13 +3,13 @@ import React from 'react';
 import $ from 'sanctuary-def';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
-import { $Maybe, explodeMaybe, foldMaybe, notEquals } from 'xod-func-tools';
+import { $Maybe, explodeMaybe, foldMaybe, notEquals } from 'sdp-func-tools';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FocusTrap } from 'react-hotkeys';
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 import debounce from 'throttle-debounce/debounce';
 
 import * as Actions from '../actions';

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import R from 'ramda';
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 
 import { WIDGET_TYPE } from '../constants';
 import { NODE_PROPERTY_KIND, NODE_PROPERTY_KEY } from '../../project/constants';

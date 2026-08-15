@@ -1,8 +1,8 @@
 import * as R from 'ramda';
 import path from 'path';
 import fs from 'fs-extra';
-import * as XF from 'xod-func-tools';
-import * as XP from 'xod-project';
+import * as XF from 'sdp-func-tools';
+import * as XP from 'sdp-project';
 
 import { def } from './types';
 import { readDir } from './read';

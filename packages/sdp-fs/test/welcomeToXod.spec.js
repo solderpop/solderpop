@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import path from 'path';
 
-import { Project } from 'xod-project';
+import { Project } from 'sdp-project';
 
 import { loadProjectWithLibs } from '../src/load';
 import pack from '../src/pack';

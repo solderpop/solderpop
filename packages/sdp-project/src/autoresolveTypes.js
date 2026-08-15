@@ -8,7 +8,7 @@ import {
   fail,
   failOnNothing,
   prependTraceToError,
-} from 'xod-func-tools';
+} from 'sdp-func-tools';
 
 import * as Node from './node';
 import * as Patch from './patch';

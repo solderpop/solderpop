@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { maybePath, foldMaybe } from 'xod-func-tools';
+import { maybePath, foldMaybe } from 'sdp-func-tools';
 
 import {
   getErrors as getErrorList,

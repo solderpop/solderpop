@@ -1,8 +1,8 @@
 import * as R from 'ramda';
 import { Maybe } from 'ramda-fantasy';
 import { createSelector } from 'reselect';
-import { mapIndexed, foldMaybe, maybeProp } from 'xod-func-tools';
-import * as XP from 'xod-project';
+import { mapIndexed, foldMaybe, maybeProp } from 'sdp-func-tools';
+import * as XP from 'sdp-project';
 
 import {
   addPoints,

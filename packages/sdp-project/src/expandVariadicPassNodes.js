@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import { Maybe } from 'ramda-fantasy';
-import { explodeEither, isAmong } from 'xod-func-tools';
+import { explodeEither, isAmong } from 'sdp-func-tools';
 
 import { def } from './types';
 

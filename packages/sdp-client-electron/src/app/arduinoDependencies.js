@@ -13,8 +13,8 @@ import path from 'path';
 import {
   checkLibrariesInstalledByUrls,
   installLibrariesByUrls,
-} from 'xod-deploy';
-import { ARDUINO_LIBRARIES_DIRNAME } from 'xod-deploy-bin';
+} from 'sdp-deploy';
+import { ARDUINO_LIBRARIES_DIRNAME } from 'sdp-deploy-bin';
 
 import {
   CHECK_ARDUINO_DEPENDENCIES_INSTALLED,

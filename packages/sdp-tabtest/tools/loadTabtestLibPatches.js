@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const R = require('ramda');
 
-const XP = require('xod-project');
-const { loadProject } = require('xod-fs');
+const XP = require('sdp-project');
+const { loadProject } = require('sdp-fs');
 
 const pathToTabtestLib = path.resolve(
   __dirname,

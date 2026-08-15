@@ -1,8 +1,8 @@
 import * as R from 'ramda';
 import { Maybe } from 'ramda-fantasy';
-import * as XP from 'xod-project';
-import { explodeEither, foldMaybe, maybeProp } from 'xod-func-tools';
-import { getLibName } from 'xod-pm';
+import * as XP from 'sdp-project';
+import { explodeEither, foldMaybe, maybeProp } from 'sdp-func-tools';
+import { getLibName } from 'sdp-pm';
 
 import * as AT from './actionTypes';
 import {

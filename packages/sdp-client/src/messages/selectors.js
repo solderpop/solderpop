@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { maybeProp, maybePath } from 'xod-func-tools';
+import { maybeProp, maybePath } from 'sdp-func-tools';
 
 export const getErrors = R.prop('errors');
 

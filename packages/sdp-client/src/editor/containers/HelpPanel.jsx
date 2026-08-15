@@ -6,8 +6,8 @@ import {
   Patch as PatchType,
   NOT_IMPLEMENTED_IN_XOD_PATH,
   TABTEST_MARKER_PATH,
-} from 'xod-project';
-import { $Maybe, foldMaybe, explodeMaybe } from 'xod-func-tools';
+} from 'sdp-project';
+import { $Maybe, foldMaybe, explodeMaybe } from 'sdp-func-tools';
 
 import { PANEL_IDS, SIDEBAR_IDS } from '../constants';
 

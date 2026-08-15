@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { getPatchPath } from 'xod-project';
+import { getPatchPath } from 'sdp-project';
 
 import { def } from './types';
 import { isProjectFile, isPatchFile, getFileContent } from './utils';

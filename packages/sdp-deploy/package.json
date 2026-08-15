@@ -1,5 +1,5 @@
 {
-  "name": "xod-deploy",
+  "name": "sdp-deploy",
   "version": "0.38.0",
   "description": "",
   "main": "dist/index.js",
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xodio/xod.git"
+    "url": "git+https://github.com/solderpop/solderpop.git"
   },
-  "author": "XOD Team <dev@xod.io>",
+  "author": "SolderPop <dev@solderpop.io>",
   "license": "AGPL-3.0",
   "bugs": {
-    "url": "https://github.com/xodio/xod/issues"
+    "url": "https://github.com/solderpop/solderpop/issues"
   },
-  "homepage": "https://xod.io/",
+  "homepage": "https://solderpop.io/",
   "dependencies": {
     "atob": "^2.0.3",
     "child-process-promise": "^2.2.1",
@@ -32,8 +32,8 @@
     "tar": "^4.0.1",
     "unbzip2-stream": "^1.2.5",
     "ws": "^3.1.0",
-    "xod-fs": "^0.38.0",
-    "xod-func-tools": "^0.34.0"
+    "sdp-fs": "^0.38.0",
+    "sdp-func-tools": "^0.34.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",

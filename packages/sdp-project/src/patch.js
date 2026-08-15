@@ -17,7 +17,7 @@ import {
   prependTraceToError,
   maybeProp,
   maybeFind,
-} from 'xod-func-tools';
+} from 'sdp-func-tools';
 
 import * as CONST from './constants';
 import * as Comment from './comment';
@@ -70,7 +70,7 @@ import BUILT_IN_PATCHES from '../dist/built-in-patches.json';
  * @returns {Patch} newly created patch
  */
 export const createPatch = def('createPatch :: () -> Patch', () => ({
-  '@@type': 'xod-project/Patch',
+  '@@type': 'sdp-project/Patch',
   nodes: {},
   links: {},
   comments: {},
@@ -1570,7 +1570,7 @@ export const isPatchNotImplementedInXod = def(
   )
 );
 
-// for internal use inside xod-project
+// for internal use inside sdp-project
 export const getUpdatedLinksForNodeWithChangedType = (
   nodeId,
   getReplacementPinKey, // :: (PinKey -> PinKey)

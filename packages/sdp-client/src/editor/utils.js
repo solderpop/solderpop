@@ -1,6 +1,6 @@
 import * as R from 'ramda';
-import * as XP from 'xod-project';
-import { catMaybies, foldMaybe } from 'xod-func-tools';
+import * as XP from 'sdp-project';
+import { catMaybies, foldMaybe } from 'sdp-func-tools';
 
 import {
   addPoints,
@@ -253,7 +253,7 @@ export const regenerateIds = entities => {
 
   return R.evolve({
     nodes: R.map(R.over(R.lensProp('id'), getReplacementNodeId)),
-    // TODO: it's quite tedious to do this with current xod-project API
+    // TODO: it's quite tedious to do this with current sdp-project API
     //       bring back set...Id functions?
     links: R.map(
       R.evolve({

@@ -1,6 +1,6 @@
 open Belt;
 
-open XodFuncTools;
+open SdpFuncTools;
 
 type t = Js.Types.obj_val;
 

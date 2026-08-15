@@ -9,16 +9,16 @@ import {
   Link,
   Comment,
   env as xpEnv,
-} from 'xod-project';
-import * as XF from 'xod-func-tools';
+} from 'sdp-project';
+import * as XF from 'sdp-func-tools';
 
 import { CHANGE_TYPES } from './constants';
 
 /* Types are by convention starts with a capital leter, so: */
 /* eslint-disable new-cap */
 
-const packageName = 'xod-fs';
-const docUrl = 'http://xod.io/docs/dev/xod-fs/#';
+const packageName = 'sdp-fs';
+const docUrl = 'http://solderpop.io/docs/dev/sdp-fs/#';
 
 //-----------------------------------------------------------------------------
 //

@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import { assert } from 'chai';
-import { explodeMaybe } from 'xod-func-tools';
+import { explodeMaybe } from 'sdp-func-tools';
 
 import * as CONST from '../src/constants';
 import { BINDABLE_CUSTOM_TYPES } from '../src/custom-types';

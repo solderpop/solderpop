@@ -1,4 +1,4 @@
-# xod-deploy
+# sdp-deploy
 
 This package is a part of the [SolderPop IDE](https://github.com/solderpop/solderpop) project.
 

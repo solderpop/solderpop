@@ -4,7 +4,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { assert } from 'chai';
 import { Maybe } from 'ramda-fantasy';
 
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 
 import initialState from '../src/core/state';
 import generateReducers from '../src/core/reducer';

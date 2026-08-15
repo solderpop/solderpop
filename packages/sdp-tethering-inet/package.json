@@ -1,5 +1,5 @@
 {
-  "name": "xod-tethering-inet",
+  "name": "sdp-tethering-inet",
   "version": "0.34.0",
   "scripts": {
     "refmt": "find src/ test/ -name '*.re*' -exec refmt --in-place {} +",
@@ -12,7 +12,7 @@
   "keywords": [
     "BuckleScript"
   ],
-  "author": "XOD",
+  "author": "SolderPop",
   "license": "AGPL-3.0",
   "main": "src/AtInternet.bs.js",
   "dependencies": {

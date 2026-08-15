@@ -1,5 +1,5 @@
 {
-  "name": "xod-pm",
+  "name": "sdp-pm",
   "version": "0.38.0",
   "description": "",
   "main": "dist/index.js",
@@ -12,20 +12,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xodio/xod.git"
+    "url": "git+https://github.com/solderpop/solderpop.git"
   },
-  "author": "XOD Team <dev@xod.io>",
+  "author": "SolderPop <dev@solderpop.io>",
   "license": "AGPL-3.0",
   "bugs": {
-    "url": "https://github.com/xodio/xod/issues"
+    "url": "https://github.com/solderpop/solderpop/issues"
   },
-  "homepage": "https://xod.io/",
+  "homepage": "https://solderpop.io/",
   "dependencies": {
     "ramda": "^0.24.1",
     "ramda-fantasy": "^0.8.0",
     "swagger-client": "^3.4.3",
-    "xod-func-tools": "^0.34.0",
-    "xod-project": "^0.38.0"
+    "sdp-func-tools": "^0.34.0",
+    "sdp-project": "^0.38.0"
   },
   "devDependencies": {
     "chai": "^4.1.2"

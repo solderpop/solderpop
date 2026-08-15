@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import shortid from 'shortid';
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 
 import * as EAT from './actionTypes';
 import * as PAT from '../project/actionTypes';

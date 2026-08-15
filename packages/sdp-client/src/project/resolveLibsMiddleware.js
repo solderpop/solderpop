@@ -1,7 +1,7 @@
 import * as R from 'ramda';
-import { explode } from 'xod-func-tools';
-import { listMissingLibraryNames } from 'xod-project';
-import { parseLibQuery } from 'xod-pm';
+import { explode } from 'sdp-func-tools';
+import { listMissingLibraryNames } from 'sdp-project';
+import { parseLibQuery } from 'sdp-pm';
 
 import { installLibraries } from '../editor/actions';
 import { PROJECT_OPEN, PROJECT_IMPORT } from './actionTypes';

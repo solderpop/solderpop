@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { isGenericType, PIN_DIRECTION } from 'xod-project';
+import { isGenericType, PIN_DIRECTION } from 'sdp-project';
 
 import { getRenderablePinType } from '../utils';
 

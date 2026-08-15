@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { noop } from 'xod-func-tools';
+import { noop } from 'sdp-func-tools';
 
 import { SLOT_SIZE, NODE_HEIGHT } from '../../nodeLayout';
 

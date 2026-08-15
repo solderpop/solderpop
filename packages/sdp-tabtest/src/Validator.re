@@ -48,7 +48,7 @@ let validatePinLabels =
         ~duplicated=duplicatedPinLabels |. List.toArray,
       );
     Some(
-      XodFuncTools.Errors.createError(
+      SdpFuncTools.Errors.createError(
         "INVALID_PIN_LABELS_IN_TABTEST",
         payload,
       ),

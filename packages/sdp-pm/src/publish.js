@@ -1,4 +1,4 @@
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 
 import { getSwaggerClient, swaggerError } from './utils';
 import { createLibUri, toString, toStringWithoutTag } from './lib-uri';

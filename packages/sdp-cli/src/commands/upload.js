@@ -13,7 +13,7 @@ import {
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import { flags } from '@oclif/command';
-import * as xdb from 'xod-deploy-bin';
+import * as xdb from 'sdp-deploy-bin';
 import BaseCommand from '../baseCommand';
 import * as commonArgs from '../args';
 import * as myFlags from '../flags';

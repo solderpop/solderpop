@@ -2,7 +2,7 @@
 import { exit, stdout } from 'process';
 import { pick } from 'ramda';
 import { flags } from '@oclif/command';
-import { writeFile, resolvePath } from 'xod-fs';
+import { writeFile, resolvePath } from 'sdp-fs';
 
 import BaseCommand from '../baseCommand';
 import * as commonArgs from '../args';

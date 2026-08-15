@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { maybeProp, explodeMaybe } from 'xod-func-tools';
+import { maybeProp, explodeMaybe } from 'sdp-func-tools';
 import { def } from './types';
 import { MANAGED_ATTACHMENT_FILENAMES } from './constants';
 

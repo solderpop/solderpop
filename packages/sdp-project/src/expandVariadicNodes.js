@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { explodeMaybe, explodeEither } from 'xod-func-tools';
+import { explodeMaybe, explodeEither } from 'sdp-func-tools';
 
 import { def } from './types';
 
@@ -14,7 +14,7 @@ import { getExpandedVariadicPatchPath } from './patchPathUtils';
 //
 // expanding a single patch
 //
-// @see https://raw.githubusercontent.com/wiki/xodio/xod/images/illustrations-for-xod-source-code/xod-project/expandVariadicNodes.png
+// @see https://raw.githubusercontent.com/wiki/xodio/xod/images/illustrations-for-xod-source-code/sdp-project/expandVariadicNodes.png
 
 const getNodeX = R.pipe(Node.getNodePosition, R.prop('x'));
 

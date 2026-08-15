@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { mapIndexed } from 'xod-func-tools';
+import { mapIndexed } from 'sdp-func-tools';
 
 // :: [{...}] -> [{..., index: N}] -- sets each element in array a property 'index'
 export const assocIndexes = mapIndexed(R.flip(R.assoc('index')));

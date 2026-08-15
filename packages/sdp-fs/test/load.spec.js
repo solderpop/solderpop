@@ -1,6 +1,6 @@
 import chai, { assert } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 
 import path from 'path';
 import R from 'ramda';

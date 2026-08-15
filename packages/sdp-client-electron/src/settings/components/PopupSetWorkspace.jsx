@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as remote from '@electron/remote';
-import { PopupForm } from 'xod-client';
+import { PopupForm } from 'sdp-client';
 
 class PopupSetWorkspace extends React.Component {
   constructor(props) {

@@ -1,6 +1,6 @@
 import * as R from 'ramda';
-import { getPatchPath } from 'xod-project';
-import { isAmong } from 'xod-func-tools';
+import { getPatchPath } from 'sdp-project';
+import { isAmong } from 'sdp-func-tools';
 
 import { def } from './types';
 import { CHANGE_TYPES } from './constants';

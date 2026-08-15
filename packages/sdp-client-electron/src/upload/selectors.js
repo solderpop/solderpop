@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import client from 'xod-client';
+import client from 'sdp-client';
 
 import { UPLOAD } from './actionTypes';
 

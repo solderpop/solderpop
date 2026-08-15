@@ -4,7 +4,7 @@
   "homepage": "https://solderpop.io/",
   "license": "AGPL-3.0",
   "main": "src-babel/app/main.js",
-  "name": "xod-client-electron",
+  "name": "sdp-client-electron",
   "version": "0.38.0",
   "scripts": {
     "build:workspace": "cpx \"../../workspace/**/*\" \"src-babel/workspace\"",
@@ -44,14 +44,14 @@
     "redux": "^3.0.5",
     "redux-thunk": "^2.1.0",
     "serialport": "^13.0.0",
-    "xod-arduino": "^0.38.0",
-    "xod-client": "^0.38.0",
-    "xod-deploy": "^0.38.0",
-    "xod-deploy-bin": "^0.38.0",
-    "xod-fs": "^0.38.0",
-    "xod-func-tools": "^0.34.0",
-    "xod-project": "^0.38.0",
-    "xod-tethering-inet": "^0.34.0"
+    "sdp-arduino": "^0.38.0",
+    "sdp-client": "^0.38.0",
+    "sdp-deploy": "^0.38.0",
+    "sdp-deploy-bin": "^0.38.0",
+    "sdp-fs": "^0.38.0",
+    "sdp-func-tools": "^0.34.0",
+    "sdp-project": "^0.38.0",
+    "sdp-tethering-inet": "^0.34.0"
   },
   "devDependencies": {
     "babel-cli": "^6.16.0",
@@ -71,8 +71,8 @@
     "buildDependenciesFromSource": true,
     "files": [
       "**/*",
-      "!**/node_modules/xod-arduino/**/*",
-      "**/node_modules/xod-arduino/dist/**/*",
+      "!**/node_modules/sdp-arduino/**/*",
+      "**/node_modules/sdp-arduino/dist/**/*",
       "!**/node_modules/bs-platform/**/*",
       "**/node_modules/bs-platform/lib/js/**/*"
     ],
@@ -133,7 +133,7 @@
     "publish": [
       {
         "provider": "generic",
-        "url": "https://releases.xod.io/releases/latest",
+        "url": "https://releases.solderpop.io/releases/latest",
         "channel": "latest"
       }
     ]

@@ -1,7 +1,7 @@
 import React from 'react';
 import PT from 'prop-types';
 
-import { Position, Size } from 'xod-project';
+import { Position, Size } from 'sdp-project';
 import sanctuaryPropType from '../../../utils/sanctuaryPropType';
 
 import { NODE_CORNER_RADIUS } from '../../nodeLayout';

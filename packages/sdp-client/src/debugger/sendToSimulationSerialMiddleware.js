@@ -1,7 +1,7 @@
 import * as R from 'ramda';
-import * as XP from 'xod-project';
-import { foldMaybe } from 'xod-func-tools';
-import { formatTweakMessage } from 'xod-arduino';
+import * as XP from 'sdp-project';
+import { foldMaybe } from 'sdp-func-tools';
+import { formatTweakMessage } from 'sdp-arduino';
 
 import { getProject } from '../project/selectors';
 import {

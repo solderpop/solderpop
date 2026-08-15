@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import { Maybe } from 'ramda-fantasy';
-import { mapIndexed } from 'xod-func-tools';
+import { mapIndexed } from 'sdp-func-tools';
 
 import * as CONST from './constants';
 import * as PatchPathUtils from './patchPathUtils';

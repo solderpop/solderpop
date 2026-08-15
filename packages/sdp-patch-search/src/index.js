@@ -1,8 +1,8 @@
 import * as R from 'ramda';
 import Fuse from 'fuse.js';
 import { Maybe } from 'ramda-fantasy';
-import { getBaseName } from 'xod-project';
-import { foldMaybe } from 'xod-func-tools';
+import { getBaseName } from 'sdp-project';
+import { foldMaybe } from 'sdp-func-tools';
 
 const options = {
   shouldSort: true,

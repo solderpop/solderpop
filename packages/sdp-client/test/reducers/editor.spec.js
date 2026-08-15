@@ -4,8 +4,8 @@ import thunk from 'redux-thunk';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import configureStore from 'redux-mock-store';
 
-import { isAmong } from 'xod-func-tools';
-import { defaultizeProject } from 'xod-project/test/helpers';
+import { isAmong } from 'sdp-func-tools';
+import { defaultizeProject } from 'sdp-project/test/helpers';
 
 import * as Actions from '../../src/editor/actions';
 import * as Selectors from '../../src/editor/selectors';

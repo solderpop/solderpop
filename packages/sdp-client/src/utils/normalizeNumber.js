@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { isValidNumberDataValue } from 'xod-project';
+import { isValidNumberDataValue } from 'sdp-project';
 
 export default R.compose(
   // If value is not valid number — fallback to '0'.

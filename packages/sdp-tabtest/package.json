@@ -1,5 +1,5 @@
 {
-  "name": "xod-tabtest",
+  "name": "sdp-tabtest",
   "version": "0.38.0",
   "scripts": {
     "refmt": "find src/ test/ -name '*.re*' -exec refmt --in-place {} +",
@@ -13,20 +13,20 @@
   "keywords": [
     "BuckleScript"
   ],
-  "author": "XOD",
+  "author": "SolderPop",
   "license": "AGPL-3.0",
   "main": "src/Tabtest_Js.bs.js",
   "dependencies": {
     "belt-holes": "^0.34.0",
-    "xod-arduino": "^0.38.0",
-    "xod-func-tools": "^0.34.0",
-    "xod-project": "^0.38.0"
+    "sdp-arduino": "^0.38.0",
+    "sdp-func-tools": "^0.34.0",
+    "sdp-project": "^0.38.0"
   },
   "devDependencies": {
     "@glennsl/bs-jest": "^0.4.9",
     "bs-platform": "7.1.1",
     "ramda": "^0.24.1",
-    "xod-fs": "^0.38.0"
+    "sdp-fs": "^0.38.0"
   },
   "jest": {
     "testMatch": [

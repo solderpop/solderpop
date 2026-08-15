@@ -1,6 +1,6 @@
 import React from 'react';
 import { HotKeys } from 'react-hotkeys';
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 
 import { COMMAND } from '../../../../utils/constants';
 

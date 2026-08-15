@@ -4,8 +4,8 @@ import {
   assocPatch,
   getPatchPath,
   getPatchByPathUnsafe,
-} from 'xod-project';
-import { isAmong } from 'xod-func-tools';
+} from 'sdp-project';
+import { isAmong } from 'sdp-func-tools';
 
 import { getProject, projectLens } from '../project/selectors';
 

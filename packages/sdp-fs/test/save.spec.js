@@ -2,9 +2,9 @@ import R from 'ramda';
 import { assert } from 'chai';
 import { removeSync, readFile, readJson, pathExists } from 'fs-extra';
 import path from 'path';
-import * as XP from 'xod-project';
+import * as XP from 'sdp-project';
 
-import { defaultizeProject, defaultizePatch } from 'xod-project/test/helpers';
+import { defaultizeProject, defaultizePatch } from 'sdp-project/test/helpers';
 
 import { calculateDiff } from '../src/patchDiff';
 import {

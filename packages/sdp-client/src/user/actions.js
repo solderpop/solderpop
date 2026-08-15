@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import 'url-search-params-polyfill';
-import { rejectWithCode, foldMaybe, noop } from 'xod-func-tools';
+import { rejectWithCode, foldMaybe, noop } from 'sdp-func-tools';
 
 import {
   getApiBillingUrl,

@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import { Maybe } from 'ramda-fantasy';
-import { maybeProp, catMaybies, isAmong } from 'xod-func-tools';
+import { maybeProp, catMaybies, isAmong } from 'sdp-func-tools';
 
 import * as Pin from './pin';
 import * as Node from './node';

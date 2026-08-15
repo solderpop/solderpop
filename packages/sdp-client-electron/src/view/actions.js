@@ -2,7 +2,7 @@ import * as R from 'ramda';
 import { ipcRenderer } from 'electron';
 import { basename } from 'path';
 
-import { getProjectName } from 'xod-project';
+import { getProjectName } from 'sdp-project';
 import {
   addProcess,
   progressProcess,
@@ -17,7 +17,7 @@ import {
   getLastSavedProject,
   updateProjectMeta,
   deriveProjectName,
-} from 'xod-client';
+} from 'sdp-client';
 import * as EVENTS from '../shared/events';
 import * as MESSAGES from '../shared/messages';
 import { STATES, getEventNameWithState } from '../shared/eventStates';

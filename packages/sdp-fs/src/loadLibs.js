@@ -1,8 +1,8 @@
 import * as R from 'ramda';
 import path from 'path';
 
-import * as XP from 'xod-project';
-import { uniqLists } from 'xod-func-tools';
+import * as XP from 'sdp-project';
+import { uniqLists } from 'sdp-func-tools';
 
 import { readDir, readJSON } from './read';
 import {
