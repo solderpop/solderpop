@@ -120,27 +120,34 @@ module.exports = pkgDir => ({
       {
         include: assetsPath,
         test: /\.(jpe?g|png|gif|svg|ttf|eot|woff|woff2)$/,
-        loader: 'file-loader',
-        options: {
-          // Was 'assets/[path][name].[ext]?[hash:6]' (cache-busting hash as
-          // a URL query string) -- modern file-loader/webpack resolve that
-          // template literally instead of treating '?' as a query
-          // delimiter, so the hash silently stopped appearing anywhere.
-          // Embedding it in the filename itself is the supported
-          // equivalent: same cache-busting-on-content-change behavior.
-          name: 'assets/[path][name].[hash:6].[ext]',
-          context: assetsPath,
+        type: 'asset/resource',
+        generator: {
+          // Was file-loader's 'assets/[path][name].[ext]?[hash:6]' with
+          // `context: assetsPath` (cache-busting hash as a URL query
+          // string, scoped to a flat 'assets/<subpath-under-assetsPath>'
+          // layout). Now on webpack 5's built-in asset modules instead of
+          // file-loader -- hashed with webpack's own hash implementation
+          // rather than file-loader's (via loader-utils, which calls
+          // Node's crypto MD4, disabled by OpenSSL 3 on Node 17+ without
+          // the legacy-provider flag). Asset modules' `[path]` placeholder
+          // has no equivalent to file-loader's scoped `context` option --
+          // it's always relative to the whole compilation, which would
+          // nest this under 'assets/sdp-client/src/core/assets/...'
+          // instead of the flat layout other code (CopyWebpackPlugin's
+          // index.html, Electron's packaged resources) expects. A filename
+          // function replicates the old scoped-relative-path behavior.
+          filename: pathData => {
+            const relativeDir = path.relative(assetsPath, path.dirname(pathData.filename));
+            return `assets/${relativeDir ? `${relativeDir}/` : ''}[name].[hash:6][ext]`;
+          },
         },
       },
       {
         include: fontAwesomePath,
         test: /\.(jpe?g|png|gif|svg|ttf|eot|woff|woff2)(\?\S*)?$/,
-        loader: 'file-loader',
-        options: {
-          // Same fix as the assetsPath rule above: hash moved into the
-          // filename since the old '?[hash:6]' query-string form stopped
-          // being honored.
-          name: 'assets/font-awesome/[name].[hash:6].[ext]',
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/font-awesome/[name].[hash:6][ext]',
         },
       },
     ],

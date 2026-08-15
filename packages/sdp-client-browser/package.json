@@ -4,11 +4,11 @@
   "description": "SolderPop IDE: Client browser application",
   "scripts": {
     "build:tutorial-project": "node ./tools/loadTutorialProject.js",
-    "build": "yarn run build:tutorial-project && NODE_OPTIONS=--openssl-legacy-provider webpack --color",
+    "build": "yarn run build:tutorial-project && webpack --color",
     "clean:dist": "rimraf ./dist ./tutorialProject.json",
     "benchmark": "node -r babel-register ./benchmark/index.js",
     "test-func": "mocha test-func/bootstrap.js --opts test-func/mocha.opts test-func/**/*.spec.js",
-    "dev": "yarn run build:tutorial-project && NODE_OPTIONS=--openssl-legacy-provider webpack-dev-server --watch --color --hot --config webpack.config.dev.js"
+    "dev": "yarn run build:tutorial-project && webpack-dev-server --watch --color --hot --config webpack.config.dev.js"
   },
   "dependencies": {
     "babel-polyfill": "^6.16.0",
@@ -37,7 +37,6 @@
     "chai": "^4.1.2",
     "css-loader": "^7.1.4",
     "expose-loader": "^5.0.1",
-    "file-loader": "^6.2.0",
     "node-static": "^0.7.10",
     "postcss": "^8.5.26",
     "postcss-loader": "^8.2.1",

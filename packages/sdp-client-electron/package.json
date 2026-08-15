@@ -8,7 +8,7 @@
   "version": "0.38.0",
   "scripts": {
     "build:workspace": "cpx \"../../workspace/**/*\" \"src-babel/workspace\"",
-    "build:gui": "NODE_OPTIONS=--openssl-legacy-provider webpack --color",
+    "build:gui": "webpack --color",
     "build:app": "babel src/app/ -d src-babel/app/ && babel src/shared/ -d src-babel/shared/",
     "build": "yarn build:gui && yarn build:app && yarn build:workspace",
     "clean:dist": "rimraf ./src-babel",
@@ -67,7 +67,6 @@
     "dir-compare": "^1.4.0",
     "electron": "43.4.0",
     "electron-builder": "^26.15.3",
-    "file-loader": "^6.2.0",
     "css-loader": "^7.1.4",
     "postcss": "^8.5.26",
     "postcss-loader": "^8.2.1",
