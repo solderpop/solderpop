@@ -7,10 +7,6 @@
       "subdirs": true
     },
     {
-      "dir": "packages/sdp-project/src",
-      "subdirs": true
-    },
-    {
       "dir": "packages/sdp-tabtest/src",
       "subdirs": true
     }
@@ -22,7 +18,6 @@
   "suffix": ".bs.js",
   "dependencies": [
     "sdp-arduino",
-    "sdp-project",
     "sdp-tabtest"
   ],
   "warnings": {
