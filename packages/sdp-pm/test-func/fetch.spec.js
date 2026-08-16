@@ -1,8 +1,10 @@
 import R from 'ramda';
-import { assert } from 'chai';
+import chai from 'chai';
+
+const { assert } = chai;
 import { getProjectName } from 'sdp-project';
-import * as F from '../src/fetch';
-import * as ERR_CODES from '../src/errorCodes';
+import * as F from '../src/fetch.js';
+import * as ERR_CODES from '../src/errorCodes.js';
 
 describe('fetching data', () => {
   const PM_SWAGGER_URL = 'https://pm.xod.io/swagger';

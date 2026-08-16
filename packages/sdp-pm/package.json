@@ -1,6 +1,6 @@
 {
   "name": "sdp-pm",
-  "type": "commonjs",
+  "type": "module",
   "version": "0.38.0",
   "description": "",
   "main": "dist/index.js",
