@@ -72,16 +72,16 @@ $terracotta: #7b8db5; // Nordic Blue (datatype-custom)
 
 // Associated colors
 
-$selected: $coral;
-$error: $red;
-$error-text: $red-bright;
+$selected: var(--theme-selected, $coral);
+$error: var(--theme-error, $red);
+$error-text: var(--theme-error-text, $red-bright);
 
-$chrome-bg: $dark;
-$chrome-title-bg: $coal-bright;
+$chrome-bg: var(--theme-chrome-bg, $dark);
+$chrome-title-bg: var(--theme-chrome-title-bg, $coal-bright);
 $chrome-title-button-hover: $dark;
-$chrome-outlines: $coal;
+$chrome-outlines: var(--theme-chrome-outlines, $coal);
 
-$chrome-light-bg: $chalk;
+$chrome-light-bg: var(--theme-chrome-light-bg, $chalk);
 
 $menu-bg: $dark-deep;
 $menu-hover: $dark-bright;
@@ -90,16 +90,16 @@ $menu-item-bg: $coal;
 $menu-item-hover: $dark-deep;
 $menu-separator: $grey;
 
-$tab-bg: $coal;
+$tab-bg: var(--theme-tab-bg, $coal);
 $tab-item-bg: $dark-deep;
 $tab-item-hover: $grey;
 $tab-button-hover: $dark;
 
-$canvas: $dark-deep;
+$canvas: var(--theme-canvas-bg, $dark-deep);
 $canvas-outlines: $dark-light;
 
-$node-label: $chalk;
-$node-outlines: $light-grey-bright;
+$node-label: var(--theme-node-label, $chalk);
+$node-outlines: var(--theme-node-outlines, $light-grey-bright);
 $node-hover-outlines: $chalk;
 $pin-bg: $coal-light;
 $pin-label: $light-grey-bright;
@@ -126,17 +126,17 @@ $light-button-hover-outlines: $grey-bright;
 $light-button-disabled-text: rgba($light-button-text, .5);
 $light-button-disabled-outlines: rgba($light-button-outlines, .5);
 
-$menubar-bg: $dark-deep;
-$menubar-text: $chalk;
-$menubar-active-bg: $coal;
-$menubar-active-text: $green-bright;
-$menubar-hover-bg: $dark-bright;
-$menubar-hover-text: $chalk;
-$menubar-border: $coal;
+$menubar-bg: var(--theme-menubar-bg, $dark-deep);
+$menubar-text: var(--theme-menubar-text, $chalk);
+$menubar-active-bg: var(--theme-menubar-active-bg, $coal);
+$menubar-active-text: var(--theme-menubar-active-text, $coral);
+$menubar-hover-bg: var(--theme-menubar-hover-bg, $dark-bright);
+$menubar-hover-text: $menubar-text;
+$menubar-border: var(--theme-chrome-outlines, $coal);
 
-$menubar-submenu-text: $chalk;
-$menubar-submenu-bg: $coal;
-$menubar-submenu-hover-bg: $dark-deep;
-$menubar-submenu-separator: $grey;
+$menubar-submenu-text: var(--theme-menubar-text, $chalk);
+$menubar-submenu-bg: var(--theme-menubar-bg, $coal);
+$menubar-submenu-hover-bg: var(--theme-menubar-hover-bg, $dark-deep);
+$menubar-submenu-separator: var(--theme-chrome-outlines, $grey);
 $menubar-submenu-disabled-text: $grey;
-$menubar-submenu-hotkey-text: $grey;
+$menubar-submenu-hotkey-text: var(--theme-menubar-text, $grey);

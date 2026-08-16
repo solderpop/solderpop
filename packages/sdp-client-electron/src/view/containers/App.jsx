@@ -96,12 +96,25 @@ const { app, dialog, Menu } = remoteElectron;
 const DEFAULT_CANVAS_WIDTH = 800;
 const DEFAULT_CANVAS_HEIGHT = 600;
 
+const ThemeSettingsPopup = client.theme.components.ThemeSettingsPopup;
+
+const applyTheme = colors => {
+  if (!colors || typeof document === 'undefined') return;
+  R.forEachObjIndexed((value, key) => {
+    const cssKey = `--theme-${key
+      .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+      .toLowerCase()}`;
+    document.documentElement.style.setProperty(cssKey, value);
+  }, colors);
+};
+
 const defaultState = {
   size: client.getViewableSize(DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT),
   workspace: '',
   projectPath: null,
   downloadProgressPopup: false,
   downloadProgressPopupError: null,
+  themeSettingsPopup: false,
 };
 
 const stopDebuggerSession = () =>
@@ -154,6 +167,8 @@ class App extends client.App {
     this.showError = this.showError.bind(this);
 
     this.hideAllPopups = this.hideAllPopups.bind(this);
+    this.showThemeSettingsPopup = this.showThemeSettingsPopup.bind(this);
+    this.hideThemeSettingsPopup = this.hideThemeSettingsPopup.bind(this);
     this.showPopupSetWorkspace = this.showPopupSetWorkspace.bind(this);
     this.showPopupSetWorkspaceNotCancellable = this.showPopupSetWorkspaceNotCancellable.bind(
       this
@@ -211,6 +226,7 @@ class App extends client.App {
   componentDidMount() {
     super.componentDidMount();
 
+    applyTheme(this.props.themeColors);
     // Reactions on messages from Main Process
     ipcRenderer.on(EVENTS.PROJECT_PATH_CHANGED, (event, projectPath) =>
       this.setState({ projectPath })
@@ -289,6 +305,12 @@ class App extends client.App {
         }
         ipcRenderer.send(EVENTS.LOAD_PROJECT, projectPath);
       });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.themeColors !== this.props.themeColors) {
+      applyTheme(this.props.themeColors);
     }
   }
 
@@ -838,6 +860,11 @@ class App extends client.App {
         ),
         { type: 'separator' },
         client.menu.onClick(
+          client.menu.items.themeSettings,
+          this.showThemeSettingsPopup
+        ),
+        { type: 'separator' },
+        client.menu.onClick(
           client.menu.items.panToOrigin,
           this.props.actions.setCurrentPatchOffsetToOrigin
         ),
@@ -913,6 +940,14 @@ class App extends client.App {
 
   hideAllPopups() {
     this.props.actions.hideAllPopups();
+  }
+
+  showThemeSettingsPopup() {
+    this.setState({ themeSettingsPopup: true });
+  }
+
+  hideThemeSettingsPopup() {
+    this.setState({ themeSettingsPopup: false });
   }
 
   selectAll() {
@@ -1066,6 +1101,10 @@ class App extends client.App {
         {this.renderWelcomeDialog()}
         {this.renderManageLocalSimulationPopup()}
         {this.renderPatchCreatingPopup()}
+        <ThemeSettingsPopup
+          isVisible={this.state.themeSettingsPopup}
+          onClose={this.hideThemeSettingsPopup}
+        />
         <PopupSetWorkspace
           workspace={this.state.workspace}
           isClosable={R.propOr(
@@ -1152,6 +1191,7 @@ const mapStateToProps = R.applySpec({
   selectedPort: getSelectedSerialPort,
   isSimulationAbortable: client.isSimulationAbortable,
   isDeploymentInProgress,
+  themeColors: client.getThemeColors,
   popups: {
     // TODO: make keys match with POPUP_IDs
     // (for example, `creatingProject` insteand of `createProject`)

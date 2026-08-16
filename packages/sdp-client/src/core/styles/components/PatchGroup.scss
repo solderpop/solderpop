@@ -46,8 +46,8 @@
   &--installing {
     @include collapsibleBlock();
     cursor: wait;
-    color: darken($sidebar-color-text, 20%);
-    background: darken($sidebar-color-bg, 3%);
+    color: $sidebar-color-text;
+    background: $sidebar-color-bg;
 
     .fa-spin {
       position: absolute;
@@ -57,7 +57,7 @@
     }
     .version {
       margin-left: 0.25em;
-      color: darken($sidebar-color-text, 40%);
+      color: $sidebar-color-subtitle;
     }
   }
 

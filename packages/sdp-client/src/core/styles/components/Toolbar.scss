@@ -1,6 +1,23 @@
 .Toolbar {
   position: relative;
-  display: block;
+  display: flex;
+  align-items: center;
   background-color: $menubar-bg;
   border-bottom: 1px solid $menubar-border;
+
+  .SolderpopLogo {
+    width: 28px;
+    height: 28px;
+    margin: 0 12px;
+    flex-shrink: 0;
+
+    circle {
+      fill: $coral;
+    }
+
+    .SolderpopLogo-ring {
+      fill: none;
+      stroke: $coral;
+    }
+  }
 }

@@ -18,6 +18,33 @@
   }
 }
 
+.ModalLogoSection {
+  display: flex;
+  justify-content: center;
+  padding-top: 14px;
+
+  .SolderpopLockup {
+    width: 200px;
+
+    .SolderpopLockup-main {
+      fill: $coral;
+    }
+
+    .SolderpopLockup-ring {
+      fill: none;
+      stroke: $coral;
+    }
+
+    .SolderpopLockup-wordmark {
+      fill: $modal-fg-color;
+    }
+
+    .SolderpopLockup-accent {
+      fill: $coral;
+    }
+  }
+}
+
 .ModalContent {
   padding-top: 14px;
 

@@ -1,0 +1,91 @@
+/* Theme system base variables */
+:root {
+  /* Global colors */
+  --theme-color-primary: #3b82f6;
+  --theme-color-secondary: #64748b;
+  --theme-color-accent: #ff6b6b;
+  --theme-color-success: #10b981;
+  --theme-color-warning: #f59e00;
+  --theme-color-danger: #ef4444;
+
+  /* Text colors */
+  --theme-text-primary: #1f2937;
+  --theme-text-secondary: #ff6b6b;
+  --theme-text-tertiary: #9ca3af;
+  --theme-text-inverse: #f9fafb;
+
+  /* Backgrounds */
+  --theme-bg-primary: #ffffff;
+  --theme-bg-secondary: #f3f4f6;
+  --theme-bg-tertiary: #e5e7eb;
+  --theme-bg-inverse: #111821;
+  --theme-bg-card: #fafafa;
+
+  /* UI elements */
+  --theme-border-color: #d1d5db;
+  --theme-border-radius: 0.375rem;
+  --theme-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  
+  /* Canvas */
+  --theme-canvas-bg: #ffffff;
+  --theme-canvas-gridlines: #e5e7eb;
+  --theme-canvas-face: #f3f4f6;
+  --theme-canvas-face-light: #fafafa;
+  --theme-canvas-face-text: #ff6b6b;
+
+  /* Node styling */
+  --theme-node-fill: #ffffff;
+  --theme-node-label: #1f2937;
+  --theme-node-outline: #d1d5db;
+  --theme-pin-bg: #f3f4f6;
+  --theme-pin-label: #6b7280;
+  --theme-comment-text: #1f2937;
+
+  /* Menubar and tabs */
+  --theme-menubar-bg: #ffffff;
+  --theme-menubar-text: #1f2937;
+  --theme-menubar-active-bg: #fff1f2;
+  --theme-menubar-active-text: #ff6b6b;
+  --theme-menubar-hover-bg: #f3f4f6;
+
+  /* Sidebar */
+  --theme-sidebar-bg: #fafafa;
+  --theme-sidebar-hover-bg: #e5e7eb;
+  --theme-sidebar-selected-bg: #fff1f2;
+  --theme-sidebar-text: #1f2937;
+  --theme-sidebar-subtitle: #6b7280;
+
+  /* Tabs */
+  --theme-tab-bg: #f3f4f6;
+  --theme-tab-item-bg: #ffffff;
+  --theme-tab-text: #6b7280;
+
+  /* Inputs */
+  --theme-input-bg: #ffffff;
+  --theme-input-text: #1f2937;
+  --theme-input-border: #d1d5db;
+  
+  /* Buttons */
+  --theme-button-dark-bg: #374151;
+  --theme-button-dark-hover-bg: #4b5563;
+  --theme-button-dark-text: #ffffff;
+  --theme-button-light-bg: #f3f4f6;
+  --theme-button-light-text: #1f2937;
+
+  /* Highlight and selections */
+  --theme-highlight: #f3f4f6;
+  --theme-selected: #ff6b6b;
+  --theme-error: #ef4444;
+  --theme-error-text: #dc2626;
+
+  /* Window chrome */
+  --theme-chrome-bg: #ffffff;
+  --theme-chrome-title-bg: #f8fafc;
+  --theme-chrome-outlines: #e2e8f0;
+  --theme-chrome-light-bg: #f1f5f9;
+
+  /* Status indicators */
+  --theme-status-success: #10b981;
+  --theme-status-warning: #f59e00;
+  --theme-status-danger: #ef4444;
+}

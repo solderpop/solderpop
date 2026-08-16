@@ -14,9 +14,20 @@ import { LIVENESS } from 'sdp-arduino';
 
 import packageJson from '../../package.json';
 import PopupInstallApp from '../components/PopupInstallApp';
+import { ThemeSettingsPopup } from 'sdp-client';
 
 const DEFAULT_CANVAS_WIDTH = 800;
 const DEFAULT_CANVAS_HEIGHT = 600;
+
+const applyTheme = colors => {
+  if (!colors || typeof document === 'undefined') return;
+  R.forEachObjIndexed((value, key) => {
+    const cssKey = `--theme-${key
+      .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+      .toLowerCase()}`;
+    document.documentElement.style.setProperty(cssKey, value);
+  });
+};
 
 class App extends client.App {
   constructor(props) {
@@ -28,6 +39,7 @@ class App extends client.App {
     this.state = {
       size: client.getViewableSize(DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT),
       popupInstallApp: false,
+      themeSettingsPopup: false,
       workspace: '',
     };
 
@@ -48,6 +60,8 @@ class App extends client.App {
     this.onFirstRun = this.onFirstRun.bind(this);
 
     this.hideInstallAppPopup = this.hideInstallAppPopup.bind(this);
+    this.showThemeSettingsPopup = this.showThemeSettingsPopup.bind(this);
+    this.hideThemeSettingsPopup = this.hideThemeSettingsPopup.bind(this);
 
     this.hotkeyHandlers = R.merge(
       {
@@ -69,6 +83,12 @@ class App extends client.App {
   componentDidMount() {
     super.componentDidMount();
     document.addEventListener('click', this.onDocumentClick);
+    applyTheme(this.props.themeColors);
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.themeColors !== this.props.themeColors) {
+      applyTheme(this.props.themeColors);
+    }
   }
   componentWillUnmount() {
     super.componentWillUnmount();
@@ -316,6 +336,8 @@ class App extends client.App {
           this.props.actions.togglePanel(client.PANEL_IDS.ACCOUNT)
         ),
         items.separator,
+        onClick(items.themeSettings, this.showThemeSettingsPopup),
+        items.separator,
         onClick(
           items.panToOrigin,
           this.props.actions.setCurrentPatchOffsetToOrigin
@@ -356,6 +378,14 @@ class App extends client.App {
     this.setState({ popupInstallApp: false });
   }
 
+  showThemeSettingsPopup() {
+    this.setState({ themeSettingsPopup: true });
+  }
+
+  hideThemeSettingsPopup() {
+    this.setState({ themeSettingsPopup: false });
+  }
+
   confirmUnsavedChanges() {
     if (!this.props.hasUnsavedChanges) return true;
 
@@ -393,6 +423,10 @@ class App extends client.App {
         {this.renderPopupPublishProject()}
         {this.renderPopupCreateNewProject()}
         {this.renderPatchCreatingPopup()}
+        <ThemeSettingsPopup
+          isVisible={this.state.themeSettingsPopup}
+          onClose={this.hideThemeSettingsPopup}
+        />
       </HotKeys>
     );
   }
@@ -413,6 +447,7 @@ const mapStateToProps = R.applySpec({
   user: client.getUser,
   currentPatchPath: client.getCurrentPatchPath,
   isSimulationAbortable: client.isSimulationAbortable,
+  themeColors: client.getThemeColors,
   popups: {
     createProject: client.getPopupVisibility(client.POPUP_ID.CREATING_PROJECT),
     createPatch: client.getPopupVisibility(client.POPUP_ID.CREATING_PATCH),
