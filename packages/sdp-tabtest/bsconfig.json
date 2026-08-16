@@ -11,7 +11,7 @@
     }
   ],
   "package-specs": {
-    "module": "commonjs",
+    "module": "esmodule",
     "in-source": true
   },
   "suffix": ".bs.js",

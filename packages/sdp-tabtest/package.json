@@ -1,9 +1,10 @@
 {
   "name": "sdp-tabtest",
+  "type": "module",
   "version": "0.38.0",
   "scripts": {
     "refmt": "rescript format -all",
-    "build:lib": "node ./tools/loadTabtestLibPatches.js",
+    "build:lib": "node ./tools/loadTabtestLibPatches.cjs",
     "build:re": "rescript build",
     "build": "yarn build:re && yarn build:lib",
     "clean:dist": "rimraf ./lib ./src/**/*.bs.js ./test/**/*.bs.js",
@@ -23,7 +24,10 @@
     "sdp-project": "^0.38.0"
   },
   "devDependencies": {
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
     "@rescript/runtime": "^12.3.0",
+    "babel-jest": "^24.9.0",
     "jest": "^24.5.0",
     "rescript": "^12.3.0",
     "ramda": "^0.24.1",
@@ -32,6 +36,22 @@
   "jest": {
     "testMatch": [
       "**/test/**/*.test.js"
-    ]
+    ],
+    "transformIgnorePatterns": [
+      "/node_modules/(?!belt-holes/|sdp-func-tools/)"
+    ],
+    "transform": {
+      "^.+\\.js$": [
+        "babel-jest",
+        {
+          "presets": [
+            ["@babel/preset-env", { "modules": "commonjs", "targets": { "node": "current" } }]
+          ]
+        }
+      ]
+    },
+    "moduleNameMapper": {
+      "^@rescript/runtime/lib/es6/(.*)$": "@rescript/runtime/lib/js/$1"
+    }
   }
 }

@@ -310,8 +310,21 @@ module TestCase = {
   }
 }
 
-@module
-external tabtestLibPatches: array<SdpProject.Patch.t> = "../lib/tabtestLibPatches.json"
+// Bare `@module` JSON imports compile to a static ESM import with no
+// import attribute (`import x from "./y.json"`), which real Node ESM
+// rejects (`with { type: "json" }` is required). `tabtestLibPatches` is
+// consumed synchronously below, so a lazy `import()` would force this
+// (and every caller of `generatePatchSuite`) to become async. Read it via
+// `fs.readFileSync` instead, resolved relative to this module via
+// `import.meta.url` — genuine ESM, synchronous, no `require`.
+%%raw(`import { readFileSync } from "node:fs";`)
+%%raw(`import { fileURLToPath } from "node:url";`)
+
+let tabtestLibPatches: array<SdpProject.Patch.t> = %raw(`
+  JSON.parse(
+    readFileSync(fileURLToPath(new URL("../lib/tabtestLibPatches.json", import.meta.url)), "utf8")
+  )
+`)
 
 let generatePatchSuite = (project, patchPathToTest): XResult.t<t> => {
   let projectWithTabtestLib = SdpProject.Project.upsertPatches(
