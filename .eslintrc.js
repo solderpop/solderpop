@@ -50,6 +50,16 @@ module.exports = {
 
   rules: {
     'prettier/prettier': 'error',
+    // Airbnb's base config forbids extensions on relative js/jsx imports;
+    // this repo now requires them everywhere (native ESM strict
+    // resolution, "type": "module" -- see docs/esm-migration-plan.md),
+    // so the inherited rule is actively wrong post-migration. Off rather
+    // than flipped to 'always': the installed eslint-plugin-import@1.16.0
+    // predates the `ignorePackages` option, so 'always' would also flag
+    // every bare npm import (e.g. `from 'ramda'`) as missing an
+    // extension. Re-enable once eslint-plugin-import is bumped past the
+    // version that added ignorePackages.
+    'import/extensions': 'off',
     'xod-fp/max-composition-depth': ['error', {
       max: 11, // TODO: it should be lowered to 6
       ignoreCurry: true,
