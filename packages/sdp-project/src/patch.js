@@ -1,5 +1,7 @@
-import * as R from 'ramda';
-import { Maybe, Either } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe, Either } = RamdaFantasy;
 import {
   explodeMaybe,
   explodeEither,
@@ -19,20 +21,20 @@ import {
   maybeFind,
 } from 'sdp-func-tools';
 
-import * as CONST from './constants';
-import * as Comment from './comment';
-import * as Node from './node';
-import * as Link from './link';
-import * as Pin from './pin';
-import * as Utils from './utils';
-import * as Attachment from './attachment';
-import { sortGraph } from './gmath';
-import { def } from './types';
+import * as CONST from './constants.js';
+import * as Comment from './comment.js';
+import * as Node from './node.js';
+import * as Link from './link.js';
+import * as Pin from './pin.js';
+import * as Utils from './utils.js';
+import * as Attachment from './attachment.js';
+import { sortGraph } from './gmath.js';
+import { def } from './types.js';
 import {
   getHardcodedPinsForPatchPath,
   getPinKeyForTerminalDirection,
   getCustomTypeTerminalPins,
-} from './builtinTerminalPatches';
+} from './builtinTerminalPatches.js';
 import {
   getBaseName,
   getLocalPath,
@@ -50,10 +52,10 @@ import {
   getSpecializationPatchPath,
   normalizeTypeNameForAbstractsResolution,
   isTweakPath,
-} from './patchPathUtils';
-import { isBindableCustomType } from './custom-types';
+} from './patchPathUtils.js';
+import { isBindableCustomType } from './custom-types.js';
 
-import BUILT_IN_PATCHES from '../dist/built-in-patches.json';
+import BUILT_IN_PATCHES from './internal/builtInPatches.js';
 
 /**
  * An object representing single patch in a project

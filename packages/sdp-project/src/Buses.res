@@ -5,9 +5,9 @@ open Belt
 
 type matchingBusNodes = list<(Node.t, list<Node.t>)>
 
-@module("..") external fromBusPatchPath: Patch.path = "FROM_BUS_PATH"
+@module("../dist/index.js") external fromBusPatchPath: Patch.path = "FROM_BUS_PATH"
 
-@module("..") external toBusPatchPath: Patch.path = "TO_BUS_PATH"
+@module("../dist/index.js") external toBusPatchPath: Patch.path = "TO_BUS_PATH"
 
 let getMatchingBusNodes = patch => {
   let nodes = Patch.listNodes(patch)

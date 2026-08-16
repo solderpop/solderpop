@@ -1,5 +1,7 @@
-import * as R from 'ramda';
-import { Either } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Either } = RamdaFantasy;
 import {
   foldEither,
   explodeEither,
@@ -8,22 +10,22 @@ import {
   fail,
 } from 'sdp-func-tools';
 
-import { getPatchPath, resolveNodeTypesInPatch } from './patch';
+import { getPatchPath, resolveNodeTypesInPatch } from './patch.js';
 import {
   listLibraryPatches,
   omitPatches,
   injectProjectTypeHints,
   listGenuinePatches,
-} from './project';
+} from './project.js';
 import {
   addMissingOptionalProjectFields,
   omitEmptyOptionalProjectFields,
-} from './optionalFieldsUtils';
+} from './optionalFieldsUtils.js';
 import {
   migrateProjectDimensionsToSlots,
   addPositionAndSizeUnitsToPatchEntities,
-} from './migrations/unitlessToSlots';
-import { Project, def } from './types';
+} from './migrations/unitlessToSlots.js';
+import { Project, def } from './types.js';
 
 export const fromXodballData = def(
   'fromXodballData :: Object -> Either Error Project',

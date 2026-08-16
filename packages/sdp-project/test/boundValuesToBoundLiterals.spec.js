@@ -1,16 +1,20 @@
-import * as R from 'ramda';
-import { assert } from 'chai';
-import { Maybe } from 'ramda-fantasy';
+import R from 'ramda';
+import chai from 'chai';
+
+const { assert } = chai;
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 import { explode } from 'sdp-func-tools';
 
-import { PIN_TYPE } from '../src/constants';
+import { PIN_TYPE } from '../src/constants.js';
 import {
   ensureLiteral,
   migrateBoundValuesToBoundLiterals,
-} from '../src/migrations/boundValuesToBoundLiterals';
-import { listLocalPatches } from '../src/project';
-import { listNodes } from '../src/patch';
-import * as Helper from './helpers';
+} from '../src/migrations/boundValuesToBoundLiterals.js';
+import { listLocalPatches } from '../src/project.js';
+import { listNodes } from '../src/patch.js';
+import * as Helper from './helpers.js';
 
 assert.strictEqualJustValue = (actual, expected) => {
   if (Maybe.isNothing(actual)) {

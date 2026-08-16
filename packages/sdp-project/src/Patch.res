@@ -9,59 +9,59 @@ type t = Type.Classify.object
 
 type path = PatchPath.t
 
-@module("..") external create: unit => t = "createPatch"
+@module("../dist/index.js") external create: unit => t = "createPatch"
 
-@module("..") external getPath: t => path = "getPatchPath"
+@module("../dist/index.js") external getPath: t => path = "getPatchPath"
 
-@module("..") external _assocNode: (Node.t, t) => t = "assocNode"
+@module("../dist/index.js") external _assocNode: (Node.t, t) => t = "assocNode"
 
 let assocNode = (patch, node) => _assocNode(node, patch)
 
-@module("..") external _dissocNode: (Node.id, t) => t = "dissocNode"
+@module("../dist/index.js") external _dissocNode: (Node.id, t) => t = "dissocNode"
 
 let dissocNode = (patch, nodeId) => _dissocNode(nodeId, patch)
 
-@module("..") external _listNodes: t => array<Node.t> = "listNodes"
+@module("../dist/index.js") external _listNodes: t => array<Node.t> = "listNodes"
 
-@module("..")
+@module("../dist/index.js")
 external _getNodeById: (Node.id, t) => SdpFuncTools.Maybe.t<Node.t> = "getNodeById"
 
 let getNodeById = (patch, nodeId) => _getNodeById(nodeId, patch)->Maybe.toOption
 
-@module("..")
+@module("../dist/index.js")
 external _upsertNodes: (array<Node.t>, t) => t = "upsertNodes"
 
 let upsertNodes = (patch, nodes) => _upsertNodes(List.toArray(nodes), patch)
 
 let listNodes = patch => _listNodes(patch)->List.fromArray
 
-@module("..") external _assocLink: (Link.t, t) => t = "assocLink"
+@module("../dist/index.js") external _assocLink: (Link.t, t) => t = "assocLink"
 
 let assocLink = (patch, link) => _assocLink(link, patch)
 
-@module("..")
+@module("../dist/index.js")
 external _upsertLinks: (array<Link.t>, t) => t = "upsertLinks"
 
 let upsertLinks = (patch, links) => _upsertLinks(List.toArray(links), patch)
 
-@module("..") external _listLinks: t => array<Link.t> = "listLinks"
+@module("../dist/index.js") external _listLinks: t => array<Link.t> = "listLinks"
 
 let listLinks = patch => _listLinks(patch)->List.fromArray
 
-@module("..") external _listPins: t => array<Pin.t> = "listPins"
+@module("../dist/index.js") external _listPins: t => array<Pin.t> = "listPins"
 
 let listPins = patch => _listPins(patch)->List.fromArray
 
-@module("..") external _omitLinks: (array<Link.t>, t) => t = "omitLinks"
+@module("../dist/index.js") external _omitLinks: (array<Link.t>, t) => t = "omitLinks"
 
 let omitLinks = (patch, links) => _omitLinks(List.toArray(links), patch)
 
-@module("..")
+@module("../dist/index.js")
 external _getPinByKey: (Pin.key, t) => Maybe.t<Pin.t> = "getPinByKey"
 
 let getPinByKey = (patch, pinKey) => _getPinByKey(pinKey, patch)->Maybe.toOption
 
-@module("..")
+@module("../dist/index.js")
 external _getVariadicPinByKey: (Node.t, Pin.key, t) => Maybe.t<Pin.t> = "getVariadicPinByKey"
 
 let getVariadicPinByKey = (patch, node, pinKey) =>
@@ -91,7 +91,7 @@ let findPinByLabel = (patch, label, ~normalize, ~direction): option<Pin.t> =>
       }
   )
 
-@module("..")
+@module("../dist/index.js")
 external _getAttachments: t => array<Attachment.t> = "getPatchAttachments"
 
 let getAttachments = t => _getAttachments(t)->List.fromArray
@@ -101,15 +101,15 @@ let getTabtestContent = t =>
 
 let hasTabtest = t => getAttachments(t)->List.some(Attachment.isTabtest)
 
-@module("..")
+@module("../dist/index.js")
 external isNotImplementedInXod: t => bool = "isPatchNotImplementedInXod"
 
-@module("..") external isRecord: t => bool = "isRecordPatch"
-@module("..") external isUnpackRecord: t => bool = "isUnpackRecordPatch"
+@module("../dist/index.js") external isRecord: t => bool = "isRecordPatch"
+@module("../dist/index.js") external isUnpackRecord: t => bool = "isUnpackRecordPatch"
 
 let isTerminal = patch => patch->getPath->PatchPath.isTerminal
 let isJumper = patch => patch->getPath->PatchPath.isJumper
 let isBus = patch => patch->getPath->PatchPath.isBus
 let isFromBus = patch => patch->getPath->PatchPath.isFromBus
 let isToBus = patch => patch->getPath->PatchPath.isToBus
-@module("..") external isAbstract: t => bool = "isAbstractPatch"
+@module("../dist/index.js") external isAbstract: t => bool = "isAbstractPatch"

@@ -1,6 +1,6 @@
 {
   "name": "sdp-project",
-  "type": "commonjs",
+  "type": "module",
   "version": "0.38.0",
   "description": "API functions to work on XOD project state",
   "keywords": [],
@@ -11,8 +11,8 @@
   "scripts": {
     "build:js": "babel src/ -d dist/ --source-maps",
     "build:re": "rescript build",
-    "build:built-in-patches": "node ./tools/loadBuiltinPatches.js",
-    "build:dummy-built-in-patches": "node ./tools/makeDummyBuiltinPatches.js",
+    "build:built-in-patches": "node ./tools/loadBuiltinPatches.cjs",
+    "build:dummy-built-in-patches": "node ./tools/makeDummyBuiltinPatches.cjs",
     "build": "yarn build:dummy-built-in-patches && yarn build:re && yarn build:js && yarn build:built-in-patches",
     "dev:re": "yarn run build:re -w",
     "dev": "yarn run build:js --watch",

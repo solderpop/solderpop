@@ -1,6 +1,6 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
-import { createPin } from './pin';
+import { createPin } from './pin.js';
 
 import {
   PIN_TYPE,
@@ -8,17 +8,17 @@ import {
   OPPOSITE_DIRECTION,
   TERMINAL_PIN_KEYS,
   DEFAULT_VALUE_OF_TYPE,
-} from './constants';
+} from './constants.js';
 
 import {
   getTerminalPath,
   getInternalTerminalPath,
   getTerminalDataType,
   getTerminalDirection,
-} from './patchPathUtils';
+} from './patchPathUtils.js';
 
-import { isBuiltInType } from './utils';
-import { isBindableCustomType } from './custom-types';
+import { isBuiltInType } from './utils.js';
+import { isBindableCustomType } from './custom-types.js';
 
 /**
  * Input terminal patches have output pins, and vice versa:

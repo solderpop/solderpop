@@ -39,7 +39,7 @@ module ResultsMap = {
   }
 }
 
-@module("..")
+@module("../dist/index.js")
 external deducePinTypesWithoutBuses_: (Patch.t, Project.t) => ResultsMap.t_Js =
   "deducePinTypesWithoutBuses"
 

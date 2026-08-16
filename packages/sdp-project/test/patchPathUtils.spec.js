@@ -1,12 +1,14 @@
-import * as R from 'ramda';
-import { assert } from 'chai';
+import R from 'ramda';
+import chai from 'chai';
+
+const { assert } = chai;
 import { explodeMaybe } from 'sdp-func-tools';
 
-import * as CONST from '../src/constants';
-import { BINDABLE_CUSTOM_TYPES } from '../src/custom-types';
-import * as PatchPathUtils from '../src/patchPathUtils';
+import * as CONST from '../src/constants.js';
+import { BINDABLE_CUSTOM_TYPES } from '../src/custom-types.js';
+import * as PatchPathUtils from '../src/patchPathUtils.js';
 
-import * as Helper from './helpers';
+import * as Helper from './helpers.js';
 
 describe('PatchPathUtils', () => {
   describe('getBaseName', () => {

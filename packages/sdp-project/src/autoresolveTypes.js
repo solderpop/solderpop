@@ -1,5 +1,7 @@
-import * as R from 'ramda';
-import { Either } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Either } = RamdaFantasy;
 import {
   foldEither,
   foldMaybe,
@@ -10,14 +12,14 @@ import {
   prependTraceToError,
 } from 'sdp-func-tools';
 
-import * as Node from './node';
-import * as Patch from './patch';
-import * as Project from './project';
-import * as Pin from './pin';
-import * as Utils from './utils';
-import * as PPU from './patchPathUtils';
-import { def } from './types';
-import { deducePinTypes } from './TypeDeduction_Js.bs';
+import * as Node from './node.js';
+import * as Patch from './patch.js';
+import * as Project from './project.js';
+import * as Pin from './pin.js';
+import * as Utils from './utils.js';
+import * as PPU from './patchPathUtils.js';
+import { def } from './types.js';
+import { deducePinTypes } from './TypeDeduction_Js.bs.js';
 
 //
 // Autoresolving abstract nodes

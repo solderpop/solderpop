@@ -1,15 +1,15 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { explodeMaybe, explodeEither } from 'sdp-func-tools';
 
-import { def } from './types';
+import { def } from './types.js';
 
-import * as Pin from './pin';
-import * as Node from './node';
-import * as Link from './link';
-import * as Patch from './patch';
-import * as Project from './project';
-import { TERMINAL_PIN_KEYS, PIN_DIRECTION } from './constants';
-import { getExpandedVariadicPatchPath } from './patchPathUtils';
+import * as Pin from './pin.js';
+import * as Node from './node.js';
+import * as Link from './link.js';
+import * as Patch from './patch.js';
+import * as Project from './project.js';
+import { TERMINAL_PIN_KEYS, PIN_DIRECTION } from './constants.js';
+import { getExpandedVariadicPatchPath } from './patchPathUtils.js';
 
 //
 // expanding a single patch

@@ -1,20 +1,22 @@
 import R from 'ramda';
-import { assert } from 'chai';
+import chai from 'chai';
+
+const { assert } = chai;
 import * as XF from 'sdp-func-tools';
 
-import * as Pin from '../src/pin';
-import * as Patch from '../src/patch';
-import * as Project from '../src/project';
-import * as Node from '../src/node';
-import * as Link from '../src/link';
-import * as Comment from '../src/comment';
-import * as Attachment from '../src/attachment';
-import * as CONST from '../src/constants';
-import * as PPU from '../src/patchPathUtils';
+import * as Pin from '../src/pin.js';
+import * as Patch from '../src/patch.js';
+import * as Project from '../src/project.js';
+import * as Node from '../src/node.js';
+import * as Link from '../src/link.js';
+import * as Comment from '../src/comment.js';
+import * as Attachment from '../src/attachment.js';
+import * as CONST from '../src/constants.js';
+import * as PPU from '../src/patchPathUtils.js';
 
-import { TERMINALS_LIB_NAME } from '../src/internal/patchPathUtils';
+import { TERMINALS_LIB_NAME } from '../src/internal/patchPathUtils.js';
 
-import * as Helper from './helpers';
+import * as Helper from './helpers.js';
 
 const emptyPatch = Helper.defaultizePatch({});
 

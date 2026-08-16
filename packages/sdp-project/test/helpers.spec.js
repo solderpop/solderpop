@@ -1,8 +1,12 @@
 import R from 'ramda';
-import { Either } from 'ramda-fantasy';
-import { assert } from 'chai';
+import RamdaFantasy from 'ramda-fantasy';
 
-import * as Helper from './helpers';
+const { Either } = RamdaFantasy;
+import chai from 'chai';
+
+const { assert } = chai;
+
+import * as Helper from './helpers.js';
 
 describe('Helpers', () => {
   describe('expectEither', () => {

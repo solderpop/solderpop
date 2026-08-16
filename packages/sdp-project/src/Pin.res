@@ -43,7 +43,7 @@ let isOutput = (pin: t): bool => pin->getDirection->(dir => dir === Output)
 
 let isInput = (pin: t): bool => pin->getDirection->(dir => dir === Input)
 
-@module("..")
+@module("../dist/index.js")
 external _normalizeLabels: array<t> => array<t> = "normalizeEmptyPinLabels"
 
 let normalizeLabels = pins => pins->List.toArray->_normalizeLabels->List.fromArray
