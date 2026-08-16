@@ -1,7 +1,5 @@
 import chai from 'chai';
-import SdpProjectTestHelpers from 'sdp-project/test/helpers.js';
-
-const { defaultizePatch } = SdpProjectTestHelpers;
+import { defaultizePatch } from 'sdp-project/test/helpers.js';
 
 import {
   calculateAdded,

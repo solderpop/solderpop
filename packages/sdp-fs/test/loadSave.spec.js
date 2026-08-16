@@ -9,9 +9,7 @@ import chai from 'chai';
 
 import { explodeEither } from 'sdp-func-tools';
 import * as XP from 'sdp-project';
-import SdpProjectTestHelpers from 'sdp-project/test/helpers.js';
-
-const { defaultizeProject } = SdpProjectTestHelpers;
+import { defaultizeProject } from 'sdp-project/test/helpers.js';
 
 import { loadProject, loadProjectFromXodball } from '../src/load.js';
 import { saveAll, saveProjectAsXodball } from '../src/save.js';

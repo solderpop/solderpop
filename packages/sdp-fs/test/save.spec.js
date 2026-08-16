@@ -5,9 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import * as XP from 'sdp-project';
 
-import SdpProjectTestHelpers from 'sdp-project/test/helpers.js';
-
-const { defaultizeProject, defaultizePatch } = SdpProjectTestHelpers;
+import { defaultizeProject, defaultizePatch } from 'sdp-project/test/helpers.js';
 
 import { calculateDiff } from '../src/patchDiff.js';
 import {
