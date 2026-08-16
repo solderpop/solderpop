@@ -1,11 +1,3 @@
 {
-  "presets": [["@babel/preset-env", { "modules": "commonjs", "targets": "ie 11" }], "@babel/preset-flow"],
-  "plugins": [
-    ["babel-plugin-inline-import", {
-      "extensions": [
-        ".cpp",
-        ".h"
-      ]
-    }]
-  ]
+  "presets": [["@babel/preset-env", { "modules": false, "targets": "ie 11" }], "@babel/preset-flow"]
 }

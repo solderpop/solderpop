@@ -23,7 +23,7 @@ type liveness =
 
 type xodGlobals = Map.String.t<string>
 
-@module("..")
+@module("../dist/index.js")
 external _transformProject: (
   Project.t,
   string,
@@ -31,9 +31,9 @@ external _transformProject: (
   xodGlobals,
 ) => Either.t<JsExn.t, TProject.t> = "transformProject"
 
-@module("..") external _transpile: TProject.t => string = "transpile"
+@module("../dist/index.js") external _transpile: TProject.t => string = "transpile"
 
-@module("..")
+@module("../dist/index.js")
 external _getNodeIdsMap: TProject.t => dict<string> = "getNodeIdsMap"
 
 let getLivenessString = liveness =>
