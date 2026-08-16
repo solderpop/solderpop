@@ -1,7 +1,7 @@
 import path from 'path';
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import * as remoteMain from '@electron/remote/main/index.js';
-import { autoUpdater } from 'electron-updater';
+import electronUpdater from 'electron-updater';
 import log from 'electron-log';
 import contextMenu from 'electron-context-menu';
 import windowStateKeeper from 'electron-window-state';
@@ -62,6 +62,11 @@ import { STATES, getEventNameWithState } from '../shared/eventStates.js';
 // Main Process is real native ESM once compiled (package.json "type":
 // "module"), which has no `__dirname` global.
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// cjs-module-lexer can't statically detect electron-updater's named
+// exports, so `import { autoUpdater } from 'electron-updater'` fails
+// under real ESM even though the property exists at runtime.
+const { autoUpdater } = electronUpdater;
 
 // =============================================================================
 //
