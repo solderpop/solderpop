@@ -312,19 +312,19 @@ module TestCase = {
 
 // Bare `@module` JSON imports compile to a static ESM import with no
 // import attribute (`import x from "./y.json"`), which real Node ESM
-// rejects (`with { type: "json" }` is required). `tabtestLibPatches` is
-// consumed synchronously below, so a lazy `import()` would force this
-// (and every caller of `generatePatchSuite`) to become async. Read it via
-// `fs.readFileSync` instead, resolved relative to this module via
-// `import.meta.url` — genuine ESM, synchronous, no `require`.
-%%raw(`import { readFileSync } from "node:fs";`)
-%%raw(`import { fileURLToPath } from "node:url";`)
-
-let tabtestLibPatches: array<SdpProject.Patch.t> = %raw(`
-  JSON.parse(
-    readFileSync(fileURLToPath(new URL("../lib/tabtestLibPatches.json", import.meta.url)), "utf8")
-  )
-`)
+// rejects (`with { type: "json" }` is required) -- and ReScript's %%raw
+// blocks can't express the attribute syntax either way (confirmed: both
+// "with" and the older "assert" form are hard parse errors in ReScript's
+// raw-block tokenizer). An earlier version of this fix read the file via
+// `fs.readFileSync` instead -- that satisfied Node but breaks the moment
+// this module is bundled into the browser app (sdp-tabtest is pulled
+// into sdp-client-browser for in-browser tabtest generation): `fs`/
+// `node:fs` don't exist in a browser. tools/loadTabtestLibPatches.cjs
+// generates a plain .js module with a named export instead of raw JSON --
+// no import attribute needed at all, works identically under Node and
+// webpack.
+@module("../lib/tabtestLibPatches.js")
+external tabtestLibPatches: array<SdpProject.Patch.t> = "tabtestLibPatches"
 
 let generatePatchSuite = (project, patchPathToTest): XResult.t<t> => {
   let projectWithTabtestLib = SdpProject.Project.upsertPatches(
