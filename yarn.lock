@@ -6231,11 +6231,6 @@ browserslist@^4.24.0, browserslist@^4.28.1, browserslist@^4.28.6, browserslist@^
     node-releases "^2.0.53"
     update-browserslist-db "^1.3.0"
 
-bs-platform@7.1.1:
-  version "7.1.1"
-  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-7.1.1.tgz#ed4032de7ab15158c61d8994680a05393e3ddd74"
-  integrity sha512-ckZHR3J+yxyEKXOBHX8+hfzWG2XX5BxhQ4Iw9lulHFGYdAm9Ep9LgKkIah7G6RYADLmVfTxFE48igvY3kkkl+g==
-
 bser@2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/bser/-/bser-2.1.1.tgz#e6787da20ece9d07998533cfd9de6f5c38f4bc05"

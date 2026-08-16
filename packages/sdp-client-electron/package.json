@@ -21,7 +21,7 @@
   "dependencies": {
     "@electron/remote": "^2.1.3",
     "babel-polyfill": "^6.16.0",
-    "bs-platform": "7.1.1",
+    "rescript": "^12.3.0",
     "classnames": "^2.2.5",
     "cpx": "^1.5.0",
     "electron-context-menu": "^2.3.0",
@@ -90,8 +90,8 @@
       "**/*",
       "!**/node_modules/sdp-arduino/**/*",
       "**/node_modules/sdp-arduino/dist/**/*",
-      "!**/node_modules/bs-platform/**/*",
-      "**/node_modules/bs-platform/lib/js/**/*"
+      "!**/node_modules/@rescript/runtime/**/*",
+      "**/node_modules/@rescript/runtime/lib/js/**/*"
     ],
     "extraResources": [
       {
