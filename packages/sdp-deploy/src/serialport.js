@@ -73,7 +73,7 @@ const flushPort = port =>
  * @type {Function}
  * @return {Promise<Port[], Error>} */
 // :: () -> [PortInfo]
-export const listPorts = () => {
+export const listPorts = () =>
   // serialport is a native module that can conflict in ABI versions
   // with one built for Electron:
   //
@@ -82,30 +82,25 @@ export const listPorts = () => {
   //   NODE_MODULE_VERSION 53. This version of Node.js requires
   //   NODE_MODULE_VERSION 51. Please try re-compiling or re-installing
   //
-  // Localize it’s require so that the conflict never arise if we’re
+  // Localize its import so that the conflict never arises if we're
   // using CLI for things not related to serial port.
-  //
-  // eslint-disable-next-line global-require
-  const { SerialPort } = require('serialport');
-
-  return SerialPort.list();
-};
+  import('serialport').then(({ SerialPort }) => SerialPort.list());
 
 // :: PortName -> PortOptions -> Promise Port Error
 export const openPort = (portName, opts = {}) =>
-  new Promise((resolve, reject) => {
-    // eslint-disable-next-line global-require
-    const { SerialPort } = require('serialport');
-
-    try {
-      const port = new SerialPort(
-        Object.assign({ path: portName }, opts),
-        err => (err ? reject(err) : resolve(port))
-      );
-    } catch (err) {
-      reject(err);
-    }
-  });
+  import('serialport').then(
+    ({ SerialPort }) =>
+      new Promise((resolve, reject) => {
+        try {
+          const port = new SerialPort(
+            Object.assign({ path: portName }, opts),
+            err => (err ? reject(err) : resolve(port))
+          );
+        } catch (err) {
+          reject(err);
+        }
+      })
+  );
 
 // :: Port -> Promise Port Error
 export const closePort = port =>
@@ -114,21 +109,19 @@ export const closePort = port =>
   });
 
 // :: PortName -> Boolean -> (String -> *) -> (* -> *) -> Promise Port Error
-export const openAndReadPort = (portName, disableRts, onData, onClose) => {
-  // eslint-disable-next-line global-require
-  const { ReadlineParser } = require('serialport');
+export const openAndReadPort = (portName, disableRts, onData, onClose) =>
+  import('serialport').then(({ ReadlineParser }) =>
+    openPort(portName, {
+      baudRate: 115200,
+    }).then(
+      R.tap(port => {
+        const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
 
-  return openPort(portName, {
-    baudRate: 115200,
-  }).then(
-    R.tap(port => {
-      const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
-
-      parser.on('data', onData);
-      port.on('close', onClose);
-    })
+        parser.on('data', onData);
+        port.on('close', onClose);
+      })
+    )
   );
-};
 
 // :: PortName -> Promise Port Error
 export const flushSerialBuffer = portName =>
