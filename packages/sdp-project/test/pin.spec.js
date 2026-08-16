@@ -1,9 +1,11 @@
-import { assert } from 'chai';
+import chai from 'chai';
 
-import * as Pin from '../src/pin';
-import * as CONST from '../src/constants';
+const { assert } = chai;
 
-import * as Helper from './helpers';
+import * as Pin from '../src/pin.js';
+import * as CONST from '../src/constants.js';
+
+import * as Helper from './helpers.js';
 
 describe('Pin', () => {
   // props required

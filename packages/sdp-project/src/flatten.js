@@ -1,5 +1,7 @@
-import * as R from 'ramda';
-import { Maybe, Either } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe, Either } = RamdaFantasy;
 
 import {
   explode,
@@ -12,16 +14,16 @@ import {
   isAmong,
 } from 'sdp-func-tools';
 
-import * as CONST from './constants';
-import * as Project from './project';
-import * as Patch from './patch';
-import * as Pin from './pin';
-import * as Node from './node';
-import * as Link from './link';
-import { def } from './types';
-import { isGenericType } from './utils';
-import * as PatchPathUtils from './patchPathUtils';
-import { getPinKeyForTerminalDirection } from './builtinTerminalPatches';
+import * as CONST from './constants.js';
+import * as Project from './project.js';
+import * as Patch from './patch.js';
+import * as Pin from './pin.js';
+import * as Node from './node.js';
+import * as Link from './link.js';
+import { def } from './types.js';
+import { isGenericType } from './utils.js';
+import * as PatchPathUtils from './patchPathUtils.js';
+import { getPinKeyForTerminalDirection } from './builtinTerminalPatches.js';
 
 // =============================================================================
 //

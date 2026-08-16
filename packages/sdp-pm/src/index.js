@@ -1,9 +1,9 @@
-export * from './fetch';
-export { default as publish } from './publish';
-export * from './errorCodes';
+export * from './fetch.js';
+export { default as publish } from './publish.js';
+export * from './errorCodes.js';
 export {
   parseLibQuery,
   stringifyLibQuery,
   isLibQueryValid,
   getLibName,
-} from './utils';
+} from './utils.js';

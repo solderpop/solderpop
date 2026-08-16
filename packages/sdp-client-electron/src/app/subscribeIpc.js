@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron';
-import { getAllStatesForEvent } from '../shared/eventStates';
-import { errorToPlainObject } from './utils';
+import { getAllStatesForEvent } from '../shared/eventStates.js';
+import { errorToPlainObject } from './utils.js';
 
 export default (fn, eventName) => {
   const STATES = getAllStatesForEvent(eventName);

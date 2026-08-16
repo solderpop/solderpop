@@ -1,10 +1,10 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { maybePath } from 'sdp-func-tools';
 
-import * as Pin from './pin';
-import * as Utils from './utils';
-import * as CONST from './constants';
-import { def } from './types';
+import * as Pin from './pin.js';
+import * as Utils from './utils.js';
+import * as CONST from './constants.js';
+import { def } from './types.js';
 import {
   isInputTerminalPath,
   isOutputTerminalPath,
@@ -14,7 +14,7 @@ import {
   getBaseName,
   isSpecializationPatchBasename,
   isTetheringInetPatchPath,
-} from './patchPathUtils';
+} from './patchPathUtils.js';
 
 /**
  * @typedef {Object} Node

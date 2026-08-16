@@ -1,9 +1,9 @@
 import R from 'ramda';
 
-import { def } from '../types';
-import { isTerminalPatchPath } from '../internal/patchPathUtils';
+import { def } from '../types.js';
+import { isTerminalPatchPath } from '../internal/patchPathUtils.js';
 
-import BUILT_IN_PATCHES from '../../dist/built-in-patches.json';
+import BUILT_IN_PATCHES from '../internal/builtInPatches.js';
 
 /* eslint-enable new-cap */
 //-----------------------------------------------------------------------------

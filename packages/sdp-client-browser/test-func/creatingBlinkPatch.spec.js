@@ -2,17 +2,20 @@
 
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 
-import getPage from './utils/getPage';
+import getPage from './utils/getPage.js';
 
-import ProjectBrowser from './pageObjects/ProjectBrowser';
-import PromptPopup from './pageObjects/PromptPopup';
-import EditorTab from './pageObjects/EditorTab';
-import Node, { getAllNodes, getSelectedNodes } from './pageObjects/Node';
-import { getLinksOfType } from './pageObjects/Link';
-import Inspector from './pageObjects/Inspector';
-import Menubar from './pageObjects/Menubar';
-import TranspiledCodePopup from './pageObjects/TranspiledCodePopup';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+import ProjectBrowser from './pageObjects/ProjectBrowser.js';
+import PromptPopup from './pageObjects/PromptPopup.js';
+import EditorTab from './pageObjects/EditorTab.js';
+import Node, { getAllNodes, getSelectedNodes } from './pageObjects/Node.js';
+import { getLinksOfType } from './pageObjects/Link.js';
+import Inspector from './pageObjects/Inspector.js';
+import Menubar from './pageObjects/Menubar.js';
+import TranspiledCodePopup from './pageObjects/TranspiledCodePopup.js';
 
 const workspacePath = subPath =>
   path.resolve(__dirname, '../../../workspace/', subPath);

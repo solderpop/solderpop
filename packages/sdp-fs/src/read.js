@@ -2,8 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import recReadDir from 'recursive-readdir';
 
-import { expandHomeDir } from './utils';
-import { IGNORE_FILENAMES } from './constants';
+import { expandHomeDir } from './utils.js';
+import { IGNORE_FILENAMES } from './constants.js';
 
 // :: rootPath -> Promise
 export const readDir = rootPath =>

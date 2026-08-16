@@ -1,14 +1,14 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import cls from 'classnames';
 
-import { SIDEBAR_IDS, PANEL_IDS } from '../constants';
+import { SIDEBAR_IDS, PANEL_IDS } from '../constants.js';
 import {
   sidebarPanelRenderer,
   getPanelsBySidebarId,
   filterMaximized,
-} from '../utils';
+} from '../utils.js';
 
 const getShowHideTooltipMessage = (panelName, maximized) =>
   maximized ? `Hide ${panelName}` : `Show ${panelName}`;

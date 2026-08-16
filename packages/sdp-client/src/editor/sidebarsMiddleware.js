@@ -1,12 +1,12 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import {
   RESIZE_PANELS,
   MINIMIZE_PANEL,
   MAXIMIZE_PANEL,
   MOVE_PANEL,
   TOGGLE_PANEL_AUTOHIDE,
-} from './actionTypes';
-import { getPanelSettings } from './selectors';
+} from './actionTypes.js';
+import { getPanelSettings } from './selectors.js';
 
 const changeSidebarActions = [
   MINIMIZE_PANEL,

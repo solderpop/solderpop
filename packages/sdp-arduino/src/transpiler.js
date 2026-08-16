@@ -1,5 +1,7 @@
-import * as R from 'ramda';
-import { Maybe, Either } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe, Either } = RamdaFantasy;
 
 import {
   explodeMaybe,
@@ -14,10 +16,10 @@ import {
   catMaybies,
 } from 'sdp-func-tools';
 import * as XP from 'sdp-project';
-import { def } from './types';
+import { def } from './types.js';
 
-import { withTetheringInetNode, renderProject } from './templates';
-import { LIVENESS } from './constants';
+import { withTetheringInetNode, renderProject } from './templates.js';
+import { LIVENESS } from './constants.js';
 
 import {
   areTimeoutsEnabled,
@@ -28,7 +30,7 @@ import {
   getEvaluateOnPinSettings,
   doesCatchErrors,
   findRequireUrls,
-} from './directives';
+} from './directives.js';
 
 //-----------------------------------------------------------------------------
 //

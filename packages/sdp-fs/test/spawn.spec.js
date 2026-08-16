@@ -1,11 +1,13 @@
-import { assert } from 'chai';
+import chai from 'chai';
 import fs from 'fs-extra';
 
-import { spawnWorkspaceFile, spawnDefaultProject } from '../src/spawn';
-import { doesFileExist, doesDirectoryExist } from '../src/utils';
-import * as ERROR_CODES from '../src/errorCodes';
+import { spawnWorkspaceFile, spawnDefaultProject } from '../src/spawn.js';
+import { doesFileExist, doesDirectoryExist } from '../src/utils.js';
+import * as ERROR_CODES from '../src/errorCodes.js';
 
-import { fixture, expectRejectedWithCode } from './utils';
+import { fixture, expectRejectedWithCode } from './utils.js';
+
+const { assert } = chai;
 
 describe('Spawn', () => {
   it('spawnWorkspaceFile resolves to workspace path on success', () => {

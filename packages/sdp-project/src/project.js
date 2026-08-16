@@ -1,5 +1,7 @@
-import * as R from 'ramda';
-import { Either, Maybe } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Either, Maybe } = RamdaFantasy;
 import {
   foldMaybe,
   foldEither,
@@ -18,23 +20,23 @@ import {
   prependTraceToError,
 } from 'sdp-func-tools';
 
-import * as CONST from './constants';
+import * as CONST from './constants.js';
 
-import * as Link from './link';
-import * as Node from './node';
-import * as Patch from './patch';
-import * as Pin from './pin';
-import * as PatchPathUtils from './patchPathUtils';
-import { def } from './types';
-import * as Utils from './utils';
-import { deducePinTypes } from './TypeDeduction_Js.bs';
-import { getGenuinePatches } from './internal/project';
+import * as Link from './link.js';
+import * as Node from './node.js';
+import * as Patch from './patch.js';
+import * as Pin from './pin.js';
+import * as PatchPathUtils from './patchPathUtils.js';
+import { def } from './types.js';
+import * as Utils from './utils.js';
+import { deducePinTypes } from './TypeDeduction_Js.bs.js';
+import { getGenuinePatches } from './internal/project.js';
 import {
   createUnpackRecordPatch,
   createToJsonRecordSpecialization,
-} from './computablePatches';
+} from './computablePatches.js';
 
-import BUILT_IN_PATCHES from '../dist/built-in-patches.json';
+import BUILT_IN_PATCHES from './internal/builtInPatches.js';
 
 /**
  * Root of a project’s state tree

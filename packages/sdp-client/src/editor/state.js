@@ -4,8 +4,8 @@ import {
   SIDEBAR_IDS,
   PANEL_IDS,
   DEFAULT_ZOOM,
-} from './constants';
-import { DEFAULT_PANNING_OFFSET } from '../project/nodeLayout';
+} from './constants.js';
+import { DEFAULT_PANNING_OFFSET } from '../project/nodeLayout.js';
 
 export default {
   currentTabId: '@/main',

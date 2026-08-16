@@ -1,7 +1,7 @@
-import * as R from 'ramda';
-import * as Utils from './utils';
-import * as Node from './node';
-import { def } from './types';
+import R from 'ramda';
+import * as Utils from './utils.js';
+import * as Node from './node.js';
+import { def } from './types.js';
 
 /**
  * @typedef {Object} Link

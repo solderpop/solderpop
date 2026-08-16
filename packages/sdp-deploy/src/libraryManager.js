@@ -1,7 +1,9 @@
-import * as R from 'ramda';
-import * as fse from 'fs-extra';
+import R from 'ramda';
+import fse from 'fs-extra';
 import path from 'path';
-import { Maybe } from 'ramda-fantasy';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 
 import {
   foldMaybeWith,
@@ -11,10 +13,10 @@ import {
   explodeMaybe,
 } from 'sdp-func-tools';
 
-import download from './download';
-import unpackZip from './unzip';
-import createProgress from './progress';
-import MSG from './messages';
+import download from './download.js';
+import unpackZip from './unzip.js';
+import createProgress from './progress.js';
+import MSG from './messages.js';
 
 // :: URL -> String
 const getProjectNameFromGithubUrl = R.match(/github.com\/.+\/(.+)\/{0,1}/);

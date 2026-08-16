@@ -1,7 +1,7 @@
 import * as XP from 'sdp-project';
 
-import { getSwaggerClient, swaggerError } from './utils';
-import { createLibUri, toString, toStringWithoutTag } from './lib-uri';
+import { getSwaggerClient, swaggerError } from './utils.js';
+import { createLibUri, toString, toStringWithoutTag } from './lib-uri.js';
 
 const packLibVersion = project => ({
   libname: XP.getProjectName(project),

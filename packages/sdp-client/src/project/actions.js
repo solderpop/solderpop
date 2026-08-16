@@ -1,33 +1,33 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 import { publish } from 'sdp-pm';
 
 import { foldMaybe, rejectWithCode } from 'sdp-func-tools';
 
-import { NODE_KIND } from './constants';
-import { addConfirmation, addError } from '../messages/actions';
-import { PROJECT_BROWSER_ERRORS } from '../projectBrowser/messages';
-import * as ActionType from './actionTypes';
-import { isPatchPathTaken } from './utils';
-import { getCurrentPatchPath } from '../editor/selectors';
-import { getGrant } from '../user/selectors';
-import { fetchGrant, requestAuthorized } from '../user/actions';
-import { LOG_IN_TO_CONTINUE, SERVICE_UNAVAILABLE } from '../user/messages';
-import { AUTHORIZATION_NEEDED } from '../user/errorCodes';
+import { NODE_KIND } from './constants.js';
+import { addConfirmation, addError } from '../messages/actions.js';
+import { PROJECT_BROWSER_ERRORS } from '../projectBrowser/messages.js';
+import * as ActionType from './actionTypes.js';
+import { isPatchPathTaken } from './utils.js';
+import { getCurrentPatchPath } from '../editor/selectors.js';
+import { getGrant } from '../user/selectors.js';
+import { fetchGrant, requestAuthorized } from '../user/actions.js';
+import { LOG_IN_TO_CONTINUE, SERVICE_UNAVAILABLE } from '../user/messages.js';
+import { AUTHORIZATION_NEEDED } from '../user/errorCodes.js';
 import {
   SUCCESSFULLY_PUBLISHED,
   PROJECT_NAME_NEEDED_TO_GENERATE_APIKEY,
   CANT_GET_TOKEN_WITHOUT_APIKEY,
   CANT_GET_TOKEN_BECAUSE_OF_WRONG_APIKEY,
   cantCloneNoPatchFound,
-} from './messages';
-import { getProject } from './selectors';
+} from './messages.js';
+import { getProject } from './selectors.js';
 import {
   getPmSwaggerUrl,
   getApiTokensUrl,
   getRenewApiTokenUrl,
-} from '../utils/urls';
-import composeMessage from '../messages/composeMessage';
+} from '../utils/urls.js';
+import composeMessage from '../messages/composeMessage.js';
 
 //
 // Project

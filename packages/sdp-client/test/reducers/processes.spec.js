@@ -1,7 +1,9 @@
-import { assert } from 'chai';
-import { default as reducer } from '../../src/processes/reducer';
-import { getLastId } from '../../src/processes/selectors';
-import { STATUS } from '../../src/utils/constants';
+import chai from 'chai';
+
+const { assert } = chai;
+import { default as reducer } from '../../src/processes/reducer.js';
+import { getLastId } from '../../src/processes/selectors.js';
+import { STATUS } from '../../src/utils/constants.js';
 
 describe('Processes reducer', () => {
   describe('while dispatch any process actionCreator', () => {

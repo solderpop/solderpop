@@ -1,7 +1,7 @@
 import R from 'ramda';
 
-import * as H from './helpers';
-import * as XP from '../src';
+import * as H from './helpers.js';
+import * as XP from '../src/index.js';
 
 // assume that nodes have an unique combination of
 // type, label and position

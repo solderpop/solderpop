@@ -1,22 +1,24 @@
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 import { maybeProp, catMaybies, isAmong } from 'sdp-func-tools';
 
-import * as Pin from './pin';
-import * as Node from './node';
-import * as Link from './link';
-import * as Patch from './patch';
-import * as Project from './project';
-import { ensureLiteral } from './migrations/boundValuesToBoundLiterals';
+import * as Pin from './pin.js';
+import * as Node from './node.js';
+import * as Link from './link.js';
+import * as Patch from './patch.js';
+import * as Project from './project.js';
+import { ensureLiteral } from './migrations/boundValuesToBoundLiterals.js';
 import {
   PIN_TYPE,
   CONST_NODETYPES,
   PULSE_CONST_NODETYPES,
   INPUT_PULSE_PIN_BINDING_OPTIONS,
-} from './constants';
-import squashSingleOutputNodes from './optimizers/squashSingleOutputNodes';
-import { isBuiltInType } from './utils';
-import { def } from './types';
+} from './constants.js';
+import squashSingleOutputNodes from './optimizers/squashSingleOutputNodes.js';
+import { isBuiltInType } from './utils.js';
+import { def } from './types.js';
 
 const getMapOfNodePinsWithLinks = def(
   'getMapOfNodePinsWithLinks :: [Node] -> [Link] -> Map NodeId [PinKey]',

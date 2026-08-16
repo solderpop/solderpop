@@ -1,7 +1,7 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { isAmong } from 'sdp-func-tools';
 
-import PIN_TYPE from './internal/pinTypes';
+import PIN_TYPE from './internal/pinTypes.js';
 
 // =============================================================================
 //

@@ -1,14 +1,14 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
-import storeShape from 'react-redux/src/utils/storeShape';
+import storeShape from 'react-redux/src/utils/storeShape.js';
 import { Icon } from 'react-fa';
 import cls from 'classnames';
 
-import { recoverState } from '../actions';
-import CloseButton from '../components/CloseButton';
-import { getUtmForumUrl } from '../../utils/urls';
+import { recoverState } from '../actions.js';
+import CloseButton from '../components/CloseButton.jsx';
+import { getUtmForumUrl } from '../../utils/urls.js';
 
 class Catcher extends React.Component {
   constructor(props) {

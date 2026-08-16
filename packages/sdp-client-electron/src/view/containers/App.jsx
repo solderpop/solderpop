@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -36,61 +36,61 @@ import { messages as xdbMessages } from 'sdp-deploy-bin';
 
 import packageJson from '../../../package.json';
 
-import * as actions from '../actions';
-import * as uploadActions from '../../upload/actions';
-import { listBoards, upload } from '../../upload/arduinoCli';
-import { compileSimulation } from '../../upload/wasmCompile';
-import * as debuggerIPC from '../../debugger/ipcActions';
+import * as actions from '../actions.js';
+import * as uploadActions from '../../upload/actions.js';
+import { listBoards, upload } from '../../upload/arduinoCli.js';
+import { compileSimulation } from '../../upload/wasmCompile.js';
+import * as debuggerIPC from '../../debugger/ipcActions.js';
 import {
   getUploadProcess,
   isDeploymentInProgress,
   getSelectedSerialPort,
-} from '../../upload/selectors';
-import * as settingsActions from '../../settings/actions';
-import PopupSetWorkspace from '../../settings/components/PopupSetWorkspace';
-import PopupCreateWorkspace from '../../settings/components/PopupCreateWorkspace';
-import PopupUploadConfig from '../../upload/components/PopupUploadConfig';
-import PopupConnectSerial from '../../upload/components/PopupConnectSerial';
-import { SaveProgressBar } from '../components/SaveProgressBar';
-import TitleBar from '../components/TitleBar';
+} from '../../upload/selectors.js';
+import * as settingsActions from '../../settings/actions.js';
+import PopupSetWorkspace from '../../settings/components/PopupSetWorkspace.jsx';
+import PopupCreateWorkspace from '../../settings/components/PopupCreateWorkspace.jsx';
+import PopupUploadConfig from '../../upload/components/PopupUploadConfig.jsx';
+import PopupConnectSerial from '../../upload/components/PopupConnectSerial.jsx';
+import { SaveProgressBar } from '../components/SaveProgressBar.jsx';
+import TitleBar from '../components/TitleBar.jsx';
 
-import formatError from '../../shared/errorFormatter';
-import * as EVENTS from '../../shared/events';
-import { INSTALL_ARDUINO_DEPENDENCIES_MSG } from '../../arduinoDependencies/constants';
+import formatError from '../../shared/errorFormatter.js';
+import * as EVENTS from '../../shared/events.js';
+import { INSTALL_ARDUINO_DEPENDENCIES_MSG } from '../../arduinoDependencies/constants.js';
 import {
   checkDeps,
   updateArdupackages,
   closePackageUpdatePopup,
   proceedPackageUpgrade,
-} from '../../arduinoDependencies/actions';
+} from '../../arduinoDependencies/actions.js';
 import {
   requestManageLocalSimulation,
   closeManageLocalSimulation,
   closeWelcomeDialog,
   firstLaunchDetected,
   clickInstallEmsdk,
-} from '../../emsdkInstaller/actions';
-import WelcomeDialog from '../../emsdkInstaller/components/WelcomeDialog';
-import ManageLocalSimulationPopup from '../../emsdkInstaller/components/ManageLocalSimulationPopup';
-import { loadWorkspacePath } from '../../app/workspaceActions';
-import { getPathToBundledWorkspace, IS_DEV } from '../../app/utils';
+} from '../../emsdkInstaller/actions.js';
+import WelcomeDialog from '../../emsdkInstaller/components/WelcomeDialog.jsx';
+import ManageLocalSimulationPopup from '../../emsdkInstaller/components/ManageLocalSimulationPopup.jsx';
+import { loadWorkspacePath } from '../../app/workspaceActions.js';
+import { getPathToBundledWorkspace, IS_DEV } from '../../app/utils.js';
 
-import getLibraryNames from '../../arduinoDependencies/getLibraryNames';
+import getLibraryNames from '../../arduinoDependencies/getLibraryNames.js';
 
-import { subscribeAutoUpdaterEvents } from '../autoupdate';
-import subscribeToTriggerMainMenuRequests from '../../testUtils/triggerMainMenu';
-import { TRIGGER_SAVE_AS, TRIGGER_LOAD_PROJECT } from '../../testUtils/events';
+import { subscribeAutoUpdaterEvents } from '../autoupdate.js';
+import subscribeToTriggerMainMenuRequests from '../../testUtils/triggerMainMenu.js';
+import { TRIGGER_SAVE_AS, TRIGGER_LOAD_PROJECT } from '../../testUtils/events.js';
 
 import {
   getOpenDialogFileFilters,
   createSaveDialogOptions,
-} from '../nativeDialogs';
-import { STATES, getEventNameWithState } from '../../shared/eventStates';
+} from '../nativeDialogs.js';
+import { STATES, getEventNameWithState } from '../../shared/eventStates.js';
 
-import UpdateArduinoPackagesPopup from '../../arduinoDependencies/components/UpdateArduinoPackagesPopup';
-import { checkArduinoDependencies } from '../../arduinoDependencies/runners';
+import UpdateArduinoPackagesPopup from '../../arduinoDependencies/components/UpdateArduinoPackagesPopup.jsx';
+import { checkArduinoDependencies } from '../../arduinoDependencies/runners.js';
 
-import { formatErrorMessage, formatLogError } from '../formatError';
+import { formatErrorMessage, formatLogError } from '../formatError.js';
 
 const { app, dialog, Menu } = remoteElectron;
 const DEFAULT_CANVAS_WIDTH = 800;

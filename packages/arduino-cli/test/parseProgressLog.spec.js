@@ -1,6 +1,8 @@
-import { assert } from 'chai';
+import chai from 'chai';
 
-import { parseProgressMessage } from '../src/parseProgressLog';
+const { assert } = chai;
+
+import { parseProgressMessage } from '../src/parseProgressLog.js';
 
 describe('Progress messages parser', () => {
   it('common message -> progress 0%', () => {

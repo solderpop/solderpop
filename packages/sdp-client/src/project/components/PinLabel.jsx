@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { PINLABEL_WIDTH, getPinLabelProps } from '../nodeLayout';
+import { PINLABEL_WIDTH, getPinLabelProps } from '../nodeLayout.js';
 
 const PinLabel = ({ label, direction, position }) => {
   const textProps = getPinLabelProps(direction, position);

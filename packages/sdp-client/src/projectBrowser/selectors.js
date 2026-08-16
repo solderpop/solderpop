@@ -1,12 +1,12 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { createSelector } from 'reselect';
 
 import * as XP from 'sdp-project';
 
-import { createMemoizedSelector } from '../utils/selectorTools';
-import * as ProjectSelectors from '../project/selectors';
-import * as HintingSelectors from '../hinting/selectors';
-import { isPatchDeadTerminal } from '../project/utils';
+import { createMemoizedSelector } from '../utils/selectorTools.js';
+import * as ProjectSelectors from '../project/selectors.js';
+import * as HintingSelectors from '../hinting/selectors.js';
+import { isPatchDeadTerminal } from '../project/utils.js';
 
 export const getProjectBrowser = R.prop('projectBrowser');
 

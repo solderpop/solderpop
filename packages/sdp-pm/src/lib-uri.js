@@ -1,6 +1,8 @@
 // TODO: duplicates sdp-cli/lib-uri.js
 
-import { Maybe } from 'ramda-fantasy';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 
 export const createLibUri = (orgname, libname, tag) => ({
   orgname,

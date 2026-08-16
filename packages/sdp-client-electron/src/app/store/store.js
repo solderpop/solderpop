@@ -1,5 +1,5 @@
 import { createStore, combineReducers } from 'redux';
-import * as AT from './actionTypes';
+import * as AT from './actionTypes.js';
 
 const projectPathReducer = (state = null, action) => {
   if (action.type === AT.UPDATE_PROJECT_PATH) {

@@ -2,9 +2,9 @@ import React from 'react';
 import PT from 'prop-types';
 
 import { Position, Size } from 'sdp-project';
-import sanctuaryPropType from '../../../utils/sanctuaryPropType';
+import sanctuaryPropType from '../../../utils/sanctuaryPropType.js';
 
-import { NODE_CORNER_RADIUS } from '../../nodeLayout';
+import { NODE_CORNER_RADIUS } from '../../nodeLayout.js';
 
 const SnappingPreviewLayer = ({ previews }) => (
   <g className="SnappingPreviewLayer">

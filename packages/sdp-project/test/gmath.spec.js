@@ -1,7 +1,9 @@
-import { assert } from 'chai';
-import { sortGraph } from '../src/gmath';
+import chai from 'chai';
 
-import { expectEitherRight, expectEitherError } from './helpers';
+const { assert } = chai;
+import { sortGraph } from '../src/gmath.js';
+
+import { expectEitherRight, expectEitherError } from './helpers.js';
 
 describe('Graph math', () => {
   describe('Topological sorting', () => {

@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import 'url-search-params-polyfill';
 import { rejectWithCode, foldMaybe, noop } from 'sdp-func-tools';
 
@@ -7,12 +7,12 @@ import {
   getWhoamiUrl,
   getLoginUrl,
   getLogoutUrl,
-} from '../utils/urls';
-import { addError } from '../messages/actions';
-import * as ActionTypes from './actionTypes';
-import * as Messages from './messages';
-import * as ERR_CODES from './errorCodes';
-import { getAccessToken } from './selectors';
+} from '../utils/urls.js';
+import { addError } from '../messages/actions.js';
+import * as ActionTypes from './actionTypes.js';
+import * as Messages from './messages.js';
+import * as ERR_CODES from './errorCodes.js';
+import { getAccessToken } from './selectors.js';
 
 const setGrant = grant => ({
   type: ActionTypes.SET_AUTH_GRANT,

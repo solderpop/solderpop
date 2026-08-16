@@ -1,23 +1,25 @@
 /* eslint-disable no-param-reassign */
 import { cwd, exit } from 'process';
 import path from 'path';
-import { dropLast, last, lensProp, when, over, pick } from 'ramda';
+import R from 'ramda';
+
+const { dropLast, last, lensProp, when, over, pick } = R;
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import { flags } from '@oclif/command';
 import { resolvePath } from 'sdp-fs';
 import * as xdb from 'sdp-deploy-bin';
-import BaseCommand from '../baseCommand';
-import * as commonArgs from '../args';
-import * as myFlags from '../flags';
-import { getListr } from '../listr';
+import BaseCommand from '../baseCommand.js';
+import * as commonArgs from '../args.js';
+import * as myFlags from '../flags.js';
+import { getListr } from '../listr.js';
 import {
   checkBoardTask,
   loadProjectTask,
   transformTask,
   transpileTask,
-} from '../listrTasks';
-import { resolveBundledWorkspacePath } from '../paths';
+} from '../listrTasks.js';
+import { resolveBundledWorkspacePath } from '../paths.js';
 
 class CompileCommand extends BaseCommand {
   async run() {

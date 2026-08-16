@@ -1,24 +1,24 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { combineReducers } from 'redux';
 
-import userReducer from '../user/reducer';
-import projectReducer from '../project/reducer';
-import undoableProject from './undoableProject';
-import projectBrowserReducer from '../projectBrowser/reducer';
-import editorReducer from '../editor/reducer';
-import errorsReducer from '../messages/reducer';
-import processesReducer from '../processes/reducer';
-import popupsReducer from '../popups/reducer';
-import debuggerReducer from '../debugger/reducer';
-import hintingReducer from '../hinting/reducer';
-import workersReducer from '../workers/reducer';
-import themeReducer from '../theme/reducer';
+import userReducer from '../user/reducer.js';
+import projectReducer from '../project/reducer.js';
+import undoableProject from './undoableProject.js';
+import projectBrowserReducer from '../projectBrowser/reducer.js';
+import editorReducer from '../editor/reducer.js';
+import errorsReducer from '../messages/reducer.js';
+import processesReducer from '../processes/reducer.js';
+import popupsReducer from '../popups/reducer.js';
+import debuggerReducer from '../debugger/reducer.js';
+import hintingReducer from '../hinting/reducer.js';
+import workersReducer from '../workers/reducer.js';
+import themeReducer from '../theme/reducer.js';
 
-import keepIntegrityAfterNavigatingHistory from './keepIntegrityAfterNavigatingHistory';
-import trackLastSavedChanges from './trackLastSavedChanges';
-import initialProjectState from '../project/state';
+import keepIntegrityAfterNavigatingHistory from './keepIntegrityAfterNavigatingHistory.js';
+import trackLastSavedChanges from './trackLastSavedChanges.js';
+import initialProjectState from '../project/state.js';
 
-import { RECOVER_STATE } from './actionTypes';
+import { RECOVER_STATE } from './actionTypes.js';
 
 // :: [(s -> a -> s)] -> s -> a -> s
 const pipeReducers = (...reducers) => (state, action) =>

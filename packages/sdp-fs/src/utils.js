@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import fs from 'fs';
 import path from 'path';
 
@@ -11,16 +11,16 @@ import {
   omitTypeHints,
 } from 'sdp-func-tools';
 
-import { PatchFileContents, Path, def } from './types';
+import { PatchFileContents, Path, def } from './types.js';
 
 import {
   DEFAULT_WORKSPACE_PATH,
   DEFAULT_PROJECT_NAME,
   LIBS_DIRNAME,
   WORKSPACE_FILENAME,
-} from './constants';
+} from './constants.js';
 
-import * as ERROR_CODES from './errorCodes';
+import * as ERROR_CODES from './errorCodes.js';
 
 export const expandHomeDir = pathToResolve => {
   const homedir =

@@ -1,11 +1,11 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 import client from 'sdp-client';
 import { foldMaybe } from 'sdp-func-tools';
 import { formatTweakMessage } from 'sdp-arduino';
 import { ipcRenderer } from 'electron';
 
-import { DEBUG_SERIAL_SEND } from '../shared/events';
+import { DEBUG_SERIAL_SEND } from '../shared/events.js';
 
 export default ({ getState }) => next => action => {
   const state = getState();

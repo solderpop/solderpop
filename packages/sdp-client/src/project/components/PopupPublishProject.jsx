@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import Icon from 'react-fa';
 import * as XP from 'sdp-project';
 
-import sanctuaryPropType from '../../utils/sanctuaryPropType';
-import PopupForm from '../../utils/components/PopupForm';
-import { HOSTNAME } from '../../utils/urls';
-import Button from '../../core/components/Button';
+import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
+import PopupForm from '../../utils/components/PopupForm.jsx';
+import { HOSTNAME } from '../../utils/urls.js';
+import Button from '../../core/components/Button.jsx';
 
 const PopupPublishProject = ({
   isVisible,

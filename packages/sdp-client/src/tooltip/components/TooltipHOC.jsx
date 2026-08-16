@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { emitShowTooltip, emitHideTooltip } from '../eventEmitters';
+import { emitShowTooltip, emitHideTooltip } from '../eventEmitters.js';
 
 // Delay between `mouseenter` and showing tooltip
 const SHOW_TOOLTIP_DELAY = 500;

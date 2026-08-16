@@ -1,11 +1,11 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { enquote, unquote } from 'sdp-func-tools';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import cls from 'classnames';
 
-import PinWidget from './PinWidget';
+import PinWidget from './PinWidget.jsx';
 
 const isStringModeValue = R.startsWith('"');
 

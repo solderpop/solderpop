@@ -1,5 +1,9 @@
 import path from 'path';
-import { assert } from 'chai';
+import { fileURLToPath } from 'url';
+import chai from 'chai';
+
+const { assert } = chai;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 import fse from 'fs-extra';
 
 import {
@@ -10,7 +14,7 @@ import {
   convertIntermediateOptions,
   parseOptions,
   patchBoardsWithOptions,
-} from '../src/optionParser';
+} from '../src/optionParser.js';
 
 const fixtureDir = path.resolve(__dirname, 'fixtures');
 

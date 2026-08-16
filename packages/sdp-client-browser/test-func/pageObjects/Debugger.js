@@ -1,7 +1,7 @@
-import BasePageObject from './BasePageObject';
-import hasClass from '../utils/hasClass';
-import getBoundingClientRect from '../utils/getBoundingClientRect';
-import getCenterPositon from '../utils/getCenterPositon';
+import BasePageObject from './BasePageObject.js';
+import hasClass from '../utils/hasClass.js';
+import getBoundingClientRect from '../utils/getBoundingClientRect.js';
+import getCenterPositon from '../utils/getCenterPositon.js';
 
 class Debugger extends BasePageObject {
   async isCollapsed() {

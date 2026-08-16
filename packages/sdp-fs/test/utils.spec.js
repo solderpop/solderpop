@@ -1,11 +1,13 @@
 import path from 'path';
-import chai, { assert } from 'chai';
+import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-import { fixture, expectRejectedWithCode } from './utils';
-import * as U from '../src/utils';
-import * as ERROR_CODES from '../src/errorCodes';
-import { DEFAULT_WORKSPACE_PATH } from '../src/constants';
+import { fixture, expectRejectedWithCode } from './utils.js';
+import * as U from '../src/utils.js';
+import * as ERROR_CODES from '../src/errorCodes.js';
+import { DEFAULT_WORKSPACE_PATH } from '../src/constants.js';
+
+const { assert } = chai;
 
 chai.use(chaiAsPromised);
 

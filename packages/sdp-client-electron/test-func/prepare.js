@@ -9,7 +9,7 @@ import { resolveLibPath } from 'sdp-fs';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Application } from 'spectron';
 
-import Page from './pageObject';
+import Page from './pageObject.js';
 
 const DEBUG = process.env.XOD_DEBUG_TESTS;
 // =============================================================================

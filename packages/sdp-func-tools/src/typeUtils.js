@@ -1,5 +1,7 @@
-import * as R from 'ramda';
-import { Either } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Either } = RamdaFantasy;
 
 export const sanctuaryDefEitherToRamdaFantasyEither = sdEither =>
   sdEither.isLeft ? Either.Left(sdEither.value) : Either.Right(sdEither.value);

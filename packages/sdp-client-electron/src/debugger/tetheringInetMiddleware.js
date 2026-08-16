@@ -1,10 +1,10 @@
-import * as R from 'ramda';
-import AtNet from 'sdp-tethering-inet';
+import R from 'ramda';
+import { create as createAtNet } from 'sdp-tethering-inet';
 import client from 'sdp-client';
 import { allPromises } from 'sdp-func-tools';
 import { ipcRenderer } from 'electron';
 
-import { DEBUG_SERIAL_SEND } from '../shared/events';
+import { DEBUG_SERIAL_SEND } from '../shared/events.js';
 
 const EOT = String.fromCharCode(4); // end of transmittion
 const ACK = String.fromCharCode(6); // acknowledge
@@ -96,7 +96,7 @@ export default ({ getState, dispatch }) => next => action => {
     const transmit = createTransmitter(dispatch, worker.sendToWasm);
     const listener = createListener(dispatch, transmit, nodeId);
     const write = R.compose(
-      AtNet.create(listener),
+      createAtNet(listener),
       R.tap(clearQueueOnCloseConnection(dispatch))
     );
     dispatch(
@@ -118,7 +118,7 @@ export default ({ getState, dispatch }) => next => action => {
       ipcRenderer.send(DEBUG_SERIAL_SEND, chunk)
     );
     const listener = createListener(dispatch, transmit, nodeId);
-    const write = AtNet.create(listener);
+    const write = createAtNet(listener);
     dispatch(
       client.tetheringInetCreated(
         action.payload.tetheringInetNodeId,

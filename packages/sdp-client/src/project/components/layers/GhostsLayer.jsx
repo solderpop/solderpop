@@ -1,10 +1,10 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { EDITOR_MODE } from '../../../editor/constants';
+import { EDITOR_MODE } from '../../../editor/constants.js';
 
-import XODLink from '../Link';
+import XODLink from '../Link.jsx';
 
 class GhostLayer extends React.Component {
   shouldComponentUpdate(nextProps) {

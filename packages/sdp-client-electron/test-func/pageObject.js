@@ -1,6 +1,6 @@
-const R = require('ramda');
-const chai = require('chai');
-const chaiAsPromised = require('chai-as-promised');
+import R from 'ramda';
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 
 chai.use(chaiAsPromised);
 const { assert } = chai;
@@ -460,7 +460,4 @@ function createPageObject(client) {
   return R.map(fn => R.partial(fn, [client]))(API);
 }
 
-module.exports = {
-  createPageObject,
-  API,
-};
+export default { createPageObject, API };

@@ -1,7 +1,7 @@
 import { maybeProp } from 'sdp-func-tools';
 
-import * as AT from './actionTypes';
-import { tetheringInetChunksToSend } from './selectors';
+import * as AT from './actionTypes.js';
+import { tetheringInetChunksToSend } from './selectors.js';
 
 export const addMessagesToDebuggerLog = messages => ({
   type: AT.DEBUGGER_LOG_ADD_MESSAGES,

@@ -1,5 +1,7 @@
 import { test } from '@oclif/test';
-import { assert } from 'chai';
+import chai from 'chai';
+
+const { assert } = chai;
 
 describe('xodc help', () => {
   const stdMock = test.stdout().stderr();

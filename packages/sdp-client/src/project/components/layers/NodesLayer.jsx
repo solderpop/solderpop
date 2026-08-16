@@ -1,13 +1,13 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import pureDeepEqual from '../../../utils/pureDeepEqual';
+import pureDeepEqual from '../../../utils/pureDeepEqual.js';
 
-import { isNodeSelected } from '../../../editor/utils';
-import { getPinLinkabilityValidator } from '../../utils';
+import { isNodeSelected } from '../../../editor/utils.js';
+import { getPinLinkabilityValidator } from '../../utils.js';
 
-import Node from '../Node';
+import Node from '../Node.jsx';
 
 const NodesLayer = ({
   nodes,

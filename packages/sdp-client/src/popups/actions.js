@@ -2,7 +2,7 @@ import {
   HIDE_ALL_POPUPS,
   SHOW_PROJECT_PREFERENCES,
   HIDE_PROJECT_PREFERENCES,
-} from './actionTypes';
+} from './actionTypes.js';
 
 export const hideAllPopups = () => ({
   type: HIDE_ALL_POPUPS,

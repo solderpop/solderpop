@@ -1,35 +1,35 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import Handlebars from 'handlebars';
 
 import { unquote } from 'sdp-func-tools';
 import * as XP from 'sdp-project';
 
-import { def } from './types';
+import { def } from './types.js';
 
-import parseImplementation from './parseImplementation';
-import parseLegacyImplementation from './parseLegacyImplementation';
+import parseImplementation from './parseImplementation.js';
+import parseLegacyImplementation from './parseLegacyImplementation.js';
 
-import configTpl from '../platform/configuration.tpl.cpp';
-import patchContextTpl from '../platform/patchContext.tpl.cpp';
-import patchPinTypesTpl from '../platform/patchPinTypes.tpl.cpp';
-import patchTemplateDefinitionTpl from '../platform/patchTemplateDefinition.tpl.cpp';
-import legacyPatchTpl from '../platform/patch.legacy.tpl.cpp';
-import patchTpl from '../platform/patch.tpl.cpp';
-import implListTpl from '../platform/implList.tpl.cpp';
-import programTpl from '../platform/program.tpl.cpp';
+import configTpl from '../platform/configuration.tpl.cpp.js';
+import patchContextTpl from '../platform/patchContext.tpl.cpp.js';
+import patchPinTypesTpl from '../platform/patchPinTypes.tpl.cpp.js';
+import patchTemplateDefinitionTpl from '../platform/patchTemplateDefinition.tpl.cpp.js';
+import legacyPatchTpl from '../platform/patch.legacy.tpl.cpp.js';
+import patchTpl from '../platform/patch.tpl.cpp.js';
+import implListTpl from '../platform/implList.tpl.cpp.js';
+import programTpl from '../platform/program.tpl.cpp.js';
 
-import preambleH from '../platform/preamble.h';
-import listViewsH from '../platform/listViews.h';
-import listFuncsH from '../platform/listFuncs.h';
-import typesH from '../platform/types.h';
-import formatNumberH from '../platform/formatNumber.h';
-import uartH from '../platform/uart.h';
-import memoryH from '../platform/memory.h';
-import stlH from '../platform/stl.h';
-import runtimeCpp from '../platform/runtime.cpp';
+import preambleH from '../platform/preamble.h.js';
+import listViewsH from '../platform/listViews.h.js';
+import listFuncsH from '../platform/listFuncs.h.js';
+import typesH from '../platform/types.h.js';
+import formatNumberH from '../platform/formatNumber.h.js';
+import uartH from '../platform/uart.h.js';
+import memoryH from '../platform/memory.h.js';
+import stlH from '../platform/stl.h.js';
+import runtimeCpp from '../platform/runtime.cpp.js';
 
-import recordImplementation from '../platform/nodes/record.tpl.cpp';
-import unpackRecordImplementation from '../platform/nodes/unpackRecord.tpl.cpp';
+import recordImplementation from '../platform/nodes/record.tpl.cpp.js';
+import unpackRecordImplementation from '../platform/nodes/unpackRecord.tpl.cpp.js';
 
 // =============================================================================
 //

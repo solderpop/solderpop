@@ -1,13 +1,20 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { assert } from 'chai';
+import chai from 'chai';
+
+const { assert } = chai;
 
 import { readFileSync } from 'fs';
-import { resolve } from 'path';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import R from 'ramda';
-import { Either, Maybe } from 'ramda-fantasy';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Either, Maybe } = RamdaFantasy;
 import { foldEither, mapIndexed } from 'sdp-func-tools';
 
-import * as XP from '../src';
+import * as XP from '../src/index.js';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export const expectEitherRight = R.curry((testFunction, object) => {
   foldEither(

@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
 /**
  * Debugger log could contain messages of a different types:

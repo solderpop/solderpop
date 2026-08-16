@@ -1,5 +1,5 @@
-import hasClass from '../utils/hasClass';
-import BasePageObject from './BasePageObject';
+import hasClass from '../utils/hasClass.js';
+import BasePageObject from './BasePageObject.js';
 
 class PatchGroupItem extends BasePageObject {
   async click() {

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import * as R from 'ramda';
+import R from 'ramda';
 import btoa from 'btoa';
 import fetch from 'node-fetch';
 import { createError, notNil } from 'sdp-func-tools';
@@ -8,7 +8,7 @@ import arduinoH from 'sdp-tabtest/cpp/Arduino.h';
 import arduinoCpp from 'sdp-tabtest/cpp/Arduino.cpp';
 import xStringFormatInl from '../../../cpplib/catch2utils/XStringFormat.inl';
 
-import * as EC from './errorCodes';
+import * as EC from './errorCodes.js';
 
 // :: String -> Nullable String -> StrMap Source -> Object -> Promise Object Error
 const compile = R.curry((hostname, accessToken, suite, opts) => {

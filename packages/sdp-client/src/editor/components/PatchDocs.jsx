@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PT from 'prop-types';
 import cn from 'classnames';
@@ -6,9 +6,9 @@ import cn from 'classnames';
 import * as XP from 'sdp-project';
 import { foldEither, foldMaybe } from 'sdp-func-tools';
 
-import Node from '../../project/components/Node';
-import { patchToNodeProps } from '../../project/utils';
-import { SLOT_SIZE } from '../../project/nodeLayout';
+import Node from '../../project/components/Node.jsx';
+import { patchToNodeProps } from '../../project/utils.js';
+import { SLOT_SIZE } from '../../project/nodeLayout.js';
 
 const NODE_POSITION_IN_PREVIEW = {
   x: 3,

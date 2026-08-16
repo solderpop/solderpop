@@ -1,8 +1,9 @@
-import chai, { assert, expect } from 'chai';
+import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { resolve } from 'path';
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
 import {
   rmrf,
   spawnDefaultProject,
@@ -11,13 +12,17 @@ import {
 } from 'sdp-fs';
 import { getProjectName } from 'sdp-project';
 
-import * as WA from '../src/app/workspaceActions';
-import * as ERROR_CODES from '../src/shared/errorCodes';
-import * as EVENTS from '../src/shared/events';
+import * as WA from '../src/app/workspaceActions.js';
+import * as ERROR_CODES from '../src/shared/errorCodes.js';
+import * as EVENTS from '../src/shared/events.js';
 
 chai.use(chaiAsPromised);
+const { assert, expect } = chai;
+const { Maybe } = RamdaFantasy;
 
-const fixture = path => resolve(__dirname, './fixtures', path);
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const fixture = subPath => resolve(__dirname, './fixtures', subPath);
 
 const expectRejectedWithCode = (promise, errorCode) =>
   expect(promise).to.eventually.be.rejected.and.have.property(

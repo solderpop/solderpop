@@ -1,4 +1,5 @@
-import { assert } from 'chai';
+import chai from 'chai';
+const { assert } = chai;
 
 import {
   omitRecursively,
@@ -8,7 +9,7 @@ import {
   renameKeys,
   reverseLookup,
   invertMap,
-} from '../src/objects';
+} from '../src/objects.js';
 
 describe('objects', () => {
   describe('omitRecursively()', () => {

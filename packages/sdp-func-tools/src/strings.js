@@ -1,5 +1,5 @@
 import R from 'ramda';
-import { def } from './types';
+import { def } from './types.js';
 
 export const enquote = def('enquote :: String -> String', s => `"${s}"`);
 

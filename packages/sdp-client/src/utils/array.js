@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { mapIndexed } from 'sdp-func-tools';
 
 // :: [{...}] -> [{..., index: N}] -- sets each element in array a property 'index'

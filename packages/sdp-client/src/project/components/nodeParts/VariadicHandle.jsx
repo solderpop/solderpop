@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -6,7 +6,7 @@ import {
   NODE_CORNER_RADIUS,
   VARIADIC_HANDLE_WIDTH,
   VARIADIC_HANDLE_HEIGHT,
-} from '../../nodeLayout';
+} from '../../nodeLayout.js';
 
 const COMPENSATE_BLURING = 0.5;
 

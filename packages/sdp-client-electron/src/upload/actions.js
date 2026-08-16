@@ -7,7 +7,7 @@ import {
   SELECT_SERIAL_PORT,
   OPEN_CONNECT_SERIAL_DIALOG,
   CLOSE_CONNECT_SERIAL_DIALOG,
-} from './actionTypes';
+} from './actionTypes.js';
 
 export const uploadToArduino = () => dispatch => {
   const processId = dispatch(client.addProcess(UPLOAD));

@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
 export const bindApi = (api, fn) => (...args) => fn(api, ...args);
 

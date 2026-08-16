@@ -10,10 +10,10 @@ export {
   extendTProjectWithGlobals,
   hasTetheringInternetNode,
   getTetheringInetNodeId,
-} from './transpiler';
+} from './transpiler.js';
 
-export { default as messages } from './messages';
+export { default as messages } from './messages.js';
 
-export { LIVENESS } from './constants';
+export { LIVENESS } from './constants.js';
 
-export { default as formatTweakMessage } from './formatTweakMessage';
+export { default as formatTweakMessage } from './formatTweakMessage.js';

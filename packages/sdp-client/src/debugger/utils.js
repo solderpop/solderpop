@@ -1,8 +1,8 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 import { foldMaybe, mapIndexed } from 'sdp-func-tools';
 
-import { UPLOAD_MSG_TYPE } from './constants';
+import { UPLOAD_MSG_TYPE } from './constants.js';
 
 export const createSystemMessage = message => ({
   type: UPLOAD_MSG_TYPE.SYSTEM,

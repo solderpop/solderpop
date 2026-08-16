@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { PopupForm } from 'sdp-client';
 
-import PortSelect from './PortSelect';
+import PortSelect from './PortSelect.jsx';
 
 class PopupConnectSerial extends React.Component {
   constructor(props) {

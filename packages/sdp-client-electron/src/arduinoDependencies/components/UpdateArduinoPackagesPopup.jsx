@@ -1,9 +1,9 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { PopupForm } from 'sdp-client';
 
-import { checkArduinoDependencyUpdates, updateIndexFiles } from '../runners';
+import { checkArduinoDependencyUpdates, updateIndexFiles } from '../runners.js';
 
 class UpdateArduinoPackagesPopup extends React.Component {
   constructor(props) {

@@ -1,6 +1,6 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
-import * as ActionTypes from './actionTypes';
+import * as ActionTypes from './actionTypes.js';
 
 const userReducer = (state = {}, action) => {
   switch (action.type) {

@@ -5,7 +5,7 @@
   - Added `scrollDown` method
  */
 
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 

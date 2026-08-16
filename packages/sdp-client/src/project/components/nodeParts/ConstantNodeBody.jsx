@@ -1,10 +1,10 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as XP from 'sdp-project';
 import { noop } from 'sdp-func-tools';
 
-import RegularNodeBody from './RegularNodeBody';
+import RegularNodeBody from './RegularNodeBody.jsx';
 
 export const getConstantValue = ({ pins }) =>
   R.compose(

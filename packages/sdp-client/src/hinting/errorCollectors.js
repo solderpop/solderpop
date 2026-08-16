@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { maybePath, foldMaybe, maybeProp } from 'sdp-func-tools';
 
 // :: { errors: StrMap [Error] } -> [Error]

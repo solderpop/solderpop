@@ -5,8 +5,10 @@ import fs from 'fs-extra';
 import { cwd, exit, stderr } from 'process';
 import { cli } from 'cli-ux';
 import chalk from 'chalk';
-import Command from '@oclif/command';
-import {
+import { Command } from '@oclif/command';
+import R from 'ramda';
+
+const {
   allPass,
   complement,
   compose,
@@ -22,7 +24,7 @@ import {
   startsWith,
   T,
   when,
-} from 'ramda';
+} = R;
 import {
   getPathToXodProject,
   isBasename,
@@ -33,9 +35,9 @@ import {
 import * as xP from 'sdp-project';
 import * as xdb from 'sdp-deploy-bin';
 import { createError } from 'sdp-func-tools';
-import { resolveBundledWorkspacePath } from './paths';
-import * as myFlags from './flags';
-import localMsgs from './messages';
+import { resolveBundledWorkspacePath } from './paths.js';
+import * as myFlags from './flags.js';
+import localMsgs from './messages.js';
 
 // convert (projectPath, patchPath) to patch name
 const getPatchName = (projectPath, patchPath) =>

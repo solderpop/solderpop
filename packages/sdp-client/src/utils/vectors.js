@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { vec } from 'vec-la-fp';
 
 // Position :: { x: Number, y: Number }

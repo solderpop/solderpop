@@ -1,14 +1,16 @@
 import R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 import { enquote, unquote, foldMaybe, catMaybies } from 'sdp-func-tools';
 
-import { def } from '../types';
-import { PIN_TYPE, INPUT_PULSE_PIN_BINDING_OPTIONS } from '../constants';
+import { def } from '../types.js';
+import { PIN_TYPE, INPUT_PULSE_PIN_BINDING_OPTIONS } from '../constants.js';
 
-import * as Project from '../project';
-import * as Patch from '../patch';
-import * as Node from '../node';
-import * as Pin from '../pin';
+import * as Project from '../project.js';
+import * as Patch from '../patch.js';
+import * as Node from '../node.js';
+import * as Pin from '../pin.js';
 
 //
 // Literals

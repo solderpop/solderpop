@@ -1,7 +1,7 @@
 import os from 'os';
 import path from 'path';
 import which from 'which';
-import * as fse from 'fs-extra';
+import fse from 'fs-extra';
 import { createError } from 'sdp-func-tools';
 
 // Locates an emsdk root and returns the `em++` binary path plus the extra

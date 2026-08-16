@@ -1,5 +1,7 @@
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 import * as XP from 'sdp-project';
 import { maybeProp, foldMaybe, foldEither } from 'sdp-func-tools';
 
@@ -8,9 +10,9 @@ import {
   calcutaleNodeSizeFromPins,
   calculatePinPosition,
   slotSizeToPixels,
-} from './nodeLayout';
+} from './nodeLayout.js';
 
-import { LINK_ERRORS } from '../editor/constants';
+import { LINK_ERRORS } from '../editor/constants.js';
 
 // :: NodeId -> PinKey -> RenderableNodes -> RenderablePin
 export const getRenderablePin = R.uncurryN(3, (nodeId, pinKey) =>

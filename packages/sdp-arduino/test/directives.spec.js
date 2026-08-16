@@ -1,4 +1,6 @@
-import { assert } from 'chai';
+import chai from 'chai';
+
+const { assert } = chai;
 
 import {
   isDirtienessEnabled,
@@ -8,7 +10,7 @@ import {
   stripCppComments,
   findXodPragmas,
   findRequireUrls,
-} from '../src/directives';
+} from '../src/directives.js';
 
 describe('Stripping C++ comments', () => {
   function assertStrippedEqual(code, expected) {

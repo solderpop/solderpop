@@ -5,7 +5,7 @@ import { messages as xdbMessages } from 'sdp-deploy-bin';
 import { messages as xardMessages } from 'sdp-arduino';
 import { messages as xfMessages } from 'sdp-fs';
 
-import uploadMessages from '../upload/messages';
+import uploadMessages from '../upload/messages.js';
 
 export const formatErrorMessage = composeErrorFormatters([
   xpMessages,

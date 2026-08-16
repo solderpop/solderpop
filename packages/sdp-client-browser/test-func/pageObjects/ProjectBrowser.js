@@ -1,7 +1,7 @@
-import scrollTo from '../utils/scrollTo';
-import BasePageObject from './BasePageObject';
-import PatchGroup from './PatchGroup';
-import PatchGroupItemContextMenu from './PatchGroupItemContextMenu';
+import scrollTo from '../utils/scrollTo.js';
+import BasePageObject from './BasePageObject.js';
+import PatchGroup from './PatchGroup.js';
+import PatchGroupItemContextMenu from './PatchGroupItemContextMenu.js';
 
 class ProjectBrowser extends BasePageObject {
   async findPatchGroup(title) {

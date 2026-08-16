@@ -1,10 +1,10 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import CustomScroll from 'react-custom-scroll';
 
-import CloseButton from '../../core/components/CloseButton';
+import CloseButton from '../../core/components/CloseButton.jsx';
 
 // Element that PoitingPopup points at might be visible partially
 // in the container. `allowedOffset` is an amount of pixels that

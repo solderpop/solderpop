@@ -1,13 +1,13 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import CodeMirror from 'codemirror';
-import 'codemirror/addon/mode/simple';
-import 'codemirror/addon/mode/overlay';
-import 'codemirror/mode/clike/clike';
+import 'codemirror/addon/mode/simple.js';
+import 'codemirror/addon/mode/overlay.js';
+import 'codemirror/mode/clike/clike.js';
 
-import 'codemirror/addon/edit/closebrackets';
-import 'codemirror/addon/edit/trailingspace';
-import 'codemirror/addon/comment/comment';
-import 'codemirror/addon/scroll/simplescrollbars';
+import 'codemirror/addon/edit/closebrackets.js';
+import 'codemirror/addon/edit/trailingspace.js';
+import 'codemirror/addon/comment/comment.js';
+import 'codemirror/addon/scroll/simplescrollbars.js';
 
 /* eslint-disable max-len */
 const XOD_TYPE_NAMES = /(Number|NodeId|Context|DirtyFlags|TimeMs|u?int\d{1,2}_t|size_t|XString|State|List|Iterator|(typeof_[A-Za-z0-9_]+))\b/gm;

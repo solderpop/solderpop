@@ -1,6 +1,6 @@
-import * as R from 'ramda';
-import { def } from './types';
-import { setOfKeys, diffSet } from './sets';
+import R from 'ramda';
+import { def } from './types.js';
+import { setOfKeys, diffSet } from './sets.js';
 
 /**
  * Returns an object provided with all `null` and `undefined` values omitted

@@ -1,6 +1,6 @@
-import * as R from 'ramda';
-import * as Utils from './utils';
-import { def } from './types';
+import R from 'ramda';
+import * as Utils from './utils.js';
+import { def } from './types.js';
 
 export const createComment = def(
   'createComment :: Position -> Size -> String -> Comment',

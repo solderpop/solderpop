@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
@@ -7,25 +7,27 @@ import { bindActionCreators } from 'redux';
 import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu';
 import { Icon } from 'react-fa';
 import { foldMaybe } from 'sdp-func-tools';
-import { Maybe } from 'ramda-fantasy';
+import RamdaFantasy from 'ramda-fantasy';
 
-import { LOG_TAB_TYPE } from '../constants';
-import { PANEL_IDS } from '../../editor/constants';
-import * as selectors from '../selectors';
-import { addError, addConfirmation } from '../../messages/actions';
-import * as DA from '../actions';
+const { Maybe } = RamdaFantasy;
+
+import { LOG_TAB_TYPE } from '../constants.js';
+import { PANEL_IDS } from '../../editor/constants.js';
+import * as selectors from '../selectors.js';
+import { addError, addConfirmation } from '../../messages/actions.js';
+import * as DA from '../actions.js';
 import {
   LOG_COPIED,
   LOG_COPY_NOT_SUPPORTED,
   logCopyError,
   logSaveError,
-} from '../messages';
+} from '../messages.js';
 
-import Log from './Log';
-import SerialInput from '../components/SerialInput';
+import Log from './Log.jsx';
+import SerialInput from '../components/SerialInput.jsx';
 
-import * as EditorSelectors from '../../editor/selectors';
-import * as EditorActions from '../../editor/actions';
+import * as EditorSelectors from '../../editor/selectors.js';
+import * as EditorActions from '../../editor/actions.js';
 
 const contextMenuAttrs = {
   className: 'contextmenu filter-button',

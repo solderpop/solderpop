@@ -1,10 +1,13 @@
 import R from 'ramda';
-import { assert } from 'chai';
+import chai from 'chai';
 
 import path from 'path';
-import { loadLibrary, loadLibs } from '../src/loadLibs';
-import { resolveLibPath } from '../src/utils';
+import { fileURLToPath } from 'url';
+import { loadLibrary, loadLibs } from '../src/loadLibs.js';
+import { resolveLibPath } from '../src/utils.js';
 
+const { assert } = chai;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const workspaceDir = './fixtures/workspace';
 
 describe('Library loader', () => {

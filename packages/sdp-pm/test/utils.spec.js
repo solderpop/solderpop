@@ -1,14 +1,18 @@
-import { assert } from 'chai';
-import { Maybe } from 'ramda-fantasy';
+import chai from 'chai';
+
+const { assert } = chai;
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 
 import {
   parseLibQuery,
   prependVIfNeeded,
   defaultToLatest,
   rejectUnexistingVersion,
-} from '../src/utils';
+} from '../src/utils.js';
 
-import * as ERR_CODES from '../src/errorCodes';
+import * as ERR_CODES from '../src/errorCodes.js';
 
 describe('Utils', () => {
   describe('parseLibQuery()', () => {

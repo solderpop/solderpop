@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { INPUT_PULSE_PIN_BINDING_OPTIONS } from 'sdp-project';
 
-import PinWidget from './PinWidget';
+import PinWidget from './PinWidget.jsx';
 
 const PulseWidget = props => {
   const onChange = event => {

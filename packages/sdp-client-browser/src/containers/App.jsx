@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import urlParse from 'url-parse';
@@ -13,7 +13,7 @@ import { foldEither, notNil } from 'sdp-func-tools';
 import { LIVENESS } from 'sdp-arduino';
 
 import packageJson from '../../package.json';
-import PopupInstallApp from '../components/PopupInstallApp';
+import PopupInstallApp from '../components/PopupInstallApp.jsx';
 import { ThemeSettingsPopup } from 'sdp-client';
 
 const DEFAULT_CANVAS_WIDTH = 800;

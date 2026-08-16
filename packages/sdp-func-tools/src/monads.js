@@ -1,6 +1,8 @@
-import * as R from 'ramda';
-import { Maybe, Either } from 'ramda-fantasy';
-import { def } from './types';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe, Either } = RamdaFantasy;
+import { def } from './types.js';
 
 /*
  * Shortcuts for easier ReasonML interop

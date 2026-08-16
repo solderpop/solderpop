@@ -1,15 +1,19 @@
-import { assert } from 'chai';
-import { Either } from 'ramda-fantasy';
+import chai from 'chai';
 
-import * as Helper from './helpers';
+const { assert } = chai;
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Either } = RamdaFantasy;
+
+import * as Helper from './helpers.js';
 import {
   getPatchByPathUnsafe,
   assocPatch,
   listGenuinePatches,
-} from '../src/project';
-import { PIN_TYPE } from '../src/constants';
+} from '../src/project.js';
+import { PIN_TYPE } from '../src/constants.js';
 
-import { autoresolveTypes, deducePinTypes } from '../src';
+import { autoresolveTypes, deducePinTypes } from '../src/index.js';
 
 describe('deducePinTypes', () => {
   const project = Helper.loadXodball('./fixtures/pin-types-deduction.xodball');

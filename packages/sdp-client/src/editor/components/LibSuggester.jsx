@@ -1,22 +1,24 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Maybe } from 'ramda-fantasy';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 
 import classNames from 'classnames';
 import Autosuggest from 'react-autosuggest';
 import Highlighter from 'react-highlight-words';
 import { Icon } from 'react-fa';
-import debounce from 'throttle-debounce/debounce';
+import debounce from 'throttle-debounce/debounce.js';
 
 import { fetchLibData, searchLibraries, parseLibQuery } from 'sdp-pm';
 import { foldMaybe, isAmong } from 'sdp-func-tools';
 
-import { getPmSwaggerUrl } from '../../utils/urls';
-import { KEYCODE } from '../../utils/constants';
-import { restoreFocusOnApp } from '../../utils/browser';
-import SuggesterContainer from './SuggesterContainer';
-import * as MSG from '../messages';
+import { getPmSwaggerUrl } from '../../utils/urls.js';
+import { KEYCODE } from '../../utils/constants.js';
+import { restoreFocusOnApp } from '../../utils/browser.js';
+import SuggesterContainer from './SuggesterContainer.jsx';
+import * as MSG from '../messages.js';
 
 const composeValue = R.curry((suggestion, version) => ({
   owner: suggestion.owner,

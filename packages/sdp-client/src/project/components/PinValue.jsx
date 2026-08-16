@@ -4,8 +4,8 @@ import cls from 'classnames';
 import { PIN_TYPE, INPUT_PULSE_PIN_BINDING_OPTIONS } from 'sdp-project';
 import { unquote } from 'sdp-func-tools';
 
-import { PINVALUE_WIDTH, getPinValueProps } from '../nodeLayout';
-import { getRenderablePinType } from '../utils';
+import { PINVALUE_WIDTH, getPinValueProps } from '../nodeLayout.js';
+import { getRenderablePinType } from '../utils.js';
 
 const formatPulsePinValue = value => {
   switch (value) {

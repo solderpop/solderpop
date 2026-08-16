@@ -4,8 +4,8 @@ import classNames from 'classnames';
 import { SkyLightStateless } from 'react-skylight';
 import EventListener from 'react-event-listener';
 
-import { noop } from '../../utils/ramda';
-import { KEYCODE } from '../../utils/constants';
+import { noop } from '../../utils/ramda.js';
+import { KEYCODE } from '../../utils/constants.js';
 
 const PopupConfirm = ({
   title,

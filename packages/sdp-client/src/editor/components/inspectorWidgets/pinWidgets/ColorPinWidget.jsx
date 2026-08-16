@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -9,12 +9,12 @@ import {
   showColorPickerWidget,
   hideColorPickerWidget,
   tweakNodeProperty,
-} from '../../../actions';
-import PinWidget from './PinWidget';
-import { hex2color } from '../../ColorPicker';
-import ColorPickerWidget from '../ColorPickerWidget';
-import { isSessionActive } from '../../../../debugger/selectors';
-import { getVisibleColorPickerWidgetId } from '../../../selectors';
+} from '../../../actions.js';
+import PinWidget from './PinWidget.jsx';
+import { hex2color } from '../../ColorPicker/index.jsx';
+import ColorPickerWidget from '../ColorPickerWidget.jsx';
+import { isSessionActive } from '../../../../debugger/selectors.js';
+import { getVisibleColorPickerWidgetId } from '../../../selectors.js';
 
 class ColorPinWidget extends React.Component {
   constructor(props) {

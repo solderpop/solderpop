@@ -1,5 +1,5 @@
 import waitForElement from 'wait-for-element';
-import { FOCUS_BOUND_VALUE, FOCUS_LABEL } from '../editor/actionTypes';
+import { FOCUS_BOUND_VALUE, FOCUS_LABEL } from '../editor/actionTypes.js';
 
 const CONTROL_SELECTORS = {
   // Select widget control with a tricky selector instead of ID, because

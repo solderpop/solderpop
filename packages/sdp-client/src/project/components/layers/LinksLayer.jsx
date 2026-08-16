@@ -1,12 +1,12 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import pureDeepEqual from '../../../utils/pureDeepEqual';
+import pureDeepEqual from '../../../utils/pureDeepEqual.js';
 
-import { isLinkSelected } from '../../../editor/utils';
+import { isLinkSelected } from '../../../editor/utils.js';
 
-import XODLink from '../Link';
+import XODLink from '../Link.jsx';
 
 const LinksLayer = ({ links, selection, isDragged = false }) => (
   <g className="LinksLayer">

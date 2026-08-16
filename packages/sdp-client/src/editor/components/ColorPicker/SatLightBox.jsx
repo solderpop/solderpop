@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import convert from 'color-convert';
 
-import colorPropType from './colorPropType';
+import colorPropType from './colorPropType.js';
 
 const inRange = (min, max, val) => Math.max(Math.min(max, val), min);
 

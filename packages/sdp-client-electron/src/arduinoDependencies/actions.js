@@ -1,6 +1,6 @@
 import * as client from 'sdp-client';
-import { UPGRADE_ARDUINO_DEPENDECIES } from '../shared/events';
-import * as AT from './actionTypes';
+import { UPGRADE_ARDUINO_DEPENDECIES } from '../shared/events.js';
+import * as AT from './actionTypes.js';
 
 export const checkDeps = client.createProcess(
   client.CHECK_ARDUINO_DEPENDENCIES

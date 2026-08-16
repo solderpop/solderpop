@@ -1,14 +1,15 @@
 {
   "name": "sdp-pm",
+  "type": "module",
   "version": "0.38.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
     "build": "babel src -d dist",
     "dev": "yarn run build --watch",
-    "test": "mocha test/**/*.spec.js",
+    "test": "mocha --require ../../tools/babel-register.js --color test/**/*.spec.js",
     "clean:dist": "rimraf ./dist",
-    "test-func": "mocha --opts test-func/mocha.opts test-func/**/*.spec.js"
+    "test-func": "mocha --require ../../tools/babel-register.js --color --timeout 30000 test-func/**/*.spec.js"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,10 @@
     "sdp-project": "^0.38.0"
   },
   "devDependencies": {
+    "@babel/cli": "^8.0.4",
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
+    "@babel/register": "^8.0.1",
     "chai": "^4.1.2"
   }
 }

@@ -1,9 +1,9 @@
-import hasClass from '../utils/hasClass';
-import getBoundingClientRect from '../utils/getBoundingClientRect';
-import getCenterPositon from '../utils/getCenterPositon';
-import drag from '../utils/drag';
-import BasePageObject from './BasePageObject';
-import Pin from './Pin';
+import hasClass from '../utils/hasClass.js';
+import getBoundingClientRect from '../utils/getBoundingClientRect.js';
+import getCenterPositon from '../utils/getCenterPositon.js';
+import drag from '../utils/drag.js';
+import BasePageObject from './BasePageObject.js';
+import Pin from './Pin.js';
 
 class Node extends BasePageObject {
   getId() {

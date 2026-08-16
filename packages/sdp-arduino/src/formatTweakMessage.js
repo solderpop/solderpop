@@ -1,11 +1,11 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
 import { unquote } from 'sdp-func-tools';
 import * as XP from 'sdp-project';
 
-import { def } from './types';
+import { def } from './types.js';
 
-import { byteLiteralToDecimal } from './templates';
+import { byteLiteralToDecimal } from './templates.js';
 
 // Convert char literals to decimal byte literals
 // E.G. `'a'` -> `97d`

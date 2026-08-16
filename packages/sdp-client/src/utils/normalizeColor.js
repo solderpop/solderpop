@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { defaultValueOfType, BINDABLE_CUSTOM_TYPES } from 'sdp-project';
 
 export default R.ifElse(

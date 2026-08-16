@@ -1,4 +1,4 @@
-import composeMessage from '../messages/composeMessage';
+import composeMessage from '../messages/composeMessage.js';
 
 // eslint-disable-next-line import/prefer-default-export
 export const invalidUrlActionName = actionName =>

@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { ipcRenderer } from 'electron';
 import { basename } from 'path';
 
@@ -18,9 +18,9 @@ import {
   updateProjectMeta,
   deriveProjectName,
 } from 'sdp-client';
-import * as EVENTS from '../shared/events';
-import * as MESSAGES from '../shared/messages';
-import { STATES, getEventNameWithState } from '../shared/eventStates';
+import * as EVENTS from '../shared/events.js';
+import * as MESSAGES from '../shared/messages.js';
+import { STATES, getEventNameWithState } from '../shared/eventStates.js';
 
 // =============================================================================
 //

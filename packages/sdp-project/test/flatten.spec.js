@@ -1,18 +1,22 @@
 import R from 'ramda';
-import { assert } from 'chai';
-import { Maybe } from 'ramda-fantasy';
+import chai from 'chai';
+
+const { assert } = chai;
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 import { explodeEither } from 'sdp-func-tools';
 
-import * as Helper from './helpers';
-import * as Project from '../src/project';
-import * as Patch from '../src/patch';
-import * as Node from '../src/node';
-import * as Link from '../src/link';
-import * as Attachment from '../src/attachment';
-import * as CONST from '../src/constants';
-import flatten, { extractPatches, extractLeafPatches } from '../src/flatten';
-import { getCastPatchPath, getTerminalPath } from '../src/patchPathUtils';
-import autoresolveTypes from '../src/autoresolveTypes';
+import * as Helper from './helpers.js';
+import * as Project from '../src/project.js';
+import * as Patch from '../src/patch.js';
+import * as Node from '../src/node.js';
+import * as Link from '../src/link.js';
+import * as Attachment from '../src/attachment.js';
+import * as CONST from '../src/constants.js';
+import flatten, { extractPatches, extractLeafPatches } from '../src/flatten.js';
+import { getCastPatchPath, getTerminalPath } from '../src/patchPathUtils.js';
+import autoresolveTypes from '../src/autoresolveTypes.js';
 
 const createImplAttachment = Attachment.createAttachmentManagedByMarker(
   CONST.NOT_IMPLEMENTED_IN_XOD_PATH

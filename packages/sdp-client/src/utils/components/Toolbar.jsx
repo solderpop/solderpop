@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Menubar, { itemsPropTypes as menubarItemsPropTypes } from './Menubar';
-import SolderpopLogo from './SolderpopLogo';
+import Menubar, { itemsPropTypes as menubarItemsPropTypes } from './Menubar.jsx';
+import SolderpopLogo from './SolderpopLogo.jsx';
 
 const Toolbar = ({ menuBarItems }) => (
   <div className="Toolbar">

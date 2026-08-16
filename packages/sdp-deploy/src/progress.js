@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { roundTo } from 'sdp-func-tools';
 
 // ProgressData :: { note: String, total: Number, current: Number, percentage: Number }

@@ -1,6 +1,10 @@
 import R from 'ramda';
-import { resolve } from 'path';
-import { expect } from 'chai'; // eslint-disable-line
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
+import chai from 'chai';
+
+const { expect } = chai;
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export const numerateFolders = initialFolders => {
   const accordance = {};

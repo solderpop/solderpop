@@ -2,23 +2,23 @@ import React from 'react';
 import * as R from 'ramda';
 import { HotKeys } from 'react-hotkeys';
 
-import { TAB_TYPES } from '../../../constants';
+import { TAB_TYPES } from '../../../constants.js';
 
-import PatchSVG from '../../../../project/components/PatchSVG';
-import * as Layers from '../../../../project/components/layers';
+import PatchSVG from '../../../../project/components/PatchSVG.jsx';
+import * as Layers from '../../../../project/components/layers/index.js';
 
 import {
   addPoints,
   subtractPoints,
   pixelPositionToSlots,
-} from '../../../../project/nodeLayout';
+} from '../../../../project/nodeLayout.js';
 
 import {
   getOffsetMatrix,
   bindApi,
   getMousePosition,
   isMiddleButtonPressed,
-} from '../modeUtils';
+} from '../modeUtils.js';
 
 let patchSvgRef = null;
 

@@ -5,12 +5,12 @@ import {
   isValidUserDefinedPatchBasename,
   PATCH_BASENAME_RULES,
 } from 'sdp-project';
-import { POPUP_ID } from '../../popups/constants';
-import { isPopupVisible } from '../../popups/selectors';
+import { POPUP_ID } from '../../popups/constants.js';
+import { isPopupVisible } from '../../popups/selectors.js';
 
-import PopupPrompt from '../../utils/components/PopupPrompt';
-import PopupConfirm from '../../utils/components/PopupConfirm';
-import { patchBasenameMask } from '../../utils/inputFormatting';
+import PopupPrompt from '../../utils/components/PopupPrompt.jsx';
+import PopupConfirm from '../../utils/components/PopupConfirm.jsx';
+import { patchBasenameMask } from '../../utils/inputFormatting.js';
 
 class ProjectBrowserPopups extends React.PureComponent {
   constructor(props) {

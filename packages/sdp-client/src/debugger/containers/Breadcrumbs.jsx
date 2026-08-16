@@ -1,15 +1,15 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { drillDown } from '../actions';
+import { drillDown } from '../actions.js';
 import {
   getRenerableBreadcrumbChunks,
   getBreadcrumbActiveIndex,
-} from '../../editor/selectors';
+} from '../../editor/selectors.js';
 
 const Breadcrumbs = ({ chunks, activeIndex, actions, children }) => (
   <div className="Breadcrumbs Breadcrumbs--debugger">

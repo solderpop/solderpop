@@ -1,6 +1,8 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import swaggerClient from 'swagger-client';
-import { Maybe } from 'ramda-fantasy';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 import {
   notEmpty,
   notNil,
@@ -9,8 +11,8 @@ import {
   explodeMaybe,
 } from 'sdp-func-tools';
 
-import * as ERR_CODES from './errorCodes';
-import * as MSG from './messages';
+import * as ERR_CODES from './errorCodes.js';
+import * as MSG from './messages.js';
 
 const LATEST = 'latest';
 

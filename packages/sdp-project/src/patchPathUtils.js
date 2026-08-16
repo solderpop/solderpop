@@ -1,18 +1,20 @@
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 import { failOnFalse, maybePath, isAmong } from 'sdp-func-tools';
 
-import { def } from './types';
-import * as CONST from './constants';
-import { isBuiltInType, isGenericType } from './utils';
+import { def } from './types.js';
+import * as CONST from './constants.js';
+import { isBuiltInType, isGenericType } from './utils.js';
 import {
   isPathLocal,
   isPathLibrary,
   isValidPatchPath,
   isValidPatchBasename,
   terminalPatchPathRegExp,
-} from './internal/patchPathUtils';
-import { BINDABLE_CUSTOM_TYPES_LIST } from './custom-types';
+} from './internal/patchPathUtils.js';
+import { BINDABLE_CUSTOM_TYPES_LIST } from './custom-types.js';
 
 export {
   isLocalMarker,
@@ -34,7 +36,7 @@ export {
   isBuiltInLibName,
   getExpandedVariadicPatchPath,
   getSpecializationSuffix,
-} from './internal/patchPathUtils';
+} from './internal/patchPathUtils.js';
 
 // :: String -> Identifier
 export const toIdentifier = R.compose(
