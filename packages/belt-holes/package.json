@@ -1,5 +1,6 @@
 {
   "name": "belt-holes",
+  "type": "module",
   "version": "0.34.0",
   "scripts": {
     "refmt": "rescript format -all",
@@ -15,13 +16,19 @@
   "license": "AGPL-3.0",
   "main": "src/BeltHoles.bs.js",
   "devDependencies": {
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
     "@rescript/runtime": "^12.3.0",
+    "babel-jest": "^24.9.0",
     "rescript": "^12.3.0"
   },
   "jest": {
     "testMatch": [
       "**/test/**/*.test.js"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^@rescript/runtime/lib/es6/(.*)$": "@rescript/runtime/lib/js/$1"
+    }
   },
   "files": [
     "src",
