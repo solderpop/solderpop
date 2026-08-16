@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as R from 'ramda';
 
-import * as actions from '../actions';
-import * as selectors from '../selectors';
+import * as actions from '../actions.js';
+import * as selectors from '../selectors.js';
 
 const COLOR_LABELS = {
   chromeBg: 'Window background',

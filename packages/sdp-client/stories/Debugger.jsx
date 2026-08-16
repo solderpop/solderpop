@@ -4,14 +4,14 @@ import { Provider, connect } from 'react-redux';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import Debugger from '../src/debugger/containers/Debugger';
-import DebuggerReducer from '../src/debugger/reducer';
-import EditorReducer from '../src/editor/reducer';
-import { getLogForCurrentTab } from '../src/debugger/selectors';
+import Debugger from '../src/debugger/containers/Debugger.jsx';
+import DebuggerReducer from '../src/debugger/reducer.js';
+import EditorReducer from '../src/editor/reducer.js';
+import { getLogForCurrentTab } from '../src/debugger/selectors.js';
 import {
   addMessagesToDebuggerLog,
   startDebuggerSession,
-} from '../src/debugger/actions';
+} from '../src/debugger/actions.js';
 
 import '../src/core/styles/main.scss';
 

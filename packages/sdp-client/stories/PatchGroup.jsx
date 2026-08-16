@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 
 import '../src/core/styles/main.scss';
-import PatchGroup from '../src/projectBrowser/components/PatchGroup';
+import PatchGroup from '../src/projectBrowser/components/PatchGroup.jsx';
 
 const ipsum = (
   <p style={{ color: '#CCC' }}>

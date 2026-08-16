@@ -2,8 +2,8 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 
 import '../src/core/styles/main.scss';
-import HOC from '../src/tooltip/components/TooltipHOC';
-import Tooltip from '../src/tooltip/components/Tooltip';
+import HOC from '../src/tooltip/components/TooltipHOC.jsx';
+import Tooltip from '../src/tooltip/components/Tooltip.jsx';
 
 const randomColor = () =>
   `#${Math.floor(Math.random() * 16777215).toString(16)}`;

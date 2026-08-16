@@ -6,7 +6,7 @@ import { action } from '@storybook/addon-actions';
 import { PIN_TYPE } from 'sdp-project';
 
 import '../src/core/styles/main.scss';
-import Inspector from '../src/editor/components/Inspector';
+import Inspector from '../src/editor/components/Inspector.jsx';
 
 const somePoint = { x: 0, y: 0 };
 

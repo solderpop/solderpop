@@ -3,8 +3,8 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 import '../src/core/styles/main.scss';
-import SnackBarMessage from '../src/messages/components/SnackBarMessage';
-import { MESSAGE_TYPE } from '../src/messages/constants';
+import SnackBarMessage from '../src/messages/components/SnackBarMessage.jsx';
+import { MESSAGE_TYPE } from '../src/messages/constants.js';
 
 const errMsg = {
   id: 0,

@@ -1,4 +1,4 @@
-import * as AT from './actionTypes';
+import * as AT from './actionTypes.js';
 
 export const setTheme = theme => ({
   type: AT.SET_THEME,
