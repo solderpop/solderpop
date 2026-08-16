@@ -9,6 +9,6 @@ type t =
   | INVALID_PORT(string)
   | INVALID_CONNECTION_TYPE(string)
   | INVALID_KEEPALIVE(string)
-  | INVALID_LINKID(string);
+  | INVALID_LINKID(string)
 
-let stringify: t => string;
+let stringify: t => string
