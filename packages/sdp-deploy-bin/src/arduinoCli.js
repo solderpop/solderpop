@@ -3,11 +3,9 @@ import path from 'path';
 import which from 'which';
 import R from 'ramda';
 import fse from 'fs-extra';
-import ArduinoCliModule from 'arduino-cli';
+import arduinoCli from 'arduino-cli';
 import { createError } from 'sdp-func-tools';
 import { isWorkspaceValid, spawnWorkspaceFile } from 'sdp-fs';
-
-const arduinoCli = ArduinoCliModule.default;
 
 import {
   ARDUINO_LIBRARIES_DIRNAME,
