@@ -1040,6 +1040,96 @@ and launching the app, invisible to every mocha/build check.
 
 104/104 tests pass, matching baseline exactly.
 
+## Phase 3 — `sdp-client-browser` (2026-08-16)
+
+Second of the three deferred packages, and the actual webpack entry
+point that first exposed several `sdp-client` bugs above (that bundling
+run happened here, not in `sdp-client` itself, since `sdp-client` alone
+is never bundled by anything). Standard recipe otherwise: `"type":
+"module"`, extensionless-import fixes (25 files), ramda default-import
+fix in `App.jsx`.
+
+- **New bug category: webpack's per-file module-type detection stops
+  tolerating raw `require()` in files with zero import/export syntax,
+  once the *package* (not the file) flips to `"type": "module"`.**
+  Every other `require()`-survives-into-ESM finding in this doc so far
+  involved a file that already had real `import`/`export` statements
+  (Node/webpack's own heuristics treat such a file as unambiguously
+  ESM). These two didn't:
+  - `src/shim.js` — a webpack entry point with no import/export at all,
+    just a bare `require('babel-runtime/regenerator')` mutation hack.
+    Confirmed dead: it patched a `redux-api-middleware` + Babel 6 bug,
+    and neither dependency exists in this codebase anymore. Emptied
+    (left as a live but now-empty entry point — deleting it outright
+    means touching the shared `sdp-client/webpack.config.cjs`, out of
+    scope here).
+  - `src/index.jsx` — mixed case: real top-level `import`s, but a
+    conditional `require('why-did-you-update')` guarded by
+    `process.env.WHY_DID_YOU_UPDATE`. Fixed with dynamic `import()`
+    instead (same fix shape as the `sdp-client/src/workers/run.js`
+    companion fix below).
+
+  Both failed identically at runtime, not build time: `require is not
+  defined`, only visible once the bundle actually executes in a
+  browser. Neither was caught by `webpack --config webpack.config.cjs`
+  succeeding, nor by any test suite — this package's own test-func
+  suite doesn't boot the real entry point, and `sdp-client`'s mocha
+  suite doesn't reach `sdp-client-browser` at all. **Action item for any
+  remaining unconverted package with a webpack entry point:** grep
+  specifically for `require(` in files that have no `import`/`export`
+  statements of their own — the extensionless-import fix pass and the
+  barrel-export audit both structurally skip this category, since
+  neither one is triggered by "file has no ESM syntax but isn't CJS
+  either."
+- **Same bug, third instance, found in an already-converted and
+  already-committed package (`sdp-client`, not `sdp-client-browser`
+  itself):** `sdp-client/src/workers/run.js` had a deliberately-lazy
+  `require('./wasm.worker')` (guarding against triggering webpack's
+  worker-loader transform during mocha tests, which don't exercise this
+  code path) sitting below real top-level `import`s. Fine under
+  `sdp-client`'s own Node-based mocha suite; broke once actually bundled
+  by `sdp-client-browser`'s webpack build, for the identical reason as
+  `index.jsx` above. Fixed the same way — dynamic `import()` wrapping the
+  function body, which still triggers worker-loader (matches on the
+  `.worker.js` extension regardless of static-vs-dynamic import syntax)
+  while staying inert until actually called. Committed separately as a
+  companion fix to `sdp-client`, since the bug lived there even though
+  only `sdp-client-browser`'s build could ever surface it. **This is now
+  the third time a fix has had to land in an earlier package after a
+  later package's real build/browser check exposed it** (previously:
+  `sdp-project`'s `Buses.res` circular-import fix, caught by
+  `sdp-client`'s browser launch). Reinforces the standing practice of
+  re-running every already-converted package's checks after each new
+  package converts — but note build/bundle-level bugs like this one
+  don't show up in *that* package's own test suite at all, only in
+  whichever downstream package actually bundles it for a browser.
+- `webpack.config.js`/`.dev.js`/`.test.js` and
+  `tools/loadTutorialProject.js` → `.cjs`, same escape hatch as
+  `sdp-client`'s own webpack config.
+- `test-func/bootstrap.js`: chai fixed to default-import + destructure
+  (same `cjs-module-lexer` static-analysis gap as every other chai
+  usage in this migration).
+- `test-func/creatingBlinkPatch.spec.js`: `__dirname` no longer exists
+  under ESM — reconstructed via `path.dirname(fileURLToPath(import.meta.url))`.
+- **`test-func` (puppeteer E2E suite) confirmed pre-existing-broken, not
+  a regression:** fails with a Babel version conflict
+  (`@babel/preset-react` requires `^7.0.0-0`, but `@babel/core@8.0.1` is
+  what's actually loaded). Verified via `git stash` / `git stash pop`
+  that this exact failure occurs identically against the unconverted
+  baseline — same mixed Babel 7/8 versions issue already documented
+  since Phase 0, unrelated to this migration. Not fixed (out of scope).
+- Browser-launch re-verification (same Playwright-against-system-
+  Chromium method as `sdp-client`'s findings above): confirmed the
+  `shim.js`/`run.js` `require is not defined` runtime error is gone, and
+  the app renders/functions identically to the pre-migration baseline —
+  same pre-existing `ERR_SSL_VERSION_OR_CIPHER_MISMATCH`/auth-check
+  `[object Object]` `pageerror` only, no new errors.
+
+Webpack build: 0 errors, 17 pre-existing warnings (same
+`setMode`/`toggleAccountPane`/`combineEditorSelection` dead-feature
+warnings documented in `sdp-client`'s findings — genuinely missing
+product features, not migration fallout).
+
 ## Explicitly not decided yet
 
 - Whether ReScript's `esmodule` output should use `.mjs` or `.js` +
