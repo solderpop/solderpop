@@ -725,6 +725,111 @@ generated JSON data:
   same JSON path — if there's more than one, centralize into a shared
   module like this one instead.
 
+## Phase 2 complete (2026-08-16)
+
+All six remaining Phase 2 candidates converted in one continuous session
+after `sdp-project`: `sdp-arduino`, `sdp-deploy`, `sdp-pm`,
+`sdp-cloud-compile`, `sdp-wasm-compile`, `sdp-cli` (converted in
+roughly that dependency order — `sdp-arduino` had to go before
+`sdp-wasm-compile`/`sdp-cli`, `sdp-project` before `sdp-arduino`). Every
+package's test suite (or, for the four with none, a manual smoke-load of
+every export, or — for `sdp-cli` — real CLI invocation) matches its
+pre-conversion baseline exactly. Remaining unconverted packages: `arduino-cli`
+(small, not yet attempted, no known blocker), and the three explicitly
+deferred-to-last Phase 3 packages (`sdp-client`, `sdp-client-browser`,
+`sdp-client-electron` — GUI/webpack/Electron, flagged from the start of
+this doc as highest-risk and needing real UI verification, not just a
+green build).
+
+**New findings from Phase 2, on top of everything in Phase 0/1:**
+
+- **`sdp-arduino` had two genuine architectural conflicts, not mechanical
+  fixes** — both stemmed from the same root cause as the earlier
+  "raw-source-loaded-via-native-`import()`-bypasses-Babel" finding, just
+  hitting build tooling instead of test helpers:
+  - `nearleyc` (the grammar-compiler for this package's implementation-
+    code parser) emits a UMD wrapper and embeds plain `require()` calls
+    in its preamble. Both are syntactically valid so ESM's parser accepts
+    them, but crash at runtime (no `module`/`window`/`require` globals in
+    real ESM), and `nearleyc` has no ESM output mode. Fixed with a
+    post-build script (`tools/fixNearleyGrammarEsm.cjs`) that rewrites
+    the generated file: hoists preamble `require()`s into real top-level
+    `import`s, turns the trailing `module.exports`/`window` UMD branch
+    into `export default`.
+  - `babel-plugin-inline-import` (inlines `.cpp`/`.h` files as string
+    literals at Babel-transform time) only works when Babel actually
+    processes the importing file — guaranteed under CommonJS, not under
+    ESM once mocha's native `import()`-driven test loading takes over
+    (see the `sdp-project`/`test/helpers.js` finding for the mechanism).
+    Removed the plugin entirely; replaced with a build step
+    (`tools/generateTemplateModules.cjs`) that pre-generates a real
+    `export default "...";` module next to each `.cpp`/`.h` file.
+  - **Both of `sdp-cloud-compile` and `sdp-wasm-compile` also use
+    `babel-plugin-inline-import` and were left as-is (plugin kept, no
+    generated-module rewrite)** — safe specifically because neither has a
+    test suite, so nothing ever triggers mocha's native-ESM entry point
+    against their source; the only consumption paths are the Babel-CLI-
+    built `dist/` output (plugin always applies correctly there) and
+    other packages requiring that same built output. **If either package
+    ever gains a test suite, apply the `sdp-arduino` fix before trusting
+    a green test run** — the plugin will silently stop working the same
+    way, `require`/`.cpp` errors won't appear until something actually
+    exercises the native-import path.
+  - Also on `sdp-arduino`: `getEmxxEnv`/`Arduino.h`-style deep imports
+    into `platform/wasmSimulation/*` from `sdp-wasm-compile` are consumed
+    the same generated-module-free way as `sdp-cloud-compile`'s deep
+    imports — fine for the same "no test suite" reason.
+- **Mechanical ramda-fix regex bug, caught by reviewing diffs before
+  moving on — a process note, not a code finding.** A regex meant to
+  convert `import { a, b } from 'ramda';` to a default-import form used a
+  non-greedy `[\s\S]*?` between `import {` and `} from 'ramda';`, which
+  in 8 of `sdp-cli`'s command files spanned across an *earlier*,
+  unrelated `import { exit } from 'process';` block and merged the two
+  into invalid syntax (`const { exit } from 'process';` followed by
+  `import { ...ramda names... } = R;`). Caught immediately because a
+  system reminder surfaced the post-edit diff and the syntax error was
+  visible on inspection — not caught by any tool. **Lesson: don't trust a
+  bulk regex substitution across many files without reading at least a
+  sample of the actual diffs it produced, even when the transform looks
+  simple** — reverted the 8 corrupted files via `git checkout --` and
+  redid them with per-file, anchored edits instead of a shared regex.
+- **`sdp-cli` — real regression in a third-party dependency's root-
+  detection, not this repo's code.** `@oclif/command@1.5.6`'s
+  `Main.run()` determines the CLI's own root directory by walking
+  `module.parent.parent.filename` — a CJS-only mechanism with no ESM
+  equivalent. `bin/run` switched from `require('../lib')` to `import
+  '../lib/index.js'` (required regardless, since `bin/run` has no file
+  extension but is still subject to `"type": "module"` — confirmed by
+  testing directly: it crashed on the old `require()` call once the
+  package flipped). Once it's a real `import`, there's no `module.parent`
+  chain, and `@oclif/command` silently fell back to treating *its own*
+  package directory as root — `xodc --help` listed only the built-in
+  `help` command, no real commands. Confirmed as an actual regression
+  (not pre-existing) by stashing and re-testing against the unconverted
+  baseline, which correctly listed all commands. Fixed by passing this
+  file's own path explicitly (`fileURLToPath(import.meta.url)`) as
+  `@oclif/command`'s `run()`'s second argument, bypassing the broken
+  auto-detection entirely. **Action item:** any other package using an
+  old CJS-era framework with similar "introspect my caller via
+  `module.parent`" auto-configuration should be suspected of the same
+  failure mode — check for `module.parent` in that framework's source
+  before assuming a green build means it actually works, the same way
+  `sdp-cli`'s build succeeded silently while the CLI was actually broken.
+- Also on `sdp-cli`: a bare subpath import of a third-party package needs
+  the extension too, same as relative imports —
+  `'source-map-support/register'` → `'source-map-support/register.js'`.
+- **Verification without a usable test suite:** `sdp-cli`'s `test-func`
+  needs a `yarn build:bundle` step (copies `../../workspace`, vendor
+  Catch2 sources, etc.) that was never run in this checkout, and fails
+  identically — `ENOENT` on `bundle/workspace/__packages__` — on the
+  unconverted baseline and after conversion, confirming it's an
+  environment gap unrelated to module format. Used direct CLI invocation
+  (`node bin/run --help`, `node bin/run <command> --help` for each of the
+  10 commands) as the real verification instead — arguably a *better*
+  check than the test suite would have been for this specific bug, since
+  it exercises exactly the code path (`Main.run()`'s root detection) that
+  broke.
+
 ## Explicitly not decided yet
 
 - Whether ReScript's `esmodule` output should use `.mjs` or `.js` +
