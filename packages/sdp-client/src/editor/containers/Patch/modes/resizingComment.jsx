@@ -65,7 +65,12 @@ const resizingCommentMode = {
   },
 
   onMouseMove(api, event) {
-    const mousePosition = getMousePosition(patchSvgRef, api.getOffset(), event);
+    const mousePosition = getMousePosition(
+      patchSvgRef,
+      api.getOffset(),
+      api.getZoom(),
+      event
+    );
     api.setState({ mousePosition });
   },
   onMouseUp(api) {
@@ -118,9 +123,10 @@ const resizingCommentMode = {
           <Layers.Background
             width={api.props.size.width}
             height={api.props.size.height}
+            zoom={api.getZoom()}
             offset={api.getOffset()}
           />
-          <g transform={getOffsetMatrix(api.getOffset())}>
+          <g transform={getOffsetMatrix(api.getOffset(), api.getZoom())}>
             <Layers.Comments
               comments={idleComments}
               selection={api.props.selection}

@@ -39,7 +39,12 @@ const selectingMode = {
   onEntityMouseDown(api, entityType, event, entityId) {
     if (isMiddleButtonPressed(event)) return;
     const patchSvgRef = api.getStorage().patchSvgRef;
-    const mousePosition = getMousePosition(patchSvgRef, api.getOffset(), event);
+    const mousePosition = getMousePosition(
+      patchSvgRef,
+      api.getOffset(),
+      api.getZoom(),
+      event
+    );
 
     if (isEntitySelected(entityType, api.props.selection, entityId)) {
       if (isSelectionModifierPressed(event)) {
@@ -90,6 +95,7 @@ const selectingMode = {
       dragStartPosition: getMousePosition(
         api.getStorage().patchSvgRef,
         api.getOffset(),
+        api.getZoom(),
         event
       ),
     });
@@ -102,6 +108,7 @@ const selectingMode = {
       dragStartPosition: getMousePosition(
         api.getStorage().patchSvgRef,
         api.getOffset(),
+        api.getZoom(),
         event
       ),
     });
@@ -114,6 +121,7 @@ const selectingMode = {
       dragStartPosition: getMousePosition(
         api.getStorage().patchSvgRef,
         api.getOffset(),
+        api.getZoom(),
         event
       ),
     });
@@ -126,6 +134,7 @@ const selectingMode = {
       const mousePosition = getMousePosition(
         api.getStorage().patchSvgRef,
         api.getOffset(),
+        api.getZoom(),
         event
       );
       api.goToMode(EDITOR_MODE.LINKING, { mousePosition });
@@ -148,6 +157,7 @@ const selectingMode = {
     const mousePosition = getMousePosition(
       api.getStorage().patchSvgRef,
       api.getOffset(),
+      api.getZoom(),
       event
     );
     if (!isMiddleButtonPressed(event)) return;
@@ -164,6 +174,7 @@ const selectingMode = {
         mousePosition: getMousePosition(
           api.getStorage().patchSvgRef,
           api.getOffset(),
+          api.getZoom(),
           event
         ),
       });
@@ -176,6 +187,7 @@ const selectingMode = {
       mousePosition: getMousePosition(
         api.getStorage().patchSvgRef,
         api.getOffset(),
+        api.getZoom(),
         event
       ),
     });
@@ -216,13 +228,14 @@ const selectingMode = {
       pixelPositionToSlots,
       snapPositionToSlots,
       getMousePosition
-    )(api.getStorage().patchSvgRef, api.getOffset(), event);
+    )(api.getStorage().patchSvgRef, api.getOffset(), api.getZoom(), event);
   },
   onBackgroundMouseDown(api, event) {
     api.setState({
       mouseDownPosition: getMousePosition(
         api.getStorage().patchSvgRef,
         api.getOffset(),
+        api.getZoom(),
         event
       ),
       isMouseDownOnBackground: true,
@@ -277,12 +290,13 @@ const selectingMode = {
           <Layers.Background
             width={api.props.size.width}
             height={api.props.size.height}
+            zoom={api.getZoom()}
             onClick={bindApi(api, this.onBackgroundClick)}
             onDoubleClick={bindApi(api, this.onBackgroundDoubleClick)}
             onMouseDown={bindApi(api, this.onBackgroundMouseDown)}
             offset={api.getOffset()}
           />
-          <g transform={getOffsetMatrix(api.getOffset())}>
+          <g transform={getOffsetMatrix(api.getOffset(), api.getZoom())}>
             <Layers.Comments
               comments={api.props.comments}
               selection={api.props.selection}

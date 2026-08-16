@@ -7,7 +7,6 @@ import $ from 'sanctuary-def';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ReactResizeDetector from 'react-resize-detector';
-import { noop } from 'sdp-func-tools';
 import normalizeWheel from 'normalize-wheel';
 
 import * as EditorActions from '../../actions';
@@ -27,7 +26,13 @@ import sanctuaryPropType from '../../../utils/sanctuaryPropType';
 
 import dropTarget from './dropTarget';
 
-import { EDITOR_MODE, TAB_TYPES, FOCUS_AREAS } from '../../constants';
+import {
+  EDITOR_MODE,
+  TAB_TYPES,
+  FOCUS_AREAS,
+  MIN_ZOOM,
+  MAX_ZOOM,
+} from '../../constants';
 
 import selectingMode from './modes/selecting';
 import linkingMode from './modes/linking';
@@ -68,6 +73,8 @@ const DEFAULT_MODES = {
 
 const mergeLeft = R.flip(R.merge);
 
+const ZOOM_SPEED = 0.001;
+
 class Patch extends React.Component {
   constructor(props) {
     super(props);
@@ -81,10 +88,8 @@ class Patch extends React.Component {
       },
       hoveredNodeId: null,
       offset: slotPositionToPixels(this.props.offset),
+      zoom: this.props.zoom,
     };
-
-    // Store is shift key was pressed on the first triggered Wheel event
-    this.shiftKey = false;
 
     // Storage for mode data without forcing update of component
     // E.G. store here refs on the components
@@ -105,8 +110,6 @@ class Patch extends React.Component {
       this.dispatchOffsetUpdate.bind(this)
     );
     this.handleScroll = this.handleScroll.bind(this);
-    this.setShiftKey = debounce(50, true, this.setShiftKey.bind(this));
-    this.getShiftKey = this.getShiftKey.bind(this);
 
     this.addNode = this.addNode.bind(this);
     this.resizeWorkarea = debounce(200, this.resizeWorkarea.bind(this));
@@ -130,6 +133,12 @@ class Patch extends React.Component {
       !R.equals(nextProps.offset, this.props.offset)
     ) {
       this.setState({ offset: slotPositionToPixels(nextProps.offset) });
+    }
+    if (
+      !R.equals(nextProps.zoom, this.state.zoom) &&
+      !R.equals(nextProps.zoom, this.props.zoom)
+    ) {
+      this.setState({ zoom: nextProps.zoom });
     }
     if (nextProps.tabType != null && this.props.tabType !== nextProps.tabType) {
       this.goToMode(DEFAULT_MODES[nextProps.tabType]);
@@ -162,6 +171,7 @@ class Patch extends React.Component {
       goToDefaultMode: this.goToDefaultMode,
       getOffset: () => this.state.offset,
       setOffset: offset => this.setState({ offset }),
+      getZoom: () => this.state.zoom,
     };
   }
 
@@ -193,13 +203,6 @@ class Patch extends React.Component {
     this.storage[mode] = R.merge(this.storage[mode], newData);
   }
 
-  getShiftKey() {
-    return this.shiftKey;
-  }
-  setShiftKey(val) {
-    this.shiftKey = val;
-  }
-
   goToMode(newMode, payload) {
     const newModeState = MODE_HANDLERS[newMode].getInitialState(
       this.props,
@@ -222,40 +225,32 @@ class Patch extends React.Component {
     // see https://www.chromestatus.com/features/6662647093133312
     if (event.cancelable) event.preventDefault();
 
-    const { currentMode } = this.state;
-    const modeHandler = MODE_HANDLERS[currentMode];
     const normalizedWheel = normalizeWheel(event);
+    const { offset, zoom } = this.state;
+    const newZoom = R.clamp(
+      MIN_ZOOM,
+      MAX_ZOOM,
+      zoom - normalizedWheel.pixelY * ZOOM_SPEED
+    );
 
-    // Set shift key with debounce on first call
-    // It needed to avoid unexpected horizontal scroll on press Shift
-    // while Patch scrolls with acceleration
-    this.setShiftKey(event.shiftKey);
+    if (newZoom === zoom) return;
 
-    // Most OS does not provide deltaX for horizontal scrolling
-    // so we have to check is the shift key pressed and does
-    // deltaX equal to zero
-    const wheel =
-      this.getShiftKey() && event.deltaX === 0
-        ? {
-            x: normalizedWheel.pixelY,
-            y: normalizedWheel.pixelX,
-          }
-        : {
-            x: normalizedWheel.pixelX,
-            y: normalizedWheel.pixelY,
-          };
+    const { left, top } = this.dropTargetRootRef.getBoundingClientRect();
+    const mouseX = event.clientX - left;
+    const mouseY = event.clientY - top;
 
-    return R.compose(
-      this.dispatchOffsetUpdate,
-      R.tap(() =>
-        (modeHandler.onMouseMove || noop)(this.getApi(currentMode), event)
-      ),
-      R.tap(newOffset => this.setState({ offset: newOffset })),
-      R.evolve({
-        x: R.subtract(R.__, wheel.x),
-        y: R.subtract(R.__, wheel.y),
-      })
-    )(this.state.offset);
+    // Content point under the cursor, kept fixed while zooming
+    const contentX = (mouseX - offset.x) / zoom;
+    const contentY = (mouseY - offset.y) / zoom;
+
+    const newOffset = {
+      x: mouseX - newZoom * contentX,
+      y: mouseY - newZoom * contentY,
+    };
+
+    this.setState({ offset: newOffset, zoom: newZoom });
+    this.dispatchOffsetUpdate(newOffset);
+    this.props.actions.setZoom(newZoom);
   }
 
   addNode(patchPath, newNodePosition) {
@@ -325,6 +320,7 @@ Patch.propTypes = {
   tabType: PropTypes.string,
   ghostLink: PropTypes.any,
   offset: PropTypes.object,
+  zoom: PropTypes.number,
   focusedArea: PropTypes.string.isRequired,
   onDoubleClick: PropTypes.func.isRequired,
   connectDropTarget: PropTypes.func.isRequired,
@@ -344,6 +340,7 @@ const mapStateToProps = R.applySpec({
   linkingPin: EditorSelectors.getLinkingPin,
   ghostLink: ProjectSelectors.getLinkGhost,
   offset: EditorSelectors.getCurrentPatchOffset,
+  zoom: EditorSelectors.getCurrentPatchZoom,
   focusedArea: EditorSelectors.getFocusedArea,
   draggedPreviewSize: EditorSelectors.getDraggedPreviewSize,
   isDebugSession: DebugSelectors.isDebugSession,
@@ -374,6 +371,7 @@ const mapDispatchToProps = dispatch => ({
       doPinSelection: EditorActions.setPinSelection,
       linkPin: EditorActions.linkPin,
       setOffset: EditorActions.setCurrentPatchOffset,
+      setZoom: EditorActions.setZoom,
       switchPatch: EditorActions.switchPatch,
       drillDown: DebuggerActions.drillDown,
       openAttachmentEditor: EditorActions.openAttachmentEditor,

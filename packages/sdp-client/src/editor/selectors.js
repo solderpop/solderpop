@@ -10,7 +10,7 @@ import {
   slotSizeToPixels,
   DEFAULT_PANNING_OFFSET,
 } from '../project/nodeLayout';
-import { SIDEBAR_IDS, TAB_TYPES } from './constants';
+import { SIDEBAR_IDS, TAB_TYPES, DEFAULT_ZOOM } from './constants';
 
 const getProject = R.prop('project'); // Problem of cycle imports...
 
@@ -43,6 +43,11 @@ export const getCurrentPatchPath = createSelector(
 export const getCurrentPatchOffset = createSelector(
   getCurrentTab,
   foldMaybe(DEFAULT_PANNING_OFFSET, R.propOr(DEFAULT_PANNING_OFFSET, 'offset'))
+);
+
+export const getCurrentPatchZoom = createSelector(
+  getCurrentTab,
+  foldMaybe(DEFAULT_ZOOM, R.propOr(DEFAULT_ZOOM, 'zoom'))
 );
 
 const isTabTypeEq = R.curry((expected, tab) => tab.type === expected);
