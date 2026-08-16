@@ -881,6 +881,165 @@ you already finished and moved on from.
   package) as a matter of course whenever a new package finishes
   conversion, not just when something visibly breaks.
 
+## `arduino-cli` and the last no-blocker package (2026-08-16)
+
+Converted `arduino-cli` (last of the original 18 with no known blocker)
+and immediately hit the same un-workaround hazard just documented above,
+in the *other* direction: `sdp-deploy-bin`'s double-default fix for
+`arduino-cli`'s default export (from the Phase 1 findings) became wrong
+the moment `arduino-cli` itself converted — once it's genuine ESM, a
+real ESM importer gets the function directly, no `.default` unwrap
+needed. Fixed the same way (revert to the plain form). Also found two
+more instances of already-known gotchas: `fs-extra`'s `remove` (named-
+export interop, same as prior findings) and `promise-all-properties`
+(Babel-compiled double-default, same class as `hm-def`). 9/9 tests pass.
+
+All 18 originally-scoped packages plus `sdp-project` are now converted
+except the three deliberately-deferred Phase 3 packages.
+
+## Phase 3 — `sdp-client` (2026-08-16)
+
+First and largest of the three deferred highest-risk packages (129
+source files, 120 `.jsx`) — flagged from the start of this doc as
+needing real UI verification, not just a green build, and that held:
+several bugs here were only found by actually building through webpack
+and launching the app, invisible to every mocha/build check.
+
+**New problems, each requiring an actual decision, not a mechanical fix:**
+
+- **`.jsx` is not a recognized extension for Node's native ESM loader —
+  full stop, independent of JSX syntax support.** `import Foo from
+  './Foo.jsx'` throws `Unknown file extension ".jsx"` before Node even
+  attempts to parse the file. `@babel/register`'s `require()` hook
+  (what makes JSX work for every other mocha-based package in this
+  repo) never gets a chance to run, because mocha loads test files via
+  `import()` once a package is `"type": "module"` — same mechanism as
+  every other "raw source reached via native import bypasses Babel"
+  finding in this doc, just hitting 120 files instead of one. Fixed
+  with a genuine Node [module customization
+  hook](https://nodejs.org/api/module.html#customization-hooks)
+  (`tools/jsxEsmLoader.mjs`) that intercepts `.jsx` loads and pipes them
+  through Babel first. **Key gotcha in the hook setup itself:** passing
+  the hook file via `--import` alone does *not* install it as a
+  loader — its exported `resolve`/`load` functions are silently never
+  called. You must call `module.register()` explicitly from a small
+  registration entry point (`tools/registerJsxLoader.mjs`), which is
+  what actually gets passed via `--import`/`NODE_OPTIONS`. Confirmed via
+  isolated probe before touching real code. No matching `resolve` hook
+  was needed — Node's default resolver doesn't reject unknown
+  extensions, only `load`'s format detection does, and this package's
+  imports all carry explicit extensions after the usual fix pass.
+- **`@babel/cli` silently renames `.jsx` → `.js` on output, but doesn't
+  rewrite import specifier strings referencing the renamed files.** Once
+  this migration's extensionless-import fix made every `.jsx` import
+  explicit, `dist/`'s own compiled output broke internally: `dist/
+  index.js` said `from './Foo.jsx'`, but the built file was actually at
+  `dist/Foo.js`. Classic Babel-CLI-plus-JSX-plus-ESM gotcha, unrelated
+  to this repo specifically. Fixed with `--keep-file-extension` (needs
+  a reasonably recent `@babel/cli`, confirmed present via `babel
+  --help`).
+- **The real webpack build (via `sdp-client-browser`, the actual
+  consumer — this package alone was never bundled by anything) surfaced
+  import bugs the mocha suite structurally cannot see**, because no
+  test file reaches `src/index.js`'s barrel or most `.jsx` components at
+  all: several *already-broken* bare specifiers (`editor/index.js`,
+  `messages/index.js`, `inspectorWidgets/index.js`, `Patch/index.jsx` —
+  confirmed pre-existing by checking there's no `resolve.modules`
+  config anywhere in the webpack config chain, including the dev-server
+  config, that could ever have made a bare specifier like this resolve;
+  fixed to explicit relative paths, same files, working specifier), and
+  a genuinely new-to-ESM problem: **deep imports into third-party
+  packages also need explicit extensions once the importing file is
+  real ESM** — `codemirror/addon/mode/simple`,
+  `throttle-debounce/debounce`, `react-redux/src/utils/storeShape`, etc.
+  all needed `.js` appended, confirmed by webpack's own explicit error
+  message ("BREAKING CHANGE: ... failed to resolve only because it was
+  resolved as fully specified ... probably because ... a '*.js' file
+  where the package.json contains '"type": "module"'"). **Action item:**
+  this class of bug (deep bare imports into `node_modules` packages
+  missing extensions) wasn't checked for in any earlier package's
+  extensionless-import pass — only relative imports were. Worth a
+  dedicated grep on any remaining package before assuming the mocha
+  suite passing means the real (webpack- or browser-consumed) build is
+  clean too.
+- **A real runtime bug only found by actually launching the app**, not
+  by any build or test check: `Cannot read properties of undefined
+  (reading 'FROM_BUS_PATH')` on load, coming from `sdp-project`'s
+  `Buses.bs.js`. Root cause: the `@module("../dist/index.js")` self-
+  reference fix (established back in the `sdp-func-tools` findings,
+  reused everywhere a ReScript file needs to call back into its own
+  package's plain-JS layer) re-imports the package's own aggregating
+  barrel from *within* one of the files that barrel aggregates — a real
+  circular import. Node's module evaluation (what the 476-test mocha
+  suite exercises) tolerated it fine; webpack's bundled ES-module live-
+  binding evaluation order did not. Fixed by pointing the two affected
+  bindings directly at `constants.js` (where `FROM_BUS_PATH`/
+  `TO_BUS_PATH` actually live) instead of the barrel, sidestepping the
+  cycle entirely — see the dedicated `sdp-project` fix commit. **~13
+  other files across `sdp-project`/`sdp-func-tools`/`sdp-arduino` use
+  the identical barrel-self-reference pattern and were *not* proactively
+  rewritten** — confirmed working for the app paths actually exercised
+  in this session (initial project load, library-tree browsing, patch
+  canvas rendering), but not proven safe for every code path. If a
+  similar "Cannot read properties of undefined" surfaces from a
+  ReScript-compiled file during later testing, this is the first thing
+  to check, and the fix is the same: point the binding at the specific
+  file defining the export instead of the barrel.
+- **Browser-launch verification method, for reuse:** no project skill
+  existed for this repo yet. Used `yarn dev` (webpack-dev-server on
+  :8080) plus a one-off Playwright script (`npm install playwright
+  --no-save` in the scratchpad, launched with `executablePath:
+  '/snap/bin/chromium'` pointing at the system browser rather than
+  downloading Playwright's own — `chromium-cli` was not available in
+  this environment). Confirmed real interactivity, not just a rendered
+  shell: project-browser tree expansion loaded real nested patch lists,
+  the patch canvas rendered real nodes/links from the default-loaded
+  tutorial project. The webpack-dev-server warning overlay (shows on
+  every recompile, not just the first) intercepts clicks even when
+  visually appearing empty — `page.evaluate(() => el.remove())` the
+  `#webpack-dev-server-client-overlay` iframe rather than trying to
+  click its close button. Recommended `/run-skill-generator` to capture
+  this as a reusable project skill; not run since it wasn't requested.
+- Barrel-export audit (now a standing step for every package) found and
+  fixed: two genuinely dead re-exports (`CreateNodeWidget`, `getUpload`
+  — never existed anywhere, safe to remove) and one real misattribution
+  (`TWEAK_PULSE_SENT` re-exported from `project/actionTypes.js` when it
+  only ever existed in `editor/actionTypes.js`, already correctly
+  imported earlier in the same file — silently tolerated under
+  CommonJS's lenient `undefined`-property access, a hard `SyntaxError`
+  under ESM). Also found and removed one dead, permanently-unreachable
+  reducer case (`PROJECT_RENAME` — the action type never existed under
+  any name, so the `case` branch could never have matched, even before
+  this migration).
+- **Explicitly not fixed:** three webpack warnings (`setMode`,
+  `toggleAccountPane`, `combineEditorSelection` — namespace-property
+  access on exports that don't exist anywhere in the codebase) look
+  identical to the barrel-audit dead-export findings above but are not
+  the same category — they're genuinely missing application features
+  (a mode-toggle button, an account pane), not a misattributed or
+  removed import. Fixing them would mean implementing real product
+  functionality, which is out of scope for a module-system migration.
+  Confirmed these are pre-existing (the same `undefined` property access
+  would have occurred under the original CommonJS build too, just
+  invisible instead of a build warning) — left as-is.
+- `.babelrc` had no explicit `modules` option — relied on
+  `@babel/preset-env`'s `"auto"` default, which already kept ESM for
+  webpack specifically (its `babel-loader` caller sets
+  `supportsStaticESM`) but forced CommonJS for the CLI/mocha paths.
+  Made it explicit (`modules: false`) for consistency with every other
+  converted package, and so dist/mocha genuinely match what webpack was
+  already doing rather than relying on an implicit default.
+- `sdp-client/webpack.config.js` → `webpack.config.cjs`: plain
+  `require()`/`module.exports` CommonJS sitting at the package root,
+  never processed by Babel, and required directly by
+  `sdp-client-browser` and `sdp-client-electron`'s own webpack configs
+  to extend the shared base — needed the same `.cjs` escape hatch as
+  every other build-tooling script in this migration (nearley's grammar
+  compiler, the template-module generators, etc.). Updated all 4
+  external `require()` references across the two consuming packages.
+
+104/104 tests pass, matching baseline exactly.
+
 ## Explicitly not decided yet
 
 - Whether ReScript's `esmodule` output should use `.mjs` or `.js` +
