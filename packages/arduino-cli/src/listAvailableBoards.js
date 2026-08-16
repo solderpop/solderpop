@@ -15,11 +15,11 @@
 
 import path from 'path';
 import { parse } from 'url';
-import * as R from 'ramda';
-import * as fse from 'fs-extra';
+import R from 'ramda';
+import fse from 'fs-extra';
 import versionCompare from 'tiny-version-compare';
 
-import { ADDITIONAL_URLS_PATH } from './config';
+import { ADDITIONAL_URLS_PATH } from './config.js';
 
 const ORIGINAL_PACKAGE_INDEX_FILE = 'package_index.json';
 

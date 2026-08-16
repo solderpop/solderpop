@@ -1,14 +1,16 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { resolve } from 'path';
 import { promisifyChildProcess } from 'promisify-child-process';
 import crossSpawn from 'cross-spawn';
 import YAML from 'yamljs';
-import { remove } from 'fs-extra';
+import fse from 'fs-extra';
 
-import { saveConfig, configure, setPackageIndexUrls } from './config';
-import { patchBoardsWithOptions } from './optionParser';
-import listAvailableBoards from './listAvailableBoards';
-import parseProgressLog from './parseProgressLog';
+const { remove } = fse;
+
+import { saveConfig, configure, setPackageIndexUrls } from './config.js';
+import { patchBoardsWithOptions } from './optionParser.js';
+import listAvailableBoards from './listAvailableBoards.js';
+import parseProgressLog from './parseProgressLog.js';
 
 const spawn = (bin, args, options) =>
   promisifyChildProcess(crossSpawn(bin, args, options), {

@@ -4,9 +4,17 @@
  */
 
 import path from 'path';
-import * as R from 'ramda';
-import * as fse from 'fs-extra';
-import promiseAllProperties from 'promise-all-properties';
+import R from 'ramda';
+import fse from 'fs-extra';
+import promiseAllPropertiesModule from 'promise-all-properties';
+
+// See sdp-func-tools/src/types.js for why this checks both shapes: native
+// ESM interop (mocha) vs. Babel's own CommonJS transform disagree on how
+// many `.default` layers a Babel-compiled default export needs unwrapped.
+const promiseAllProperties =
+  typeof promiseAllPropertiesModule === 'function'
+    ? promiseAllPropertiesModule
+    : promiseAllPropertiesModule.default;
 
 const PACKAGES_DIR = 'packages';
 const HARDWARE_DIR = 'hardware';
