@@ -4,7 +4,7 @@
   justify-content: center;
   flex-grow: 1;
 
-  background-color: $dark-deep;
+  background-color: var(--theme-workspace-bg, $dark-deep);
 
   .logo {
     width: 25%;
@@ -15,12 +15,12 @@
     }
 
     .logo-main {
-      fill: $coral;
+      fill: var(--theme-selected, $coral);
     }
 
     .logo-ring {
       fill: none;
-      stroke: $coral;
+      stroke: var(--theme-selected, $coral);
     }
   }
 }

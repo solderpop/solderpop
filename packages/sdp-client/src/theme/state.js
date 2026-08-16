@@ -18,6 +18,7 @@ export const THEME_KEYS = [
   'sidebarSelectedHoverBg',
   'sidebarText',
   'sidebarSubtitle',
+  'workspaceBg',
   'canvasBg',
   'canvasGridlines',
   'canvasFace',
@@ -41,6 +42,14 @@ export const THEME_KEYS = [
   'selected',
   'error',
   'errorText',
+  'deployPanelBg',
+  'deployPanelText',
+  'deployPanelTitleBg',
+  'deployPanelTitleText',
+  'deployPanelTabBg',
+  'deployPanelHoverBg',
+  'deployPanelInputBg',
+  'deployPanelInputText',
 ];
 
 const navy = {
@@ -63,6 +72,7 @@ const navy = {
   sidebarSelectedHoverBg: '#4a6883',
   sidebarText: '#c7cfd6',
   sidebarSubtitle: '#8a97a3',
+  workspaceBg: '#24333f',
   canvasBg: '#24333f',
   canvasGridlines: '#34495e',
   canvasFace: '#646464',
@@ -86,6 +96,14 @@ const navy = {
   selected: '#ff6b6b',
   error: '#c33d3d',
   errorText: '#fd6161',
+  deployPanelBg: '#2c3e50',
+  deployPanelText: '#c7cfd6',
+  deployPanelTitleBg: '#283748',
+  deployPanelTitleText: '#a9b4bd',
+  deployPanelTabBg: '#4c5f72',
+  deployPanelHoverBg: '#3d5468',
+  deployPanelInputBg: '#2f4356',
+  deployPanelInputText: '#eef1f3',
 };
 
 const light = {
@@ -108,6 +126,7 @@ const light = {
   sidebarSelectedHoverBg: '#ffd3d6',
   sidebarText: '#334155',
   sidebarSubtitle: '#94a3b8',
+  workspaceBg: '#eef1f5',
   canvasBg: '#ffffff',
   canvasGridlines: '#eef1f5',
   canvasFace: '#a8b3bf',
@@ -131,6 +150,14 @@ const light = {
   selected: '#ff6b6b',
   error: '#dc2626',
   errorText: '#b91c1c',
+  deployPanelBg: '#f8fafc',
+  deployPanelText: '#334155',
+  deployPanelTitleBg: '#ffffff',
+  deployPanelTitleText: '#64748b',
+  deployPanelTabBg: '#eef1f5',
+  deployPanelHoverBg: '#eef1f5',
+  deployPanelInputBg: '#ffffff',
+  deployPanelInputText: '#1f2933',
 };
 
 const nordic = {
@@ -153,6 +180,7 @@ const nordic = {
   sidebarSelectedHoverBg: '#2c4257',
   sidebarText: '#c7cfd6',
   sidebarSubtitle: '#7b8db5',
+  workspaceBg: '#16222e',
   canvasBg: '#16222e',
   canvasGridlines: '#22384a',
   canvasFace: '#5f7084',
@@ -176,6 +204,14 @@ const nordic = {
   selected: '#ff6b6b',
   error: '#c33d3d',
   errorText: '#fd6161',
+  deployPanelBg: '#16222e',
+  deployPanelText: '#c7cfd6',
+  deployPanelTitleBg: '#101720',
+  deployPanelTitleText: '#7b8db5',
+  deployPanelTabBg: '#22384a',
+  deployPanelHoverBg: '#22384a',
+  deployPanelInputBg: '#2c4257',
+  deployPanelInputText: '#d8dee3',
 };
 
 export const INITIAL_STATE = {

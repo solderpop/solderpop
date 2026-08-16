@@ -27,6 +27,7 @@ const COLOR_LABELS = {
   sidebarSelectedHoverBg: 'Selected hover',
   sidebarText: 'Sidebar text',
   sidebarSubtitle: 'Sidebar subtitle',
+  workspaceBg: 'Workspace background',
   canvasBg: 'Canvas background',
   canvasGridlines: 'Canvas gridlines',
   canvasFace: 'Canvas face',
@@ -50,6 +51,14 @@ const COLOR_LABELS = {
   selected: 'Accent / selection',
   error: 'Error',
   errorText: 'Error text',
+  deployPanelBg: 'Deployment panel background',
+  deployPanelText: 'Deployment panel text',
+  deployPanelTitleBg: 'Deployment panel title bar',
+  deployPanelTitleText: 'Deployment panel title text',
+  deployPanelTabBg: 'Deployment panel tabs',
+  deployPanelHoverBg: 'Deployment panel hover',
+  deployPanelInputBg: 'Deployment panel input',
+  deployPanelInputText: 'Deployment panel input text',
 };
 
 const COLOR_GROUPS = [
@@ -94,6 +103,7 @@ const COLOR_GROUPS = [
     key: 'canvas',
     label: 'Canvas & Nodes',
     keys: [
+      'workspaceBg',
       'canvasBg',
       'canvasGridlines',
       'canvasFace',
@@ -120,6 +130,20 @@ const COLOR_GROUPS = [
       'darkButtonText',
       'lightButtonBg',
       'lightButtonText',
+    ],
+  },
+  {
+    key: 'deployment',
+    label: 'Deployment Panel',
+    keys: [
+      'deployPanelBg',
+      'deployPanelText',
+      'deployPanelTitleBg',
+      'deployPanelTitleText',
+      'deployPanelTabBg',
+      'deployPanelHoverBg',
+      'deployPanelInputBg',
+      'deployPanelInputText',
     ],
   },
   {
