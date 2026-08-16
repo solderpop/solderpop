@@ -1,9 +1,9 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { bindActionCreators } from 'redux';
 
-import createStore from './store';
-import * as Actions from './actions';
-import * as Selectors from './selectors';
+import createStore from './store.js';
+import * as Actions from './actions.js';
+import * as Selectors from './selectors.js';
 
 export default () => {
   const store = createStore({});

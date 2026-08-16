@@ -5,11 +5,11 @@
   "license": "AGPL-3.0",
   "main": "src-babel/app/main.js",
   "name": "sdp-client-electron",
-  "type": "commonjs",
+  "type": "module",
   "version": "0.38.0",
   "scripts": {
     "build:workspace": "cpx \"../../workspace/**/*\" \"src-babel/workspace\"",
-    "build:gui": "webpack --color",
+    "build:gui": "webpack --color --config webpack.config.cjs",
     "build:app": "babel src/app/ -d src-babel/app/ && babel src/shared/ -d src-babel/shared/",
     "build": "yarn build:gui && yarn build:app && yarn build:workspace",
     "clean:dist": "rimraf ./src-babel",

@@ -13,28 +13,27 @@ import {
   CLOSE_UPLOAD_CONFIG,
   OPEN_CONNECT_SERIAL_DIALOG,
   CLOSE_CONNECT_SERIAL_DIALOG,
-  REQUEST_INSTALL_ARDUINO_IDE,
-} from '../upload/actionTypes';
+} from '../upload/actionTypes.js';
 
 import {
   CREATE_WORKSPACE_REQUESTED,
   SWITCH_WORKSPACE_REQUESTED,
   CREATE_WORKSPACE,
   SWITCH_WORKSPACE,
-} from '../settings/actionTypes';
+} from '../settings/actionTypes.js';
 
 import {
   ARDUPACKAGES_UPDATE_REQUEST,
   ARDUPACKAGES_UPDATE_POPUP_CLOSE,
   ARDUPACKAGES_UPGRADE_PROCEED,
-} from '../arduinoDependencies/actionTypes';
+} from '../arduinoDependencies/actionTypes.js';
 
 import {
   MANAGE_LOCAL_SIMULATION_REQUEST,
   MANAGE_LOCAL_SIMULATION_CLOSE,
   WELCOME_POPUP_CLOSE,
   FIRST_LAUNCH_DETECTED,
-} from '../emsdkInstaller/actionTypes';
+} from '../emsdkInstaller/actionTypes.js';
 
 export default (state, action) => {
   switch (action.type) {
@@ -66,8 +65,6 @@ export default (state, action) => {
       return showOnlyPopup(POPUP_ID.CREATING_WORKSPACE, action.payload, state);
     case SWITCH_WORKSPACE_REQUESTED:
       return showOnlyPopup(POPUP_ID.SWITCHING_WORKSPACE, action.payload, state);
-    case REQUEST_INSTALL_ARDUINO_IDE:
-      return showOnlyPopup(POPUP_ID.ARDUINO_IDE_NOT_FOUND, {}, state);
 
     case CREATE_WORKSPACE:
       return hideOnePopup(POPUP_ID.CREATING_WORKSPACE, state);

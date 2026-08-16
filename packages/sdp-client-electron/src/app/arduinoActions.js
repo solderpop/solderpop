@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
 import { rejectWithCode, delay } from 'sdp-func-tools';
 import * as xd from 'sdp-deploy';
@@ -6,12 +6,12 @@ import {
   createSystemMessage,
   parseDebuggerMessage,
   createErrorMessage,
-} from 'sdp-client/dist/debugger/debugProtocol';
+} from 'sdp-client/dist/debugger/debugProtocol.js';
 
-import * as settings from './settings';
-import * as MESSAGES from '../shared/messages';
-import * as ERROR_CODES from '../shared/errorCodes';
-import * as EVENTS from '../shared/events';
+import * as settings from './settings.js';
+import * as MESSAGES from '../shared/messages.js';
+import * as ERROR_CODES from '../shared/errorCodes.js';
+import * as EVENTS from '../shared/events.js';
 
 // =============================================================================
 //

@@ -1,5 +1,5 @@
-import * as R from 'ramda';
-import { TRIGGER_MAIN_MENU_ITEM } from './events';
+import R from 'ramda';
+import { TRIGGER_MAIN_MENU_ITEM } from './events.js';
 
 function findMenuItem([itemLabel, ...restLabels], tpl) {
   if (R.isNil(tpl)) {

@@ -1,9 +1,9 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as client from 'sdp-client';
 
-import { installEmsdk } from './runners';
-import { installEmsdkProcess } from './actions';
-import { formatErrorMessage, formatLogError } from '../view/formatError';
+import { installEmsdk } from './runners.js';
+import { installEmsdkProcess } from './actions.js';
+import { formatErrorMessage, formatLogError } from '../view/formatError.js';
 
 // sdp-deploy/src/progress.js's ProgressData uses `note`, not `message` —
 // different from arduino-cli's own progress parser (parseProgressLog.js),

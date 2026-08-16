@@ -1,8 +1,20 @@
 import path from 'path';
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import { fileURLToPath } from 'url';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
 import { resolvePath } from 'sdp-fs';
 import electron from 'electron';
+
+const { Maybe } = RamdaFantasy;
+
+// Main Process only: this file is real native ESM once compiled to
+// src-babel/app (package.json "type": "module"), which has no
+// `__dirname` global. The Renderer Process branch below deliberately
+// keeps using the bare `__dirname` identifier instead -- it's bundled
+// by webpack (node: { __dirname: false }), which leaves that reference
+// for Electron's renderer runtime to resolve to the bundle's own
+// directory, a genuinely different (and correct) value for that context.
+const mainProcessDirname = () => path.dirname(fileURLToPath(import.meta.url));
 
 // see https://github.com/sindresorhus/electron-is-dev/issues/24#issuecomment-692379137
 export const IS_DEV =
@@ -102,7 +114,7 @@ export const getResourcesRoot = () => {
   if (IS_DEV) {
     return process.type === 'renderer'
       ? __dirname
-      : path.resolve(__dirname, '..');
+      : path.resolve(mainProcessDirname(), '..');
   }
   return process.resourcesPath;
 };

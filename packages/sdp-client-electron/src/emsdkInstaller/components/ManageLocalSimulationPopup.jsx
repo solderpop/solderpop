@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { PopupForm } from 'sdp-client';
 
-import { checkEmsdkInstalled, uninstallEmsdk } from '../runners';
+import { checkEmsdkInstalled, uninstallEmsdk } from '../runners.js';
 
 class ManageLocalSimulationPopup extends React.Component {
   constructor(props) {

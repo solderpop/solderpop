@@ -8,8 +8,8 @@
  */
 
 import path from 'path';
-import * as R from 'ramda';
-import * as fse from 'fs-extra';
+import R from 'ramda';
+import fse from 'fs-extra';
 import { app } from 'electron';
 
 import { ARDUINO_PACKAGES_DIRNAME } from 'sdp-deploy-bin';

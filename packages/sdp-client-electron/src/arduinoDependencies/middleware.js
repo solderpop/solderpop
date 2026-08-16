@@ -1,14 +1,14 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as client from 'sdp-client';
 import { foldMaybe } from 'sdp-func-tools';
 import { messages as xdbMessages } from 'sdp-deploy-bin';
-import { INSTALL_ARDUINO_DEPENDENCIES_MSG } from './constants';
-import { installArduinoDependencies, updateArduinoPackages } from './runners';
-import { installDeps, updatePackages } from './actions';
-import { ARDUPACKAGES_UPGRADE_PROCEED } from './actionTypes';
-import getLibraryNames from './getLibraryNames';
+import { INSTALL_ARDUINO_DEPENDENCIES_MSG } from './constants.js';
+import { installArduinoDependencies, updateArduinoPackages } from './runners.js';
+import { installDeps, updatePackages } from './actions.js';
+import { ARDUPACKAGES_UPGRADE_PROCEED } from './actionTypes.js';
+import getLibraryNames from './getLibraryNames.js';
 
-import { formatErrorMessage, formatLogError } from '../view/formatError';
+import { formatErrorMessage, formatLogError } from '../view/formatError.js';
 
 const progressToProcess = R.curry((processFn, progressData) => {
   processFn(progressData.message, progressData.percentage);

@@ -1,16 +1,16 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as xdb from 'sdp-deploy-bin';
 
-import subscribeIpc from './subscribeIpc';
-import { loadWorkspacePath } from './workspaceActions';
-import { getPathToBundledWorkspace } from './utils';
+import subscribeIpc from './subscribeIpc.js';
+import { loadWorkspacePath } from './workspaceActions.js';
+import { getPathToBundledWorkspace } from './utils.js';
 import {
   LIST_BOARDS,
   UPLOAD_TO_ARDUINO,
   UPDATE_INDEXES,
   CHECK_ARDUINO_DEPENDENCY_UPDATES,
   UPGRADE_ARDUINO_DEPENDECIES,
-} from '../shared/events';
+} from '../shared/events.js';
 
 /**
  * Begins upload through USB pipeline.

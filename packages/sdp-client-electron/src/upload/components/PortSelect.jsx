@@ -1,9 +1,9 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { NO_PORTS_FOUND as NO_PORTS_FOUND_ERRCODE } from '../../shared/errorCodes';
-import { ENUMERATING_PORTS, NO_PORTS_FOUND } from '../../shared/messages';
+import { NO_PORTS_FOUND as NO_PORTS_FOUND_ERRCODE } from '../../shared/errorCodes.js';
+import { ENUMERATING_PORTS, NO_PORTS_FOUND } from '../../shared/messages.js';
 
 class PortSelect extends React.Component {
   constructor(props) {

@@ -1,4 +1,4 @@
-import composeMessage from './composeMessage';
+import composeMessage from './composeMessage.js';
 
 export const CODE_TRANSPILED =
   'Project was successfully transpiled. Searching for device...';

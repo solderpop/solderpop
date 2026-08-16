@@ -1,7 +1,7 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import electronSettings from 'electron-settings';
 
-import { getUserDataDir } from './utils';
+import { getUserDataDir } from './utils.js';
 
 // =============================================================================
 //

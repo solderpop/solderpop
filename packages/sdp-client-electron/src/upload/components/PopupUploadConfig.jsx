@@ -1,12 +1,12 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { PopupForm } from 'sdp-client';
 
-import { ENUMERATING_BOARDS } from '../../shared/messages';
-import { updateIndexFiles } from '../../arduinoDependencies/runners';
+import { ENUMERATING_BOARDS } from '../../shared/messages.js';
+import { updateIndexFiles } from '../../arduinoDependencies/runners.js';
 
-import PortSelect from './PortSelect';
+import PortSelect from './PortSelect.jsx';
 
 class PopupUploadConfig extends React.Component {
   constructor(props) {
