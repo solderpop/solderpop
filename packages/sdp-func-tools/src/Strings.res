@@ -1,1 +1,1 @@
-@module("../index.js") external cppEscape: string => string = "cppEscape"
+@module("../dist/index.js") external cppEscape: string => string = "cppEscape"

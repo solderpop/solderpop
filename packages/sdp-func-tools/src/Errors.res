@@ -1,1 +1,1 @@
-@module("../index.js") external createError: (string, 'a) => JsExn.t = "createError"
+@module("../dist/index.js") external createError: (string, 'a) => JsExn.t = "createError"

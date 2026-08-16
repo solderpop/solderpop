@@ -3,7 +3,12 @@ import $ from 'sanctuary-def';
 import $type from 'sanctuary-type-identifiers';
 import HMDefModule from 'hm-def';
 
-const HMDef = HMDefModule.default;
+// Native ESM's default interop (mocha/babel-register, modules:false) leaves
+// HMDefModule as hm-def's raw double-wrapped CJS export, needing one more
+// `.default`. Babel's own CommonJS transform (Jest, modules:"commonjs")
+// already unwraps one layer while compiling this very import statement, so
+// HMDefModule is already the real module there. Tolerate both shapes.
+const HMDef = HMDefModule.create ? HMDefModule : HMDefModule.default;
 
 /* Types are by convention starts with a capital leter, so: */
 /* eslint-disable new-cap */
