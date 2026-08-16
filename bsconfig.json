@@ -1,20 +1,13 @@
 {
   "name": "xod",
   "namespace": false,
-  "sources": [
-    {
-      "dir": "packages/sdp-tabtest/src",
-      "subdirs": true
-    }
-  ],
+  "sources": [],
   "package-specs": {
     "module": "commonjs",
     "in-source": true
   },
   "suffix": ".bs.js",
-  "dependencies": [
-    "sdp-tabtest"
-  ],
+  "dependencies": [],
   "warnings": {
     "error": "+101"
   }
