@@ -1,26 +1,24 @@
-// Single canonical read of built-in-patches.json, shared by every consumer
-// (src/project.js, src/patch.js, src/migrations/unitlessToSlots.js, and
-// test/project.spec.js). A bare `import ... from '*.json'` compiles to a
-// static ESM import with no "with { type: json }" attribute, which real
-// Node ESM rejects -- so this reads it via fs instead, resolved through
-// import.meta.url. Deliberately centralized in one module rather than
-// duplicated per file: each independent read/parse would produce its own
-// object, breaking the reference sharing every importer of the same file
-// got for free under the old static import (Node's module cache dedups
-// by resolved path, so every `import` of the same JSON file got the exact
-// same object). At least one consumer relies on that aliasing -- some
-// code mutates a built-in patch object in place rather than returning a
-// new one, and that mutation is expected to be visible to every other
-// consumer holding the "same" data, exactly as it was before this file
-// existed.
-import { readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-
-const BUILT_IN_PATCHES = JSON.parse(
-  readFileSync(
-    fileURLToPath(new URL('../../dist/built-in-patches.json', import.meta.url)),
-    'utf8'
-  )
-);
+// Single canonical import of built-in-patches.json, shared by every
+// consumer (src/project.js, src/patch.js, src/migrations/
+// unitlessToSlots.js, and test/project.spec.js). Deliberately centralized
+// in one module rather than duplicated per file: each independent import
+// of the same path still resolves to the same cached object (Node/webpack
+// both dedup module resolution by path), but centralizing keeps that
+// invariant obvious and gives every consumer the exact same reference on
+// purpose -- see the migration plan doc for why that sharing matters (a
+// downstream mutation bug relies on it).
+//
+// A bare `import ... from '*.json'` needs the "with { type: 'json' }"
+// import attribute under real Node ESM (Node 22+, this repo's floor) --
+// without it, Node rejects the import outright. An earlier version of
+// this fix read the file via `fs.readFileSync` instead, which satisfied
+// Node but broke the moment this module got bundled into the browser app
+// (sdp-client -> sdp-client-browser pulls this package in) -- `fs` and
+// `url` don't exist in a browser, and webpack 5 doesn't polyfill Node
+// core modules by default. The import-attribute form works in both:
+// webpack has always handled bare `.json` imports as a first-class
+// module type regardless of the attribute, and Babel (this repo's
+// bundling pipeline) parses and passes the attribute through unchanged.
+import BUILT_IN_PATCHES from '../../dist/built-in-patches.json' with { type: 'json' };
 
 export default BUILT_IN_PATCHES;
