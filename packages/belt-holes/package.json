@@ -2,10 +2,10 @@
   "name": "belt-holes",
   "version": "0.34.0",
   "scripts": {
-    "refmt": "find src/ test/ -name '*.re*' -exec refmt --in-place {} +",
-    "build": "bsb -make-world",
-    "dev:re": "bsb -w",
-    "clean:dist": "rimraf ./lib ./src/**/*.bs.js ./test/**/*.bs.js",
+    "refmt": "rescript format -all",
+    "build": "rescript build",
+    "dev:re": "rescript build -w",
+    "clean:dist": "rimraf ./lib ./src/**/*.bs.js",
     "test": "jest"
   },
   "keywords": [
@@ -15,12 +15,12 @@
   "license": "AGPL-3.0",
   "main": "src/BeltHoles.bs.js",
   "devDependencies": {
-    "@glennsl/bs-jest": "^0.4.9",
-    "bs-platform": "7.1.1"
+    "@rescript/runtime": "^12.3.0",
+    "rescript": "^12.3.0"
   },
   "jest": {
     "testMatch": [
-      "**/test/**/*_jest.bs.js"
+      "**/test/**/*.test.js"
     ]
   },
   "files": [

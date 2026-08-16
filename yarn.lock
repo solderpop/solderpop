@@ -2829,7 +2829,7 @@
   resolved "https://registry.yarnpkg.com/@rescript/linux-x64/-/linux-x64-12.3.0.tgz#b3680558c39bb317224475397bf9a6868ab975e6"
   integrity sha512-0bPcKI0M38EpoFbhLz2w8ZAY3oZ0GWChwcDn43AN2EAWGLiCORhLP6biqRDg37jK/Bh8Y0MhYzjNWIeHoEDINQ==
 
-"@rescript/runtime@12.3.0":
+"@rescript/runtime@12.3.0", "@rescript/runtime@^12.3.0":
   version "12.3.0"
   resolved "https://registry.yarnpkg.com/@rescript/runtime/-/runtime-12.3.0.tgz#9f878a5ebc1e1791a00f6336e6d625ae3e4f353b"
   integrity sha512-8SRM2f6+LaWach8NJjYQVCCmu6KYmJCb+437L7YpaUpJBDyUOC1x0FF75shZ/Gid9guKPF3zMHrTNHLuyQkkiQ==

@@ -3,10 +3,6 @@
   "namespace": false,
   "sources": [
     {
-      "dir": "packages/belt-holes/src",
-      "subdirs": true
-    },
-    {
       "dir": "packages/sdp-arduino/src",
       "subdirs": true
     },
@@ -25,7 +21,6 @@
   },
   "suffix": ".bs.js",
   "dependencies": [
-    "belt-holes",
     "sdp-arduino",
     "sdp-project",
     "sdp-tabtest"
