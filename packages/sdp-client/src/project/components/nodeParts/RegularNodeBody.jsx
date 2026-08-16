@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import * as XP from 'sdp-project';
 import { noop } from 'sdp-func-tools';
 
-import { NODE_CORNER_RADIUS } from '../../nodeLayout';
-import NodeLabel from './NodeLabel';
-import VariadicHandle from './VariadicHandle';
-import ResizeHandle from './ResizeHandle';
+import { NODE_CORNER_RADIUS } from '../../nodeLayout.js';
+import NodeLabel from './NodeLabel.jsx';
+import VariadicHandle from './VariadicHandle.jsx';
+import ResizeHandle from './ResizeHandle.jsx';
 
 const NODE_BODY_RECT_PROPS = {
   rx: NODE_CORNER_RADIUS,

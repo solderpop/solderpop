@@ -1,12 +1,12 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import Markdown from 'react-remarkable';
 import classNames from 'classnames';
 
-import { noop } from '../../utils/ramda';
+import { noop } from '../../utils/ramda.js';
 
-import { NODE_CORNER_RADIUS, RESIZE_HANDLE_SIZE } from '../nodeLayout';
+import { NODE_CORNER_RADIUS, RESIZE_HANDLE_SIZE } from '../nodeLayout.js';
 
 // see https://github.com/jonschlinkert/remarkable#options
 const remarkableOptions = {

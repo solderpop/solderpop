@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { maybePath, foldMaybe } from 'sdp-func-tools';
 
 import {
@@ -6,7 +6,7 @@ import {
   getAllErrorsForNode,
   getAllErrorsForLink,
   getAllErrorsForPatch,
-} from './errorCollectors';
+} from './errorCollectors.js';
 
 export const getHintingState = R.prop('hinting');
 

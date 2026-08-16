@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
@@ -7,8 +7,8 @@ import { getEmptyImage } from 'react-dnd-html5-backend';
 import { Icon } from 'react-fa';
 import { ContextMenuTrigger } from 'react-contextmenu';
 
-import { PATCH_GROUP_CONTEXT_MENU_ID } from '../constants';
-import { DRAGGED_ENTITY_TYPE } from '../../editor/constants';
+import { PATCH_GROUP_CONTEXT_MENU_ID } from '../constants.js';
+import { DRAGGED_ENTITY_TYPE } from '../../editor/constants.js';
 
 const dragSource = {
   beginDrag(props) {

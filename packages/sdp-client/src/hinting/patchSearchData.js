@@ -1,11 +1,13 @@
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 import * as XP from 'sdp-project';
 import { isAmong, foldMaybe, notNil } from 'sdp-func-tools';
 import { createIndexData } from 'sdp-patch-search';
 
-import * as PAT from '../project/actionTypes';
-import { RECOVER_STATE } from '../core/actionTypes';
+import * as PAT from '../project/actionTypes.js';
+import { RECOVER_STATE } from '../core/actionTypes.js';
 
 // PatchSearchData :: { path: String, keywords: [String], desription: String, fullDescription: string }
 

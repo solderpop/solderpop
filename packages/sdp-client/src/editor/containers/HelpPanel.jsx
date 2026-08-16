@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -9,16 +9,16 @@ import {
 } from 'sdp-project';
 import { $Maybe, foldMaybe, explodeMaybe } from 'sdp-func-tools';
 
-import { PANEL_IDS, SIDEBAR_IDS } from '../constants';
+import { PANEL_IDS, SIDEBAR_IDS } from '../constants.js';
 
-import SidebarPanel from '../components/SidebarPanel';
-import { getPatchOfSelectedNodeForQuickHelp } from '../../core/selectors';
-import PatchDocs from '../components/PatchDocs';
-import CppPatchDocs from '../components/CppPatchDocs';
-import TabtestPatchDocs from '../components/TabtestPatchDocs';
-import sanctuaryPropType from '../../utils/sanctuaryPropType';
-import { getEditingAttachmentPatchPath } from '../selectors';
-import { getCurrentPatch } from '../../project/selectors';
+import SidebarPanel from '../components/SidebarPanel.jsx';
+import { getPatchOfSelectedNodeForQuickHelp } from '../../core/selectors.js';
+import PatchDocs from '../components/PatchDocs.jsx';
+import CppPatchDocs from '../components/CppPatchDocs.jsx';
+import TabtestPatchDocs from '../components/TabtestPatchDocs.jsx';
+import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
+import { getEditingAttachmentPatchPath } from '../selectors.js';
+import { getCurrentPatch } from '../../project/selectors.js';
 
 const getDocsForSelectedNode = foldMaybe(
   <div className="no-selection">

@@ -1,5 +1,5 @@
 import React from 'react';
-import * as R from 'ramda';
+import R from 'ramda';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { Icon } from 'react-fa';

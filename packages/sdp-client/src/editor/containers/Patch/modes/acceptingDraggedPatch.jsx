@@ -1,10 +1,10 @@
 import React from 'react';
 import { HotKeys } from 'react-hotkeys';
 
-import PatchSVG from '../../../../project/components/PatchSVG';
-import * as Layers from '../../../../project/components/layers';
+import PatchSVG from '../../../../project/components/PatchSVG.jsx';
+import * as Layers from '../../../../project/components/layers/index.js';
 
-import { getOffsetMatrix } from '../modeUtils';
+import { getOffsetMatrix } from '../modeUtils.js';
 
 const acceptingDraggedPatchMode = {
   getInitialState() {

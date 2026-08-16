@@ -1,6 +1,6 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
-import { getProject } from '../project/selectors';
+import { getProject } from '../project/selectors.js';
 
 import {
   PROJECT_CREATE,
@@ -8,7 +8,7 @@ import {
   PROJECT_IMPORT,
   PROJECT_OPEN_WORKSPACE,
   SAVE_ALL,
-} from '../project/actionTypes';
+} from '../project/actionTypes.js';
 
 const updateLastSavedProject = state =>
   R.assoc('lastSavedProject', getProject(state), state);

@@ -1,11 +1,11 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
 import Menu, { SubMenu, MenuItem, Divider } from 'rc-menu';
 
-import { noop } from '../ramda';
-import deepSCU from '../deepSCU';
+import { noop } from '../ramda.js';
+import deepSCU from '../deepSCU.js';
 
 const capitalize = R.compose(
   R.join(''),

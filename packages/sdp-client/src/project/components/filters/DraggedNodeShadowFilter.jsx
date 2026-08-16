@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ShadowFilter from './ShadowFilter';
+import ShadowFilter from './ShadowFilter.jsx';
 
 const DraggedNodeShadowFilter = () => (
   <ShadowFilter

@@ -1,28 +1,28 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import { HotKeys } from 'react-hotkeys';
 
 import * as XP from 'sdp-project';
 
-import { EDITOR_MODE, SELECTION_ENTITY_TYPE } from '../../../constants';
-import { isEntitySelected } from '../../../utils';
-import { isInputTarget } from '../../../../utils/browser';
-import { COMMAND } from '../../../../utils/constants';
+import { EDITOR_MODE, SELECTION_ENTITY_TYPE } from '../../../constants.js';
+import { isEntitySelected } from '../../../utils.js';
+import { isInputTarget } from '../../../../utils/browser.js';
+import { COMMAND } from '../../../../utils/constants.js';
 
-import PatchSVG from '../../../../project/components/PatchSVG';
-import * as Layers from '../../../../project/components/layers';
+import PatchSVG from '../../../../project/components/PatchSVG.jsx';
+import * as Layers from '../../../../project/components/layers/index.js';
 
 import {
   snapPositionToSlots,
   pixelPositionToSlots,
-} from '../../../../project/nodeLayout';
+} from '../../../../project/nodeLayout.js';
 
 import {
   bindApi,
   getMousePosition,
   getOffsetMatrix,
   isMiddleButtonPressed,
-} from '../modeUtils';
+} from '../modeUtils.js';
 
 const isSelectionModifierPressed = event => event.metaKey || event.ctrlKey;
 

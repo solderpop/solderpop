@@ -1,9 +1,9 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 import { foldMaybeWith } from 'sdp-func-tools';
 
-import { defaultValidateFunctions } from './validation.funcs';
-import { getActingPatchPath } from './actionUtils';
+import { defaultValidateFunctions } from './validation.funcs.js';
+import { getActingPatchPath } from './actionUtils.js';
 
 // PinValidateFn :: Patch -> Project -> Map PinKey PinErrors
 // NodeValidateFn :: Patch -> Project -> Map NodeId NodeErrors

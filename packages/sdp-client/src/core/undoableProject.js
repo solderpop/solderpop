@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import {
   listLocalPatches,
   assocPatch,
@@ -7,7 +7,7 @@ import {
 } from 'sdp-project';
 import { isAmong } from 'sdp-func-tools';
 
-import { getProject, projectLens } from '../project/selectors';
+import { getProject, projectLens } from '../project/selectors.js';
 
 import {
   PROJECT_CREATE,
@@ -16,7 +16,7 @@ import {
   PROJECT_OPEN_WORKSPACE,
   PATCH_HISTORY_UNDO,
   PATCH_HISTORY_REDO,
-} from '../project/actionTypes';
+} from '../project/actionTypes.js';
 
 const HISTORY_DIRECTION = {
   PAST: 'past',

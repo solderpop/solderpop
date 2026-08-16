@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -9,9 +9,9 @@ import regExpEscape from 'escape-string-regexp';
 
 import { isAmong, noop } from 'sdp-func-tools';
 
-import { KEYCODE } from '../../utils/constants';
-import { restoreFocusOnApp } from '../../utils/browser';
-import SuggesterContainer from './SuggesterContainer';
+import { KEYCODE } from '../../utils/constants.js';
+import { restoreFocusOnApp } from '../../utils/browser.js';
+import SuggesterContainer from './SuggesterContainer.jsx';
 
 const getSuggestionValue = ({ item }) => item.path;
 

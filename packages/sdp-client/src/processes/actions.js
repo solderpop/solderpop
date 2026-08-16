@@ -1,7 +1,7 @@
-import * as R from 'ramda';
-import * as ProcessSelectors from './selectors';
+import R from 'ramda';
+import * as ProcessSelectors from './selectors.js';
 
-import { STATUS } from '../utils/constants';
+import { STATUS } from '../utils/constants.js';
 
 export const addProcess = type => (dispatch, getState) => {
   const processes = ProcessSelectors.getProccesses(getState());

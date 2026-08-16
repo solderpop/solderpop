@@ -1,11 +1,11 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import { HotKeys } from 'react-hotkeys';
 
-import { EDITOR_MODE } from '../../../constants';
+import { EDITOR_MODE } from '../../../constants.js';
 
-import PatchSVG from '../../../../project/components/PatchSVG';
-import * as Layers from '../../../../project/components/layers';
+import PatchSVG from '../../../../project/components/PatchSVG.jsx';
+import * as Layers from '../../../../project/components/layers/index.js';
 
 import {
   addPoints,
@@ -16,11 +16,11 @@ import {
   slotSizeToPixels,
   NODE_HEIGHT,
   SLOT_SIZE,
-} from '../../../../project/nodeLayout';
+} from '../../../../project/nodeLayout.js';
 
-import { getPxSize } from '../../../../project/pxDimensions';
+import { getPxSize } from '../../../../project/pxDimensions.js';
 
-import { getOffsetMatrix, bindApi, getMousePosition } from '../modeUtils';
+import { getOffsetMatrix, bindApi, getMousePosition } from '../modeUtils.js';
 
 let patchSvgRef = null;
 

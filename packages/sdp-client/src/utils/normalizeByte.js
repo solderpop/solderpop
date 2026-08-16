@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import {
   DEFAULT_VALUE_OF_TYPE,
   PIN_TYPE,

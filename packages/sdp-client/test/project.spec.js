@@ -1,14 +1,20 @@
 import R from 'ramda';
-import thunk from 'redux-thunk';
+import thunkModule from 'redux-thunk';
+
+const thunk = typeof thunkModule === 'function' ? thunkModule : thunkModule.default;
 import { createStore, applyMiddleware } from 'redux';
-import { assert } from 'chai';
-import { Maybe } from 'ramda-fantasy';
+import chai from 'chai';
+
+const { assert } = chai;
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 
 import * as XP from 'sdp-project';
 
-import initialState from '../src/core/state';
-import generateReducers from '../src/core/reducer';
-import { getProject } from '../src/project/selectors';
+import initialState from '../src/core/state.js';
+import generateReducers from '../src/core/reducer.js';
+import { getProject } from '../src/project/selectors.js';
 
 import {
   createProject,
@@ -24,7 +30,7 @@ import {
   resizeComment,
   editComment,
   bulkDeleteNodesAndComments,
-} from '../src/project/actions';
+} from '../src/project/actions.js';
 
 describe('project reducer', () => {
   describe('Project management', () => {

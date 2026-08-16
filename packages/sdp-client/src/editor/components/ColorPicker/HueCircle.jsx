@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import colorPropType from './colorPropType';
+import colorPropType from './colorPropType.js';
 
 const THICKNESS = 20;
 

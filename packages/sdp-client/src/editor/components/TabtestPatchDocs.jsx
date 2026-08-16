@@ -1,10 +1,10 @@
 import React from 'react';
 import PT from 'prop-types';
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 import Icon from 'react-fa';
 
-import { getUtmSiteUrl } from '../../utils/urls';
+import { getUtmSiteUrl } from '../../utils/urls.js';
 
 const CppPatchDocs = ({ patch }) => {
   const [inputPins, outputPins] = R.compose(

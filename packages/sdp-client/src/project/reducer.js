@@ -1,14 +1,16 @@
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 import * as XP from 'sdp-project';
 import { explodeEither, foldMaybe, maybeProp } from 'sdp-func-tools';
 import { getLibName } from 'sdp-pm';
 
-import * as AT from './actionTypes';
+import * as AT from './actionTypes.js';
 import {
   PASTE_ENTITIES,
   INSTALL_LIBRARIES_COMPLETE,
-} from '../editor/actionTypes';
+} from '../editor/actionTypes.js';
 
 import {
   addPoints,
@@ -16,13 +18,13 @@ import {
   snapNodePositionToSlots,
   pixelPositionToSlots,
   getBusNodePositionForPin,
-} from './nodeLayout';
+} from './nodeLayout.js';
 import {
   NODE_PROPERTY_KIND,
   NODE_PROPERTY_KEY,
   NODE_KIND,
   MAIN_PATCH_PATH,
-} from './constants';
+} from './constants.js';
 
 // TODO: rewrite this?
 const selectNodePropertyUpdater = ({ kind, key, value = '' }) => {

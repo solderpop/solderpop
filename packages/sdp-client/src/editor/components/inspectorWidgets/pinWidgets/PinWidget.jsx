@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -9,7 +9,7 @@ import {
   isBuiltInType,
 } from 'sdp-project';
 
-import PinIcon from './PinIcon';
+import PinIcon from './PinIcon.jsx';
 
 // TODO: move these checks
 

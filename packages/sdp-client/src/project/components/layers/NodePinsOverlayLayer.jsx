@@ -1,14 +1,14 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import cn from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 
 import { getBaseName } from 'sdp-project';
 
-import pureDeepEqual from '../../../utils/pureDeepEqual';
+import pureDeepEqual from '../../../utils/pureDeepEqual.js';
 
-import NodePinsOverlay from '../NodePinsOverlay';
-import { getPinLinkabilityValidator } from '../../utils';
+import NodePinsOverlay from '../NodePinsOverlay.jsx';
+import { getPinLinkabilityValidator } from '../../utils.js';
 
 const NodePinsOverlayLayer = ({
   nodes,

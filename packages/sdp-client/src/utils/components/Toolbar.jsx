@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Menubar, { itemsPropTypes as menubarItemsPropTypes } from './Menubar';
+import Menubar, { itemsPropTypes as menubarItemsPropTypes } from './Menubar.jsx';
 
 const Toolbar = ({ menuBarItems }) => (
   <div className="Toolbar">

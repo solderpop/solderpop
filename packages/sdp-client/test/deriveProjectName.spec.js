@@ -1,5 +1,7 @@
-import { assert } from 'chai';
-import deriveProjectName from '../src/utils/deriveProjectName';
+import chai from 'chai';
+
+const { assert } = chai;
+import deriveProjectName from '../src/utils/deriveProjectName.js';
 
 describe('Derive project name from filename', () => {
   const test = (input, output) =>

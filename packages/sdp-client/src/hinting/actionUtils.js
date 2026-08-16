@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 import { maybePath, isAmong } from 'sdp-func-tools';
 

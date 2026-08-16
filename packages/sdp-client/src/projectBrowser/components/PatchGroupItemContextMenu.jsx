@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { ContextMenu, MenuItem, connectMenu } from 'react-contextmenu';
 
-import { PATCH_GROUP_CONTEXT_MENU_ID } from '../constants';
+import { PATCH_GROUP_CONTEXT_MENU_ID } from '../constants.js';
 
 const onContextMenuItemClick = onClick => (event, data) => {
   onClick(data.patchPath);

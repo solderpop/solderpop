@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { maybeProp, maybePath } from 'sdp-func-tools';
 
 export const getErrors = R.prop('errors');

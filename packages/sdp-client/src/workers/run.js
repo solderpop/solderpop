@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { noop, createError } from 'sdp-func-tools';
 import { prepareModuleOptions, ERROR_CODES } from 'sdp-cloud-compile';
 

@@ -1,5 +1,5 @@
-import { addError } from '../messages/actions';
-import formatUnexpectedError from '../messages/formatUnexpectedError';
+import { addError } from '../messages/actions.js';
+import formatUnexpectedError from '../messages/formatUnexpectedError.js';
 
 export default () => next => action => {
   try {

@@ -1,10 +1,10 @@
-import reducer from './reducer';
-import container from './containers/Editor';
-import state from './state';
-import * as constants from './constants';
-import * as selectors from './selectors';
-import * as actions from './actions';
-import * as actionTypes from './actionTypes';
+import reducer from './reducer.js';
+import container from './containers/Editor.jsx';
+import state from './state.js';
+import * as constants from './constants.js';
+import * as selectors from './selectors.js';
+import * as actions from './actions.js';
+import * as actionTypes from './actionTypes.js';
 
 export {
   reducer,

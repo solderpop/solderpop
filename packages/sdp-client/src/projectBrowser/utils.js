@@ -1,7 +1,7 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 
-import { getProject } from '../project/selectors';
+import { getProject } from '../project/selectors.js';
 
 // eslint-disable-next-line import/prefer-default-export
 export const isPatchEmpty = (state, patchPath) =>

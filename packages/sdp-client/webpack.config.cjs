@@ -9,7 +9,7 @@
  * Usage:
  * ```
  * const merge = require('webpack-merge');
- * const getBaseConfig = require('sdp-client/webpack.config');
+ * const getBaseConfig = require('sdp-client/webpack.config.cjs');
  *
  * merge.smart(getBaseConfig(__dirname), {
  *   entry: [

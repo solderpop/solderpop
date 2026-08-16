@@ -1,6 +1,6 @@
-import * as R from 'ramda';
-import { MESSAGE_ADD, MESSAGE_DELETE } from './actionTypes';
-import { getNewId } from './selectors';
+import R from 'ramda';
+import { MESSAGE_ADD, MESSAGE_DELETE } from './actionTypes.js';
+import { getNewId } from './selectors.js';
 
 export default (messages = {}, action) => {
   switch (action.type) {

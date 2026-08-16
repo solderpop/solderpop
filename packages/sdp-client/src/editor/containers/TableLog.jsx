@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -7,16 +7,16 @@ import { bindActionCreators } from 'redux';
 import ReactDataSheet from 'react-datasheet';
 import { Icon } from 'react-fa';
 
-import * as Actions from '../actions';
-import * as DebuggerSelectors from '../../debugger/selectors';
+import * as Actions from '../actions.js';
+import * as DebuggerSelectors from '../../debugger/selectors.js';
 
-import { addConfirmation } from '../../messages/actions';
+import { addConfirmation } from '../../messages/actions.js';
 import {
   LOG_COPIED,
   LOG_COPY_NOT_SUPPORTED,
   logCopyError,
   logSaveError,
-} from '../../debugger/messages';
+} from '../../debugger/messages.js';
 
 // :: [[String]] -> [[{ value, readOnly }]]
 const tableLogToDataSheet = R.map(

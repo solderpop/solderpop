@@ -1,8 +1,8 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 import { foldMaybe, isAmong } from 'sdp-func-tools';
-import * as PAT from '../project/actionTypes';
-import * as EAT from '../editor/actionTypes';
+import * as PAT from '../project/actionTypes.js';
+import * as EAT from '../editor/actionTypes.js';
 
 // :: Action -> Boolean
 const isLoadingProjectAction = R.propSatisfies(

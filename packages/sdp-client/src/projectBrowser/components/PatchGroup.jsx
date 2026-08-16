@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Collapsible from 'react-collapsible';
 import cls from 'classnames';
 
-import { noop } from '../../utils/ramda';
+import { noop } from '../../utils/ramda.js';
 
 const PatchGroup = ({ name, children, type, onClose, withErrors }) => (
   <Collapsible

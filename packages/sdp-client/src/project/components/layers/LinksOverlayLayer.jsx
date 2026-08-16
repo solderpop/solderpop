@@ -1,13 +1,13 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import cn from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import pureDeepEqual from '../../../utils/pureDeepEqual';
+import pureDeepEqual from '../../../utils/pureDeepEqual.js';
 
-import XODLink from '../Link';
+import XODLink from '../Link.jsx';
 
-import { isLinkSelected } from '../../../editor/utils';
+import { isLinkSelected } from '../../../editor/utils.js';
 
 const LinksOverlayLayer = ({ links, selection, hidden, onClick }) => (
   <g className={cn('LinksOverlayLayer', { hidden })}>

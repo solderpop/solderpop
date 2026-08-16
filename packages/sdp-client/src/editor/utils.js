@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 import { catMaybies, foldMaybe } from 'sdp-func-tools';
 
@@ -10,8 +10,8 @@ import {
   sizeToPoint,
   subtractPoints,
   GAP_IN_SLOTS,
-} from '../project/nodeLayout';
-import { SELECTION_ENTITY_TYPE, PANEL_IDS } from './constants';
+} from '../project/nodeLayout.js';
+import { SELECTION_ENTITY_TYPE, PANEL_IDS } from './constants.js';
 
 export const getTabByPatchPath = R.curry((patchPath, tabs) =>
   R.compose(R.find(R.propEq('patchPath', patchPath)), R.values)(tabs)

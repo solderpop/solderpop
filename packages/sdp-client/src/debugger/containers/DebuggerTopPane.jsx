@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import $ from 'sanctuary-def';
@@ -6,11 +6,11 @@ import { $Maybe, foldMaybe, noop } from 'sdp-func-tools';
 import { Icon } from 'react-fa';
 import { shouldUpdate } from 'recompose';
 
-import sanctuaryPropType from '../../utils/sanctuaryPropType';
-import Breadcrumbs from './Breadcrumbs';
-import TooltipHOC from '../../tooltip/components/TooltipHOC';
+import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
+import Breadcrumbs from './Breadcrumbs.jsx';
+import TooltipHOC from '../../tooltip/components/TooltipHOC.jsx';
 
-import { DEBUGGER_TAB_ID } from '../../editor/constants';
+import { DEBUGGER_TAB_ID } from '../../editor/constants.js';
 
 const DebuggerTopPane = props =>
   foldMaybe(

@@ -1,15 +1,15 @@
 // It's a clone of `resizingComment` mode with a little changes
 // One day we'll get rid of special "Comment" entity and only this mode will stay
 
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import * as XP from 'sdp-project';
 
-import { EDITOR_MODE } from '../../../constants';
+import { EDITOR_MODE } from '../../../constants.js';
 
-import PatchSVG from '../../../../project/components/PatchSVG';
-import * as Layers from '../../../../project/components/layers';
+import PatchSVG from '../../../../project/components/PatchSVG.jsx';
+import * as Layers from '../../../../project/components/layers/index.js';
 
 import {
   addPoints,
@@ -22,12 +22,12 @@ import {
   NODE_HEIGHT,
   PIN_RADIUS,
   SLOT_SIZE,
-} from '../../../../project/nodeLayout';
-import { getPxSize } from '../../../../project/pxDimensions';
+} from '../../../../project/nodeLayout.js';
+import { getPxSize } from '../../../../project/pxDimensions.js';
 
-import { getOffsetMatrix, bindApi, getMousePosition } from '../modeUtils';
-import { isLinkConnectedToNodeIds } from '../../../../project/utils';
-import { shortenDraggedLinks } from './moving';
+import { getOffsetMatrix, bindApi, getMousePosition } from '../modeUtils.js';
+import { isLinkConnectedToNodeIds } from '../../../../project/utils.js';
+import { shortenDraggedLinks } from './moving.jsx';
 
 const updateLinksPositions = R.uncurryN(2)(resizedNodes =>
   R.map(link => {

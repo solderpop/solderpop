@@ -1,23 +1,23 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 import { foldMaybe } from 'sdp-func-tools';
 import { formatTweakMessage } from 'sdp-arduino';
 
-import { getProject } from '../project/selectors';
+import { getProject } from '../project/selectors.js';
 import {
   isSimulationRunning,
   getCurrentChunksPath,
   getInvertedDebuggerNodeIdsMap,
   getStoredGlobals,
-} from './selectors';
-import * as editorSelectors from '../editor/selectors';
+} from './selectors.js';
+import * as editorSelectors from '../editor/selectors.js';
 
-import { LINE_SENT_TO_SERIAL } from './actionTypes';
-import { NODE_PROPERTY_UPDATED } from '../project/actionTypes';
+import { LINE_SENT_TO_SERIAL } from './actionTypes.js';
+import { NODE_PROPERTY_UPDATED } from '../project/actionTypes.js';
 import {
   TWEAK_PULSE_SENT,
   NODE_PROPERTY_UPDATING,
-} from '../editor/actionTypes';
+} from '../editor/actionTypes.js';
 
 export default ({ getState }) => next => action => {
   const state = getState();

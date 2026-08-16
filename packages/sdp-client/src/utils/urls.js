@@ -1,5 +1,7 @@
-import { curry } from 'ramda';
+import R from 'ramda';
 import URL from 'url-parse';
+
+const { curry } = R;
 
 // :: String -> String -> { utm_source :: String, utm_campaign :: String, utm_medium :: String}
 const getUtmParams = (campaign, medium) => ({

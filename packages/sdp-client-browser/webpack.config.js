@@ -2,7 +2,7 @@
 const { merge } = require('webpack-merge');
 const webpack = require('webpack');
 /* eslint-enable import/no-extraneous-dependencies */
-const getBaseConfig = require('sdp-client/webpack.config');
+const getBaseConfig = require('sdp-client/webpack.config.cjs');
 
 module.exports = merge(getBaseConfig(__dirname), {
   plugins: [

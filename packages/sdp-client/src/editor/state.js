@@ -1,5 +1,5 @@
-import { FOCUS_AREAS, TAB_TYPES, SIDEBAR_IDS, PANEL_IDS } from './constants';
-import { DEFAULT_PANNING_OFFSET } from '../project/nodeLayout';
+import { FOCUS_AREAS, TAB_TYPES, SIDEBAR_IDS, PANEL_IDS } from './constants.js';
+import { DEFAULT_PANNING_OFFSET } from '../project/nodeLayout.js';
 
 export default {
   currentTabId: '@/main',

@@ -1,10 +1,10 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 import { foldMaybe, catMaybies } from 'sdp-func-tools';
 
-import * as PAT from '../project/actionTypes';
-import * as EAT from '../editor/actionTypes';
-import { RECOVER_STATE } from '../core/actionTypes';
+import * as PAT from '../project/actionTypes.js';
+import * as EAT from '../editor/actionTypes.js';
+import { RECOVER_STATE } from '../core/actionTypes.js';
 
 import {
   defaultValidateFunction,
@@ -15,14 +15,14 @@ import {
   validatePatchesGenerally,
   setAssocPolicy,
   setMergePolicy,
-} from './validation.internal';
+} from './validation.internal.js';
 import {
   getVariadicMarkersErrorMap,
   getDeadRefErrorMap,
   validateBoundValues,
   validateLinkPins,
-} from './validation.funcs';
-import { bulkActionChangesTerminalNodes } from './actionUtils';
+} from './validation.funcs.js';
+import { bulkActionChangesTerminalNodes } from './actionUtils.js';
 
 /**
  * HOW IT WORKS AND HOW TO MAINTAIN IT
@@ -363,4 +363,4 @@ export const validateProject = R.curry(
     )(action, newProject, deducedPinTypes, prevErrors)
 );
 
-export { mergeErrors } from './validation.internal';
+export { mergeErrors } from './validation.internal.js';

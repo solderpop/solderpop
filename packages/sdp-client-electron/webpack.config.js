@@ -3,7 +3,7 @@ const path = require('path');
 const { merge } = require('webpack-merge');
 const webpack = require('webpack');
 /* eslint-enable import/no-extraneous-dependencies */
-const getBaseConfig = require('sdp-client/webpack.config');
+const getBaseConfig = require('sdp-client/webpack.config.cjs');
 
 const pkgpath = subpath => path.resolve(__dirname, subpath);
 
@@ -39,7 +39,7 @@ module.exports = merge(getBaseConfig(__dirname), {
       },
       {
         // Scoped strictly to this package's own assets. The base config
-        // (sdp-client/webpack.config.js) already has asset-module rules for
+        // (sdp-client/webpack.config.cjs) already has asset-module rules for
         // its own assets, each scoped with its own `include`. An unscoped
         // rule here would double-process those same files.
         include: [pkgpath('src/view/assets')],

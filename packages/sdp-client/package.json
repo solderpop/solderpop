@@ -1,13 +1,13 @@
 {
   "name": "sdp-client",
-  "type": "commonjs",
+  "type": "module",
   "version": "0.38.0",
   "description": "SolderPop IDE: Client application",
   "scripts": {
-    "build": "babel src/ -d dist/ --source-maps",
+    "build": "babel src/ -d dist/ --source-maps --keep-file-extension",
     "clean:dist": "rimraf ./dist",
     "dev": "yarn run build --watch",
-    "test": "mocha --require ../../tools/babel-register.js --color --timeout 10000 test --recursive",
+    "test": "NODE_OPTIONS=\"--import ./tools/registerJsxLoader.mjs\" mocha --require ../../tools/babel-register.js --color --timeout 10000 test --recursive",
     "test:watch": "yarn run test --watch",
     "storybook": "start-storybook -p 9001 -c .storybook"
   },

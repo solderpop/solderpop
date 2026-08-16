@@ -1,6 +1,6 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { isAmong } from 'sdp-func-tools';
-import initialState from './state';
+import initialState from './state.js';
 
 import {
   PATCH_RENAME_REQUESTED,
@@ -9,15 +9,15 @@ import {
   REMOVE_SELECTION,
   TOGGLE_DEPRECATED_FILTER,
   TOGGLE_UTILITY_FILTER,
-} from './actionTypes';
+} from './actionTypes.js';
 
-import { PATCH_DELETE, PATCH_RENAME } from '../project/actionTypes';
+import { PATCH_DELETE, PATCH_RENAME } from '../project/actionTypes.js';
 
 import {
   INSTALL_LIBRARIES_BEGIN,
   INSTALL_LIBRARIES_COMPLETE,
   INSTALL_LIBRARIES_FAILED,
-} from '../editor/actionTypes';
+} from '../editor/actionTypes.js';
 
 // Reducers
 const selectionReducer = (state, action) => {

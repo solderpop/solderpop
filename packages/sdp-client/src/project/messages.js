@@ -1,4 +1,4 @@
-import { LINK_ERRORS as LE } from '../editor/constants';
+import { LINK_ERRORS as LE } from '../editor/constants.js';
 
 export const SUCCESSFULLY_PUBLISHED = {
   title: 'Library published',

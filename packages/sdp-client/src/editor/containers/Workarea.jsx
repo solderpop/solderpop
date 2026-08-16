@@ -1,19 +1,19 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import cn from 'classnames';
-import debounce from 'throttle-debounce/debounce';
+import debounce from 'throttle-debounce/debounce.js';
 import { notEquals } from 'sdp-func-tools';
 
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
-import Debugger from '../../debugger/containers/Debugger';
+import Debugger from '../../debugger/containers/Debugger.jsx';
 
-import { SLOT_SIZE } from '../../project/nodeLayout';
-import { PANEL_IDS } from '../constants';
-import * as Actions from '../actions';
-import * as EditorSelectors from '../selectors';
+import { SLOT_SIZE } from '../../project/nodeLayout.js';
+import { PANEL_IDS } from '../constants.js';
+import * as Actions from '../actions.js';
+import * as EditorSelectors from '../selectors.js';
 
 const pickPropsToCheck = R.compose(
   R.evolve({ panelSettings: R.map(R.omit(['size'])) }),

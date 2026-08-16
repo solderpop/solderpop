@@ -1,11 +1,11 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as XP from 'sdp-project';
 
-import { getRenderablePinType } from '../../utils';
-import NodeLabel from './NodeLabel';
+import { getRenderablePinType } from '../../utils.js';
+import NodeLabel from './NodeLabel.jsx';
 
 const labelHeight = 24;
 const scale = 0.8; // of a triangle
