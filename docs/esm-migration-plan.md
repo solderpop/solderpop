@@ -98,9 +98,19 @@ least-risky/most-isolated first:
 
 **Phase 1 — leaf packages with no/few internal cross-package requires:**
 
-*Progress: `sdp-func-tools` done (2026-08-16) — see "Phase 1 findings" below
-for the interop gotchas hit and the fix pattern to reuse on every other
-package.*
+*Progress (2026-08-16): all seven Phase 1 candidates converted and
+passing — `sdp-func-tools`, `sdp-fs`, `sdp-deploy-bin`, `sdp-patch-search`
+(mocha/no-test-suite packages, see "Phase 1 findings" below for the interop
+recipe), and `belt-holes`, `sdp-tethering-inet`, `sdp-tabtest` (the three
+Jest packages — first attempt on `belt-holes` was reverted over a real
+`require(esm)` blocker, then retried successfully with `babel-jest`, see
+the "Jest packages retried" section below for that recipe plus several
+Jest-specific interop findings, including one correction to the
+`sdp-func-tools`/`sdp-fs` `hm-def` fix that only shows up under Jest).
+Phase 1 candidate list fully cleared. Nothing committed yet this session —
+diff is large in aggregate across 7 packages, will need splitting into
+multiple PRs to respect the 250 LOC cap when ready to commit. Phase 2 not
+yet started.*
 
 Likely candidates (verify against current dependency graph, not memory):
 `sdp-fs`, `sdp-deploy-bin`, `sdp-patch-search`, `belt-holes`,
@@ -265,11 +275,400 @@ the rest of Phase 1 and Phase 2's plain-JS side.
    the enforced floor.
 
 **Not yet touched, still open:** none of the ReScript source files needed
-edits beyond the one `@module("..")` → `@module("../index.js")` self-import
-fix (4 `.res` files, `Either`/`Errors`/`Maybe`/`Strings` — same
-extensionless-import problem as item 5, just on the ReScript side of the
-boundary via the `@module` FFI string). Watch for the same pattern in every
-other ReScript package with a `@module("..")` self-reference.
+edits beyond the one `@module("..")` self-import fix (4 `.res` files,
+`Either`/`Errors`/`Maybe`/`Strings` — same extensionless-import problem as
+item 5, just on the ReScript side of the boundary via the `@module` FFI
+string). Watch for the same pattern in every other ReScript package with a
+`@module("..")` self-reference.
+
+**Correction, found while converting `sdp-fs` next:** the `@module("..")`
+fix above was first written as `@module("../index.js")` and that was
+**wrong** — caught it because `sdp-project`'s ReScript output (`Patch.bs.js`)
+deep-requires `sdp-func-tools/src/Maybe.bs.js` directly (ReScript's own
+cross-package resolution reaches into a dependency's in-source `.bs.js`
+output directly, bypassing `package.json` `main` entirely), which surfaced
+`Cannot find module '.../sdp-func-tools/index.js'` — there is no
+`src/index.js`-as-package-root file, only `dist/index.js` via the `main`
+field. The original `require("..")` relied on CommonJS's directory-with-
+`package.json`-`main` resolution (`".."` from `src/` → package root → `main`
+→ `dist/index.js`) — ESM has no equivalent for relative specifiers, so the
+correct explicit path is **`@module("../dist/index.js")`**, not
+`"../index.js"`. Fixed in all 4 `.res` files and rebuilt; re-verified
+`sdp-func-tools`'s own 58 tests still pass afterward. Note this makes
+`src/*.bs.js`'s self-reference depend on `dist/` already being built —
+same as the pre-migration behavior, not a new constraint, just now explicit
+instead of implicit in the resolution algorithm.
+
+## Phase 1 findings — `sdp-fs` (2026-08-16)
+
+Second package converted, depends on `sdp-func-tools` (already ESM, Phase 1)
+and `sdp-project` (still CommonJS, Phase 2) — good test of the mixed-module
+direction the plan flagged as needing re-verification. All 52 existing tests
+still pass. Diff: 174 insertions / 124 deletions across 30 files, under the
+250 LOC cap.
+
+Recipe from `sdp-func-tools` reused as-is (package.json `type: module`,
+`.babelrc` `modules: false`, extensionless imports fixed, default-import +
+destructure for `ramda`/`chai`). Two additional gotchas surfaced, both worth
+checking on every remaining package:
+
+1. **`fs-extra` has the same non-statically-analyzable-named-exports problem
+   as `ramda`/`ramda-fantasy`/`chai`.** Its `module.exports` is built via
+   object-spread of nested `require()` calls (`{ ...require('./copy'),
+   ...require('./remove'), ... }`), which `cjs-module-lexer` can only
+   partially resolve — empirically `outputFile` got detected but
+   `removeSync` did not (inconsistent, don't rely on partial detection).
+   Fixed the same way: `import fse from 'fs-extra'; const { removeSync } =
+   fse;` instead of `import { removeSync } from 'fs-extra'`. Add `fs-extra`
+   to the "always use default import" list alongside `ramda`, `ramda-fantasy`,
+   `chai`.
+2. **New failure mode, worse than the named-export problem: deep-importing
+   a *raw, unbuilt* source file from another package (bypassing that
+   package's `main`/`dist`) loses named exports entirely, even though the
+   same file transforms correctly when built.** `sdp-fs`'s tests import
+   `sdp-project/test/helpers.js` directly (a test helper that's never run
+   through `babel src -d dist`, only exists as source). Once `sdp-fs` became
+   `"type": "module"`, `import { defaultizeProject } from
+   'sdp-project/test/helpers.js'` failed with `does not provide an export
+   named 'defaultizeProject'`, even though `sdp-project`'s own `.babelrc`
+   (unchanged, still `modules: "commonjs"`) transforms that exact file
+   correctly when run through the Babel CLI by hand. Root cause (confirmed
+   via direct probing, not just inference): when Node's ESM loader resolves
+   an `import` of a file whose nearest `package.json` says `"type":
+   "commonjs"`, it runs `cjs-module-lexer`'s static named-export detection
+   against the **raw file on disk** — the actual `export const` source, not
+   the `@babel/register`-transformed-in-memory version — before handing off
+   execution to the CJS loader (which is the only place `@babel/register`'s
+   `require.extensions` hook lives). Since the raw source uses ESM `export`
+   syntax rather than CJS `exports.x =`, the lexer finds nothing, so only a
+   synthetic `default` (equal to the whole eventually-transformed
+   `module.exports`) is exposed. This does **not** affect normal
+   package-entry imports (`import { X } from 'sdp-project'`), because those
+   resolve to `dist/index.js`, which is pre-built (real `exports.x =` on
+   disk already, from running the build ahead of time) — only deep imports
+   of never-built raw source, like test helpers, hit this. Fixed the same
+   default-import way: `import SdpProjectTestHelpers from
+   'sdp-project/test/helpers.js'; const { defaultizeProject } =
+   SdpProjectTestHelpers;` (single-wrapped here, unlike the `hm-def` double-
+   wrap case in the `sdp-func-tools` findings above — check empirically per
+   file which shape applies rather than assuming). **Action item for later
+   phases:** grep every package for deep `require`/`import` of another
+   package's non-`main` source files (test helpers are the known case here;
+   there may be others) and apply this fix, or consider building test
+   helpers to `dist/` too so they don't need it.
+
+## Phase 1 findings — `sdp-deploy-bin` (2026-08-16)
+
+Third package, small (4 files), **no test suite** (`arduino-cli` and `fs`
+touch real hardware/filesystem state — no `test` script, no `test/` dir
+exists). Depends only on already-converted `sdp-func-tools`/`sdp-fs` plus
+the internal `arduino-cli` package (still CommonJS) and external `which`.
+Verification here was necessarily weaker than the first two packages:
+built the package and smoke-loaded `dist/index.js` directly (checked every
+named export resolves and is the right type, called the one pure function
+(`patchFqbnWithOptions`) with a fixture board). No way to exercise
+`createCli`/`compile`/`upload` without a real `arduino-cli` binary and
+board — flagging that as a real coverage gap carried over from before the
+migration, not one this migration introduced.
+
+Same recipe again (`type: module`, `modules: false`, extensionless imports,
+default-import fixes). Two more findings:
+
+1. **`arduino-cli` (the internal package, not `fs-extra`) has the same
+   Babel-double-default problem as `hm-def`.** Its `dist/index.js` has
+   `exports.default = ArduinoCli` (a factory function). `import arduinoCli
+   from 'arduino-cli'` binds to the whole `{ default: ArduinoCli,
+   __esModule: true }` object, not the function — confirmed by probing
+   `m.default.default` was the function, `m.default` was not. Fixed with
+   the same `import ArduinoCliModule from 'arduino-cli'; const arduinoCli =
+   ArduinoCliModule.default;` pattern. **This means every not-yet-migrated
+   internal package with a single default export (built by this repo's own
+   Babel config) is a candidate for the same bug** — not just `hm-def`.
+   Check every internal-package default import during every future phase,
+   not just external deps.
+2. **Bigger finding, not about ESM mechanics at all: native ESM's strict,
+   static export resolution turned two pre-existing dead-code bugs in
+   `sdp-fs/src/index.js` into hard load-time crashes**, discovered only
+   because `sdp-deploy-bin` (a *different* package) imports `sdp-fs`.
+   `sdp-fs`'s own test suite never caught these because nothing exercises
+   `sdp-fs`'s barrel `index.js` re-export surface directly — tests import
+   straight from the individual source files. Found:
+   - `export { spawnWorkspaceFile, spawnStdLib, spawnDefaultProject } from
+     './spawn.js'` — `spawnStdLib` was never defined in `spawn.js`, dead
+     stale re-export, no other file in the repo references it. Removed.
+   - `export { scanWorkspaceForLibNames, loadLibsFromWorkspaceList } from
+     './loadLibs.js'` — `loadLibsFromWorkspaceList` doesn't exist either;
+     the real, currently-used name is `loadLibs` (confirmed via
+     `src/load.js` and `test/loadLibs.spec.js`, both import `loadLibs`).
+     Corrected the re-export to the real name.
+
+   Under CommonJS this was completely silent: `require('sdp-fs').spawnStdLib`
+   just resolves to `undefined`, and nothing happened to read it. Under
+   native ESM, an unresolvable named export in *any* `export { x } from
+   './y'` statement is a **hard `SyntaxError` at module-link time for the
+   entire module graph** — it doesn't matter that nothing actually calls
+   the missing export, the whole import chain refuses to load. **Action
+   item, high priority for every remaining package:** audit every
+   `index.js` (or other barrel file)'s named re-export list against the
+   actual exports of its source files *before* converting, not after —
+   this class of bug won't surface via that package's own tests, only via
+   some other package's `import` of it (as happened here), which means it
+   can hide until a much later phase if not checked proactively. A quick
+   per-package check: for every `export { a, b, c } from './x.js'` line,
+   grep `x.js` for `export const a`/`export function a`/etc. and confirm
+   each name is real.
+
+## Phase 1 findings — `sdp-patch-search` (2026-08-16)
+
+Fourth package, small (2 src files), has tests (mocha). Converted with the
+established recipe only — no new gotchas, everything from the
+`sdp-func-tools`/`sdp-fs`/`sdp-deploy-bin` findings applied directly and it
+worked first try: 16/16 tests passing, matches baseline. Diff stayed small.
+Including this mainly to record that **not every package surfaces a new
+problem** — the recipe is converging, most packages should be this easy now
+that the CJS-interop and extensionless-import gotchas are known in advance.
+
+## Phase 1 — `belt-holes` blocked, reverted (2026-08-16)
+
+Attempted next (zero internal deps, ReScript-only, looked like the easiest
+remaining candidate) and hit a real blocker, **reverted, not converted**:
+
+**`belt-holes` uses Jest, not mocha — and Jest's `require()` does not have
+Node's native `require(esm)` interop.** Flipped `bsconfig.json` to
+`esmodule` and added `"type": "module"` exactly as with every other
+package; `rescript build` regenerated the `.bs.js` files correctly (as
+real `import`/`export` ESM syntax, same as always — ReScript itself even
+switched the `@rescript/runtime` import paths from `lib/js/` to `lib/es6/`
+automatically, no manual fix needed there). But `yarn test` (`jest`) failed
+immediately on every suite:
+```
+SyntaxError: Cannot use import statement outside a module
+> 3 | const BeltHoles_List = require('../src/BeltHoles_List.bs.js');
+```
+Root cause: this package has **no Babel config at all** (pure ReScript +
+Jest, nothing else) — Jest's default transform pipeline for a
+Babel-config-less project does effectively no transformation, and more
+fundamentally, **Jest's `require()` is Jest's own implementation
+(`jest-runtime`), not Node's** — it does not gain Node's newer
+`require(esm)` capability just because the host Node version supports it.
+The interop that made every other Phase 1 package work (a CJS-format
+caller `require()`-ing a real ESM-format file, confirmed safe back in the
+Phase 0 probe and re-confirmed for real code in the `sdp-func-tools`
+findings) is a Node runtime feature, not a JavaScript-engine-wide one —
+Jest's module system doesn't inherit it.
+
+**This means every Jest-based package in this migration is a distinct
+sub-case from the mocha-based ones**, needing one of these before
+conversion (not decided yet, needs its own scoping pass, do not just
+retry the mechanical recipe):
+- Enable Jest's experimental ESM support
+  (`NODE_OPTIONS=--experimental-vm-modules`, `extensionsToTreatAsEsm` in
+  Jest config, etc.) — keeps this package Babel-free but is Jest's
+  "experimental" tier, stability/compatibility with the installed Jest
+  version not yet checked.
+- Add a `babel-jest` transform so Jest transpiles through Babel like the
+  mocha packages do — works but adds a new dependency (Babel) to a package
+  that currently has none, and duplicates the `modules: false` config
+  decision made everywhere else.
+- Newer Jest major versions have improved native ESM support — check the
+  currently-installed Jest version's capabilities before picking either
+  option above; this may be simpler than either workaround if the version
+  already installed supports it well.
+
+**Action item:** confirmed by grepping every package's `scripts.test` —
+three packages use Jest: `belt-holes`, `sdp-tabtest`, `sdp-tethering-inet`
+(all three are ReScript-backed, all in the original Phase 1/2 candidate
+list). All three will hit this exact blocker. Also noted in passing:
+`sdp-client-electron` uses `electron-mocha`, a third test runner — not
+urgent (that's a Phase 3 package) but worth a similar sanity check before
+converting it rather than assuming the mocha recipe transfers unchanged.
+
+## Phase 1 — Jest packages retried with `babel-jest`, all three converted (2026-08-16)
+
+User call: use `babel-jest` (the proven, already-everywhere-else pattern)
+over Jest's experimental ESM mode. Retried and completed all three —
+`belt-holes`, `sdp-tethering-inet`, `sdp-tabtest` — same session. Baseline
+counts (re-confirmed per package before/after): `belt-holes` 13/13,
+`sdp-tethering-inet` 61/67 (6 pre-existing failures — real network/TCP
+tests, timeout with no internet in this sandbox, confirmed identical via
+`git stash` against the unmodified baseline, not a migration regression),
+`sdp-tabtest` 14/14 (one of its two suites was already failing before this
+session touched it at all — see below).
+
+**The recipe, once dialed in, applied uniformly to all three:**
+1. `bsconfig.json` → `esmodule`, `package.json` → `"type": "module"`, same
+   as every other package.
+2. Add a **test-only** `.babelrc` (not used for any build step — these
+   packages have none — only for `babel-jest` to discover):
+   ```json
+   { "presets": [["@babel/preset-env", { "modules": "commonjs", "targets": { "node": "current" } }]] }
+   ```
+   Deliberately `modules: "commonjs"` here, the *opposite* of every other
+   package's `modules: false`. The goal for a Jest package is different:
+   make `babel-jest` transform ESM syntax back to CommonJS at test-load
+   time, sidestepping Jest's lack of `require(esm)` entirely, rather than
+   preserving ESM for Node to interpret natively. The files on disk stay
+   real ESM either way — this only affects Jest's in-memory transform, not
+   what real consumers (Node, other converted packages) see.
+3. Add `@babel/core`, `@babel/preset-env`, `babel-jest` as `devDependencies`
+   (versions matched to what's already installed/hoisted:
+   `babel-jest@^24.9.0` — pinned to the Jest 24 line already in use, since a
+   newer `babel-jest` wasn't verified compatible and wasn't needed).
+4. **`transformIgnorePatterns` must explicitly un-ignore any dependency
+   that's already been converted to ESM** — Jest's default ignores all of
+   `node_modules`, but a workspace-symlinked sibling package (`belt-holes`,
+   `sdp-func-tools`) needing its own ESM-to-CJS transform lives there too.
+   Pattern used: `"/node_modules/(?!belt-holes/|sdp-func-tools/)"` (list
+   grows per package's actual converted dependencies).
+5. **Babel's own per-file `.babelrc` discovery does not reliably cross
+   package boundaries inside `transformIgnorePatterns`-unignored
+   `node_modules` deps** — un-ignoring `belt-holes/` alone wasn't enough;
+   `babel-jest` still didn't apply a transform to `belt-holes`'s files
+   pulled in via `sdp-tethering-inet`'s test run (same class of
+   root/rootMode config-boundary issue as the `sdp-fs`/`sdp-project` finding
+   above, different manifestation). Fix: don't rely on file-tree config
+   discovery at all — pass the babel config **inline** via Jest's own
+   `transform` option instead of a discoverable `.babelrc`:
+   ```json
+   "transform": {
+     "^.+\\.js$": ["babel-jest", { "presets": [["@babel/preset-env", { "modules": "commonjs", "targets": { "node": "current" } }]] }]
+   }
+   ```
+   This applies unconditionally to every matched file regardless of which
+   package's directory it lives in. (The plain `.babelrc` file is till
+   useful/kept as documentation + a fallback, but the inline `transform`
+   is what's actually load-bearing.)
+6. `@rescript/runtime`'s `esmodule`-mode output (`lib/es6/*.js`) is real,
+   unbuilt ESM shipped inside `node_modules` — same class of problem as
+   point 4, but for a dependency with no CommonJS-vs-ESM package-level
+   toggle of its own (Jest can't be told to just transform it, its own
+   internal cross-file imports keep pointing at `lib/es6/` regardless).
+   The transform+ignore-pattern approach doesn't reach into `@rescript/
+   runtime`'s own internals cleanly. Fixed instead with `moduleNameMapper`,
+   redirecting to the CommonJS build that already ships alongside it:
+   ```json
+   "moduleNameMapper": { "^@rescript/runtime/lib/es6/(.*)$": "@rescript/runtime/lib/js/$1" }
+   ```
+   Only affects Jest's module resolution during tests — real consumers
+   still get the genuine `es6/` build via Node's normal resolution.
+
+**Package-specific findings on top of the shared recipe:**
+
+- **`sdp-tethering-inet` — `%raw` embedding a bare `require(...)` call —
+  fixed (2026-08-16).** `src/nodejs/Net.res` had `%raw(\`
+  require("internet-available") \`)`, compiling to a literal
+  `require("internet-available")` call inside otherwise-ESM output —
+  invisible under Jest (transformed to CommonJS) but would throw
+  `ReferenceError: require is not defined` under real Node ESM. First
+  attempt used a plain `@module external ... = "internet-available"`
+  binding instead — **that was also wrong**: ReScript's whole-module
+  `@module` binding (no field name) compiles to a *namespace* import
+  (`import * as X from "..."`) under `esmodule` target, and a namespace
+  object is never callable even when the underlying CJS export was a bare
+  function — same root cause as the `events`/`EventEmitter` fix earlier in
+  this doc, but this time there's no named-export escape hatch
+  (`internet-available`'s `module.exports` is *just* a function, no
+  self-referencing property to bind to instead). Fixed by keeping `%raw`
+  but replacing the embedded `require()` with a lazy dynamic `import()` —
+  valid in both real ESM and Babel-transformed CommonJS, and free since
+  `isAvailable` already returns a promise (no signature change needed):
+  ```rescript
+  let isAvailable = %raw(`
+    function () {
+      return import('internet-available').then(function (mod) {
+        var fn = mod.default || mod;
+        return fn();
+      });
+    }
+  `)
+  ```
+  Verified two ways: Jest suite still 61/67 (same pre-existing network
+  failures as before, unrelated), and a direct native-ESM smoke test
+  calling `isAvailable()` in isolation — resolves with `undefined`
+  (confirmed this matches the underlying `internet-available` library's
+  own behavior exactly: it resolves with no value and rejects on failure,
+  by design — not a regression from this fix, verified by calling the raw
+  library function directly for comparison).
+- **`sdp-tabtest` — bare JSON import — fixed (2026-08-16).** `src/Tabtest.res`
+  had `@module external tabtestLibPatches: array<...> =
+  "../lib/tabtestLibPatches.json"`, compiling to `import * as
+  TabtestLibPatchesJson from "../lib/tabtestLibPatches.json"` — real Node
+  ESM requires an import attribute for JSON (`with { type: "json" }`),
+  missing here, would throw under native ESM despite passing under Jest
+  (transformed to `require`, which natively handles JSON). Since
+  `tabtestLibPatches` is consumed synchronously at module scope (not
+  awaited), a dynamic `import()` would have forced `generatePatchSuite`
+  and every caller of it to become async — too big a ripple for this fix.
+  Used a synchronous `fs.readFileSync` instead, resolved via
+  `import.meta.url` (no `__dirname`, no `require`):
+  ```rescript
+  %%raw(`import { readFileSync } from "node:fs";`)
+  %%raw(`import { fileURLToPath } from "node:url";`)
+
+  let tabtestLibPatches: array<SdpProject.Patch.t> = %raw(`
+    JSON.parse(
+      readFileSync(fileURLToPath(new URL("../lib/tabtestLibPatches.json", import.meta.url)), "utf8")
+    )
+  `)
+  ```
+  Note the binding changed from `external` to `let` — ReScript's `external`
+  requires its right-hand side to be a bare string naming a JS value, not
+  an arbitrary `%raw` expression; only `let` accepts a computed value.
+  `%%raw` (double-percent) injects a genuine top-level ESM `import`
+  statement rather than an inline expression — used here to bring
+  `readFileSync`/`fileURLToPath` into scope without `require`. Verified:
+  Jest suite 14/14 (unchanged), and the `readFileSync`/`fileURLToPath`
+  mechanism itself confirmed working under a standalone real-`.mjs` probe
+  (full end-to-end native-ESM load of `sdp-tabtest` isn't possible yet —
+  it still deep-imports the unconverted, still-CommonJS `sdp-project`,
+  Phase 2 work).
+- **`sdp-tabtest`'s `tools/loadTabtestLibPatches.js` is a standalone build
+  script run directly via `node` (`yarn build:lib`), never through Jest —
+  renamed to `.cjs`.** It uses plain `require()` syntax; under `"type":
+  "module"` a `.js` file would be parsed as ESM by Node with no `require`
+  global, a hard crash. `.cjs` is the standard escape hatch: always
+  CommonJS regardless of the package's `"type"` field. Check every
+  remaining package for standalone `node ./tools/*.js`-style scripts
+  before converting — they're easy to miss since they're not part of
+  `src/` or `test/` and don't show up in the require-count grep from the
+  scope inventory.
+- **Real cross-package regression, caught only because of the dependency
+  graph, not this package's own tests: the `hm-def` double-default fix
+  from the `sdp-func-tools`/`sdp-fs` findings above was WRONG for the Jest
+  path.** `HMDefModule.default` (the fix that made mocha packages pass)
+  returned `undefined` under `sdp-tabtest`'s Jest run, because **Babel's
+  own `_interopRequireDefault` helper — used when `babel-jest` transforms
+  `import HMDefModule from 'hm-def'` to CommonJS — already performs one
+  layer of default-unwrapping as part of translating the import statement
+  itself.** Node's native ESM interop (what mocha/`@babel/register`
+  packages get) does *not* pre-unwrap — the synthetic `.default` is always
+  the literal raw `module.exports`, however it's shaped. Same source line,
+  two different consumption paths, two different numbers of `.default`
+  layers needed — confirmed empirically by hand-running
+  `babel.transformFileSync` on the file and reading the generated
+  `_interopRequireDefault` output. Fixed with a shape-tolerant check in
+  both `sdp-func-tools/src/types.js` and `sdp-fs/src/types.js`:
+  ```js
+  const HMDef = HMDefModule.create ? HMDefModule : HMDefModule.default;
+  ```
+  **This generalizes: any "double-default" fix applied earlier in this
+  plan (`hm-def`, `arduino-cli`) needs the same tolerant-check treatment
+  if the package is ever deep-imported by a Jest-based test run — not just
+  its own package's test suite.** `sdp-arduino/src/types.js` and
+  `sdp-project/src/types.js` have the identical `hm-def` pattern and are
+  still CommonJS (Phase 2, untouched) — when converting either, apply the
+  tolerant form directly rather than the plain `.default` form that had
+  to be corrected here. `sdp-deploy-bin`'s `arduino-cli` double-default
+  fix (mocha-only, no current Jest consumer) doesn't need it *yet*, but
+  would need it the moment any Jest package deep-imports it.
+- Confirmed (again) that a `rescript build` failure ("Missing dependency
+  `Pin-SdpProject` in search path") hit mid-session was **stale incremental
+  build cache from flipping multiple interdependent packages'
+  `bsconfig.json` module targets in the same session**, not a real bug —
+  resolved by `yarn rescript clean` run from the package whose build was
+  failing (cleans its full dependency chain), not just the specific
+  package that seemed to have changed. If a ReScript build error mentions
+  a module that obviously exists, clean before investigating further.
 
 ## Explicitly not decided yet
 
@@ -281,3 +680,23 @@ other ReScript package with a `@module("..")` self-reference.
   migration, bulk-then-verify is lower risk with a good test net; file-by-file
   is lower risk without one. Decide per-package based on existing test
   coverage.
+
+## Follow-up (separate effort, not part of this migration)
+
+`ramda-fantasy` is unmaintained (last real release years ago). Worth
+replacing at some point — **Fluture** is the better target over Sanctuary or
+Folktale: the codebase already leans Sanctuary-style (`sanctuary-def`,
+`hm-def`), and Fluture is actively maintained, Sanctuary-compatible, and its
+`Either`/`Maybe`-shaped `Result` needs minimal API churn versus what
+`sdp-func-tools/src/monads.js` currently wraps. Folktale is also abandoned,
+so it doesn't solve the actual problem.
+
+Do this **after** the ESM migration finishes, as its own effort — don't mix
+module-format churn with monad-library churn in the same PRs, especially
+under the 250 LOC/PR cap. `ramda-fantasy` usage is currently isolated to a
+handful of `import`/destructure sites (see item 6 in the Phase 1 findings
+above for the current list: `errors.js`, `typeUtils.js`, `monads.js`, plus
+test files) — that isolation is itself a byproduct of the ESM conversion's
+import-fixing pass, so re-grep for full usage before starting rather than
+trusting this list, since more packages will have gone through the same
+conversion by then.
