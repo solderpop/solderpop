@@ -27,7 +27,7 @@
   }
 
   .titlebar {
-    background-color: $coal-bright;
+    background-color: var(--theme-deploy-panel-title-bg, $coal-bright);
 
     display: flex;
     flex-direction: row;
@@ -41,7 +41,7 @@
 
       .title {
         margin-left: 7px;
-        color: $light-grey-bright;
+        color: var(--theme-deploy-panel-title-text, $light-grey-bright);
       }
 
       .progress {
@@ -80,20 +80,20 @@
       border: none;
       outline: none;
       cursor: pointer;
-      color: #aaa;
+      color: var(--theme-deploy-panel-title-text, #aaa);
 
       &:hover {
-        color: #aaa;
-        background: #444;
+        color: var(--theme-deploy-panel-title-text, #aaa);
+        background: var(--theme-deploy-panel-hover-bg, #444);
       }
     }
 
     .abort-process-button {
       display: inline-block;
       @include deploymentPanelButton();
-      color: $red-bright;
+      color: var(--theme-error-text, $red-bright);
       &:hover {
-        color: $red-bright;
+        color: var(--theme-error-text, $red-bright);
       }
     }
     .quick-upload-button {
@@ -135,7 +135,7 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    background-color: $grey;
+    background-color: var(--theme-deploy-panel-tab-bg, $grey);
 
     .tab {
       display: inline-block;
@@ -145,7 +145,7 @@
 
       &.active {
         cursor: default;
-        border-bottom: 2px solid $cyan;
+        border-bottom: 2px solid var(--theme-selected, $cyan);
       }
     }
 
@@ -154,7 +154,7 @@
       display: inline-block;
 
       .fa {
-        color: $chalk;
+        color: var(--theme-deploy-panel-text, $chalk);
         border: 0;
         background: transparent;
 
@@ -163,7 +163,7 @@
         padding: 4px .5ex 4px;
 
         &:hover {
-          background-color: $dark;
+          background-color: var(--theme-deploy-panel-hover-bg, $dark);
         }
 
         &:disabled {
@@ -181,7 +181,7 @@
     position: relative;
     height: 165px;
 
-    background: $sidebar-color-bg;
+    background: var(--theme-deploy-panel-bg, $sidebar-color-bg);
     border-left: 1px solid $color-canvas-background;
   }
 
@@ -244,9 +244,9 @@
       width: 100%;
       line-height: 18px;
       padding: 1px 3px;
-      color: $chalk-bright; // like in the implementation editor
-      background: $blackberry-shadow;
-      border: 1px solid $grey-light;
+      color: var(--theme-deploy-panel-input-text, $chalk-bright); // like in the implementation editor
+      background: var(--theme-deploy-panel-input-bg, $blackberry-shadow);
+      border: 1px solid var(--theme-input-border, $grey-light);
       font-family: $font-family-mono;
     }
 
@@ -259,15 +259,15 @@
       background: linear-gradient(
         to right,
         rgba(255,255,255,0) 0%,
-        $blackberry-shadow 35%,
-        $blackberry-shadow 100%
+        var(--theme-deploy-panel-input-bg, $blackberry-shadow) 35%,
+        var(--theme-deploy-panel-input-bg, $blackberry-shadow) 100%
       );
-      color: $chalk-bright;
+      color: var(--theme-deploy-panel-input-text, $chalk-bright);
       border: 0;
       font-weight: bold;
 
       &:hover {
-        color: $cyan;
+        color: var(--theme-selected, $cyan);
         cursor: pointer;
       }
 
