@@ -1,6 +1,11 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import $ from 'sanctuary-def';
-import HMDef from 'hm-def';
+import HMDefModule from 'hm-def';
+
+// See sdp-func-tools/src/types.js for why this checks both shapes: native
+// ESM interop (mocha) vs. Babel's own CommonJS transform (Jest) disagree
+// on how many `.default` layers hm-def's export needs unwrapped.
+const HMDef = HMDefModule.create ? HMDefModule : HMDefModule.default;
 import {
   ProjectName,
   PatchPath,
@@ -12,7 +17,7 @@ import {
 } from 'sdp-project';
 import * as XF from 'sdp-func-tools';
 
-import { CHANGE_TYPES } from './constants';
+import { CHANGE_TYPES } from './constants.js';
 
 /* Types are by convention starts with a capital leter, so: */
 /* eslint-disable new-cap */

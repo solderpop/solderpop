@@ -1,18 +1,23 @@
 import path from 'path';
+import { fileURLToPath } from 'url';
 import fs from 'fs-extra';
 import os from 'os';
 
 import R from 'ramda';
 import dircompare from 'dir-compare';
-import { assert } from 'chai';
+import chai from 'chai';
 
 import { explodeEither } from 'sdp-func-tools';
 import * as XP from 'sdp-project';
-import { defaultizeProject } from 'sdp-project/test/helpers';
+import SdpProjectTestHelpers from 'sdp-project/test/helpers.js';
 
-import { loadProject, loadProjectFromXodball } from '../src/load';
-import { saveAll, saveProjectAsXodball } from '../src/save';
+const { defaultizeProject } = SdpProjectTestHelpers;
 
+import { loadProject, loadProjectFromXodball } from '../src/load.js';
+import { saveAll, saveProjectAsXodball } from '../src/save.js';
+
+const { assert } = chai;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const fixture = subpath => path.resolve(__dirname, 'fixtures', subpath);
 
 const formatDiffs = comparison =>

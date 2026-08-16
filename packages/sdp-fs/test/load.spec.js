@@ -1,13 +1,17 @@
-import chai, { assert } from 'chai';
+import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import * as XP from 'sdp-project';
 
 import path from 'path';
+import { fileURLToPath } from 'url';
 import R from 'ramda';
-import * as Loader from '../src/load';
+import * as Loader from '../src/load.js';
 
-import { fixture, expectRejectedWithCode } from './utils';
-import * as ERROR_CODES from '../src/errorCodes';
+import { fixture, expectRejectedWithCode } from './utils.js';
+import * as ERROR_CODES from '../src/errorCodes.js';
+
+const { assert } = chai;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 chai.use(chaiAsPromised);
 

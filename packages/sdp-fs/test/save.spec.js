@@ -1,25 +1,31 @@
 import R from 'ramda';
-import { assert } from 'chai';
-import { removeSync, readFile, readJson, pathExists } from 'fs-extra';
+import chai from 'chai';
+import fse from 'fs-extra';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import * as XP from 'sdp-project';
 
-import { defaultizeProject, defaultizePatch } from 'sdp-project/test/helpers';
+import SdpProjectTestHelpers from 'sdp-project/test/helpers.js';
 
-import { calculateDiff } from '../src/patchDiff';
+const { defaultizeProject, defaultizePatch } = SdpProjectTestHelpers;
+
+import { calculateDiff } from '../src/patchDiff.js';
 import {
   saveProjectEntirely,
   saveLibraryEntirely,
   saveAll,
   saveProject,
   saveLibraries,
-} from '../src/save';
-import * as ERROR_CODES from '../src/errorCodes';
+} from '../src/save.js';
+import * as ERROR_CODES from '../src/errorCodes.js';
 
-import { resolveLibPath } from '../src/utils';
+import { resolveLibPath } from '../src/utils.js';
 
-import { expectRejectedWithCode } from './utils';
+import { expectRejectedWithCode } from './utils.js';
 
+const { assert } = chai;
+const { removeSync, readFile, readJson, pathExists } = fse;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const tempDirName = './fs-temp';
 const tempDir = path.resolve(__dirname, tempDirName);
 const tempProjectDir = path.resolve(__dirname, tempDirName, 'project');

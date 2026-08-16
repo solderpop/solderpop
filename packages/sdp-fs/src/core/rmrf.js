@@ -1,4 +1,6 @@
-import { remove } from 'fs-extra';
+import fse from 'fs-extra';
+
+const { remove } = fse;
 
 export default path =>
   new Promise((resolve, reject) =>

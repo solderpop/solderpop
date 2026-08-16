@@ -1,11 +1,16 @@
-import { assert } from 'chai';
+import chai from 'chai';
 import fs from 'fs';
 import path from 'path';
-import { removeSync } from 'fs-extra';
+import { fileURLToPath } from 'url';
+import fse from 'fs-extra';
 
-import { Backup } from '../src/backup';
-import { readDir } from '../src/read';
-import { writeJSON } from '../src/write';
+import { Backup } from '../src/backup.js';
+import { readDir } from '../src/read.js';
+import { writeJSON } from '../src/write.js';
+
+const { assert } = chai;
+const { removeSync } = fse;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 describe('Backup', () => {
   const projectPath = path.resolve(

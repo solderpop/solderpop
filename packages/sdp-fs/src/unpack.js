@@ -1,12 +1,12 @@
 import path from 'path';
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 
-import { def } from './types';
+import { def } from './types.js';
 import {
   convertProjectToProjectFileContents,
   convertPatchToPatchFileContents,
-} from './convertTypes';
+} from './convertTypes.js';
 
 export const fsSafeName = XP.toIdentifier;
 

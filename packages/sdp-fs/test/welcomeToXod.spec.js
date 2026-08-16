@@ -1,10 +1,14 @@
-import { assert } from 'chai';
+import chai from 'chai';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 import { Project } from 'sdp-project';
 
-import { loadProjectWithLibs } from '../src/load';
-import pack from '../src/pack';
+import { loadProjectWithLibs } from '../src/load.js';
+import pack from '../src/pack.js';
+
+const { assert } = chai;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 describe('welcome-to-xod', () => {
   const workspace = path.resolve(__dirname, '../../../workspace');
