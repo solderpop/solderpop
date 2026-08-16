@@ -670,6 +670,61 @@ session touched it at all — see below).
   package that seemed to have changed. If a ReScript build error mentions
   a module that obviously exists, clean before investigating further.
 
+## Phase 2 findings — `sdp-project` (2026-08-16)
+
+First Phase 2 package (had to go before `sdp-arduino`, which depends on
+it). Much bigger than anything in Phase 1 — 67 files touched, largest
+single-package diff of the migration so far. All previously-known gotchas
+applied directly (extensionless imports, `ramda`/`ramda-fantasy`/`chai`/
+`hm-def` default-import fixes, `@module("..")` self-reference →
+`@module("../dist/index.js")`). Two new findings, one of them important
+enough to change the recipe for every remaining package with build-
+generated JSON data:
+
+- **Barrel-export audit is worth scripting, not eyeballing, past a certain
+  file count.** `src/index.js` re-exports ~150 names across a dozen
+  `export { ... } from './x.js'` blocks. Wrote a small Node script that
+  parses each block and greps the target file for each name (source at
+  the point this was done — re-derive rather than trust it's still
+  accurate) rather than checking by hand. Found 4 genuinely dead
+  re-exports this way (`haveAddedNodesOrChangedTypesOrBoundValues`,
+  `convertPatchDimensionsToSlots`, `convertPatchDimensionsToPixels`,
+  `cppEscape` — the last one actually lives in `sdp-func-tools`, not this
+  package at all). Confirmed via repo-wide grep that nothing imports any
+  of the four from `sdp-project` — removed rather than guessed at a
+  rename target, same policy as the `sdp-fs` findings above. **Run this
+  audit before, not after, converting every remaining package** — it's
+  cheap and catches a class of bug that a package's own tests structurally
+  cannot catch (see the `sdp-fs`/`sdp-deploy-bin` findings for why).
+- **The JSON-import fix from the `sdp-tabtest` findings needs a
+  correction: don't read the same file independently in multiple files.**
+  This package has 4 separate call sites that used to do `import
+  BUILT_IN_PATCHES from '../dist/built-in-patches.json'` (a build-
+  generated file) — `project.js`, `patch.js`,
+  `migrations/unitlessToSlots.js`, and `test/project.spec.js`. Applying
+  the `sdp-tabtest` fix (independent `fs.readFileSync` + `import.meta.url`
+  per file) mechanically caused 3 real test failures — same array
+  lengths, different members, despite the underlying JSON being byte-
+  identical. Root cause: **Node's module cache dedups `import` by resolved
+  file path, so all 4 old static imports of the same JSON file were
+  silently the exact same object in memory.** Something downstream
+  mutates a built-in patch object in place instead of returning a new one
+  (a real, pre-existing bug, out of scope to chase down here), and the
+  test suite's "expected" value only ever matched the library's "actual"
+  value because they were *literally the same object* — the assertion was
+  accidentally tautological. Independent `readFileSync` calls each
+  produce a fresh, unaliased object, breaking that accidental sharing and
+  exposing the real bug as a visible test failure. Fixed by centralizing
+  the read into one new module (`src/internal/builtInPatches.js`) that
+  every consumer imports from — restores the original aliasing/sharing
+  behavior exactly, which is the correct scope for an ESM migration (stay
+  behavior-preserving; don't fix unrelated bugs a change happens to
+  surface). **Action item:** the `sdp-tabtest` fix (independent read) is
+  only safe when the JSON file has exactly one consumer. Before applying
+  it to any remaining package, grep for every other file that imports the
+  same JSON path — if there's more than one, centralize into a shared
+  module like this one instead.
+
 ## Explicitly not decided yet
 
 - Whether ReScript's `esmodule` output should use `.mjs` or `.js` +
