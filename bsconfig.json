@@ -3,10 +3,6 @@
   "namespace": false,
   "sources": [
     {
-      "dir": "packages/sdp-arduino/src",
-      "subdirs": true
-    },
-    {
       "dir": "packages/sdp-tabtest/src",
       "subdirs": true
     }
@@ -17,7 +13,6 @@
   },
   "suffix": ".bs.js",
   "dependencies": [
-    "sdp-arduino",
     "sdp-tabtest"
   ],
   "warnings": {
