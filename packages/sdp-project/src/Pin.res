@@ -9,7 +9,7 @@ type t = {
   "key": key,
   "direction": string,
   "label": string,
-  "_type": string,
+  "type": string,
   "defaultValue": string,
   "order": int,
   "description": string,
@@ -51,7 +51,7 @@ let normalizeLabels = pins => pins->List.toArray->_normalizeLabels->List.fromArr
 let getKey = pin => pin["key"]
 
 let getPrimitiveTypeExn = (pin: t): primitiveDataType => {
-  let tp = pin["_type"]
+  let tp = pin["type"]
   switch tp {
   | "pulse" => Pulse
   | "boolean" => Boolean
@@ -65,4 +65,4 @@ let getPrimitiveTypeExn = (pin: t): primitiveDataType => {
 
 let getLabel = pin => pin["label"]
 
-let getType = pin => pin["_type"]
+let getType = pin => pin["type"]
