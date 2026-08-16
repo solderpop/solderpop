@@ -1,4 +1,10 @@
-import { FOCUS_AREAS, TAB_TYPES, SIDEBAR_IDS, PANEL_IDS } from './constants';
+import {
+  FOCUS_AREAS,
+  TAB_TYPES,
+  SIDEBAR_IDS,
+  PANEL_IDS,
+  DEFAULT_ZOOM,
+} from './constants';
 import { DEFAULT_PANNING_OFFSET } from '../project/nodeLayout';
 
 export default {
@@ -27,6 +33,7 @@ export default {
       linkingPin: null,
       editedAttachment: null,
       offset: DEFAULT_PANNING_OFFSET,
+      zoom: DEFAULT_ZOOM,
     },
   },
   patchWorkareaSize: { width: 0, height: 0 },

@@ -1,4 +1,5 @@
 import React from 'react';
+import * as R from 'ramda';
 import { HotKeys } from 'react-hotkeys';
 
 import { TAB_TYPES } from '../../../constants';
@@ -27,10 +28,12 @@ const getCurrentOffset = api => {
     api.state.panningStartPosition &&
     api.state.isPanning
   ) {
-    return addPoints(
-      api.getOffset(),
+    // mouse positions are in content coords, offset is in screen pixels
+    const delta = R.map(
+      R.multiply(api.getZoom()),
       subtractPoints(api.state.mousePosition, api.state.panningStartPosition)
     );
+    return addPoints(api.getOffset(), delta);
   }
 
   return api.getOffset();
@@ -52,7 +55,12 @@ const panningMode = {
   },
 
   onMouseDown(api, event) {
-    const mousePosition = getMousePosition(patchSvgRef, api.getOffset(), event);
+    const mousePosition = getMousePosition(
+      patchSvgRef,
+      api.getOffset(),
+      api.getZoom(),
+      event
+    );
 
     api.setState({
       isPanning: true,
@@ -61,7 +69,12 @@ const panningMode = {
     });
   },
   onMouseMove(api, event) {
-    const mousePosition = getMousePosition(patchSvgRef, api.getOffset(), event);
+    const mousePosition = getMousePosition(
+      patchSvgRef,
+      api.getOffset(),
+      api.getZoom(),
+      event
+    );
 
     api.setState({ mousePosition });
   },
@@ -112,9 +125,10 @@ const panningMode = {
           <Layers.Background
             width={api.props.size.width}
             height={api.props.size.height}
+            zoom={api.getZoom()}
             offset={offset}
           />
-          <g transform={getOffsetMatrix(offset)}>
+          <g transform={getOffsetMatrix(offset, api.getZoom())}>
             <Layers.Comments
               comments={api.props.comments}
               selection={api.props.selection}

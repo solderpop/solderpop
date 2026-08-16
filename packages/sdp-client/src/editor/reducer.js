@@ -12,6 +12,7 @@ import { MAIN_PATCH_PATH } from '../project/constants';
 import {
   DEBUGGER_TAB_ID,
   TABLE_LOG_TAB_ID,
+  DEFAULT_ZOOM,
   FOCUS_AREAS,
   SELECTION_ENTITY_TYPE,
   TAB_TYPES,
@@ -93,6 +94,10 @@ const setTabOffset = R.curry((offset, tabId, state) =>
   )(state)
 );
 
+const setTabZoom = R.curry((zoom, tabId, state) =>
+  R.assocPath(['tabs', tabId, 'zoom'], zoom)(state)
+);
+
 const getTabIdbyPatchPath = R.curry((patchPath, state) =>
   R.compose(
     R.propOr(null, 'id'),
@@ -150,6 +155,7 @@ const addTabWithProps = R.curry((id, type, patchPath, state) =>
       index: getTabNewIndex(state),
       type,
       offset: DEFAULT_PANNING_OFFSET,
+      zoom: DEFAULT_ZOOM,
       editedAttachment: null,
     },
     state
@@ -744,6 +750,12 @@ const editorReducer = (state = initialState, action) => {
         },
         state
       );
+
+    case EAT.SET_ZOOM:
+      return R.when(
+        () => state.currentTabId != null,
+        setTabZoom(action.payload, state.currentTabId)
+      )(state);
 
     default:
       return state;

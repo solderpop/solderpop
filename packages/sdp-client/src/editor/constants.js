@@ -70,6 +70,10 @@ export const TAB_TYPES = {
 export const DEBUGGER_TAB_ID = 'debugger';
 export const TABLE_LOG_TAB_ID = 'tablelog';
 
+export const DEFAULT_ZOOM = 1;
+export const MIN_ZOOM = 0.2;
+export const MAX_ZOOM = 4;
+
 export const PANEL_IDS = {
   PROJECT_BROWSER: 'PROJECT_BROWSER',
   INSPECTOR: 'INSPECTOR',

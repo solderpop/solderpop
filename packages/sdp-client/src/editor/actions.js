@@ -38,7 +38,11 @@ import {
   bulkMoveNodesAndComments,
   bulkDeleteNodesAndComments,
 } from '../project/actions';
-import { addError, addConfirmation, addNotification } from '../messages/actions';
+import {
+  addError,
+  addConfirmation,
+  addNotification,
+} from '../messages/actions';
 import composeMessage from '../messages/composeMessage';
 
 import * as Selectors from './selectors';
@@ -1034,3 +1038,8 @@ export const changeTableLogSource = (tabId, nodeId) => (dispatch, getState) => {
     },
   });
 };
+
+export const setZoom = zoom => ({
+  type: ActionType.SET_ZOOM,
+  payload: zoom,
+});

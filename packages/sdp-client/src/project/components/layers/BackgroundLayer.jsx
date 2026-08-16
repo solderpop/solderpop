@@ -7,16 +7,16 @@ import { SLOT_SIZE, NODE_HEIGHT } from '../../nodeLayout';
 // Add 0.5 to compensate blurring of pattern
 const COMPENSATE_BLUR = 0.5;
 
-const NodeSlotPattern = ({ offset }) => (
+const NodeSlotPattern = ({ offset, zoom }) => (
   <pattern
     id="patch_bg_pattern"
     x={Math.round(offset.x) - COMPENSATE_BLUR}
     y={Math.round(offset.y) - COMPENSATE_BLUR}
-    width={SLOT_SIZE.WIDTH}
-    height={SLOT_SIZE.HEIGHT}
+    width={SLOT_SIZE.WIDTH * zoom}
+    height={SLOT_SIZE.HEIGHT * zoom}
     patternUnits="userSpaceOnUse"
   >
-    <g stroke="none" fill="none">
+    <g stroke="none" fill="none" transform={`scale(${zoom})`}>
       <line x1={COMPENSATE_BLUR} y1={1} x2={COMPENSATE_BLUR} y2={NODE_HEIGHT} />
       <line
         x1={0}
@@ -36,11 +36,22 @@ const NodeSlotPattern = ({ offset }) => (
 
 NodeSlotPattern.propTypes = {
   offset: PropTypes.object.isRequired,
+  zoom: PropTypes.number,
 };
 
-const BackgroundLayer = ({ onClick, onDoubleClick, onMouseDown, offset }) => (
+NodeSlotPattern.defaultProps = {
+  zoom: 1,
+};
+
+const BackgroundLayer = ({
+  onClick,
+  onDoubleClick,
+  onMouseDown,
+  offset,
+  zoom,
+}) => (
   <g className="BackgroundLayer">
-    <NodeSlotPattern offset={offset} />
+    <NodeSlotPattern offset={offset} zoom={zoom} />
     <rect
       className="BackgroundRect"
       key="bg"
@@ -59,6 +70,7 @@ BackgroundLayer.defaultProps = {
   onClick: noop,
   onDoubleClick: noop,
   onMouseDown: noop,
+  zoom: 1,
 };
 
 BackgroundLayer.propTypes = {
@@ -66,6 +78,7 @@ BackgroundLayer.propTypes = {
   onDoubleClick: PropTypes.func,
   onMouseDown: PropTypes.func,
   offset: PropTypes.object.isRequired,
+  zoom: PropTypes.number,
 };
 
 export default BackgroundLayer;

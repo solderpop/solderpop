@@ -2,20 +2,20 @@ import * as R from 'ramda';
 
 export const bindApi = (api, fn) => (...args) => fn(api, ...args);
 
-// :: Point -> String
-export const getOffsetMatrix = ({ x, y }) =>
-  `matrix(1, 0, 0, 1, ${Math.round(x)}, ${Math.round(y)})`;
+// :: Point -> Number -> String
+export const getOffsetMatrix = ({ x, y }, zoom) =>
+  `matrix(${zoom}, 0, 0, ${zoom}, ${Math.round(x)}, ${Math.round(y)})`;
 
-// :: Ref -> Point -> Event -> Point
-export const getMousePosition = (rootRef, offset, event) => {
+// :: Ref -> Point -> Number -> Event -> Point
+export const getMousePosition = (rootRef, offset, zoom, event) => {
   // TODO: warn that we returned default value?
   if (!rootRef) return { x: 0, y: 0 };
 
   const bbox = rootRef.getBoundingClientRect();
 
   return {
-    x: event.clientX - bbox.left - offset.x,
-    y: event.clientY - bbox.top - offset.y,
+    x: (event.clientX - bbox.left - offset.x) / zoom,
+    y: (event.clientY - bbox.top - offset.y) / zoom,
   };
 };
 
