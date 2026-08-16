@@ -35,7 +35,21 @@ let disconnect = (str: string, session: t) =>
 
 // Internet-available
 
-let isAvailable = %raw(` require("internet-available") `)
+// "internet-available"'s CJS module.exports is a bare function. ReScript's
+// `@module` binding with no field name compiles to a namespace import
+// (`import * as X`) under esmodule output, and a namespace object is never
+// callable even when the underlying CJS export was — breaks under both
+// real ESM and Babel's CJS-transformed output. `isAvailable` is already
+// async, so resolve this via a lazy dynamic `import()` instead, which is
+// valid ESM and sidesteps the whole-module-binding codegen issue.
+let isAvailable = %raw(`
+  function () {
+    return import('internet-available').then(function (mod) {
+      var fn = mod.default || mod;
+      return fn();
+    });
+  }
+`)
 
 // Tcp-ping
 

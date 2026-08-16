@@ -1,6 +1,6 @@
 type t
 
-@new @module external create: unit => t = "events"
+@new @module("events") external create: unit => t = "EventEmitter"
 
 @send external emit: (t, string, string) => bool = "emit"
 
