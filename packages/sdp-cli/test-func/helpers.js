@@ -1,6 +1,9 @@
 import path from 'path';
 import os from 'os';
 import fs from 'fs-extra';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export const createWorkingDirectory = prefix =>
   fs.mkdtempSync(path.resolve(os.tmpdir(), `sdp-cli-test-${prefix}-`));

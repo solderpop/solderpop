@@ -1,6 +1,6 @@
 {
   "name": "sdp-cli",
-  "type": "commonjs",
+  "type": "module",
   "version": "0.38.0",
   "description": "SolderPop IDE: Command Line Interface",
   "author": "SolderPop <dev@solderpop.io>",

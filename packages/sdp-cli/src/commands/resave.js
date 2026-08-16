@@ -1,7 +1,9 @@
 /* eslint-disable no-param-reassign */
 import path from 'path';
 import { stdout, exit } from 'process';
-import { pick } from 'ramda';
+import R from 'ramda';
+
+const { pick } = R;
 import { flags } from '@oclif/command';
 import {
   loadProject,
@@ -10,11 +12,11 @@ import {
   saveProjectEntirely,
 } from 'sdp-fs';
 import { toXodball } from 'sdp-project';
-import BaseCommand from '../baseCommand';
-import * as commonArgs from '../args';
-import * as myFlags from '../flags';
-import { resolveBundledWorkspacePath } from '../paths';
-import { getListr } from '../listr';
+import BaseCommand from '../baseCommand.js';
+import * as commonArgs from '../args.js';
+import * as myFlags from '../flags.js';
+import { resolveBundledWorkspacePath } from '../paths.js';
+import { getListr } from '../listr.js';
 
 class ResaveCommand extends BaseCommand {
   async run() {

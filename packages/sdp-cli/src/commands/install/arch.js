@@ -2,8 +2,8 @@
 import { exit } from 'process';
 import fs from 'fs-extra';
 import * as xdb from 'sdp-deploy-bin';
-import BaseCommand from '../../baseCommand';
-import { resolveBundledWorkspacePath } from '../../paths';
+import BaseCommand from '../../baseCommand.js';
+import { resolveBundledWorkspacePath } from '../../paths.js';
 
 class InstallArchCommand extends BaseCommand {
   async run() {

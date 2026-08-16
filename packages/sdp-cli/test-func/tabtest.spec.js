@@ -1,10 +1,12 @@
 import { test } from '@oclif/test';
-import { assert } from 'chai';
+import chai from 'chai';
+
+const { assert } = chai;
 import path from 'path';
 import os from 'os';
 import process from 'process';
 import fs from 'fs-extra';
-import { bundledWorkspacePath, createWorkingDirectory } from './helpers';
+import { bundledWorkspacePath, createWorkingDirectory } from './helpers.js';
 
 const defaultOutputDir = path.resolve(os.tmpdir(), 'sdp-tabtest');
 

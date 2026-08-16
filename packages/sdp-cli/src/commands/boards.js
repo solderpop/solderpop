@@ -1,6 +1,8 @@
 /* eslint-disable no-param-reassign */
 import { exit } from 'process';
-import {
+import R from 'ramda';
+
+const {
   compose,
   concat,
   filter,
@@ -10,11 +12,11 @@ import {
   prop,
   sortBy,
   startsWith,
-} from 'ramda';
+} = R;
 import asTable from 'as-table';
 import * as xdb from 'sdp-deploy-bin';
-import BaseCommand from '../baseCommand';
-import { resolveBundledWorkspacePath } from '../paths';
+import BaseCommand from '../baseCommand.js';
+import { resolveBundledWorkspacePath } from '../paths.js';
 
 const mergeAvailableInstalled = (available, installed) => {
   const fqbns = pluck('fqbn', installed);

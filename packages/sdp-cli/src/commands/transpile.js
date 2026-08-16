@@ -1,15 +1,17 @@
 /* eslint-disable no-param-reassign */
 import { exit, stdout } from 'process';
-import { pick } from 'ramda';
+import R from 'ramda';
+
+const { pick } = R;
 import { flags } from '@oclif/command';
 import { writeFile, resolvePath } from 'sdp-fs';
 
-import BaseCommand from '../baseCommand';
-import * as commonArgs from '../args';
-import * as myFlags from '../flags';
-import { getListr } from '../listr';
-import { loadProjectTask, transformTask, transpileTask } from '../listrTasks';
-import { resolveBundledWorkspacePath } from '../paths';
+import BaseCommand from '../baseCommand.js';
+import * as commonArgs from '../args.js';
+import * as myFlags from '../flags.js';
+import { getListr } from '../listr.js';
+import { loadProjectTask, transformTask, transpileTask } from '../listrTasks.js';
+import { resolveBundledWorkspacePath } from '../paths.js';
 
 class TranspileCommand extends BaseCommand {
   async run() {
