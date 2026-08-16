@@ -830,6 +830,57 @@ green build).
   it exercises exactly the code path (`Main.run()`'s root detection) that
   broke.
 
+## Important: re-check earlier packages' workarounds when their deps convert (2026-08-16)
+
+Caught by re-running the *entire* suite of already-converted packages
+after finishing `sdp-cli` (a full sweep — worth doing after every batch,
+not just the package just touched): **`sdp-fs` and `sdp-patch-search`
+both broke**, with `sdp-project/test/helpers.js does not provide an
+export named 'default'`.
+
+Cause: the `sdp-fs`/`sdp-patch-search` findings (Phase 1) documented a
+default-import workaround for deep-importing `sdp-project/test/
+helpers.js` — needed at the time because `sdp-project` was still
+`"type": "commonjs"`, so Node's `cjs-module-lexer` analyzed the *raw*
+file (real `export const` syntax, since the source was never
+transformed) against a CJS-typed package and found no named exports,
+synthesizing only a `default`. That workaround **silently became wrong**
+the moment `sdp-project` itself was converted (Phase 2): the same file is
+now genuinely parsed as real ESM with its real named exports, and there
+is no `default` export at all — the old shim (`import
+SdpProjectTestHelpers from '...'; const { x } = SdpProjectTestHelpers;`)
+found nothing to bind to. Fixed by reverting to plain named imports
+(`import { x } from '...'`), the natural/correct form now that the
+target is truly ESM.
+
+**This is a general hazard specific to this migration's incremental,
+package-by-package order, not a one-off bug:** any workaround written in
+an earlier phase to cope with a *not-yet-converted* dependency needs to
+be re-examined — and very possibly reverted to the plain/idiomatic form —
+the moment that dependency gets converted in a later phase. The build
+succeeding gives no signal either way (these are runtime import-shape
+mismatches, not syntax errors) — only actually running the depending
+package's tests catches it, and nothing prompts you to re-run a package
+you already finished and moved on from.
+
+**Action items, both now and for the rest of this migration:**
+- After converting any package, **re-run the full test suite of every
+  already-converted package**, not just the one just touched — this is
+  the only way this class of regression surfaces. (This was already
+  informally happening via the "final full sweep" pattern in this doc's
+  findings, but wasn't being done rigorously enough to catch this one
+  before now — do it explicitly, every time, going forward.)
+- `sdp-client`'s `test/tableLogSources.spec.js` and `test/hinting.spec.js`
+  have the same kind of deep import of `sdp-project`'s (or possibly
+  another package's) test helpers — not checked/fixed here since
+  `sdp-client` isn't converted yet (Phase 3), but whatever workaround it
+  needs when *it's* converted should be written with this exact trap in
+  mind, and re-verified if any of ITS dependencies convert afterward.
+- More generally: grep for `SdpProjectTestHelpers`-style default-import-
+  of-a-deep-test-helper patterns (or the equivalent for any other
+  package) as a matter of course whenever a new package finishes
+  conversion, not just when something visibly breaks.
+
 ## Explicitly not decided yet
 
 - Whether ReScript's `esmodule` output should use `.mjs` or `.js` +
