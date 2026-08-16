@@ -1130,6 +1130,136 @@ Webpack build: 0 errors, 17 pre-existing warnings (same
 warnings documented in `sdp-client`'s findings — genuinely missing
 product features, not migration fallout).
 
+## Phase 3 — `sdp-client-electron` (2026-08-16)
+
+Last package in the migration. Standard recipe: `"type": "module"`,
+148 extensionless-import fixes across 49 files, `webpack.config.js` →
+`.cjs`, `.babelrc` `modules: false` (same split as every other package
+built both by `babel` CLI and webpack's `babel-loader`).
+
+- **Electron GUI/test verification could not be completed in this
+  sandbox — flagged and confirmed with the user before proceeding.**
+  `node_modules/electron/dist/electron` here is a plain Node.js binary
+  standing in for real Electron: `--version` reports the Node version
+  (not an Electron version), and it fails on `--no-sandbox` with
+  Node's own "bad option:" unrecognized-flag message, identical to
+  running `node --no-sandbox` directly. Confirmed pre-existing (not
+  migration fallout) by hitting the identical failure before touching
+  any code in this package. No system Electron install exists as a
+  fallback. Both `test` (electron-mocha) and `test-func` (Spectron)
+  ultimately depend on launching a real Electron process and cannot
+  run to completion here.
+- **The stand-in binary turned out to be useful anyway**: running it
+  directly against the compiled Main Process entry point still
+  executes real Node-native strict-ESM module resolution across the
+  entire reachable import graph, since it genuinely is Node under the
+  hood. This caught several bugs a webpack build alone would not:
+  - **Every `import * as R from 'ramda'` and `import * as fse from
+    'fs-extra'` (~25 files) was silently broken.** `cjs-module-lexer`
+    can't statically detect either package's named exports (same root
+    cause documented for `ramda` since Phase 1), so under real ESM the
+    namespace object only ever carries a `default` property —
+    `R.propOr`, `fse.remove`, etc. were `undefined` at every call
+    site, not a parse/import-time failure. This is a *new* variant of
+    an already-known bug: every earlier fix for this issue was for
+    *named* imports (`import { propOr } from 'ramda'`, which fails
+    loudly at import time); a *namespace* import (`import * as R`)
+    fails silently instead — the import itself succeeds, only property
+    access on it is broken, and only at the specific call site that
+    happens to touch a name the lexer missed. Worth checking for this
+    namespace-import variant specifically if `ramda`/`fs-extra` show
+    up in any future package's audit — `grep` for `import \* as` isn't
+    enough on its own, since real ESM sibling packages use the same
+    syntax safely. Fixed to default imports everywhere (`import R from
+    'ramda'`).
+  - `tetheringInetMiddleware.js`: `import AtNet from
+    'sdp-tethering-inet'` (default import) never matched that
+    package's real shape — it only has named exports (`create`,
+    `execute`, ...), no default. Unlike the ramda/fs-extra case above,
+    this fails loudly (`export 'default' ... was not found`) since
+    it's a real ESM module, not a CJS-interop gap. Fixed to `import {
+    create as createAtNet }`.
+  - `utils.js`: `import { Maybe } from 'ramda-fantasy'` — the same
+    non-statically-analyzable CJS exports problem `sdp-func-tools` hit
+    in Phase 1. Fixed with the same default-import + destructure
+    pattern established there.
+  - **`main.js`/`utils.js` are Main Process code, compiled to real ESM
+    by `babel src/app -d src-babel/app` — which has no `__dirname`
+    global.** `utils.js` is the interesting case: the *same source
+    file* is also webpack-bundled for the Renderer Process, where
+    `__dirname` is deliberately left alone (`node: { __dirname: false
+    }` in the webpack config) so Electron's renderer runtime resolves
+    it to the bundle's own directory — a genuinely different value by
+    design, per the file's own docblock. Fixed *only* the Main Process
+    branch via `fileURLToPath(import.meta.url)`, leaving the Renderer
+    Process's bare `__dirname` reference completely untouched, to
+    avoid silently changing already-correct, differently-scoped
+    renderer behavior.
+  - `@electron/remote/main` → `@electron/remote/main/index.js`: a bare
+    subpath resolved to a directory, which Node's strict ESM resolver
+    rejects outright (`ERR_UNSUPPORTED_DIR_IMPORT`) — a distinct
+    failure mode from the usual missing-file-extension category,
+    caught only because the stand-in binary actually runs Node's real
+    resolver instead of webpack's more permissive one.
+  - Plus the usual bare-extensionless-deep-import category
+    (`sdp-client/dist/debugger/debugProtocol`,
+    `sdp-deploy/dist/download`/`unzip`/`progress`, `sdp-deploy/dist/constants`).
+- `popups/reducer.js`: removed a dead `REQUEST_INSTALL_ARDUINO_IDE`
+  import/case — the constant was never defined anywhere in this
+  package, so the `ARDUINO_IDE_NOT_FOUND` popup could never have been
+  reachable, even before this migration. Same
+  silently-tolerated-under-CommonJS dead-export category documented
+  repeatedly elsewhere in this doc.
+- **Found and fixed one real pre-existing bug in `sdp-fs`** (already
+  converted, already committed): `find.js` rejects with
+  `ERROR_CODES.TRIED_TO_OPEN_NOT_XOD_FILE` when a non-`.xod` file is
+  opened, but that constant was never defined in `errorCodes.js`.
+  Invisible under CommonJS (silent `undefined` property access) and
+  uncovered by `sdp-fs`'s own test suite; surfaced here because webpack
+  statically validates named-export access through namespace imports
+  once the importing chain is itself real ESM. Same "a later package's
+  real build exposes a latent bug in an earlier, already-converted
+  package" category as the `sdp-project`/`Buses.res` and
+  `sdp-client/workers/run.js` findings — companion-fixed and committed
+  separately, `sdp-fs`'s own 52/52 tests still pass.
+- `src/shim.js`: same dead `babel-runtime/regenerator` patch as
+  `sdp-client-browser/src/shim.js` — emptied the same way.
+- `test/workspaceActions.spec.js`, `test-func/0-fs.spec.js`,
+  `test-func/pageObject.js`: chai fixed to default-import +
+  destructure (same `cjs-module-lexer` gap as every other chai usage
+  in this migration); `__dirname` fixed via
+  `fileURLToPath(import.meta.url)` (real ESM test files now);
+  `pageObject.js` itself converted from plain CommonJS
+  (`require`/`module.exports`) to real ESM — it has no import/export
+  syntax of its own, so it would otherwise hit the same "require is
+  not defined" failure documented for `shim.js`-style files elsewhere
+  in this migration, just discovered via Node directly instead of
+  webpack.
+
+**What was verified, given the sandbox couldn't run real Electron:**
+`babel` compile of `src/app`/`src/shared` (clean, plus `node --check`
+passing on every output file), `webpack --config webpack.config.cjs`
+(0 errors, 22 pre-existing warnings — same dead-feature warnings
+documented for `sdp-client`/`sdp-client-browser`), and the stand-in
+binary + `yarn test-func` both running cleanly through 100% of the
+reachable module-resolution graph before hitting the confirmed-
+pre-existing Electron-launch wall. **This should be re-verified with
+real Electron (a proper desktop/CI environment) before merge** — build-
+and module-resolution-level correctness is confirmed, but no actual
+GUI interaction was observed for this package, unlike `sdp-client`/
+`sdp-client-browser` where a real browser was available.
+
+## Migration complete
+
+All packages in the monorepo have been converted from CommonJS to
+ESM. Every package's own test suite passes at its baseline count
+(with the `sdp-client-electron` exception above, blocked purely by
+sandbox tooling, not code correctness), and both GUI applications were
+build-verified; `sdp-client-browser` was additionally verified via a
+real browser launch. Remaining open items are tracked below (ReScript
+output extension convention) and further down (`ramda-fantasy`
+follow-up) rather than blocking this migration.
+
 ## Explicitly not decided yet
 
 - Whether ReScript's `esmodule` output should use `.mjs` or `.js` +
