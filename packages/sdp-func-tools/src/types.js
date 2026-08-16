@@ -1,7 +1,9 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import $ from 'sanctuary-def';
 import $type from 'sanctuary-type-identifiers';
-import HMDef from 'hm-def';
+import HMDefModule from 'hm-def';
+
+const HMDef = HMDefModule.default;
 
 /* Types are by convention starts with a capital leter, so: */
 /* eslint-disable new-cap */

@@ -1,6 +1,7 @@
-import { assert } from 'chai';
+import chai from 'chai';
+const { assert } = chai;
 
-import { roundTo } from '../src/math';
+import { roundTo } from '../src/math.js';
 
 describe('Math', () => {
   it('roundTo() returns right values', () => {

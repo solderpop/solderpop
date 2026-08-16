@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
 // :: [a] -> Set a
 export const setOf = a => new Set(a);

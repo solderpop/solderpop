@@ -1,6 +1,6 @@
 {
   "name": "sdp-func-tools",
-  "type": "commonjs",
+  "type": "module",
   "version": "0.34.0",
   "description": "",
   "keywords": [],

@@ -1,7 +1,8 @@
 import R from 'ramda';
-import { assert } from 'chai';
+import chai from 'chai';
+const { assert } = chai;
 
-import { tapP, retryOrFail } from '../src/promises';
+import { tapP, retryOrFail } from '../src/promises.js';
 
 describe('promises', () => {
   describe('tapP()', () => {

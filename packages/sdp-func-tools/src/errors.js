@@ -1,7 +1,9 @@
-import * as R from 'ramda';
-import { Either } from 'ramda-fantasy';
-import { def } from './types';
-import { foldMaybe, foldEither } from './monads';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Either } = RamdaFantasy;
+import { def } from './types.js';
+import { foldMaybe, foldEither } from './monads.js';
 
 export const createError = def(
   'createError :: String -> Object -> Error',

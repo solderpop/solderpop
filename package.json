@@ -90,6 +90,6 @@
     "**/spdy": "file:./tools/spdy-shim"
   },
   "engines": {
-    "node": ">=12.16.3"
+    "node": ">=22.12.0"
   }
 }

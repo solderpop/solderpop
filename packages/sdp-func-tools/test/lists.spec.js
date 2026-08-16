@@ -1,6 +1,7 @@
-import { assert } from 'chai';
+import chai from 'chai';
+const { assert } = chai;
 
-import { isAmong, uniqLists, swap } from '../src/lists';
+import { isAmong, uniqLists, swap } from '../src/lists.js';
 
 describe('lists', () => {
   describe('isAmong', () => {
