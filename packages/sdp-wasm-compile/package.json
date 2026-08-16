@@ -1,6 +1,6 @@
 {
   "name": "sdp-wasm-compile",
-  "type": "commonjs",
+  "type": "module",
   "version": "0.1.0",
   "description": "Local Emscripten-based C++ to WASM compiler for Simulate, replacing the old xod.io cloud compile service",
   "main": "dist/index.js",
