@@ -1,5 +1,5 @@
-import BasePageObject from './BasePageObject';
-import PatchGroupItem from './PatchGroupItem';
+import BasePageObject from './BasePageObject.js';
+import PatchGroupItem from './PatchGroupItem.js';
 
 class PatchGroup extends BasePageObject {
   async _getTrigger() {

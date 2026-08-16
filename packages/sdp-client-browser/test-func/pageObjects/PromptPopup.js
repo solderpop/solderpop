@@ -1,4 +1,4 @@
-import ConfirmationPopup from './ConfirmationPopup';
+import ConfirmationPopup from './ConfirmationPopup.js';
 
 class PromptPopup extends ConfirmationPopup {
   async typeText(text) {

@@ -1,11 +1,11 @@
 /* global browser:false, assert:false */
 
-import getPage from './utils/getPage';
+import getPage from './utils/getPage.js';
 
-import ProjectBrowser from './pageObjects/ProjectBrowser';
-import PatchGroupItemContextMenu from './pageObjects/PatchGroupItemContextMenu';
-import ConfirmationPopup from './pageObjects/ConfirmationPopup';
-import EditorTab from './pageObjects/EditorTab';
+import ProjectBrowser from './pageObjects/ProjectBrowser.js';
+import PatchGroupItemContextMenu from './pageObjects/PatchGroupItemContextMenu.js';
+import ConfirmationPopup from './pageObjects/ConfirmationPopup.js';
+import EditorTab from './pageObjects/EditorTab.js';
 
 const PATCH_NAME = '001-hello';
 

@@ -1,15 +1,15 @@
 {
   "name": "sdp-client-browser",
-  "type": "commonjs",
+  "type": "module",
   "version": "0.38.0",
   "description": "SolderPop IDE: Client browser application",
   "scripts": {
-    "build:tutorial-project": "node ./tools/loadTutorialProject.js",
-    "build": "yarn run build:tutorial-project && webpack --color",
+    "build:tutorial-project": "node ./tools/loadTutorialProject.cjs",
+    "build": "yarn run build:tutorial-project && webpack --color --config webpack.config.cjs",
     "clean:dist": "rimraf ./dist ./tutorialProject.json",
     "benchmark": "node -r babel-register ./benchmark/index.js",
     "test-func": "mocha --require ../../tools/babel-register.js --color --timeout 90000 --bail test-func/bootstrap.js test-func/**/*.spec.js",
-    "dev": "yarn run build:tutorial-project && webpack-dev-server --watch --color --hot --config webpack.config.dev.js"
+    "dev": "yarn run build:tutorial-project && webpack-dev-server --watch --color --hot --config webpack.config.dev.cjs"
   },
   "dependencies": {
     "babel-polyfill": "^6.16.0",
