@@ -62,6 +62,8 @@ import SnackBar from './messages';
 import composeMessage from './messages/composeMessage';
 import * as MessageConstants from './messages/constants';
 import Toolbar from './utils/components/Toolbar';
+import SolderpopLogo from './utils/components/SolderpopLogo';
+import SolderpopLockup from './utils/components/SolderpopLockup';
 import PopupShowCode from './utils/components/PopupShowCode';
 import PopupAlert from './utils/components/PopupAlert';
 import PopupConfirm from './utils/components/PopupConfirm';
@@ -85,6 +87,8 @@ import { default as deriveProjectName } from './utils/deriveProjectName';
 import themeReducer from './theme/reducer';
 import { INITIAL_STATE as themeInitialState } from './theme/state';
 import ThemeSettingsPopup from './theme/components/ThemeSettingsPopup';
+
+export { default as ThemeSettingsPopup } from './theme/components/ThemeSettingsPopup';
 
 export * from './editor/actions';
 export * from './project/actions';
@@ -141,6 +145,8 @@ export { default as PopupConfirm } from './utils/components/PopupConfirm';
 export { default as PopupPrompt } from './utils/components/PopupPrompt';
 export { default as PopupForm } from './utils/components/PopupForm';
 export { default as Toolbar } from './utils/components/Toolbar';
+export { default as SolderpopLogo } from './utils/components/SolderpopLogo';
+export { default as SolderpopLockup } from './utils/components/SolderpopLockup';
 export {
   default as PopupProjectPreferences,
 } from './project/components/PopupProjectPreferences';
@@ -228,6 +234,8 @@ export default Object.assign(
       components: { ThemeSettingsPopup },
     },
     ThemeSettingsPopup,
+    SolderpopLogo,
+    SolderpopLockup,
   },
   UserSelectors,
   EditorSelectors,

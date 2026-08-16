@@ -14,8 +14,7 @@ import { LIVENESS } from 'sdp-arduino';
 
 import packageJson from '../../package.json';
 import PopupInstallApp from '../components/PopupInstallApp';
-
-const ThemeSettingsPopup = client.theme.components.ThemeSettingsPopup;
+import { ThemeSettingsPopup } from 'sdp-client';
 
 const DEFAULT_CANVAS_WIDTH = 800;
 const DEFAULT_CANVAS_HEIGHT = 600;
@@ -27,7 +26,7 @@ const applyTheme = colors => {
       .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
       .toLowerCase()}`;
     document.documentElement.style.setProperty(cssKey, value);
-  }, colors);
+  });
 };
 
 class App extends client.App {

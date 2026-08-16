@@ -179,7 +179,7 @@ const nordic = {
 };
 
 export const INITIAL_STATE = {
-  currentTheme: 'navy',
+  currentTheme: 'light',
   themes: {
     navy: {
       name: 'Navy',

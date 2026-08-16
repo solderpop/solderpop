@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SkyLight from 'react-skylight';
 
-import { getUtmSiteUrl } from 'sdp-client';
+import { getUtmSiteUrl, SolderpopLockup } from 'sdp-client';
 
 class PopupInstallApp extends React.PureComponent {
   constructor(props) {
@@ -42,6 +42,9 @@ class PopupInstallApp extends React.PureComponent {
         afterClose={this.props.onClose}
       >
         <div className="ModalBody">
+          <div className="ModalLogoSection">
+            <SolderpopLockup />
+          </div>
           <div className="ModalContent">
             Uploading a program requires access to USB ports. <br />
             Browsers do not provide it for security reasons,&nbsp; so you have
