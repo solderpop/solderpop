@@ -27,6 +27,12 @@ module.exports = merge(getBaseConfig(__dirname), {
     bindings: 'commonjs bindings',
     serialport: 'commonjs serialport',
   },
+  ignoreWarnings: [
+    // electron-settings ships a sourceMappingURL pointing at a .ts file
+    // that isn't included in its published package -- nothing we can fix
+    // on our side short of patching the dependency.
+    /Failed to parse source map.*electron-settings/,
+  ],
   module: {
     rules: [
       {

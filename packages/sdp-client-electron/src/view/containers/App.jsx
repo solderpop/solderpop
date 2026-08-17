@@ -1251,7 +1251,6 @@ const mapDispatchToProps = (dispatch) => ({
       switchWorkspace: settingsActions.switchWorkspace,
       openProject: client.openProject,
       saveAll: actions.saveAll,
-      openTutorial: actions.openTutorial,
       uploadToArduino: uploadActions.uploadToArduino,
       uploadToArduinoConfig: uploadActions.uploadToArduinoConfig,
       hideUploadConfigPopup: uploadActions.hideUploadConfigPopup,
