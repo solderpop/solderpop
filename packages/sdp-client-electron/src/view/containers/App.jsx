@@ -39,7 +39,7 @@ import packageJson from '../../../package.json';
 import * as actions from '../actions.js';
 import * as uploadActions from '../../upload/actions.js';
 import { listBoards, upload } from '../../upload/arduinoCli.js';
-import { compileSimulation } from '../../upload/wasmCompile.js';
+import compileSimulation from '../../upload/wasmCompile.js';
 import * as debuggerIPC from '../../debugger/ipcActions.js';
 import {
   getUploadProcess,

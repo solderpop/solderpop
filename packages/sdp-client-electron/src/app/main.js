@@ -30,7 +30,7 @@ import {
   subscribeCheckUpdates,
   subscribeUpgradeArduinoPackages,
 } from './arduinoCli.js';
-import { subscribeCompileSimulation } from './wasmCompile.js';
+import subscribeCompileSimulation from './wasmCompile.js';
 import {
   subscribeOnCheckEmsdkInstalled,
   subscribeOnInstallEmsdk,

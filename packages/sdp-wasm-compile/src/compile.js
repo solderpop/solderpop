@@ -73,10 +73,7 @@ const wrapCompileError = (err) =>
   );
 
 // :: String -> Nullable Path -> Promise Suite Error
-// Named on purpose: matches sdp-cloud-compile/src/compile.js's own
-// compileSimulation export shape and its 9 existing consumers.
-// eslint-disable-next-line import/prefer-default-export
-export const compileSimulation = async (programCode, emsdkRoot = null) => {
+const compileSimulation = async (programCode, emsdkRoot = null) => {
   const { emxx, env } = await getEmxxEnv(emsdkRoot);
   const rootDir = await getRootDir();
   const buildDir = await fse.mkdtemp(path.join(rootDir, 'build_'));
@@ -115,3 +112,5 @@ export const compileSimulation = async (programCode, emsdkRoot = null) => {
     options: { noExitRuntime: true },
   };
 };
+
+export default compileSimulation;

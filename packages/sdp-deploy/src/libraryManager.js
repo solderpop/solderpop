@@ -7,7 +7,7 @@ import {
   foldMaybeWith,
   createError,
   allPromises,
-  then,
+  thenP,
   explodeMaybe,
 } from 'sdp-func-tools';
 
@@ -93,7 +93,7 @@ export const checkLibrariesInstalledByUrls = R.curry(
   (onProgress, libsPath, libUrls) => {
     const progress = createProgress(libUrls.length);
     return R.compose(
-      then(R.zipObj(libUrls)),
+      thenP(R.zipObj(libUrls)),
       allPromises,
       R.map((url) =>
         R.compose(

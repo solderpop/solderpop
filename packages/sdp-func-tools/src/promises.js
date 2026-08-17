@@ -28,12 +28,7 @@ export const allPromises = (promises) => Promise.all(promises);
  * near the end of the function chain. Otherwise, use `composeP`.
  */
 // :: (a -> b) -> Promise a -> Promise b
-// Deliberately named `then` (used via named import only, e.g.
-// `import { then } from 'sdp-func-tools'` in libraryManager.js) --
-// no-restricted-exports guards against `await`ing a namespace import
-// that happens to carry a `.then`, which doesn't apply to this usage.
-// eslint-disable-next-line no-restricted-exports
-export const then = R.curry((fn, promise) => promise.then(fn));
+export const thenP = R.curry((fn, promise) => promise.then(fn));
 
 // :: Number -> Promise.Resolved ()
 export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

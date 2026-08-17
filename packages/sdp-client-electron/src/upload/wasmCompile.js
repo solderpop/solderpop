@@ -6,5 +6,6 @@ import { COMPILE_SIMULATION } from '../shared/events.js';
 const compileSimulationIpc = promisifyIpc(COMPILE_SIMULATION);
 
 // :: String -> Promise Suite Error
-// eslint-disable-next-line import/prefer-default-export
-export const compileSimulation = (code) => compileSimulationIpc(noop, code);
+const compileSimulation = (code) => compileSimulationIpc(noop, code);
+
+export default compileSimulation;
