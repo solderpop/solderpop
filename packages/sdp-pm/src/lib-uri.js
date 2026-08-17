@@ -10,13 +10,14 @@ export const createLibUri = (orgname, libname, tag) => ({
   tag,
 });
 
-export const parseLibUri = string =>
+export const parseLibUri = (string) =>
   Maybe.toMaybe(string.match(/^([^@/]+?)\/([^@/]+?)(?:@([^@/]+?))?$/)).map(
     ([, orgname, libname, tag]) =>
       createLibUri(orgname, libname, tag || 'latest')
   );
 
-export const toStringWithoutTag = libUri =>
+export const toStringWithoutTag = (libUri) =>
   `${libUri.orgname}/${libUri.libname}`;
 
-export const toString = libUri => `${toStringWithoutTag(libUri)}@${libUri.tag}`;
+export const toString = (libUri) =>
+  `${toStringWithoutTag(libUri)}@${libUri.tag}`;

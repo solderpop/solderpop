@@ -4,7 +4,7 @@ import * as fse from 'fs-extra';
 import { assert } from 'chai';
 import which from 'which';
 
-import arduinoCli from '../src/index';
+import arduinoCli from '../src/index.js';
 
 describe('Arduino Cli', () => {
   const PATH_TO_CLI =
@@ -32,14 +32,14 @@ describe('Arduino Cli', () => {
     it('with default config', () =>
       arduinoCli(PATH_TO_CLI)
         .dumpConfig()
-        .then(res => {
+        .then((res) => {
           assert.include(res.directories.user, '/sketchbook');
           assert.include(res.directories.data, '/data');
         }));
     it('with custom config', () =>
       arduinoCli(PATH_TO_CLI, cfg)
         .dumpConfig()
-        .then(res => {
+        .then((res) => {
           assert.strictEqual(res.directories.user, cfg.directories.user);
           assert.strictEqual(res.directories.data, cfg.directories.data);
         }));
@@ -76,7 +76,7 @@ describe('Arduino Cli', () => {
       return cli
         .setPackageIndexUrls([url])
         .then(() => cli.dumpConfig())
-        .then(res => assert.include(res.board_manager.additional_urls, url));
+        .then((res) => assert.include(res.board_manager.additional_urls, url));
     });
     it('downloads additional package index', () => {
       const cli = arduinoCli(PATH_TO_CLI, cfg);
@@ -112,7 +112,7 @@ describe('Arduino Cli', () => {
     it('Installs arduino package', () =>
       cli.core
         .install(
-          progressData =>
+          (progressData) =>
             assert.hasAllKeys(progressData, [
               'message',
               'percentage',
@@ -134,7 +134,7 @@ describe('Arduino Cli', () => {
         )
         .then(assert.isTrue));
     it('Returns list with installed package', () =>
-      cli.core.list().then(res => {
+      cli.core.list().then((res) => {
         assert.lengthOf(res, 1);
         assert.propertyVal(res[0], 'ID', 'arduino:avr');
         assert.propertyVal(res[0], 'Installed', '1.6.21');
@@ -142,7 +142,7 @@ describe('Arduino Cli', () => {
         assert.propertyVal(res[0], 'Name', 'Arduino AVR Boards');
       }));
     it('Lists all installed boards with cpu options', () =>
-      cli.listInstalledBoards().then(res => {
+      cli.listInstalledBoards().then((res) => {
         assert.includeDeepMembers(res, [
           {
             name: 'Arduino/Genuino Uno',

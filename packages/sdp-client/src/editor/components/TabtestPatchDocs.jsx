@@ -6,7 +6,7 @@ import Icon from 'react-fa';
 
 import { getUtmSiteUrl } from '../../utils/urls.js';
 
-const CppPatchDocs = ({ patch }) => {
+function CppPatchDocs({ patch }) {
   const [inputPins, outputPins] = R.compose(
     R.map(R.sort(R.ascend(XP.getPinOrder))),
     R.partition(XP.isInputPin),
@@ -27,7 +27,7 @@ const CppPatchDocs = ({ patch }) => {
         <div>
           <span className="pin-direction">Inputs:</span>
           <ul>
-            {inputPins.map(pin => (
+            {inputPins.map((pin) => (
               <li key={XP.getPinKey(pin)}>
                 <span className="pin-label">{XP.getPinLabel(pin)}</span>
                 <span className={`pin-type ${XP.getPinType(pin)}`}>
@@ -42,7 +42,7 @@ const CppPatchDocs = ({ patch }) => {
         <div className="outputs">
           <span className="pin-direction">Outputs:</span>
           <ul>
-            {outputPins.map(pin => (
+            {outputPins.map((pin) => (
               <li key={XP.getPinKey(pin)}>
                 <span className="pin-label">{XP.getPinLabel(pin)}</span>
                 <span className={`pin-type ${XP.getPinType(pin)}`}>
@@ -64,7 +64,7 @@ const CppPatchDocs = ({ patch }) => {
       </a>
     </div>
   );
-};
+}
 
 CppPatchDocs.propTypes = {
   patch: PT.object.isRequired,

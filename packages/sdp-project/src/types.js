@@ -2,11 +2,6 @@ import HMDefModule from 'hm-def';
 import R from 'ramda';
 import $ from 'sanctuary-def';
 
-// See sdp-func-tools/src/types.js for why this checks both shapes: native
-// ESM interop (mocha) vs. Babel's own CommonJS transform (Jest) disagree
-// on how many `.default` layers hm-def's export needs unwrapped.
-const HMDef = HMDefModule.create ? HMDefModule : HMDefModule.default;
-
 import * as XF from 'sdp-func-tools';
 
 import * as C from './constants.js';
@@ -19,6 +14,11 @@ import {
   isLibName,
 } from './internal/patchPathUtils.js';
 import { isValidVersion } from './versionUtils.js';
+
+// See sdp-func-tools/src/types.js for why this checks both shapes: native
+// ESM interop (mocha) vs. Babel's own CommonJS transform (Jest) disagree
+// on how many `.default` layers hm-def's export needs unwrapped.
+const HMDef = HMDefModule.create ? HMDefModule : HMDefModule.default;
 
 /* Types are by convention starts with a capital leter, so: */
 /* eslint-disable new-cap */
@@ -58,7 +58,7 @@ const NonZeroNaturalNumber = NullaryType(
 );
 const ArityStep = NullaryType(
   'ArityStep',
-  x => x >= 1 && x <= C.MAX_ARITY_STEP && Number.isInteger(x)
+  (x) => x >= 1 && x <= C.MAX_ARITY_STEP && Number.isInteger(x)
 );
 
 export const Label = AliasType('Label', $.String);

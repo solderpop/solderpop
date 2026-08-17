@@ -59,7 +59,7 @@ const squashSingleOutputNodes = def(
     const squashedNodeId = Node.getNodeId(squashedNode);
 
     const linksFromSquashedNode = R.map(
-      oldLink =>
+      (oldLink) =>
         Link.createLink(
           Link.getLinkInputPinKey(oldLink),
           Link.getLinkInputNodeId(oldLink),

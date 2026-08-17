@@ -1,7 +1,7 @@
 import { SHOW_GLOBAL_TOOLTIP, HIDE_GLOBAL_TOOLTIP } from './events.js';
 
 // Emitter functions
-export const emitShowTooltip = payload => {
+export const emitShowTooltip = (payload) => {
   window.dispatchEvent(
     new window.CustomEvent(SHOW_GLOBAL_TOOLTIP, { detail: payload })
   );

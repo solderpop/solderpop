@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
 
-const Button = ({
+function Button({
   as = 'button',
   className,
   disabled,
@@ -10,8 +10,8 @@ const Button = ({
   small,
   children,
   ...restProps
-}) =>
-  React.createElement(
+}) {
+  return React.createElement(
     as,
     {
       ...restProps,
@@ -25,6 +25,7 @@ const Button = ({
     },
     children
   );
+}
 
 Button.propTypes = {
   as: PropTypes.string,

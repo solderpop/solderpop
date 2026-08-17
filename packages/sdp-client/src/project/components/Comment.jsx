@@ -105,15 +105,8 @@ class Comment extends React.Component {
   }
 
   render() {
-    const {
-      id,
-      content,
-      pxPosition,
-      pxSize,
-      isSelected,
-      isDragged,
-      hidden,
-    } = this.props;
+    const { id, content, pxPosition, pxSize, isSelected, isDragged, hidden } =
+      this.props;
 
     const { isEditing, editorValue } = this.state;
 

@@ -25,24 +25,24 @@ describe('Backup', () => {
   before(() => removeSync(restoreTmpDir));
   after(() => removeSync(restoreTmpDir));
 
-  it('make() should create .tmp directory and copy files into it', done => {
+  it('make() should create .tmp directory and copy files into it', (done) => {
     backup
       .make()
       .then(() => readDir(tempPath))
-      .then(files => {
+      .then((files) => {
         assert.lengthOf(files, 7);
         done();
       })
-      .catch(err => done(err));
+      .catch((err) => done(err));
   });
 
-  it('clear() should remove .tmp directory', done => {
+  it('clear() should remove .tmp directory', (done) => {
     backup.clear();
     assert(fs.existsSync(tempPath) === false);
     done();
   });
 
-  it('restore() should restore data from .tmp', done => {
+  it('restore() should restore data from .tmp', (done) => {
     const data = {
       dirname: './test/',
       filename: 'test.json',
@@ -60,16 +60,16 @@ describe('Backup', () => {
       })
       .then(() => rBackup.make())
       .then(() => readDir(temppath))
-      .then(files => {
+      .then((files) => {
         assert.lengthOf(files, 1);
       })
       .then(() => fs.renameSync(filepath, `${filepath}_broken`))
       .then(() => rBackup.restore())
       .then(() => readDir(dirpath))
-      .then(files => {
+      .then((files) => {
         assert.deepEqual(files, [filepath]);
         done();
       })
-      .catch(err => done(err));
+      .catch((err) => done(err));
   });
 });

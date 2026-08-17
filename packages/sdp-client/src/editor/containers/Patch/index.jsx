@@ -121,7 +121,7 @@ class Patch extends React.Component {
     return {
       nodeHover: {
         nodeId: this.state.hoveredNodeId,
-        onMouseOver: nodeId => this.setState({ hoveredNodeId: nodeId }),
+        onMouseOver: (nodeId) => this.setState({ hoveredNodeId: nodeId }),
         onMouseLeave: () => this.setState({ hoveredNodeId: null }),
       },
     };
@@ -170,7 +170,7 @@ class Patch extends React.Component {
       goToMode: this.goToMode,
       goToDefaultMode: this.goToDefaultMode,
       getOffset: () => this.state.offset,
-      setOffset: offset => this.setState({ offset }),
+      setOffset: (offset) => this.setState({ offset }),
       getZoom: () => this.state.zoom,
     };
   }
@@ -199,6 +199,7 @@ class Patch extends React.Component {
   getModeStorage(mode) {
     return () => this.storage[mode] || {};
   }
+
   setModeStorage(mode, newData) {
     this.storage[mode] = R.merge(this.storage[mode], newData);
   }
@@ -262,9 +263,10 @@ class Patch extends React.Component {
   }
 
   resizeWorkarea(width, height) {
-    return R.compose(this.props.actions.patchWorkareaResized, pixelSizeToSlots)(
-      { width, height }
-    );
+    return R.compose(
+      this.props.actions.patchWorkareaResized,
+      pixelSizeToSlots
+    )({ width, height });
   }
 
   render() {
@@ -283,7 +285,7 @@ class Patch extends React.Component {
     return this.props.connectDropTarget(
       <div
         className={cn('PatchWrapper-container', currentMode)}
-        ref={r => {
+        ref={(r) => {
           this.dropTargetRootRef = r;
         }}
         onWheel={this.handleScroll}
@@ -349,7 +351,7 @@ const mapStateToProps = R.applySpec({
   chunkActiveIndex: EditorSelectors.getBreadcrumbActiveIndex,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(
     {
       addNode: ProjectActions.addNode,

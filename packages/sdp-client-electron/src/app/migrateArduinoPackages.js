@@ -21,7 +21,7 @@ const OLD_PACKAGE_VERSIONS = {
 };
 
 const moveWithoutEexistError = (from, to) =>
-  fse.move(from, to).catch(err => {
+  fse.move(from, to).catch((err) => {
     if (err.code === 'EEXIST') {
       return 0;
     }
@@ -33,10 +33,10 @@ const moveWithoutEexistError = (from, to) =>
  *
  * :: Path -> Promise 0 Error
  */
-export default async wsPath => {
+export default async (wsPath) => {
   const appData = app.getPath('userData');
   const oldPackagesDir = path.join(appData, 'packages');
-  if (!await fse.pathExists(oldPackagesDir)) return 0;
+  if (!(await fse.pathExists(oldPackagesDir))) return 0;
 
   const oldHardwareDir = path.join(oldPackagesDir, 'arduino', 'hardware');
   const archs = await fse.readdir(oldHardwareDir);

@@ -3,7 +3,7 @@ import * as XP from 'sdp-project';
 import { getSwaggerClient, swaggerError } from './utils.js';
 import { createLibUri, toString, toStringWithoutTag } from './lib-uri.js';
 
-const packLibVersion = project => ({
+const packLibVersion = (project) => ({
   libname: XP.getProjectName(project),
   version: {
     description: XP.getProjectDescription(project),
@@ -13,7 +13,7 @@ const packLibVersion = project => ({
 });
 
 export default function publish(swaggerUrl, grant, project) {
-  return getSwaggerClient(swaggerUrl).then(swagger => {
+  return getSwaggerClient(swaggerUrl).then((swagger) => {
     const { Library, Organization, User, Version } = swagger.apis;
 
     // eslint-disable-next-line no-param-reassign
@@ -27,9 +27,9 @@ export default function publish(swaggerUrl, grant, project) {
     const libUri = createLibUri(orgname, libname, version.semver);
 
     return Organization.getOrg({ orgname })
-      .catch(err => {
+      .catch((err) => {
         if (err.status !== 404) throw swaggerError(err);
-        return User.putUserOrg({ org: {}, orgname, username }).catch(err2 => {
+        return User.putUserOrg({ org: {}, orgname, username }).catch((err2) => {
           if (err2.status === 403) {
             throw new Error(`user "${username}" is not registered.`);
           }
@@ -40,10 +40,10 @@ export default function publish(swaggerUrl, grant, project) {
         });
       })
       .then(() =>
-        Library.getOrgLib({ libname, orgname }).catch(err => {
+        Library.getOrgLib({ libname, orgname }).catch((err) => {
           if (err.status !== 404) throw swaggerError(err);
           return Library.putOrgLib({ lib: {}, libname, orgname }).catch(
-            err2 => {
+            (err2) => {
               if (err2.status === 403) {
                 throw new Error(
                   `user "${username}" can't access ${toStringWithoutTag(
@@ -57,7 +57,7 @@ export default function publish(swaggerUrl, grant, project) {
         })
       )
       .then(() =>
-        Version.postLibVersion({ libname, orgname, version }).catch(err => {
+        Version.postLibVersion({ libname, orgname, version }).catch((err) => {
           if (err.status === 409) {
             throw new Error(`version "${toString(libUri)}" already exists.`);
           }

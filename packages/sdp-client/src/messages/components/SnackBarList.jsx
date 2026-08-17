@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const SnackBarList = ({ onMouseOver, onMouseOut, children }) => (
-  <ul
-    className="SnackBarList"
-    onMouseOver={onMouseOver}
-    onMouseOut={onMouseOut}
-  >
-    {children}
-  </ul>
-);
+function SnackBarList({ onMouseOver, onMouseOut, children }) {
+  return (
+    <ul
+      className="SnackBarList"
+      onMouseOver={onMouseOver}
+      onMouseOut={onMouseOut}
+    >
+      {children}
+    </ul>
+  );
+}
 
 SnackBarList.propTypes = {
   children: PropTypes.arrayOf(PropTypes.element),

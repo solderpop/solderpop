@@ -14,7 +14,7 @@ const charLiteralToByteLiteral = R.when(
   R.compose(
     R.concat(R.__, 'd'),
     R.toString,
-    a => a.charCodeAt(0),
+    (a) => a.charCodeAt(0),
     R.nth(1),
     R.match(XP.charLiteralRegExp)
   )
@@ -40,14 +40,14 @@ export default def(
         return `${prefix}\r\n`;
       case XP.PIN_TYPE.STRING:
         return R.compose(
-          s => `${prefix}:${s}\r\n`,
+          (s) => `${prefix}:${s}\r\n`,
           R.slice(0, XP.getStringTweakLength(nodeType)),
           unquote
         )(value);
       case XP.BINDABLE_CUSTOM_TYPES.COLOR:
         return R.compose(
           ([r, g, b]) => `${prefix}:${r},${g},${b}\r\n`,
-          R.map(x => parseInt(x, 16)),
+          R.map((x) => parseInt(x, 16)),
           R.splitEvery(2),
           R.tail
         )(value);

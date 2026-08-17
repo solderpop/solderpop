@@ -1,5 +1,4 @@
 import chai from 'chai';
-const { assert } = chai;
 
 import {
   omitRecursively,
@@ -10,6 +9,8 @@ import {
   reverseLookup,
   invertMap,
 } from '../src/objects.js';
+
+const { assert } = chai;
 
 describe('objects', () => {
   describe('omitRecursively()', () => {

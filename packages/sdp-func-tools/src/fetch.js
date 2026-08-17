@@ -12,18 +12,17 @@ import R from 'ramda';
  *   status, statusText and payload
  */
 // :: Object -> (FetchResult | Error) -> Error
-export const rejectFetchResult = R.curry(
-  (payload, res) =>
-    res.status
-      ? Object.assign(
-          new Error(res.statusText),
-          {
-            status: res.status,
-            statusText: res.statusText,
-          },
-          payload
-        )
-      : Object.assign(res, payload)
+export const rejectFetchResult = R.curry((payload, res) =>
+  res.status
+    ? Object.assign(
+        new Error(res.statusText),
+        {
+          status: res.status,
+          statusText: res.statusText,
+        },
+        payload
+      )
+    : Object.assign(res, payload)
 );
 
 export default {};

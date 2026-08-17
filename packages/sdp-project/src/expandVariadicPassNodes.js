@@ -1,7 +1,5 @@
 import R from 'ramda';
 import RamdaFantasy from 'ramda-fantasy';
-
-const { Maybe } = RamdaFantasy;
 import { explodeEither, isAmong } from 'sdp-func-tools';
 
 import { def } from './types.js';
@@ -16,6 +14,8 @@ import {
   isVariadicPassPath,
 } from './patchPathUtils.js';
 import { createAdditionalValueTerminalGroups } from './expandVariadicNodes.js';
+
+const { Maybe } = RamdaFantasy;
 
 const expandPassPatch = R.curry((desiredArityLevel, patch) => {
   const expandedPatchPath = R.compose(
@@ -49,16 +49,17 @@ const expandPassPatch = R.curry((desiredArityLevel, patch) => {
     variadicPins
   );
 
-  const variadicPinKeys = R.compose(R.map(Pin.getPinKey), R.prop('value'))(
-    variadicPins
-  );
+  const variadicPinKeys = R.compose(
+    R.map(Pin.getPinKey),
+    R.prop('value')
+  )(variadicPins);
 
   const linksFromVariadicOutputs = R.compose(
     R.filter(R.pipe(Link.getLinkOutputNodeId, isAmong(variadicPinKeys))),
     Patch.listLinks
   )(patch);
   const nodesConnectedToVariadicInputs = R.compose(
-    R.map(nodeId => Patch.getNodeByIdUnsafe(nodeId, patch)),
+    R.map((nodeId) => Patch.getNodeByIdUnsafe(nodeId, patch)),
     R.uniq,
     R.map(Link.getLinkInputNodeId)
   )(linksFromVariadicOutputs);
@@ -70,8 +71,8 @@ const expandPassPatch = R.curry((desiredArityLevel, patch) => {
   );
 
   const linksFromAdditionalTerminalsToNodesWithAddedArity = R.compose(
-    R.chain(terminalGroupIndex =>
-      R.map(link => {
+    R.chain((terminalGroupIndex) =>
+      R.map((link) => {
         const inputNodeId = Link.getLinkInputNodeId(link);
         const inputPinKey = R.compose(
           R.over(Pin.variadicPinKeySuffixLens, R.add(terminalGroupIndex)),
@@ -172,7 +173,7 @@ export default def(
               Node.getNodeType
             )
           ),
-          R.filter(R.pipe(Node.getNodeArityLevel, al => al > 1)),
+          R.filter(R.pipe(Node.getNodeArityLevel, (al) => al > 1)),
           Patch.listNodes
         )(initialPatch);
         // TODO: short-cirquit if nodesToExpand is empty?
@@ -203,7 +204,7 @@ export default def(
 
         const updatedPatch = R.compose(
           Patch.upsertNodes(R.__, initialPatch),
-          R.map(node =>
+          R.map((node) =>
             R.compose(
               Node.setNodeArityLevel(1),
               Node.setNodeType(

@@ -81,11 +81,11 @@ const changingArityLevel = {
      */
     // :: RenderableNode
     const newNode = R.compose(
-      renderableNode =>
+      (renderableNode) =>
         R.compose(
           R.assoc('id', `${renderableNode.id}-$CHANGING_ARITY`),
           R.assoc('isChangingArity', true),
-          keysToOmit =>
+          (keysToOmit) =>
             R.compose(
               R.assocPath(
                 ['size', 'width'],
@@ -128,7 +128,7 @@ const changingArityLevel = {
         <PatchSVG
           onMouseMove={bindApi(api, this.onMouseMove)}
           onMouseUp={bindApi(api, this.onMouseUp)}
-          svgRef={svg => {
+          svgRef={(svg) => {
             patchSvgRef = svg;
           }}
           isInChangingArityLevelMode

@@ -48,7 +48,7 @@ http://this-should-be-autolinked.com
 `;
 
 storiesOf('Comment', module)
-  .addDecorator(story => (
+  .addDecorator((story) => (
     <svg width="500" height="500">
       <rect width="100%" height="100%" fill="lightgrey" />
       {story()}

@@ -1,7 +1,7 @@
 import chai from 'chai';
+import initialState from '../src/core/state.js';
 
 const { assert } = chai;
-import initialState from '../src/core/state.js';
 
 describe('Initial state', () => {
   describe('should have reducers:', () => {

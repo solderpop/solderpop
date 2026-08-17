@@ -29,6 +29,6 @@ export const subscribeAutoUpdaterEvents = (ipcRenderer, App) => {
   });
 };
 
-export const downloadUpdate = ipcRenderer => {
+export const downloadUpdate = (ipcRenderer) => {
   ipcRenderer.send(EVENTS.APP_UPDATE_DOWNLOAD_REQUEST);
 };

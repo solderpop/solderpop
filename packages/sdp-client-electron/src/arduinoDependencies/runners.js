@@ -50,7 +50,7 @@ export const checkArduinoDependencyUpdates = () =>
   promisifyIpc(CHECK_ARDUINO_DEPENDENCY_UPDATES)(noop, null);
 
 // :: _ -> Promise [Core] Error
-export const updateArduinoPackages = onProgress =>
+export const updateArduinoPackages = (onProgress) =>
   promisifyIpc(UPGRADE_ARDUINO_DEPENDECIES)(onProgress, null);
 
 // :: _ -> Promise [URL] Error

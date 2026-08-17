@@ -9,7 +9,8 @@ function findMenuItem([itemLabel, ...restLabels], tpl) {
   const item = R.find(R.propEq('label', itemLabel), tpl);
   if (R.isNil(item)) {
     return null;
-  } else if (R.isEmpty(restLabels)) {
+  }
+  if (R.isEmpty(restLabels)) {
     return item;
   }
 
@@ -17,7 +18,7 @@ function findMenuItem([itemLabel, ...restLabels], tpl) {
 }
 
 export default (eventEmitter, menuTemplate) => {
-  eventEmitter.on(TRIGGER_MAIN_MENU_ITEM, pathToMenuItem => {
+  eventEmitter.on(TRIGGER_MAIN_MENU_ITEM, (pathToMenuItem) => {
     const item = findMenuItem(pathToMenuItem, menuTemplate);
     if (item && typeof item.click === 'function') {
       item.click();

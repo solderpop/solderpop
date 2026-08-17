@@ -102,7 +102,7 @@ const shallValidateFunctions = {
   [RECOVER_STATE]: R.F,
   [PAT.BULK_MOVE_NODES_AND_COMMENTS]: (action, project) => {
     // Could change validity only when moving terminals or `output-self` marker
-    const nodeIds = action.payload.nodeIds;
+    const { nodeIds } = action.payload;
     if (nodeIds.length === 0) return false;
 
     return R.compose(
@@ -114,12 +114,12 @@ const shallValidateFunctions = {
     )(project);
   },
   [PAT.NODE_PROPERTY_UPDATED]: (action, project) => {
-    const key = action.payload.key;
+    const { key } = action.payload;
     // If User changed property, not a pin value — do not validate
     if (key === 'description') return false;
 
     const nodeId = action.payload.id;
-    const patchPath = action.payload.patchPath;
+    const { patchPath } = action.payload;
 
     return R.compose(
       foldMaybe(
@@ -309,7 +309,7 @@ const shortValidators = {
     )(prevErrors);
 
     const installedLibNames = R.compose(
-      R.map(libName => {
+      R.map((libName) => {
         // TODO: Replace with `R.takeWhile` from newer Ramda
         const index = libName.indexOf('@');
         return libName.substring(0, index !== -1 ? index : libName.length);
@@ -318,9 +318,10 @@ const shortValidators = {
       R.path(['payload', 'projects'])
     )(action);
 
-    const isAmongInstalledLibs = R.compose(R.anyPass, R.map(R.startsWith))(
-      installedLibNames
-    );
+    const isAmongInstalledLibs = R.compose(
+      R.anyPass,
+      R.map(R.startsWith)
+    )(installedLibNames);
 
     const libErrors = R.compose(
       validatePatchesGenerally(project, deducedPinTypes, prevErrors),
@@ -345,7 +346,7 @@ const shortValidators = {
 // :: Action -> Project -> Boolean
 export const shallValidate = R.curry((action, project) =>
   R.compose(
-    fn => fn(project),
+    (fn) => fn(project),
     getFunctionByActionOrDefault(shallValidateFunctions, R.T)
   )(action)
 );
@@ -358,7 +359,7 @@ export const shallValidate = R.curry((action, project) =>
 export const validateProject = R.curry(
   (action, newProject, deducedPinTypes, prevErrors) =>
     R.compose(
-      fn => fn(newProject, deducedPinTypes, prevErrors),
+      (fn) => fn(newProject, deducedPinTypes, prevErrors),
       getFunctionByActionOrDefault(shortValidators, defaultValidateFunction)
     )(action, newProject, deducedPinTypes, prevErrors)
 );

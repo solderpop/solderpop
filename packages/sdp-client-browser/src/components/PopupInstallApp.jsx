@@ -12,16 +12,19 @@ class PopupInstallApp extends React.PureComponent {
     this.assignPopupRef = this.assignPopupRef.bind(this);
     this.hide = this.hide.bind(this);
   }
+
   componentWillReceiveProps(nextProps) {
     if (!this.props.isVisible && nextProps.isVisible) {
       this.show();
     }
   }
+
   show() {
     if (this.popup) {
       this.popup.show();
     }
   }
+
   hide() {
     if (this.popup) {
       this.popup.hide();

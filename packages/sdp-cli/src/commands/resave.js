@@ -2,8 +2,6 @@
 import path from 'path';
 import { stdout, exit } from 'process';
 import R from 'ramda';
-
-const { pick } = R;
 import { flags } from '@oclif/command';
 import {
   loadProject,
@@ -18,6 +16,8 @@ import * as myFlags from '../flags.js';
 import { resolveBundledWorkspacePath } from '../paths.js';
 import { getListr } from '../listr.js';
 
+const { pick } = R;
+
 class ResaveCommand extends BaseCommand {
   async run() {
     this.parseArgv(ResaveCommand);
@@ -28,19 +28,19 @@ class ResaveCommand extends BaseCommand {
 
     const loadProjectTask = {
       title: 'Project loading',
-      task: ctx =>
+      task: (ctx) =>
         loadProject(
           [workspace, resolveBundledWorkspacePath()],
           projectPath
-        ).then(project => {
+        ).then((project) => {
           ctx.project = project;
         }),
     };
 
     const saveToFileTask = {
       title: 'Saving...',
-      skip: ctx => !(ctx.project && output),
-      task: ctx =>
+      skip: (ctx) => !(ctx.project && output),
+      task: (ctx) =>
         (path.extname(output) === '.xodball'
           ? saveProjectAsXodball(output, ctx.project)
           : saveProjectEntirely(output, ctx.project)
@@ -53,7 +53,7 @@ class ResaveCommand extends BaseCommand {
       collapse: false,
     })
       .run()
-      .then(async ctx => {
+      .then(async (ctx) => {
         if (output && ctx.status) {
           this.info(ctx.status);
         }
@@ -63,7 +63,7 @@ class ResaveCommand extends BaseCommand {
         }
       })
       .then(() => exit(0))
-      .catch(err => {
+      .catch((err) => {
         this.printError(err);
         return exit(100);
       });
@@ -84,7 +84,7 @@ ResaveCommand.flags = {
       'xodball or multifile directory output path, defaults to stdout',
     env: 'XOD_OUTPUT',
     helpValue: 'path',
-    parse: p => resolvePath(p),
+    parse: (p) => resolvePath(p),
   }),
 };
 

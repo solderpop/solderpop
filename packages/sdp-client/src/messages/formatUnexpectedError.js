@@ -1,4 +1,4 @@
-export default err => ({
+export default (err) => ({
   title: 'Error',
   note: err.message,
   solution:

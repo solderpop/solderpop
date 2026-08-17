@@ -2,8 +2,8 @@ import R from 'ramda';
 import { noop, createError } from 'sdp-func-tools';
 import { prepareModuleOptions, ERROR_CODES } from 'sdp-cloud-compile';
 
-const getRuntimeUrl = suite => R.path(['artifactUrls', 'main.js'], suite);
-const getWasmUrl = suite => R.path(['artifactUrls', 'main.wasm'], suite);
+const getRuntimeUrl = (suite) => R.path(['artifactUrls', 'main.js'], suite);
+const getWasmUrl = (suite) => R.path(['artifactUrls', 'main.wasm'], suite);
 
 const runWasmWorker = (suite, onLaunch) =>
   // Import the worker dynamically (rather than a static top-level import)
@@ -42,10 +42,10 @@ const runWasmWorker = (suite, onLaunch) =>
         worker.onReceive = noop;
 
         const handlers = {
-          'serial:receive': data => worker.onReceive(data),
-          data: x => stdout.push(x),
-          error: x => stderr.push(x),
-          quit: exitCode => {
+          'serial:receive': (data) => worker.onReceive(data),
+          data: (x) => stdout.push(x),
+          error: (x) => stderr.push(x),
+          quit: (exitCode) => {
             if (exitCode === 0 && stderr.length === 0) {
               resolve({ stdout, stderr, worker });
             } else {
@@ -61,17 +61,17 @@ const runWasmWorker = (suite, onLaunch) =>
           },
         };
 
-        worker.sendToWasm = str =>
+        worker.sendToWasm = (str) =>
           worker.postMessage({
             type: 'serial:send',
             payload: str,
           });
 
-        worker.onmessage = e =>
+        worker.onmessage = (e) =>
           R.propOr(noop, e.data.type, handlers)(e.data.payload);
 
         // For unhandled errors in WebWorker
-        worker.onerror = e => {
+        worker.onerror = (e) => {
           R.propOr(noop, 'error', handlers)(e.message);
           handlers.quit(1);
         };

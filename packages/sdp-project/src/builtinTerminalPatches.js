@@ -30,7 +30,7 @@ import { isBindableCustomType } from './custom-types.js';
  * +----O----+   +----------+
  *
  */
-export const getPinKeyForTerminalDirection = direction =>
+export const getPinKeyForTerminalDirection = (direction) =>
   TERMINAL_PIN_KEYS[OPPOSITE_DIRECTION[direction]];
 
 const getTerminalPins = R.curry((direction, type) => {

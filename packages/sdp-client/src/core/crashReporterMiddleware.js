@@ -1,7 +1,7 @@
 import { addError } from '../messages/actions.js';
 import formatUnexpectedError from '../messages/formatUnexpectedError.js';
 
-export default () => next => action => {
+export default () => (next) => (action) => {
   try {
     return next(action);
   } catch (err) {

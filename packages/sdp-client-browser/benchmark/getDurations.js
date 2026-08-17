@@ -3,7 +3,7 @@
  * @see https://groups.google.com/forum/#!topic/google-chrome-developer-tools/J0pQuKeeqfw
  */
 
-const getDuration = pathToJson => {
+const getDuration = (pathToJson) => {
   /* eslint-disable import/no-dynamic-require */
   /* eslint-disable global-require */
   const { traceEvents } = require(pathToJson);

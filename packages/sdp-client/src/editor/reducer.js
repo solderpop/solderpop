@@ -76,7 +76,7 @@ const setTabOffset = R.curry((offset, tabId, state) =>
   R.compose(
     R.when(
       () => tabId === DEBUGGER_TAB_ID,
-      newState =>
+      (newState) =>
         R.assocPath(
           [
             'tabs',
@@ -108,9 +108,11 @@ const getTabIdbyPatchPath = R.curry((patchPath, state) =>
 );
 
 const listTabsByPatchPath = R.curry((patchPath, state) =>
-  R.compose(R.filter(R.propEq('patchPath', patchPath)), R.values, getTabs)(
-    state
-  )
+  R.compose(
+    R.filter(R.propEq('patchPath', patchPath)),
+    R.values,
+    getTabs
+  )(state)
 );
 
 const syncTabOffset = R.curry((offset, state) => {
@@ -136,7 +138,7 @@ const setPropsToTab = R.curry((id, props, state) =>
   )(state)
 );
 
-const getTabNewIndex = state => {
+const getTabNewIndex = (state) => {
   const tabs = R.prop('tabs')(state);
   const lastIndex = R.reduce(
     (acc, tab) => R.pipe(R.prop('index'), R.max(acc))(tab),
@@ -195,7 +197,7 @@ const resetCurrentPatchPath = (reducer, state, project) => {
   const stateWithClearedTabs = R.assoc('tabs', {}, state);
 
   return R.compose(
-    R.ifElse(R.isNil, R.always(stateWithClearedTabs), firstLocalPatch => {
+    R.ifElse(R.isNil, R.always(stateWithClearedTabs), (firstLocalPatch) => {
       const firstPatchPath = XP.getPatchPath(firstLocalPatch);
       const offset = getInitialPatchOffset(firstPatchPath, project);
 
@@ -259,7 +261,7 @@ const closeTabById = R.curry((tabId, state) => {
     isCurrentTabClosing
   );
 
-  const openOriginalPatch = patchPath =>
+  const openOriginalPatch = (patchPath) =>
     R.compose(
       R.converge(setTabOffset(tabToClose.offset), [
         getTabIdbyPatchPath(patchPath),
@@ -672,14 +674,19 @@ const editorReducer = (state = initialState, action) => {
     case DAT.INSTALL_ARDUINO_DEPENDENCIES:
     case DAT.UPGRADE_ARDUINO_DEPENDECIES:
     case DAT.CHECK_ARDUINO_DEPENDENCIES: {
-      const { type, meta: { status } } = action;
+      const {
+        type,
+        meta: { status },
+      } = action;
       return type !== DAT.CHECK_ARDUINO_DEPENDENCIES &&
         (status === STATUS.STARTED || status === STATUS.FAILED)
         ? showDebuggerPane(state)
         : state;
     }
     case DAT.UPLOAD: {
-      const { meta: { status } } = action;
+      const {
+        meta: { status },
+      } = action;
       return status === STATUS.FAILED ? showDebuggerPane(state) : state;
     }
     case DAT.DEBUGGER_LOG_ADD_MESSAGES: {

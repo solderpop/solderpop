@@ -1,7 +1,5 @@
 import R from 'ramda';
 import RamdaFantasy from 'ramda-fantasy';
-
-const { Maybe } = RamdaFantasy;
 import { createSelector } from 'reselect';
 import { mapIndexed, foldMaybe, maybeProp } from 'sdp-func-tools';
 import * as XP from 'sdp-project';
@@ -13,6 +11,8 @@ import {
   DEFAULT_PANNING_OFFSET,
 } from '../project/nodeLayout.js';
 import { SIDEBAR_IDS, TAB_TYPES, DEFAULT_ZOOM } from './constants.js';
+
+const { Maybe } = RamdaFantasy;
 
 const getProject = R.prop('project'); // Problem of cycle imports...
 
@@ -63,13 +63,13 @@ export const getPreparedTabs = createSelector(
     const currentTabId = foldMaybe(null, R.identity, maybeCurrentTabId);
     return R.map(
       R.compose(
-        tab => R.assoc('isActive', currentTabId === tab.id, tab),
+        (tab) => R.assoc('isActive', currentTabId === tab.id, tab),
         R.cond([
           [isTabTypeEq(TAB_TYPES.TABLE_LOG), setTabLabel('Table Logs')],
           [isTabTypeEq(TAB_TYPES.DEBUGGER), setTabLabel('Debugger')],
           [
             isTabTypeEq(TAB_TYPES.PATCH),
-            tab =>
+            (tab) =>
               R.compose(
                 setTabLabel(R.__, tab),
                 XP.getBaseName,
@@ -98,10 +98,10 @@ export const getSelection = R.pipe(
   foldMaybe([], R.propOr([], 'selection'))
 );
 
-export const getSelectionByTypes = createSelector(getSelection, selection => {
+export const getSelectionByTypes = createSelector(getSelection, (selection) => {
   let result = {};
   if (selection.length > 0) {
-    result = R.groupBy(s => s.entity, selection);
+    result = R.groupBy((s) => s.entity, selection);
   }
   result.Node = result.Node || [];
   result.Pin = result.Pin || [];
@@ -232,16 +232,16 @@ export const getAllPanelsSettings = R.compose(
   R.prop('panels'),
   getEditor
 );
-export const getPanelSettings = R.uncurryN(2, panelId =>
+export const getPanelSettings = R.uncurryN(2, (panelId) =>
   R.compose(R.prop(panelId), getAllPanelsSettings)
 );
-export const isPanelMaximized = R.uncurryN(2, panelId =>
+export const isPanelMaximized = R.uncurryN(2, (panelId) =>
   R.compose(R.prop('maximized'), getPanelSettings(panelId))
 );
-export const isPanelAutohiding = R.uncurryN(2, panelId =>
+export const isPanelAutohiding = R.uncurryN(2, (panelId) =>
   R.compose(R.prop('autohide'), getPanelSettings(panelId))
 );
-export const getPanelSidebar = R.uncurryN(2, panelId =>
+export const getPanelSidebar = R.uncurryN(2, (panelId) =>
   R.compose(R.prop('sidebar'), getPanelSettings(panelId))
 );
 

@@ -1,13 +1,12 @@
-'use strict';
-
-const BeltHoles_Map_String = require('../src/BeltHoles_Map_String.bs.js');
 const Belt_MapString = require('@rescript/runtime/lib/js/Belt_MapString.js');
+const BeltHoles_Map_String = require('../src/BeltHoles_Map_String.bs.js');
+const BeltHoles_String = require('../src/BeltHoles_String.bs.js');
 
 // Belt_MapString.toArray returns entries sorted by key, so comparing the
 // resulting plain array is a stable, order-independent equivalent of the
 // old custom `toEqualMap` matcher.
-const mapOf = entries => Belt_MapString.fromArray(entries);
-const arrayOf = map => Belt_MapString.toArray(map);
+const mapOf = (entries) => Belt_MapString.fromArray(entries);
+const arrayOf = (map) => Belt_MapString.toArray(map);
 
 describe('Key mapping', () => {
   test('changes keys, preserves data', () => {
@@ -16,7 +15,7 @@ describe('Key mapping', () => {
       ['two', 2],
       ['three', 3],
     ]);
-    const outMap = BeltHoles_Map_String.mapKeys(inMap, s => s.toUpperCase());
+    const outMap = BeltHoles_Map_String.mapKeys(inMap, (s) => s.toUpperCase());
     const expectedMap = mapOf([
       ['ONE', 1],
       ['TWO', 2],
@@ -30,8 +29,10 @@ describe('Key mapping', () => {
       ['foo', 'was foo'],
       ['oof', 'was oof'],
     ]);
-    const BeltHoles_String = require('../src/BeltHoles_String.bs.js');
-    const outMap = BeltHoles_Map_String.mapKeys(inMap, BeltHoles_String.reverse);
+    const outMap = BeltHoles_Map_String.mapKeys(
+      inMap,
+      BeltHoles_String.reverse
+    );
     const expectedMap = mapOf([
       ['oof', 'was foo'],
       ['foo', 'was oof'],

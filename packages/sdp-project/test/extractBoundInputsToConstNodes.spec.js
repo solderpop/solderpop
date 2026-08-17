@@ -1,16 +1,16 @@
 import R from 'ramda';
 import chai from 'chai';
 
-const { assert } = chai;
-
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
 import * as XP from '../src/index.js';
 
 import * as Helper from './helpers.js';
 
 // TODO: automatically load from workspace?
 // See src/project.js for why this isn't a plain `import ... from '*.json'`.
-import { readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
+
+const { assert } = chai;
 
 const constantPatches = JSON.parse(
   readFileSync(
@@ -26,7 +26,7 @@ describe('extractBoundInputsToConstNodes', () => {
   const mainPatchPath = XP.getLocalPath('main');
   const testPatchPath = XP.getLocalPath('test');
 
-  const getInputPinKey = type => `${type}-input`;
+  const getInputPinKey = (type) => `${type}-input`;
 
   const testPatch = Helper.defaultizePatch({
     nodes: {
@@ -114,9 +114,11 @@ describe('extractBoundInputsToConstNodes', () => {
 
   it('extracts default bound values into constant nodes', () => {
     const findNodeByType = R.curry((type, patch) =>
-      R.compose(R.propOr(null, type), R.indexBy(XP.getNodeType), XP.listNodes)(
-        patch
-      )
+      R.compose(
+        R.propOr(null, type),
+        R.indexBy(XP.getNodeType),
+        XP.listNodes
+      )(patch)
     );
 
     const project = R.clone(testProject);

@@ -6,7 +6,7 @@ const { assert } = chai;
 describe('xodc help', () => {
   const stdMock = test.stdout().stderr();
 
-  stdMock.command(['help']).it('prints help to stdout', ctx => {
+  stdMock.command(['help']).it('prints help to stdout', (ctx) => {
     assert.include(
       ctx.stdout,
       'autocomplete',
@@ -34,10 +34,10 @@ describe('xodc help', () => {
     'tabtest',
     'transpile',
     'upload',
-  ].forEach(command => {
+  ].forEach((command) => {
     stdMock
       .command(['help', command])
-      .it(`prints help to stdout for command '${command}'`, ctx => {
+      .it(`prints help to stdout for command '${command}'`, (ctx) => {
         assert.include(
           ctx.stdout,
           command,

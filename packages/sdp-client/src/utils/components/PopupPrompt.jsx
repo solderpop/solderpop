@@ -5,11 +5,11 @@ import classNames from 'classnames';
 import { SkyLightStateless } from 'react-skylight';
 import EventListener from 'react-event-listener';
 
-import { noop } from '../../utils/ramda.js';
-import { KEYCODE } from '../../utils/constants.js';
+import { noop } from '../ramda.js';
+import { KEYCODE } from '../constants.js';
 import deepSCU from '../deepSCU.js';
 
-const selectOnFocus = event => event.target.select();
+const selectOnFocus = (event) => event.target.select();
 
 class PopupPrompt extends React.Component {
   constructor(props) {

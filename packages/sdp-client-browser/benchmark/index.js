@@ -2,19 +2,19 @@ import path from 'path';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import puppeteer from 'puppeteer';
 
-import { startServer, stopServer, PORT } from '../tools/staticServer';
-import getBoundingClientRect from '../test-func/utils/getBoundingClientRect';
-import getCenterPositon from '../test-func/utils/getCenterPositon';
+import { startServer, stopServer, PORT } from '../tools/staticServer.js';
+import getBoundingClientRect from '../test-func/utils/getBoundingClientRect.js';
+import getCenterPositon from '../test-func/utils/getCenterPositon.js';
 
-import ProjectBrowser from '../test-func/pageObjects/ProjectBrowser';
-import PromptPopup from '../test-func/pageObjects/PromptPopup';
-import PatchGroupItemContextMenu from '../test-func/pageObjects/PatchGroupItemContextMenu';
-import { getSelectedNodes } from '../test-func/pageObjects/Node';
+import ProjectBrowser from '../test-func/pageObjects/ProjectBrowser.js';
+import PromptPopup from '../test-func/pageObjects/PromptPopup.js';
+import PatchGroupItemContextMenu from '../test-func/pageObjects/PatchGroupItemContextMenu.js';
+import { getSelectedNodes } from '../test-func/pageObjects/Node.js';
 
-const getTracingResultsPath = name =>
+const getTracingResultsPath = (name) =>
   path.resolve(__dirname, `./tracing-results/${name}.json`);
 
-const waitForSelectingMode = page =>
+const waitForSelectingMode = (page) =>
   page.waitFor('.PatchWrapper-container.selecting');
 const pinSelector = (nodeId, pinName) =>
   `#nodePinsOverlay_${nodeId} .PinOverlay[title=${pinName}]`;
@@ -77,9 +77,8 @@ const height = 850;
       await contextMenu.clickPlace();
 
       const [placedNode] = await getSelectedNodes(page);
-      const {
-        width: placedNodeWidth,
-      } = await placedNode.getBoundingClientRect();
+      const { width: placedNodeWidth } =
+        await placedNode.getBoundingClientRect();
       const placedNodeId = await placedNode.getId();
       nodeIds.push(placedNodeId);
 

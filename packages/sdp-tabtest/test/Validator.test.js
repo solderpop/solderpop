@@ -1,9 +1,9 @@
-const Validator = require('../src/Validator.bs.js');
 const BeltList = require('@rescript/runtime/lib/js/Belt_List.js');
+const Validator = require('../src/Validator.bs.js');
 
-const toList = arr => BeltList.fromArray(arr);
+const toList = (arr) => BeltList.fromArray(arr);
 
-const assertNone = expectation => {
+const assertNone = (expectation) => {
   expect(expectation).toBeUndefined();
 };
 
@@ -24,7 +24,7 @@ describe('Assert pin labels', () => {
     const tsvPins = ['IN1'];
     assertSomeError(
       'INVALID_PIN_LABELS_IN_TABTEST {"missing":["IN2","IN3"],"redundant":[],"duplicated":[]}',
-      Validator.validatePinLabels(toList(realPins), toList(tsvPins)),
+      Validator.validatePinLabels(toList(realPins), toList(tsvPins))
     );
   });
 
@@ -33,7 +33,7 @@ describe('Assert pin labels', () => {
     const tsvPins = ['IN1', 'IN2', 'IN3'];
     assertSomeError(
       'INVALID_PIN_LABELS_IN_TABTEST {"missing":[],"redundant":["IN2","IN3"],"duplicated":[]}',
-      Validator.validatePinLabels(toList(realPins), toList(tsvPins)),
+      Validator.validatePinLabels(toList(realPins), toList(tsvPins))
     );
   });
 
@@ -48,7 +48,7 @@ describe('Assert pin labels', () => {
     const tsvPins = ['IN1', 'IN1', 'IN1'];
     assertSomeError(
       'INVALID_PIN_LABELS_IN_TABTEST {"missing":[],"redundant":[],"duplicated":["IN1"]}',
-      Validator.validatePinLabels(toList(realPins), toList(tsvPins)),
+      Validator.validatePinLabels(toList(realPins), toList(tsvPins))
     );
   });
 
@@ -57,7 +57,7 @@ describe('Assert pin labels', () => {
     const tsvPins = ['__time(ms)', 'IN1', '__time(ms)'];
     assertSomeError(
       'INVALID_PIN_LABELS_IN_TABTEST {"missing":[],"redundant":[],"duplicated":["__time(ms)"]}',
-      Validator.validatePinLabels(toList(realPins), toList(tsvPins)),
+      Validator.validatePinLabels(toList(realPins), toList(tsvPins))
     );
   });
 
@@ -66,7 +66,7 @@ describe('Assert pin labels', () => {
     const tsvPins = ['IN1', 'IN1', 'IN4', 'IN4'];
     assertSomeError(
       'INVALID_PIN_LABELS_IN_TABTEST {"missing":["IN2","IN3"],"redundant":["IN4"],"duplicated":["IN1"]}',
-      Validator.validatePinLabels(toList(realPins), toList(tsvPins)),
+      Validator.validatePinLabels(toList(realPins), toList(tsvPins))
     );
   });
 });

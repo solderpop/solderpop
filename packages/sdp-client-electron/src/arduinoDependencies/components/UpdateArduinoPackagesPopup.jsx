@@ -36,7 +36,7 @@ class UpdateArduinoPackagesPopup extends React.Component {
     this.setState({ cores: null });
     updateIndexFiles()
       .then(checkArduinoDependencyUpdates)
-      .then(cores => this.setState({ cores }));
+      .then((cores) => this.setState({ cores }));
   }
 
   renderCores() {
@@ -53,7 +53,7 @@ class UpdateArduinoPackagesPopup extends React.Component {
         <p>Packages to upgrade:</p>
         <ul>
           {R.map(
-            core => (
+            (core) => (
               <li key={core.ID}>
                 {core.Name}: {core.Installed} &rarr; {core.Latest}
               </li>

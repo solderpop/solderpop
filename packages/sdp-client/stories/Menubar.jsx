@@ -5,7 +5,7 @@ import '../src/core/styles/main.scss';
 import Menubar from '../src/utils/components/Menubar.jsx';
 
 storiesOf('Menubar', module)
-  .addDecorator(story => (
+  .addDecorator((story) => (
     <div
       style={{
         // to see white submenus

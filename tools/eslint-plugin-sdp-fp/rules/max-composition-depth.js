@@ -80,7 +80,7 @@ const isNestingExpression = R.curry((opts, node) =>
 // :: Node -> [Node] -- a chain of parents to the root
 const parents = R.ifElse(
   R.prop('parent'),
-  R.compose(parent => R.concat([parent], parents(parent)), R.prop('parent')),
+  R.compose((parent) => R.concat([parent], parents(parent)), R.prop('parent')),
   R.always([])
 );
 

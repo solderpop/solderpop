@@ -53,7 +53,7 @@ class ProjectBrowser extends BasePageObject {
   }
 }
 
-ProjectBrowser.findOnPage = async page => {
+ProjectBrowser.findOnPage = async (page) => {
   const elementHandle = await page.$('.ProjectBrowser');
   return new ProjectBrowser(page, elementHandle);
 };

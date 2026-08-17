@@ -23,7 +23,6 @@ export const LOG_IN_TO_CONTINUE = {
 
 export const USERNAME_NEEDED_FOR_LITERAL = {
   title: 'Not logged in',
-  note:
-    'The program uses the `=XOD_USERNAME` literal. You should log in to make it work.',
+  note: 'The program uses the `=XOD_USERNAME` literal. You should log in to make it work.',
   solution: 'Open the Account sidebar to enter your login/password or sign up.',
 };

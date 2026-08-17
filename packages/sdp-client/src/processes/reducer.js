@@ -13,7 +13,7 @@ const makeProcess = (id, state, action) =>
     state
   );
 
-const isProcess = action => action.meta && action.meta.status;
+const isProcess = (action) => action.meta && action.meta.status;
 
 export default (processes = {}, action) => {
   if (!isProcess(action)) {

@@ -3,8 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import $ from 'sanctuary-def';
 import RamdaFantasy from 'ramda-fantasy';
-
-const { Either } = RamdaFantasy;
 import {
   foldMaybe,
   foldEither,
@@ -67,6 +65,8 @@ import { PANEL_IDS } from '../../editor/constants.js';
 import formatErrorMessage from '../formatErrorMessage.js';
 import initialProjectState from '../../project/state.js';
 
+const { Either } = RamdaFantasy;
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -81,9 +81,8 @@ export default class App extends React.Component {
     // run one.
     this.compileSimulationLocally = null;
 
-    this.transformProjectForTranspiler = this.transformProjectForTranspiler.bind(
-      this
-    );
+    this.transformProjectForTranspiler =
+      this.transformProjectForTranspiler.bind(this);
     this.getGlobals = this.getGlobals.bind(this);
     this.onSelectAll = this.onSelectAll.bind(this);
     this.onFocusOut = this.onFocusOut.bind(this);
@@ -92,11 +91,11 @@ export default class App extends React.Component {
       [COMMAND.UNDO]: this.props.actions.undoCurrentPatch,
       [COMMAND.REDO]: this.props.actions.redoCurrentPatch,
       [COMMAND.HIDE_HELPBOX]: this.props.actions.hideHelpbox,
-      [COMMAND.TOGGLE_HELP]: event => {
+      [COMMAND.TOGGLE_HELP]: (event) => {
         if (isInputTarget(event)) return;
         this.props.actions.toggleHelp();
       },
-      [COMMAND.INSERT_NODE]: event => {
+      [COMMAND.INSERT_NODE]: (event) => {
         if (isInputTarget(event)) return;
         this.props.actions.showSuggester(null);
       },
@@ -209,15 +208,14 @@ export default class App extends React.Component {
 
     let sessionGlobals = []; // TODO: Refactor
     eitherToPromise(eitherTProject)
-      .then(
-        tProject =>
-          this.isBrowser && hasTetheringInternetNode(tProject)
-            ? Promise.reject(DO_NOT_USE_TETHERING_INTERNET_IN_BROWSER)
-            : tProject
+      .then((tProject) =>
+        this.isBrowser && hasTetheringInternetNode(tProject)
+          ? Promise.reject(DO_NOT_USE_TETHERING_INTERNET_IN_BROWSER)
+          : tProject
       )
-      .then(tProject => {
+      .then((tProject) => {
         const globalsInProject = listGlobals(tProject);
-        return this.getGlobals(globalsInProject).then(globals => {
+        return this.getGlobals(globalsInProject).then((globals) => {
           sessionGlobals = globals; // TODO: Refactor
           return R.compose(eitherToPromise, extendTProjectWithGlobals)(
             globals,
@@ -232,7 +230,7 @@ export default class App extends React.Component {
           nodePinKeysMap: getNodePinKeysMap,
           tableLogNodeIds: getTableLogNodeIds,
           tetheringInetNodeId: getTetheringInetNodeId,
-          pinsAffectedByErrorRaisers: tProj =>
+          pinsAffectedByErrorRaisers: (tProj) =>
             R.compose(
               foldMaybe(
                 {},
@@ -267,10 +265,13 @@ export default class App extends React.Component {
           )
       )
       .catch(
-        R.compose(err => {
-          this.props.actions.addError(err);
-          this.props.actions.abortSimulation();
-        }, R.when(R.is(Error), formatErrorMessage))
+        R.compose(
+          (err) => {
+            this.props.actions.addError(err);
+            this.props.actions.abortSimulation();
+          },
+          R.when(R.is(Error), formatErrorMessage)
+        )
       );
   }
 
@@ -292,7 +293,7 @@ export default class App extends React.Component {
         R.compose(
           R.ifElse(
             R.length,
-            projectName => Promise.resolve(enquote(projectName)),
+            (projectName) => Promise.resolve(enquote(projectName)),
             () => Promise.reject(PROJECT_NAME_NEEDED_FOR_LITERAL)
           ),
           getProjectName
@@ -300,16 +301,18 @@ export default class App extends React.Component {
       XOD_TOKEN: () => this.props.actions.renewApiToken().then(enquote),
     };
 
-    return R.compose(allValues, R.map(R.call), R.pick(globalNames))(
-      globalGetters
-    );
+    return R.compose(
+      allValues,
+      R.map(R.call),
+      R.pick(globalNames)
+    )(globalGetters);
   }
 
   transformProjectForTranspiler(liveness) {
     try {
       return foldMaybe(
         Either.Left(NO_PATCH_TO_TRANSPILE),
-        curPatchPath =>
+        (curPatchPath) =>
           transformProject(this.props.project, curPatchPath, liveness),
         this.props.currentPatchPath
       );

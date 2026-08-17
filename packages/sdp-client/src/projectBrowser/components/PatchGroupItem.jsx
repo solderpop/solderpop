@@ -17,7 +17,7 @@ const dragSource = {
   },
 };
 
-const collect = connect => ({
+const collect = (connect) => ({
   connectDragSource: connect.dragSource(),
   connectDragPreview: connect.dragPreview(),
 });
@@ -134,6 +134,8 @@ PatchGroupItem.propTypes = {
 };
 
 // eslint-disable-next-line new-cap
-export default DragSource(DRAGGED_ENTITY_TYPE.PATCH, dragSource, collect)(
-  PatchGroupItem
-);
+export default DragSource(
+  DRAGGED_ENTITY_TYPE.PATCH,
+  dragSource,
+  collect
+)(PatchGroupItem);

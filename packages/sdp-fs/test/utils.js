@@ -6,7 +6,7 @@ import chai from 'chai';
 const { expect } = chai;
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-export const numerateFolders = initialFolders => {
+export const numerateFolders = (initialFolders) => {
   const accordance = {};
 
   return R.pipe(
@@ -16,7 +16,7 @@ export const numerateFolders = initialFolders => {
       accordance[folder.id] = idx;
       return R.assoc('id', idx, folder);
     }),
-    R.map(folder => {
+    R.map((folder) => {
       if (folder.parentId === null) {
         return folder;
       }
@@ -28,7 +28,7 @@ export const numerateFolders = initialFolders => {
 // :: patches { { folderId: ???, ... } } -> patches { { folderId: '0', ... } }
 export const replaceFolderId = R.map(R.assoc('folderId', '0'));
 
-export const fixture = path => resolve(__dirname, './fixtures', path);
+export const fixture = (path) => resolve(__dirname, './fixtures', path);
 export const expectRejectedWithCode = (promise, errorCode) =>
   expect(promise).to.eventually.be.rejected.and.have.property(
     'errorCode',

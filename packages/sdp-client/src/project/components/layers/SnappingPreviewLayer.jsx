@@ -6,20 +6,22 @@ import sanctuaryPropType from '../../../utils/sanctuaryPropType.js';
 
 import { NODE_CORNER_RADIUS } from '../../nodeLayout.js';
 
-const SnappingPreviewLayer = ({ previews }) => (
-  <g className="SnappingPreviewLayer">
-    {previews.map(({ pxPosition, pxSize }, key) => (
-      <rect
-        key={key} // in this particular case it's okay to use index as key
-        className="SnappingPreview"
-        {...pxPosition}
-        {...pxSize}
-        rx={NODE_CORNER_RADIUS}
-        ry={NODE_CORNER_RADIUS}
-      />
-    ))}
-  </g>
-);
+function SnappingPreviewLayer({ previews }) {
+  return (
+    <g className="SnappingPreviewLayer">
+      {previews.map(({ pxPosition, pxSize }, key) => (
+        <rect
+          key={key} // in this particular case it's okay to use index as key
+          className="SnappingPreview"
+          {...pxPosition}
+          {...pxSize}
+          rx={NODE_CORNER_RADIUS}
+          ry={NODE_CORNER_RADIUS}
+        />
+      ))}
+    </g>
+  );
+}
 
 SnappingPreviewLayer.displayName = 'SnappingPreviewLayer';
 

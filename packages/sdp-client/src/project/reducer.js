@@ -1,7 +1,5 @@
 import R from 'ramda';
 import RamdaFantasy from 'ramda-fantasy';
-
-const { Maybe } = RamdaFantasy;
 import * as XP from 'sdp-project';
 import { explodeEither, foldMaybe, maybeProp } from 'sdp-func-tools';
 import { getLibName } from 'sdp-pm';
@@ -26,6 +24,8 @@ import {
   MAIN_PATCH_PATH,
 } from './constants.js';
 
+const { Maybe } = RamdaFantasy;
+
 // TODO: rewrite this?
 const selectNodePropertyUpdater = ({ kind, key, value = '' }) => {
   if (kind === NODE_PROPERTY_KIND.PIN) {
@@ -37,7 +37,8 @@ const selectNodePropertyUpdater = ({ kind, key, value = '' }) => {
   if (kind === NODE_PROPERTY_KIND.PROP) {
     if (key === NODE_PROPERTY_KEY.LABEL) {
       return XP.setNodeLabel(value);
-    } else if (key === NODE_PROPERTY_KEY.DESCRIPTION) {
+    }
+    if (key === NODE_PROPERTY_KEY.DESCRIPTION) {
       return XP.setNodeDescription(value);
     }
   }
@@ -257,9 +258,10 @@ export default (state = {}, action) => {
         )
       )(action.payload.projects);
 
-      const libNames = R.compose(R.map(getLibName), R.keys)(
-        action.payload.projects
-      );
+      const libNames = R.compose(
+        R.map(getLibName),
+        R.keys
+      )(action.payload.projects);
 
       return R.compose(
         assocPatchListAndMigrate(patches),
@@ -304,7 +306,7 @@ export default (state = {}, action) => {
 
       return R.over(
         XP.lensPatch(patchPath),
-        patch => R.reduce((p, fn) => fn(p), patch, dissocFns),
+        (patch) => R.reduce((p, fn) => fn(p), patch, dissocFns),
         state
       );
     }
@@ -490,7 +492,7 @@ export default (state = {}, action) => {
           case NODE_KIND.CONSTANT: {
             return foldMaybe(
               state,
-              newNodeType => {
+              (newNodeType) => {
                 const outputPinKey = R.compose(
                   foldMaybe('__out__', XP.getPinKey),
                   R.chain(maybeProp(0)),
@@ -514,7 +516,7 @@ export default (state = {}, action) => {
 
             return foldMaybe(
               state,
-              type => {
+              (type) => {
                 const outputPinKey = R.compose(
                   foldMaybe('__out__', XP.getPinKey),
                   R.chain(maybeProp(0)),

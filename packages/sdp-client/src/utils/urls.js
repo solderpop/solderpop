@@ -58,4 +58,4 @@ export const getApiBillingUrl = () => `${getApiUrl()}/billing`;
 
 export const getApiTokensUrl = () => `${getApiUrl()}/iot/tokens`;
 
-export const getRenewApiTokenUrl = apiKey => `${getApiTokensUrl()}/${apiKey}`;
+export const getRenewApiTokenUrl = (apiKey) => `${getApiTokensUrl()}/${apiKey}`;

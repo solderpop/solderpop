@@ -5,8 +5,8 @@ import { INPUT_PULSE_PIN_BINDING_OPTIONS } from 'sdp-project';
 
 import PinWidget from './PinWidget.jsx';
 
-const PulseWidget = props => {
-  const onChange = event => {
+function PulseWidget(props) {
+  const onChange = (event) => {
     props.onChange(event.target.value);
   };
 
@@ -37,7 +37,7 @@ const PulseWidget = props => {
       </select>
     </PinWidget>
   );
-};
+}
 
 PulseWidget.propTypes = {
   elementId: PropTypes.string.isRequired,

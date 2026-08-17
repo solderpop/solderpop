@@ -1,7 +1,5 @@
 import R from 'ramda';
 import RamdaFantasy from 'ramda-fantasy';
-
-const { Either, Maybe } = RamdaFantasy;
 import {
   foldMaybe,
   foldEither,
@@ -37,6 +35,8 @@ import {
 } from './computablePatches.js';
 
 import BUILT_IN_PATCHES from './internal/builtInPatches.js';
+
+const { Either, Maybe } = RamdaFantasy;
 
 /**
  * Root of a project’s state tree
@@ -204,14 +204,14 @@ const generateCustomTypeTerminalDescription = (constructorPath, direction) =>
   ]);
 
 // :: Project -> Map PatchPath Patch
-const getPatches = memoizeOnlyLast(project => {
+const getPatches = memoizeOnlyLast((project) => {
   // those are not built-in or auto-generated patches
   const genuinePatches = getGenuinePatches(project);
 
   const customTypeTerminals = R.compose(
     R.indexBy(Patch.getPatchPath),
-    R.chain(constructorPatchPath =>
-      R.map(dir =>
+    R.chain((constructorPatchPath) =>
+      R.map((dir) =>
         R.pipe(
           Patch.createPatch,
           Patch.setPatchPath(
@@ -232,7 +232,7 @@ const getPatches = memoizeOnlyLast(project => {
     R.indexBy(Patch.getPatchPath),
     foldEither(
       () => [],
-      R.chain(recordPatch =>
+      R.chain((recordPatch) =>
         catMaybies([
           // unpack-my-record
           createUnpackRecordPatch(recordPatch),
@@ -416,7 +416,7 @@ export const getPinsForNode = def(
         Maybe.isJust,
         R.compose(
           explodeMaybe(`Expected valid pins for existent patch ${type}`),
-          R.map(patch =>
+          R.map((patch) =>
             R.compose(
               Patch.upsertDeadPins(node, currentPatch),
               Patch.addVariadicPins(node, patch),
@@ -488,9 +488,8 @@ const checkPinsCompatibility = def(
               },
               Utils.canCastTypes
             )(outputPinType, inputPinType),
-          R.map(
-            ({ original, deduced }) =>
-              deduced ? explodeEither(deduced) : original
+          R.map(({ original, deduced }) =>
+            deduced ? explodeEither(deduced) : original
           )
         )
       ),
@@ -499,7 +498,7 @@ const checkPinsCompatibility = def(
         Either.of,
         R.compose(
           foldEither(
-            conflictingTypes =>
+            (conflictingTypes) =>
               fail('INCOMPATIBLE_PINS__LINK_CAUSES_TYPE_CONFLICT', {
                 types: conflictingTypes,
                 trace: [patchPath],
@@ -565,7 +564,7 @@ const checkLinkPin = def(
       })(mPatch);
 
     // :: Maybe Node -> Either Error Node
-    const checkNodeExists = mNode =>
+    const checkNodeExists = (mNode) =>
       failOnNothing('DEAD_REFERENCE__NODE_NOT_FOUND', {
         nodeId,
         patchPath,
@@ -576,7 +575,7 @@ const checkLinkPin = def(
       R.chain(() => checkPinExists(maybePatch, maybeNode)),
       R.chain(
         R.compose(
-          nodeType => checkPatchExists(maybePatch, nodeType),
+          (nodeType) => checkPatchExists(maybePatch, nodeType),
           Node.getNodeType
         )
       ),
@@ -651,7 +650,7 @@ export const getInvalidBoundNodePins = def(
       catMaybies,
       R.mapObjIndexed((literal, pinKey) =>
         R.compose(
-          R.map(pin => {
+          R.map((pin) => {
             const pinName = R.either(Pin.getPinLabel, Pin.getPinType)(pin);
 
             return fail('INVALID_LITERAL_BOUND_TO_PIN', {
@@ -675,7 +674,7 @@ const checkForInvalidBoundValues = R.curry((project, checkedPatch) =>
   R.compose(
     R.map(R.always(checkedPatch)),
     R.sequence(Either.of),
-    R.map(node => {
+    R.map((node) => {
       const invalidBoundValueErrors = R.compose(
         R.values,
         getInvalidBoundNodePins
@@ -700,7 +699,7 @@ const checkPatchForDeadNodes = def(
       R.sequence(Either.of),
       R.chain(
         R.compose(
-          type =>
+          (type) =>
             R.compose(
               failOnNothing('DEAD_REFERENCE__PATCH_FOR_NODE_NOT_FOUND', {
                 nodeType: type,
@@ -765,7 +764,7 @@ export const validatePatchForVariadics = def(
         return R.compose(
           R.map(R.head),
           R.sequence(Either.of),
-          R.map(link => {
+          R.map((link) => {
             const variadicPassPinLabel = R.compose(
               R.prop(R.__, normalizedPinLabelsByPinKey),
               Link.getLinkOutputNodeId
@@ -789,9 +788,8 @@ export const validatePatchForVariadics = def(
                     );
                   }
 
-                  const connectedPatchVariadicPins = Patch.computeVariadicPins(
-                    connectedPatch
-                  );
+                  const connectedPatchVariadicPins =
+                    Patch.computeVariadicPins(connectedPatch);
 
                   if (Either.isLeft(connectedPatchVariadicPins)) {
                     // That's a job for a validator of that particular patch
@@ -824,7 +822,7 @@ export const validatePatchForVariadics = def(
                   );
                 }
               ),
-              R.chain(connectedNode => {
+              R.chain((connectedNode) => {
                 const connectedNodeType = Node.getNodeType(connectedNode);
                 const maybeConnectedPatch = getPatchByPath(
                   connectedNodeType,
@@ -900,7 +898,7 @@ export const assocPatch = def(
  * @param {String} patchPath
  * @returns {Lens} a Ramda lens whose focus is a patch with the specified path.
  */
-export const lensPatch = patchPath =>
+export const lensPatch = (patchPath) =>
   R.lens(getPatchByPathUnsafe(patchPath), (patch, project) =>
     R.ifElse(
       // To avoid mutating autogenerated patches
@@ -1003,11 +1001,10 @@ export const validatePatchRebase = def(
           R.complement(doesPathExist(R.__, project))
         )
       ),
-      R.chain(
-        oldPatch =>
-          Patch.isGenuinePatch(oldPatch)
-            ? Either.of(newPath)
-            : fail('CANT_REBASE_PATCH__BUILT_IN_PATCH', { oldPath })
+      R.chain((oldPatch) =>
+        Patch.isGenuinePatch(oldPatch)
+          ? Either.of(newPath)
+          : fail('CANT_REBASE_PATCH__BUILT_IN_PATCH', { oldPath })
       ),
       failOnNothing('CANT_REBASE_PATCH__PATCH_NOT_FOUND_BY_PATH', {
         oldPath,
@@ -1035,7 +1032,7 @@ export const validatePatchRebase = def(
 export const rebasePatch = def(
   'rebasePatch :: PatchPath -> PatchPath -> Project -> Either Error Project',
   (newPath, oldPath, project) =>
-    validatePatchRebase(newPath, oldPath, project).map(proj => {
+    validatePatchRebase(newPath, oldPath, project).map((proj) => {
       // we just checked that it exists in `validatePatchRebase`
       const oldPatch = getPatchByPathUnsafe(oldPath, proj);
       // { [oldPath] : newPath }
@@ -1052,7 +1049,7 @@ export const rebasePatch = def(
           Patch.isConstructorPatch,
           () =>
             R.map(
-              direction => [
+              (direction) => [
                 PatchPathUtils.getTerminalPath(direction, oldPath),
                 PatchPathUtils.getTerminalPath(direction, newPath),
               ],
@@ -1130,13 +1127,12 @@ export const updatePatch = def(
 export const getClonePatchPath = def(
   'getClonePatchPath :: PatchPath -> Project -> PatchPath',
   (patchPath, project) => {
-    const specializationSuffix = PatchPathUtils.getSpecializationSuffix(
-      patchPath
-    );
+    const specializationSuffix =
+      PatchPathUtils.getSpecializationSuffix(patchPath);
 
     return R.compose(
       R.concat(R.__, specializationSuffix),
-      newPatchPath =>
+      (newPatchPath) =>
         R.compose(
           R.ifElse(
             R.equals(0),
@@ -1229,10 +1225,10 @@ export const isTerminalNodeInUse = def(
   'isTerminalNodeInUse :: PinKey -> PatchPath -> Project -> Boolean',
   (terminalNodeId, patchPath, project) =>
     R.compose(
-      R.any(patch =>
+      R.any((patch) =>
         R.compose(
           notEmpty,
-          R.chain(node => Patch.listLinksByPin(terminalNodeId, node, patch)),
+          R.chain((node) => Patch.listLinksByPin(terminalNodeId, node, patch)),
           R.filter(R.compose(R.equals(patchPath), Node.getNodeType)),
           Patch.listNodes
         )(patch)
@@ -1257,7 +1253,7 @@ export const isTerminalNodeInUse = def(
  */
 export const resolveNodeTypesInProject = def(
   'resolveNodeTypesInProject :: Project -> Project',
-  project =>
+  (project) =>
     R.compose(
       upsertPatches(R.__, project),
       R.map(Patch.resolveNodeTypesInPatch),
@@ -1328,9 +1324,9 @@ const listDeadLinksByNodeId = def(
   (nodeId, patch, project) =>
     R.compose(
       foldMaybe([], R.identity),
-      R.map(node =>
+      R.map((node) =>
         R.compose(
-          deadPinKeys =>
+          (deadPinKeys) =>
             R.compose(
               R.filter(
                 R.either(
@@ -1384,7 +1380,7 @@ export const changeNodeTypeUnsafe = def(
 
     const updatedLinks = Patch.getUpdatedLinksForNodeWithChangedType(
       nodeId,
-      oldPinKey => mapOfCorrespondingPinKeys[oldPinKey] || oldPinKey,
+      (oldPinKey) => mapOfCorrespondingPinKeys[oldPinKey] || oldPinKey,
       patch
     );
 
@@ -1433,11 +1429,12 @@ export const changeNodeTypeUnsafe = def(
 export const getPatchDependencies = def(
   'getPatchDependencies :: PatchPath -> Project -> [PatchPath]',
   (entryPatchPath, project) =>
-    R.compose(R.uniq, R.unnest, R.values, getDependenciesMap)(
-      project,
-      [entryPatchPath],
-      {}
-    )
+    R.compose(
+      R.uniq,
+      R.unnest,
+      R.values,
+      getDependenciesMap
+    )(project, [entryPatchPath], {})
 );
 
 /**
@@ -1445,7 +1442,7 @@ export const getPatchDependencies = def(
  * @param {Project} project
  * @returns {Either<Error|Project>}
  */
-export const validateProject = project =>
+export const validateProject = (project) =>
   R.compose(
     R.ifElse(Either.isLeft, R.identity, R.always(Either.of(project))),
     R.sequence(Either.of),
@@ -1493,7 +1490,7 @@ export const removeDebugNodes = def(
         (accProject, patchPath) =>
           R.over(
             lensPatch(patchPath),
-            patch =>
+            (patch) =>
               R.compose(
                 R.reduce(
                   (accPatch, node) => Patch.dissocNode(node, accPatch),

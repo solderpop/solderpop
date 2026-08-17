@@ -1,7 +1,7 @@
 import chai from 'chai';
+import normalizeByte from '../src/utils/normalizeByte.js';
 
 const { assert } = chai;
-import normalizeByte from '../src/utils/normalizeByte.js';
 
 describe('normalizeByte', () => {
   const test = (from, to) => {

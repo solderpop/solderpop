@@ -14,21 +14,25 @@ class PatchGroupItemContextMenu extends BasePageObject {
   clickOpen() {
     return this._clickItemWithId('open');
   }
+
   clickPlace() {
     return this._clickItemWithId('place');
   }
+
   clickRename() {
     return this._clickItemWithId('rename');
   }
+
   clickDelete() {
     return this._clickItemWithId('delete');
   }
+
   clickHelp() {
     return this._clickItemWithId('help');
   }
 }
 
-PatchGroupItemContextMenu.findOnPage = async page => {
+PatchGroupItemContextMenu.findOnPage = async (page) => {
   const elementHandle = await page.$('.ContextMenu--PatchGroupItem');
   return new PatchGroupItemContextMenu(page, elementHandle);
 };

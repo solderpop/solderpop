@@ -5,7 +5,7 @@ import R from 'ramda';
  * @param {Function} promiseFn Function that returns Promise
  * @returns {Function} Run promiseFn with argument and returns the same argument on resolve
  */
-export const tapP = promiseFn => arg => promiseFn(arg).then(R.always(arg));
+export const tapP = (promiseFn) => (arg) => promiseFn(arg).then(R.always(arg));
 
 // :: ERROR_CODE -> Error -> Promise.Reject Error
 export const rejectWithCode = R.curry((code, err) =>
@@ -13,25 +13,30 @@ export const rejectWithCode = R.curry((code, err) =>
 );
 
 // :: StrMap (Promise a b) -> Promise (StrMap a) b
-export const allValues = promises => {
+export const allValues = (promises) => {
   const pairs = R.toPairs(promises);
   const keys = R.pluck(0, pairs);
   const vals = R.pluck(1, pairs);
-  return Promise.all(vals).then(x => R.zipObj(keys, x));
+  return Promise.all(vals).then((x) => R.zipObj(keys, x));
 };
 
 // :: [Promise a] -> Promise a
-export const allPromises = promises => Promise.all(promises);
+export const allPromises = (promises) => Promise.all(promises);
 
 /**
  * Helper for function compositions where Promises appears
  * near the end of the function chain. Otherwise, use `composeP`.
  */
 // :: (a -> b) -> Promise a -> Promise b
+// Deliberately named `then` (used via named import only, e.g.
+// `import { then } from 'sdp-func-tools'` in libraryManager.js) --
+// no-restricted-exports guards against `await`ing a namespace import
+// that happens to carry a `.then`, which doesn't apply to this usage.
+// eslint-disable-next-line no-restricted-exports
 export const then = R.curry((fn, promise) => promise.then(fn));
 
 // :: Number -> Promise.Resolved ()
-export const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
  * Utility function to retry getting data from somewhere N times
@@ -67,7 +72,7 @@ export const retryOrFail = R.curry((delays, stopFn, errFn, retryFn) => {
   const maxRetries = delays.length;
   let retryCounter = 0;
 
-  const run = data =>
+  const run = (data) =>
     new Promise((resolve, reject) => {
       if (stopFn(data) || retryCounter === maxRetries) {
         reject(errFn(data));
@@ -76,10 +81,7 @@ export const retryOrFail = R.curry((delays, stopFn, errFn, retryFn) => {
 
       setTimeout(() => {
         retryCounter += 1;
-        retryFn()
-          .catch(run)
-          .then(resolve)
-          .catch(reject);
+        retryFn().catch(run).then(resolve).catch(reject);
       }, delays[retryCounter]);
     });
 

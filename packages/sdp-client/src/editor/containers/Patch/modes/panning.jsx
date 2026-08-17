@@ -22,7 +22,7 @@ import {
 
 let patchSvgRef = null;
 
-const getCurrentOffset = api => {
+const getCurrentOffset = (api) => {
   if (
     api.state.mousePosition &&
     api.state.panningStartPosition &&
@@ -118,7 +118,7 @@ const panningMode = {
           onMouseUp={bindApi(api, this.onMouseUp)}
           isInPanningMode
           isPanning={api.state.isPanning}
-          svgRef={svg => {
+          svgRef={(svg) => {
             patchSvgRef = svg;
           }}
         >

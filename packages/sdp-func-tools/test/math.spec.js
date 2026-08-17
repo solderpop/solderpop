@@ -1,7 +1,8 @@
 import chai from 'chai';
-const { assert } = chai;
 
 import { roundTo } from '../src/math.js';
+
+const { assert } = chai;
 
 describe('Math', () => {
   it('roundTo() returns right values', () => {
@@ -9,6 +10,6 @@ describe('Math', () => {
     assert.equal(roundTo(3, 1.1115), 1.112);
     assert.equal(roundTo(4, 1.1115), 1.1115);
     assert.equal(roundTo(4, 1), 1);
-    assert.equal(roundTo(10, 47.83941230486833478), 47.8394123049);
+    assert.equal(roundTo(10, 47.83941230486833), 47.8394123049);
   });
 });

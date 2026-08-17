@@ -1,10 +1,6 @@
 import R from 'ramda';
 import RamdaFantasy from 'ramda-fantasy';
-
-const { Maybe, Either } = RamdaFantasy;
 import chai from 'chai';
-
-const { assert } = chai;
 
 import { addMissingOptionalProjectFields } from '../src/optionalFieldsUtils.js';
 import * as Node from '../src/node.js';
@@ -15,6 +11,10 @@ import { OUTPUT_SELF_PATH } from '../src/constants.js';
 import BUILT_IN_PATCHES from '../src/internal/builtInPatches.js';
 
 import * as Helper from './helpers.js';
+
+const { Maybe, Either } = RamdaFantasy;
+
+const { assert } = chai;
 
 const BUILT_IN_PATCH_PATHS = R.keys(BUILT_IN_PATCHES);
 
@@ -303,7 +303,7 @@ describe('Project', () => {
         project
       );
 
-      Helper.expectEitherRight(actualProject => {
+      Helper.expectEitherRight((actualProject) => {
         assert.deepEqual(actualProject, project);
       }, eitherProject);
     });
@@ -364,7 +364,7 @@ describe('Project', () => {
       const newPatch = Helper.defaultizePatch({ path: '@/test2' });
       const result = Project.validatePatchContents(newPatch, smallProject);
       Helper.expectEitherRight(
-        validPatch => assert.deepEqual(validPatch, newPatch),
+        (validPatch) => assert.deepEqual(validPatch, newPatch),
         result
       );
     });
@@ -374,14 +374,14 @@ describe('Project', () => {
         smallProject
       );
       Helper.expectEitherRight(
-        validPatch => assert.deepEqual(validPatch, patchWithNodeOnly),
+        (validPatch) => assert.deepEqual(validPatch, patchWithNodeOnly),
         result
       );
     });
     it('should be Either.Right for valid new patch', () => {
       const result = Project.validatePatchContents(fullPatch, fullProject);
       Helper.expectEitherRight(
-        validPatch => assert.deepEqual(validPatch, fullPatch),
+        (validPatch) => assert.deepEqual(validPatch, fullPatch),
         result
       );
     });
@@ -390,7 +390,7 @@ describe('Project', () => {
       const mainPatch = Project.getPatchByPathUnsafe('@/main', blinkProject);
       const result = Project.validatePatchContents(mainPatch, blinkProject);
       Helper.expectEitherRight(
-        validPatch => assert.deepEqual(validPatch, mainPatch),
+        (validPatch) => assert.deepEqual(validPatch, mainPatch),
         result
       );
     });
@@ -774,9 +774,10 @@ describe('Project', () => {
         emptyProject
       );
       assert.sameMembers(
-        R.compose(R.map(Patch.getPatchPath), Project.listLocalPatches)(
-          newProject
-        ),
+        R.compose(
+          R.map(Patch.getPatchPath),
+          Project.listLocalPatches
+        )(newProject),
         ['@/test']
       );
     });
@@ -819,7 +820,7 @@ describe('Project', () => {
     ]);
     it('should return Project with associated patches', () => {
       const proj = Project.upsertPatches(patches, emptyProject);
-      R.forEach(expectedPatch => {
+      R.forEach((expectedPatch) => {
         const patchPath = Patch.getPatchPath(expectedPatch);
         assert.deepEqual(
           Project.getPatchByPathUnsafe(patchPath, proj),
@@ -885,7 +886,7 @@ describe('Project', () => {
 
       const newProject = Project.rebasePatch(newPath, oldPath, project);
 
-      Helper.expectEitherRight(proj => {
+      Helper.expectEitherRight((proj) => {
         const patchPaths = R.compose(
           R.map(Patch.getPatchPath),
           Project.listGenuinePatches
@@ -905,7 +906,7 @@ describe('Project', () => {
 
       const newProject = Project.rebasePatch(newPath, oldPath, project);
 
-      Helper.expectEitherRight(proj => {
+      Helper.expectEitherRight((proj) => {
         const actualRebasedPatchPath = R.compose(
           Patch.getPatchPath,
           Project.getPatchByPathUnsafe(newPath)
@@ -929,7 +930,7 @@ describe('Project', () => {
 
       const eitherNewProject = Project.rebasePatch(newPath, oldPath, project);
 
-      Helper.expectEitherRight(newProject => {
+      Helper.expectEitherRight((newProject) => {
         const actualNodeType = R.compose(
           Node.getNodeType,
           Patch.getNodeByIdUnsafe('1'),
@@ -960,9 +961,9 @@ describe('Project', () => {
         project
       );
 
-      Helper.expectEitherRight(updatedProject => {
+      Helper.expectEitherRight((updatedProject) => {
         const newTerminals = R.compose(
-          R.map(n => [Node.getNodeId(n), Node.getNodeType(n)]),
+          R.map((n) => [Node.getNodeId(n), Node.getNodeType(n)]),
           Patch.listNodes,
           Project.getPatchByPathUnsafe('@/foo')
         )(updatedProject);
@@ -1084,7 +1085,7 @@ describe('Project', () => {
           Project.clonePatch('@/my-patch', '@/my-patch-copy')
         )(project);
 
-        Helper.expectEitherRight(proj => {
+        Helper.expectEitherRight((proj) => {
           // Test that all copies exists with the right suffix
           const patchPaths = R.compose(
             R.map(Patch.getPatchPath),
@@ -1118,7 +1119,7 @@ describe('Project', () => {
           Project.clonePatch('another/one/external', '@/external-copy')
         )(project);
 
-        Helper.expectEitherRight(proj => {
+        Helper.expectEitherRight((proj) => {
           // Test that all copies exists with the right suffix
           const patchPaths = R.compose(
             R.map(Patch.getPatchPath),
@@ -1460,7 +1461,7 @@ describe('Project', () => {
       './fixtures/broken-project.xodball'
     );
     const project = addMissingOptionalProjectFields(brokenProject);
-    const unfoldRight = e => Either.either(R.always(null), R.identity, e);
+    const unfoldRight = (e) => Either.either(R.always(null), R.identity, e);
 
     it('returns Either Error about non-existing patch in the project', () => {
       const res = Project.validateProject(project);
@@ -1744,35 +1745,23 @@ describe('Project', () => {
             ['pulse']
           ),
           // good specialization
-          '@/when-either-changes(number,string)': Helper.createSpecializationPatch(
-            ['number', 'string'],
-            ['pulse']
-          ),
+          '@/when-either-changes(number,string)':
+            Helper.createSpecializationPatch(['number', 'string'], ['pulse']),
           // another good specialization
-          '@/when-either-changes(number,number)': Helper.createSpecializationPatch(
-            ['number', 'number'],
-            ['pulse']
-          ),
+          '@/when-either-changes(number,number)':
+            Helper.createSpecializationPatch(['number', 'number'], ['pulse']),
           // and another good specialization, from other library
-          'someone/other-lib/when-either-changes(number,string)': Helper.createSpecializationPatch(
-            ['number', 'string'],
-            ['pulse']
-          ),
+          'someone/other-lib/when-either-changes(number,string)':
+            Helper.createSpecializationPatch(['number', 'string'], ['pulse']),
           // wrong static pin
-          '@/when-either-changes(string,pulse)': Helper.createSpecializationPatch(
-            ['string', 'pulse'],
-            ['string']
-          ),
+          '@/when-either-changes(string,pulse)':
+            Helper.createSpecializationPatch(['string', 'pulse'], ['string']),
           // completely wrong name
-          '@/when-either-changes(some-nonsense)': Helper.createSpecializationPatch(
-            ['string', 'string'],
-            ['pulse']
-          ),
+          '@/when-either-changes(some-nonsense)':
+            Helper.createSpecializationPatch(['string', 'string'], ['pulse']),
           // wrong base name (types need to be the other way around)
-          '@/when-either-changes(string,number)': Helper.createSpecializationPatch(
-            ['number', 'string'],
-            ['pulse']
-          ),
+          '@/when-either-changes(string,number)':
+            Helper.createSpecializationPatch(['number', 'string'], ['pulse']),
           '@/something-completely-different': Helper.createSpecializationPatch(
             ['number', 'string'],
             ['pulse']

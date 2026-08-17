@@ -42,9 +42,9 @@ const options = {
 
 const sortByScoreOrAlphabetically = R.sort((a, b) => {
   if (a.score < b.score) return -1;
-  else if (a.score > b.score) return 1;
-  else if (a.item.path < b.item.path) return -1;
-  else if (a.item.path > b.item.path) return 1;
+  if (a.score > b.score) return 1;
+  if (a.item.path < b.item.path) return -1;
+  if (a.item.path > b.item.path) return 1;
 
   return 0;
 });
@@ -67,12 +67,12 @@ const calculateEntryRate = (str, token) => {
 };
 
 const calculatePenaltyForPath = R.curry((token, item) => {
-  const path = item.item.path;
+  const { path } = item.item;
   const basename = getBaseName(path);
   const index = basename.indexOf(token);
   const k = calculateEntryRate(path, token);
 
-  return index === -1 ? 0.25 : index / 100 * k;
+  return index === -1 ? 0.25 : (index / 100) * k;
 });
 
 const refineScore = R.curry((query, result) =>
@@ -80,7 +80,7 @@ const refineScore = R.curry((query, result) =>
     sortByScoreOrAlphabetically,
     R.unless(
       () => query.trim().split(' ').length > 1, // TODO
-      R.map(item => {
+      R.map((item) => {
         const tokens = query.trim().split(' ');
         const token = tokens[0];
 
@@ -102,15 +102,15 @@ const refineScoreForSpecializationNode = R.curry((query, result) =>
     R.contains('('),
     R.compose(
       sortByScoreOrAlphabetically,
-      foldMaybe(result, typesString =>
+      foldMaybe(result, (typesString) =>
         R.compose(
-          types =>
-            R.map(item =>
+          (types) =>
+            R.map((item) =>
               R.compose(
                 R.assoc('score', R.__, item),
                 R.ifElse(
                   R.gt(R.__, 0),
-                  count => item.score / count,
+                  (count) => item.score / count,
                   R.always(Infinity)
                 ),
                 countTokensInString(types),
@@ -129,14 +129,14 @@ const refineScoreForSpecializationNode = R.curry((query, result) =>
   )(query)
 );
 
-const getAverageScore = resultList =>
+const getAverageScore = (resultList) =>
   R.compose(
     R.divide(R.__, resultList.length),
     R.reduce(R.add, 0),
     R.pluck('score')
   )(resultList);
 
-const reduceResults = rawResults => {
+const reduceResults = (rawResults) => {
   // Cut results with "Infinity" score from results
   const results = R.reject(R.propEq('score', Infinity), rawResults);
 
@@ -145,7 +145,7 @@ const reduceResults = rawResults => {
 
   if (results.length <= 5) return results;
 
-  const filtered = results.filter(r => r.score < scoreToFilter);
+  const filtered = results.filter((r) => r.score < scoreToFilter);
   if (filtered.length > 1) return filtered;
 
   return results;
@@ -162,12 +162,12 @@ const filterNodesByLib = R.curry((query, idx) =>
   R.ifElse(
     R.startsWith('lib:'),
     R.compose(
-      libName => R.filter(R.compose(R.contains(libName), R.prop('lib')), idx),
+      (libName) => R.filter(R.compose(R.contains(libName), R.prop('lib')), idx),
       // TODO: Remove `R.join` after updating on newer Ramda (>0.24.1)
       //       cause it will work fine with strings
       //       Can not update now on 0.25.0, cause it have performance issues
       R.join(''),
-      R.takeWhile(x => x !== ' '),
+      R.takeWhile((x) => x !== ' '),
       R.drop(4)
     ),
     R.always(idx)

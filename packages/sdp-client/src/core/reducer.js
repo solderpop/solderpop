@@ -21,15 +21,17 @@ import initialProjectState from '../project/state.js';
 import { RECOVER_STATE } from './actionTypes.js';
 
 // :: [(s -> a -> s)] -> s -> a -> s
-const pipeReducers = (...reducers) => (state, action) =>
-  action.type === RECOVER_STATE
-    ? action.payload
-    : reducers.reduce((s, r) => r(s, action), state);
+const pipeReducers =
+  (...reducers) =>
+  (state, action) =>
+    action.type === RECOVER_STATE
+      ? action.payload
+      : reducers.reduce((s, r) => r(s, action), state);
 
 const lastActionsReducer = (prevActions = [], newAction) =>
   R.compose(R.slice(-3, Infinity), R.append(newAction))(prevActions);
 
-const combineRootReducers = extraReducers => {
+const combineRootReducers = (extraReducers) => {
   const reducers = R.merge(
     {
       user: userReducer,

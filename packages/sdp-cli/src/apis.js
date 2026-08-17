@@ -1,11 +1,11 @@
 import fetch from 'node-fetch';
 import { createError } from 'sdp-func-tools';
 
-const getProto = apiSuffix =>
+const getProto = (apiSuffix) =>
   ['solderpop.io', 'xod.show'].indexOf(apiSuffix) >= 0 ? 'https' : 'http';
 
 const myFetch = (input, init) =>
-  fetch(input, init).then(res => {
+  fetch(input, init).then((res) => {
     if (!res.ok) {
       return Promise.reject(res);
     }
@@ -24,8 +24,8 @@ const getAccessToken = (apiSuffix, username, password) => {
       password,
     }),
   })
-    .then(res => res.json())
-    .then(body => {
+    .then((res) => res.json())
+    .then((body) => {
       if (!body.access_token)
         throw createError('PUBLISH_AUTH_FAILED', {
           username,
@@ -37,7 +37,7 @@ const getAccessToken = (apiSuffix, username, password) => {
 
 const getUser = (apiSuffix, username) => {
   const reqUrl = `${getProto(apiSuffix)}://pm.${apiSuffix}/users/${username}`;
-  return myFetch(reqUrl).then(res => res.json());
+  return myFetch(reqUrl).then((res) => res.json());
 };
 
 const getLib = (apiSuffix, username, libname) => {

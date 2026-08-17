@@ -89,15 +89,19 @@ class Node extends React.Component {
   }
 
   onMouseOver(...args) {
-    return R.pathOr(noop, ['context', 'nodeHover', 'onMouseOver'], this)(
-      ...args
-    );
+    return R.pathOr(
+      noop,
+      ['context', 'nodeHover', 'onMouseOver'],
+      this
+    )(...args);
   }
 
   onMouseLeave(...args) {
-    return R.pathOr(noop, ['context', 'nodeHover', 'onMouseLeave'], this)(
-      ...args
-    );
+    return R.pathOr(
+      noop,
+      ['context', 'nodeHover', 'onMouseLeave'],
+      this
+    )(...args);
   }
 
   getHoveredNodeId() {
@@ -222,7 +226,7 @@ class Node extends React.Component {
               {this.renderBody()}
             </g>
             <g className={pinsCls} id={`nodePins_${id}`}>
-              {pinsArr.map(pin => (
+              {pinsArr.map((pin) => (
                 <g key={pin.key}>
                   {pin.isConnected || XP.isOutputPin(pin) ? null : (
                     <PinValue {...pin} key={`pinValue_${pin.key}`} />

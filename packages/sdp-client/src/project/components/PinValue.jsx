@@ -7,14 +7,14 @@ import { unquote } from 'sdp-func-tools';
 import { PINVALUE_WIDTH, getPinValueProps } from '../nodeLayout.js';
 import { getRenderablePinType } from '../utils.js';
 
-const formatPulsePinValue = value => {
+const formatPulsePinValue = (value) => {
   switch (value) {
     case INPUT_PULSE_PIN_BINDING_OPTIONS.CONTINUOUSLY:
       return 'Loop';
     case INPUT_PULSE_PIN_BINDING_OPTIONS.ON_BOOT:
       return 'Boot';
-    default:
     case INPUT_PULSE_PIN_BINDING_OPTIONS.NEVER:
+    default:
       return '';
   }
 };
@@ -30,7 +30,7 @@ const formatPinValue = (type, value) => {
   }
 };
 
-const PinValue = ({ value, type, deducedType, direction, position }) => {
+function PinValue({ value, type, deducedType, direction, position }) {
   const textProps = getPinValueProps(direction, position);
 
   const pinType = getRenderablePinType({ type, deducedType });
@@ -47,7 +47,7 @@ const PinValue = ({ value, type, deducedType, direction, position }) => {
       </div>
     </foreignObject>
   ) : null;
-};
+}
 
 PinValue.propTypes = {
   value: PropTypes.string,

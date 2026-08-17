@@ -6,5 +6,5 @@ export default Link;
 
 export const getLinksOfType = async (page, linkType) => {
   const elementHandles = await page.$$(`.Link.${linkType}`);
-  return elementHandles.map(eh => new Link(page, eh));
+  return elementHandles.map((eh) => new Link(page, eh));
 };

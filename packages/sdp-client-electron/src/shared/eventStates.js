@@ -20,7 +20,7 @@ export const getEventNameWithState = R.curry(
   (eventName, state) => `${eventName}:${state}`
 );
 
-export const getAllStatesForEvent = eventName =>
+export const getAllStatesForEvent = (eventName) =>
   R.compose(
     R.assoc('BEGIN', eventName),
     R.map(getEventNameWithState(eventName))

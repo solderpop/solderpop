@@ -17,7 +17,7 @@ const { assert } = chai;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const bundledWsPath = p => path.resolve(__dirname, '../../../workspace', p);
+const bundledWsPath = (p) => path.resolve(__dirname, '../../../workspace', p);
 
 // :: PatchFileContents -> [NodeType]
 const extractListOfUsedNodeTypes = R.compose(R.pluck('type'), R.prop('nodes'));
@@ -146,7 +146,7 @@ describe('Test FS things', () => {
       assert.eventually.equal(
         fse
           .readJSON(ide.libPath('xod/core', 'project.xod'))
-          .then(proj => proj.version),
+          .then((proj) => proj.version),
         '0.11.0'
       ));
   });

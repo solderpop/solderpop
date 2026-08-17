@@ -1,8 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { exit } from 'process';
 import R from 'ramda';
-
-const { pick } = R;
 import * as xodFs from 'sdp-fs';
 import {
   getProjectName,
@@ -22,7 +20,9 @@ import {
   putUserLib,
 } from '../apis.js';
 
-const packLibVersion = async projectDir => {
+const { pick } = R;
+
+const packLibVersion = async (projectDir) => {
   const projectWithoutLibs = await xodFs.loadProjectWithoutLibs(
     await xodFs.findClosestProjectDir(projectDir)
   );
@@ -43,9 +43,10 @@ const createLibUri = (orgname, libname, tag) => ({
   tag,
 });
 
-const uriToStringWithoutTag = libUri => `${libUri.orgname}/${libUri.libname}`;
+const uriToStringWithoutTag = (libUri) => `${libUri.orgname}/${libUri.libname}`;
 
-const uriToString = libUri => `${uriToStringWithoutTag(libUri)}@${libUri.tag}`;
+const uriToString = (libUri) =>
+  `${uriToStringWithoutTag(libUri)}@${libUri.tag}`;
 
 class PublishCommand extends BaseCommand {
   async run() {
@@ -65,7 +66,7 @@ class PublishCommand extends BaseCommand {
 
     const loadLibTask = {
       title: 'Load library',
-      task: ctx =>
+      task: (ctx) =>
         packLibVersion(projectPath).then(({ libname, version }) => {
           ctx.libname = libname;
           ctx.version = version;
@@ -75,12 +76,12 @@ class PublishCommand extends BaseCommand {
 
     const getAccessTokenTask = {
       title: 'Authenticate',
-      task: ctx =>
+      task: (ctx) =>
         getAccessToken(api, username, password)
-          .then(token => {
+          .then((token) => {
             ctx.token = token;
           })
-          .catch(error => {
+          .catch((error) => {
             throw createError('PUBLISH_AUTH_FAILED', {
               username,
               status: error.statusText || error.message,
@@ -90,9 +91,9 @@ class PublishCommand extends BaseCommand {
 
     const checkUserTask = {
       title: 'Get user',
-      task: ctx =>
+      task: (ctx) =>
         getUser(api, targetUsername)
-          .catch(error => {
+          .catch((error) => {
             if (error.status === 404)
               throw createError('PUBLISH_USER_NOT_EXIST', {
                 username: targetUsername,
@@ -102,7 +103,7 @@ class PublishCommand extends BaseCommand {
               status: error.statusText || error.message,
             });
           })
-          .then(user => {
+          .then((user) => {
             if (
               user.username !== username &&
               user.trusts.indexOf(username) === -1
@@ -120,12 +121,12 @@ class PublishCommand extends BaseCommand {
 
     const getLibTask = {
       title: 'Get library',
-      task: ctx =>
+      task: (ctx) =>
         getLib(api, targetUsername, ctx.libname)
-          .then(lib => {
+          .then((lib) => {
             ctx.library = lib;
           })
-          .catch(error => {
+          .catch((error) => {
             if (error.status !== 404)
               throw createError('PUBLISH_LIB_OTHER_ERROR', {
                 lib: uriToStringWithoutTag(ctx.libUri),
@@ -137,29 +138,31 @@ class PublishCommand extends BaseCommand {
 
     const putLibraryTask = {
       title: 'Create library',
-      skip: ctx => (ctx.library ? 'Already exists' : false),
-      task: ctx =>
-        putUserLib(api, ctx.token, targetUsername, ctx.libname).catch(error => {
-          if (error.status === 403) {
-            throw createError('PUBLISH_ACCESS_DENIED', {
-              username,
-              lib: uriToString(ctx.libUri),
-              libOwner: targetUsername,
+      skip: (ctx) => (ctx.library ? 'Already exists' : false),
+      task: (ctx) =>
+        putUserLib(api, ctx.token, targetUsername, ctx.libname).catch(
+          (error) => {
+            if (error.status === 403) {
+              throw createError('PUBLISH_ACCESS_DENIED', {
+                username,
+                lib: uriToString(ctx.libUri),
+                libOwner: targetUsername,
+              });
+            }
+            throw createError('PUBLISH_PUT_LIBRARY_OTHER_ERROR', {
+              lib: uriToStringWithoutTag(ctx.libUri),
+              status: error.statusText || error.message,
             });
           }
-          throw createError('PUBLISH_PUT_LIBRARY_OTHER_ERROR', {
-            lib: uriToStringWithoutTag(ctx.libUri),
-            status: error.statusText || error.message,
-          });
-        }),
+        ),
     };
 
     const publishLibraryTask = {
       title: 'Publish library',
-      task: ctx =>
+      task: (ctx) =>
         postUserLib(api, ctx.token, targetUsername, ctx.libname, ctx.version)
           .then(() => exit(0))
-          .catch(error => {
+          .catch((error) => {
             if (error.status === 409) {
               throw createError('PUBLISH_LIBVERSION_EXISTS', {
                 lib: uriToString(ctx.libUri),
@@ -190,7 +193,7 @@ class PublishCommand extends BaseCommand {
     )
       .run()
       .then(() => exit(0))
-      .catch(err => {
+      .catch((err) => {
         this.printError(err);
         return exit(100);
       });

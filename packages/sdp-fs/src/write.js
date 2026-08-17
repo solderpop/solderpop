@@ -14,7 +14,7 @@ export const writeFile = curry((outputPath, data, encoding) => {
 
   return outputFile(resolvedPath, dataWithEol, encoding)
     .then(() => ({ path: resolvedPath, data }))
-    .catch(err =>
+    .catch((err) =>
       Promise.reject(Object.assign(err, { path: resolvedPath, data }))
     );
 });

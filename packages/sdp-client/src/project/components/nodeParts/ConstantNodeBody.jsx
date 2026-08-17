@@ -18,13 +18,17 @@ export const getConstantValue = ({ pins }) =>
     R.values
   )(pins);
 
-const ConstantNodeBody = props => (
-  <RegularNodeBody
-    {...props}
-    label={props.label || getConstantValue(props) || XP.getBaseName(props.type)}
-    isResizable
-  />
-);
+function ConstantNodeBody(props) {
+  return (
+    <RegularNodeBody
+      {...props}
+      label={
+        props.label || getConstantValue(props) || XP.getBaseName(props.type)
+      }
+      isResizable
+    />
+  );
+}
 
 ConstantNodeBody.defaultProps = {
   onVariadicHandleDown: noop,

@@ -3,7 +3,7 @@ import { maybeProp } from 'sdp-func-tools';
 import * as AT from './actionTypes.js';
 import { tetheringInetChunksToSend } from './selectors.js';
 
-export const addMessagesToDebuggerLog = messages => ({
+export const addMessagesToDebuggerLog = (messages) => ({
   type: AT.DEBUGGER_LOG_ADD_MESSAGES,
   payload: messages,
 });
@@ -25,7 +25,7 @@ export const toggleCapturingDebuggerProtocolMessages = () => ({
   type: AT.DEBUGGER_LOG_TOGGLE_XOD_PROTOCOL_MESSAGES,
 });
 
-export const selectDebuggerTab = tab => ({
+export const selectDebuggerTab = (tab) => ({
   type: AT.SELECT_DEBUGGER_TAB,
   payload: tab,
 });
@@ -53,14 +53,14 @@ export const startDebuggerSession = (
   },
 });
 
-export const startSerialSession = message => ({
+export const startSerialSession = (message) => ({
   type: AT.SERIAL_SESSION_STARTED,
   payload: {
     message,
   },
 });
 
-export const stopDebuggerSession = message => ({
+export const stopDebuggerSession = (message) => ({
   type: AT.DEBUG_SESSION_STOPPED,
   payload: {
     message,
@@ -79,7 +79,7 @@ export const markDebugSessionOutdated = () => ({
   type: AT.MARK_DEBUG_SESSION_OUTDATED,
 });
 
-export const sendToSerial = line => ({
+export const sendToSerial = (line) => ({
   type: AT.LINE_SENT_TO_SERIAL,
   payload: line,
 });
@@ -93,7 +93,7 @@ export const tetheringInetCreated = (nodeId, sender, transmitter) => ({
   },
 });
 
-export const tetheringInetChunksAdded = chunk => ({
+export const tetheringInetChunksAdded = (chunk) => ({
   type: AT.TETHERING_INET_CHUNKS_ADDED,
   payload: chunk,
 });

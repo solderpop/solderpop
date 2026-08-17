@@ -51,7 +51,7 @@ const debuggingMode = R.merge(selectingMode, {
           onMouseDown={bindApi(api, this.onMouseDown)}
           onMouseMove={bindApi(api, this.onMouseMove)}
           onMouseUp={bindApi(api, this.onMouseUp)}
-          svgRef={svg => api.setStorage({ patchSvgRef: svg })}
+          svgRef={(svg) => api.setStorage({ patchSvgRef: svg })}
         >
           <Layers.Background
             width={api.props.size.width}

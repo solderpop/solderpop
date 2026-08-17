@@ -87,9 +87,10 @@ class Menubar extends React.Component {
   }
 
   onTitleClick({ key }) {
-    const isTopLevel = R.compose(R.contains(key), R.map(R.prop('key')))(
-      this.props.items
-    );
+    const isTopLevel = R.compose(
+      R.contains(key),
+      R.map(R.prop('key'))
+    )(this.props.items);
 
     if (this.state.isOpen && isTopLevel) {
       this.closeAll();
@@ -150,7 +151,7 @@ class Menubar extends React.Component {
     const { isOpen, openKeys } = this.state;
 
     return (
-      <React.Fragment>
+      <>
         <Menu
           mode="horizontal"
           selectedKeys={noSelectedKeys}
@@ -169,7 +170,7 @@ class Menubar extends React.Component {
           className={cn('MenuUnderlay', { isVisible: isOpen })}
           onClick={this.closeAll}
         />
-      </React.Fragment>
+      </>
     );
   }
 }

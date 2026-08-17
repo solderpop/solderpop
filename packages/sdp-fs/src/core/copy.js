@@ -6,7 +6,7 @@ const { curry } = R;
 export default curry(
   (source, target) =>
     new Promise((resolve, reject) => {
-      fse.copy(source, target, err => {
+      fse.copy(source, target, (err) => {
         if (err) {
           reject(err);
           return;

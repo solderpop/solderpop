@@ -19,52 +19,54 @@ import {
   NODE_PROPERTY_UPDATING,
 } from '../editor/actionTypes.js';
 
-export default ({ getState }) => next => action => {
-  const state = getState();
-  const result = next(action);
+export default ({ getState }) =>
+  (next) =>
+  (action) => {
+    const state = getState();
+    const result = next(action);
 
-  const isTweakActionType =
-    action.type === NODE_PROPERTY_UPDATED ||
-    action.type === TWEAK_PULSE_SENT ||
-    action.type === NODE_PROPERTY_UPDATING;
+    const isTweakActionType =
+      action.type === NODE_PROPERTY_UPDATED ||
+      action.type === TWEAK_PULSE_SENT ||
+      action.type === NODE_PROPERTY_UPDATING;
 
-  if (isTweakActionType && isSimulationRunning(state)) {
-    const { id: nodeId, value = '', patchPath } = action.payload;
-    const nodeType = R.compose(
-      XP.getNodeType,
-      XP.getNodeByIdUnsafe(nodeId),
-      XP.getPatchByPathUnsafe(patchPath),
-      getProject
-    )(state);
-
-    if (XP.isTweakPath(nodeType)) {
-      const nodeIdPath = R.compose(
-        foldMaybe(nodeId, R.concat(R.__, nodeId)),
-        getCurrentChunksPath
-      )(state);
-      const debuggerNodeId = R.compose(
-        R.prop(nodeIdPath),
-        getInvertedDebuggerNodeIdsMap
+    if (isTweakActionType && isSimulationRunning(state)) {
+      const { id: nodeId, value = '', patchPath } = action.payload;
+      const nodeType = R.compose(
+        XP.getNodeType,
+        XP.getNodeByIdUnsafe(nodeId),
+        XP.getPatchByPathUnsafe(patchPath),
+        getProject
       )(state);
 
-      const globals = getStoredGlobals(state);
+      if (XP.isTweakPath(nodeType)) {
+        const nodeIdPath = R.compose(
+          foldMaybe(nodeId, R.concat(R.__, nodeId)),
+          getCurrentChunksPath
+        )(state);
+        const debuggerNodeId = R.compose(
+          R.prop(nodeIdPath),
+          getInvertedDebuggerNodeIdsMap
+        )(state);
 
-      // If value looks like a global literal — get value from the stored globals
-      const valueToSend = R.when(
-        R.startsWith('='),
-        R.compose(R.propOr(value, R.__, globals), R.tail)
-      )(value);
+        const globals = getStoredGlobals(state);
 
-      const msg = formatTweakMessage(nodeType, debuggerNodeId, valueToSend);
-      const worker = editorSelectors.simulationWorker(state);
-      worker.sendToWasm(msg);
+        // If value looks like a global literal — get value from the stored globals
+        const valueToSend = R.when(
+          R.startsWith('='),
+          R.compose(R.propOr(value, R.__, globals), R.tail)
+        )(value);
+
+        const msg = formatTweakMessage(nodeType, debuggerNodeId, valueToSend);
+        const worker = editorSelectors.simulationWorker(state);
+        worker.sendToWasm(msg);
+      }
     }
-  }
 
-  if (action.type === LINE_SENT_TO_SERIAL && isSimulationRunning(state)) {
-    const worker = editorSelectors.simulationWorker(state);
-    worker.sendToWasm(action.payload);
-  }
+    if (action.type === LINE_SENT_TO_SERIAL && isSimulationRunning(state)) {
+      const worker = editorSelectors.simulationWorker(state);
+      worker.sendToWasm(action.payload);
+    }
 
-  return result;
-};
+    return result;
+  };

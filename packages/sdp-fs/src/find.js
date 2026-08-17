@@ -73,7 +73,7 @@ export const getPathToXodProject = R.composeP(
     [R.either(isBasename('patch.xodp'), isDirectory), findClosestProjectDir],
     [
       R.T,
-      filePath =>
+      (filePath) =>
         rejectWithCode(
           ERROR_CODES.TRIED_TO_OPEN_NOT_XOD_FILE,
           new Error(`Tried to open not a xod file: ${filePath}`)

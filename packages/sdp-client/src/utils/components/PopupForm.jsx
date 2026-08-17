@@ -4,21 +4,21 @@ import classNames from 'classnames';
 import { SkyLightStateless } from 'react-skylight';
 import EventListener from 'react-event-listener';
 
-import { noop } from '../../utils/ramda.js';
-import { KEYCODE } from '../../utils/constants.js';
+import { noop } from '../ramda.js';
+import { KEYCODE } from '../constants.js';
 
-const PopupForm = ({
+function PopupForm({
   title,
   children,
   className,
   onClose,
   isClosable,
   isVisible,
-}) => {
+}) {
   const wrapperClassNames = classNames('PopupForm', className);
   const onCloseClicked = isClosable ? onClose : noop;
 
-  const onKeyDown = event => {
+  const onKeyDown = (event) => {
     if (!isVisible) return;
 
     const keycode = event.keycode || event.which;
@@ -41,7 +41,7 @@ const PopupForm = ({
       </SkyLightStateless>
     </div>
   );
-};
+}
 
 PopupForm.propTypes = {
   title: PropTypes.string,

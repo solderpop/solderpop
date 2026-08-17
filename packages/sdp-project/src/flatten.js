@@ -1,8 +1,6 @@
 import R from 'ramda';
 import RamdaFantasy from 'ramda-fantasy';
 
-const { Maybe, Either } = RamdaFantasy;
-
 import {
   explode,
   explodeMaybe,
@@ -24,6 +22,8 @@ import { def } from './types.js';
 import { isGenericType } from './utils.js';
 import * as PatchPathUtils from './patchPathUtils.js';
 import { getPinKeyForTerminalDirection } from './builtinTerminalPatches.js';
+
+const { Maybe, Either } = RamdaFantasy;
 
 // =============================================================================
 //
@@ -47,11 +47,11 @@ function LinkWrapper(x) {
 }
 
 const Wr = {
-  Node: x => new NodeWrapper(x),
-  Link: x => new LinkWrapper(x),
-  get: wrapper => wrapper.get(),
-  isNode: x => x.isNode,
-  isLink: x => x.isLink,
+  Node: (x) => new NodeWrapper(x),
+  Link: (x) => new LinkWrapper(x),
+  get: (wrapper) => wrapper.get(),
+  isNode: (x) => x.isNode,
+  isLink: (x) => x.isLink,
 };
 
 NodeWrapper.prototype.isNode = true;
@@ -114,9 +114,8 @@ const extendTerminalPins = R.curry(([path, patch]) => {
     return [path, patch];
   }
 
-  const internalTerminalPath = PatchPathUtils.convertToInternalTerminalPath(
-    path
-  );
+  const internalTerminalPath =
+    PatchPathUtils.convertToInternalTerminalPath(path);
   return [
     internalTerminalPath,
     Patch.setPatchPath(internalTerminalPath, patch),
@@ -126,7 +125,7 @@ const extendTerminalPins = R.curry(([path, patch]) => {
 // :: Function extractLeafPatches -> String[] -> Project -> Node -> Either Error [Path, Patch, ...]
 const extractLeafPatchRecursive = R.curry((recursiveFn, project, node) =>
   R.compose(
-    path =>
+    (path) =>
       R.compose(
         R.chain(recursiveFn(project, path)),
         failOnNothing('PATCH_NOT_FOUND_BY_PATH', { patchPath: path }),
@@ -156,7 +155,7 @@ export const extractLeafPatches = def(
       ],
       [
         R.either(isLeafPatchWithImplsOrTerminal, Patch.isAbstractPatch),
-        R.compose(R.of, Either.of, leafPatch => [path, leafPatch]),
+        R.compose(R.of, Either.of, (leafPatch) => [path, leafPatch]),
       ],
       [
         R.T,
@@ -185,8 +184,8 @@ const isLeafNode = R.curry((leafPatchPaths, node) =>
 );
 
 // :: String -> String -> String
-const getPrefixedId = R.curry(
-  (prefix, id) => (prefix ? `${prefix}~${id}` : id)
+const getPrefixedId = R.curry((prefix, id) =>
+  prefix ? `${prefix}~${id}` : id
 );
 
 const getPinType = R.curry((patchTuples, nodes, idGetter, keyGetter, link) => {
@@ -316,7 +315,7 @@ const splitLinkWithCastNode = R.curry((project, patchTuples, nodes, link) =>
   R.compose(
     foldMaybe(
       [null, [link]], // fallback
-      castNode => {
+      (castNode) => {
         const origLinkId = Link.getLinkId(link);
         const fromNodeId = Link.getLinkOutputNodeId(link);
         const fromPinKey = Link.getLinkOutputPinKey(link);
@@ -361,12 +360,12 @@ const bindValuesToIndexedNodes = R.curry((valuesToBind, nodesById) =>
 );
 
 // :: StrMap Node -> NodeId -> Boolean
-const isNodeWithIdTerminal = R.uncurryN(2, nodesById =>
+const isNodeWithIdTerminal = R.uncurryN(2, (nodesById) =>
   R.compose(isInternalTerminalNode, R.flip(R.prop)(nodesById))
 );
 
 // :: StrMap Node -> Link -> Boolean
-const isLinkFromTerminalToRegularNode = R.uncurryN(2, nodesById =>
+const isLinkFromTerminalToRegularNode = R.uncurryN(2, (nodesById) =>
   R.both(
     R.compose(isNodeWithIdTerminal(nodesById), Link.getLinkOutputNodeId),
     R.compose(
@@ -487,7 +486,7 @@ const getValueToBind = R.curry((nodesById, linksChain) => {
       R.head,
       getPinKeyForTerminalDirection(CONST.PIN_DIRECTION.OUTPUT),
       topOutputTermianls
-    ).map(bottomBoundValue => {
+    ).map((bottomBoundValue) => {
       const topLink = R.last(linksChain);
       return {
         nodeId: Link.getLinkOutputNodeId(topLink),
@@ -545,7 +544,7 @@ const getValueToBind = R.curry((nodesById, linksChain) => {
     R.last,
     getPinKeyForTerminalDirection(CONST.PIN_DIRECTION.INPUT),
     outputNodesFromLinkChain
-  ).map(topBoundValue => {
+  ).map((topBoundValue) => {
     const bottomLink = R.head(linksChain);
     return {
       nodeId: Link.getLinkInputNodeId(bottomLink),
@@ -556,7 +555,7 @@ const getValueToBind = R.curry((nodesById, linksChain) => {
 });
 
 // :: [Link] -> Link
-const collapseLinksChain = linksChain => {
+const collapseLinksChain = (linksChain) => {
   const firstLink = R.head(linksChain);
   const lastLink = R.last(linksChain);
 
@@ -613,10 +612,8 @@ const removeTerminalsAndPassPins = ([nodes, links]) => {
   const nodesById = R.indexBy(Node.getNodeId, nodes);
   const linksByInputNodeId = R.indexBy(Link.getLinkInputNodeId, links);
 
-  const [
-    collapsedTerminalLinks,
-    valuesToBind,
-  ] = getCollapsedLinksAndValuesToBind(nodesById, linksByInputNodeId, links);
+  const [collapsedTerminalLinks, valuesToBind] =
+    getCollapsedLinksAndValuesToBind(nodesById, linksByInputNodeId, links);
 
   const terminalNodeIds = R.compose(
     R.map(Node.getNodeId),
@@ -689,7 +686,7 @@ const replaceGenericTerminalsWithCastNodes = R.curry(
 
     const linksConnectedToTerminals = R.filter(
       R.compose(
-        linkNodeIds => R.any(isAmong(linkNodeIds), terminalNodeIds),
+        (linkNodeIds) => R.any(isAmong(linkNodeIds), terminalNodeIds),
         Link.getLinkNodeIds
       ),
       links
@@ -719,7 +716,7 @@ const replaceGenericTerminalsWithCastNodes = R.curry(
     // links in array will be used to create a new link.
     // NodeIds collected to omit Nodes that replaced with a new link.
     // :: [[NodeId, Link]]
-    const terminalChains = R.map(lowermostLink =>
+    const terminalChains = R.map((lowermostLink) =>
       traverseUpAndCollectTerminalChain(
         terminalNodeIds,
         linksConnectedToTerminals,
@@ -795,10 +792,13 @@ const createCastNodes = R.curry((project, patchTuples, nodes, links) =>
   R.compose(
     removeTerminalsAndPassPins,
     replaceGenericTerminalsWithCastNodes(project, patchTuples),
-    R.converge((newNodes, newLinks) => [newNodes, newLinks], [
-      R.compose(R.concat(nodes), R.reject(R.isNil), R.pluck(0)),
-      R.compose(R.flatten, R.pluck(1)),
-    ]),
+    R.converge(
+      (newNodes, newLinks) => [newNodes, newLinks],
+      [
+        R.compose(R.concat(nodes), R.reject(R.isNil), R.pluck(0)),
+        R.compose(R.flatten, R.pluck(1)),
+      ]
+    ),
     R.map(splitLinkWithCastNode(project, patchTuples, nodes))
   )(links)
 );
@@ -810,9 +810,10 @@ const filterTuplesByUniqPaths = R.uniqWith(R.eqBy(R.prop(0)));
 const updateLinkNodeIds = R.curry((leafPaths, prefix, patch, link) => {
   const inputNodeId = Link.getLinkInputNodeId(link);
   const inputPinKey = Link.getLinkInputPinKey(link);
-  const isInputLeafNode = R.compose(isLeafNode(leafPaths), getNodeById(patch))(
-    inputNodeId
-  );
+  const isInputLeafNode = R.compose(
+    isLeafNode(leafPaths),
+    getNodeById(patch)
+  )(inputNodeId);
   const newInputNodeId = isInputLeafNode
     ? getPrefixedId(prefix, inputNodeId)
     : getPrefixedId(prefix, getPrefixedId(inputNodeId, inputPinKey));
@@ -878,7 +879,7 @@ const rekeyBoundValues = R.curry((boundValues, node) => {
   return Node.getAllBoundValues(node);
 });
 
-const convertTerminalToInternalTerminal = R.when(isTerminalNode, node => {
+const convertTerminalToInternalTerminal = R.when(isTerminalNode, (node) => {
   const nodeType = Node.getNodeType(node);
   return R.compose(
     Node.setNodeType(PatchPathUtils.convertToInternalTerminalPath(nodeType)),
@@ -920,12 +921,12 @@ export const extractPatches = R.curry(
           R.compose(
             Wr.Node,
             // 1.3. update id
-            node =>
+            (node) =>
               R.assoc('id', getPrefixedId(prefix, Node.getNodeId(node)), node),
             // 1.2. convert node type from 'input|output' to 'terminal', if needed
             convertTerminalToInternalTerminal,
             // 1.1. Copy and rekey pins from parent node
-            node =>
+            (node) =>
               R.assoc(
                 'boundLiterals',
                 rekeyBoundValues(boundValues, node),
@@ -979,7 +980,7 @@ export const extractPatches = R.curry(
 const convertPatch = def(
   'convertPatch :: Project -> [Pair PatchPath Patch] -> Patch -> Patch',
   (project, leafPatches, patch) =>
-    R.unless(Patch.isPatchNotImplementedInXod, originalPatch => {
+    R.unless(Patch.isPatchNotImplementedInXod, (originalPatch) => {
       const leafPatchPaths = R.pluck(0, leafPatches);
       const flattenEntities = extractPatches(
         project,
@@ -1029,7 +1030,7 @@ const flattenProject = def(
   'flattenProject :: Project -> PatchPath -> Patch -> Either Error Project',
   (project, path, patch) =>
     R.compose(
-      R.chain(leafPatches =>
+      R.chain((leafPatches) =>
         R.compose(
           R.map(Project.assocPatch(path, R.__, project)),
           Project.validatePatchContents(R.__, project),
@@ -1048,7 +1049,7 @@ const flattenProject = def(
 
 const checkEntryPatchIsNative = def(
   'checkEntryPatchIsNative :: Patch -> Either Error Patch',
-  patch =>
+  (patch) =>
     R.ifElse(
       Patch.isPatchNotImplementedInXod,
       () =>
@@ -1059,7 +1060,7 @@ const checkEntryPatchIsNative = def(
 
 const checkEntryPatchIsNotAbstract = def(
   'checkEntryPatchIsNotAbstract :: Patch -> Either Error Patch',
-  patch =>
+  (patch) =>
     R.ifElse(
       Patch.isAbstractPatch,
       () =>
@@ -1125,7 +1126,7 @@ export default def(
   'flatten :: Project -> PatchPath -> Either Error Project',
   (inputProject, path) =>
     R.compose(
-      R.chain(project =>
+      R.chain((project) =>
         R.compose(
           R.chain(flattenProject(project, path)),
           R.chain(checkEntryPatchIsNative),

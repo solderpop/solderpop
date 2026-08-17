@@ -32,16 +32,18 @@ export const getProjectName = createSelector(
 
 // :: HintingErrors -> Patch -> Patch
 const markDeadPatches = R.curry((errors, patch) =>
-  R.pipe(XP.getPatchPath, R.has(R.__, errors), R.assoc('dead', R.__, patch))(
-    patch
-  )
+  R.pipe(
+    XP.getPatchPath,
+    R.has(R.__, errors),
+    R.assoc('dead', R.__, patch)
+  )(patch)
 );
 
 // :: StrMap PatchPath PathFlags -> Patch -> Patch
 const markDeprecatedPatches = R.curry((patchMarkers, patch) =>
   R.compose(
     R.assoc('isDeprecated', R.__, patch),
-    patchPath => R.pathOr(false, [patchPath, 'deprecated'], patchMarkers),
+    (patchPath) => R.pathOr(false, [patchPath, 'deprecated'], patchMarkers),
     XP.getPatchPath
   )(patch)
 );
@@ -50,7 +52,7 @@ const markDeprecatedPatches = R.curry((patchMarkers, patch) =>
 const markUtilityPatches = R.curry((patchMarkers, patch) =>
   R.compose(
     R.assoc('isUtility', R.__, patch),
-    patchPath => R.pathOr(false, [patchPath, 'utility'], patchMarkers),
+    (patchPath) => R.pathOr(false, [patchPath, 'utility'], patchMarkers),
     XP.getPatchPath
   )(patch)
 );

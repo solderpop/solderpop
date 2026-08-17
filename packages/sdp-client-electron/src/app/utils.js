@@ -26,14 +26,14 @@ const USERDATA_ARGNAME = '--userdata-dir=';
 
 // Utility to set the user data directory arguments for the renerer processes
 // from the main process on creating a renderer.
-export const setUserDataArg = userDataDir =>
+export const setUserDataArg = (userDataDir) =>
   `${USERDATA_ARGNAME}${userDataDir}`;
 
 export const getUserDataDir = () =>
   process.type === 'renderer'
     ? R.compose(
         R.slice(USERDATA_ARGNAME.length, Infinity),
-        R.find(arg => arg.startsWith(USERDATA_ARGNAME))
+        R.find((arg) => arg.startsWith(USERDATA_ARGNAME))
       )(process.argv)
     : process.env.USERDATA_DIR || electron.app.getPath('userData');
 
@@ -67,7 +67,7 @@ export const errorToPlainObject = R.when(
  * that will return `Maybe Path`.
  */
 // :: App -> () -> Maybe Path
-export const getFilePathToOpen = app => {
+export const getFilePathToOpen = (app) => {
   // Windows & Linux
   let pathToOpen = R.compose(
     R.map(resolvePath),

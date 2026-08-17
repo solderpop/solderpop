@@ -1,24 +1,24 @@
-'use strict';
-
-const BeltHoles_List = require('../src/BeltHoles_List.bs.js');
 const Belt_List = require('@rescript/runtime/lib/js/Belt_List.js');
 const Belt_MapString = require('@rescript/runtime/lib/js/Belt_MapString.js');
 const Belt_Map = require('@rescript/runtime/lib/js/Belt_Map.js');
+const BeltHoles_List = require('../src/BeltHoles_List.bs.js');
 
-const list = xs => Belt_List.fromArray(xs);
+const list = (xs) => Belt_List.fromArray(xs);
 
 describe('groupByString', () => {
   test('splits a list into a sublists stored in a Map.String', () => {
     const outMap = BeltHoles_List.groupByString(
       list(['foo', 'Foo', 'Bar', 'FOO', 'bAr', 'baz']),
-      s => s.toLowerCase()
+      (s) => s.toLowerCase()
     );
     const expectedMap = Belt_MapString.fromArray([
       ['foo', list(['foo', 'Foo', 'FOO'])],
       ['bar', list(['Bar', 'bAr'])],
       ['baz', list(['baz'])],
     ]);
-    expect(Belt_MapString.toArray(outMap)).toEqual(Belt_MapString.toArray(expectedMap));
+    expect(Belt_MapString.toArray(outMap)).toEqual(
+      Belt_MapString.toArray(expectedMap)
+    );
   });
 });
 

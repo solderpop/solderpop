@@ -23,7 +23,7 @@ const updateErrors = R.curry((action, state) =>
   R.compose(
     R.ifElse(
       notNil,
-      errs => R.over(errorsLens, mergeErrors(R.__, errs), state),
+      (errs) => R.over(errorsLens, mergeErrors(R.__, errs), state),
       R.always(state)
     ),
     getErrorsFromAction

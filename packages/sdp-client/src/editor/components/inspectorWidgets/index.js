@@ -122,7 +122,7 @@ const WIDGET_MAPPING = {
   },
 };
 
-const getGenericTypeWidget = dataType => ({
+const getGenericTypeWidget = (dataType) => ({
   component: GenericPinWidget,
   dataType,
   keyDownHandlers: submitOnEnter,
@@ -130,7 +130,7 @@ const getGenericTypeWidget = dataType => ({
   normalizeValue: normalizeGenericValue,
 });
 
-const getDisabledWidget = dataType => ({
+const getDisabledWidget = (dataType) => ({
   component: DisabledInputWidget,
   props: { dataType },
 });
@@ -151,12 +151,8 @@ export { default as NumberWidget } from './pinWidgets/NumberPinWidget.jsx';
 export { default as PulseWidget } from './pinWidgets/PulsePinWidget.jsx';
 export { default as StringWidget } from './pinWidgets/StringPinWidget.jsx';
 export { default as GenericPinWidget } from './pinWidgets/GenericPinWidget.jsx';
-export {
-  default as DisabledInputWidget,
-} from './pinWidgets/DisabledInputWidget.jsx';
+export { default as DisabledInputWidget } from './pinWidgets/DisabledInputWidget.jsx';
 export { default as DescriptionWidget } from './DescriptionWidget.jsx';
 export { default as LabelWidget } from './LabelWidget.jsx';
 export { default as PulseTweakWidget } from './PulseTweakWidget.jsx';
-export {
-  default as NodeSpecializationWidget,
-} from './NodeSpecializationWidget.jsx';
+export { default as NodeSpecializationWidget } from './NodeSpecializationWidget.jsx';

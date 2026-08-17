@@ -1,7 +1,5 @@
 /* eslint-disable no-param-reassign */
 import R from 'ramda';
-
-const { compose, filter, identity, last, map, startsWith } = R;
 import { transformProject, transpile, LIVENESS } from 'sdp-arduino';
 import { loadProject } from 'sdp-fs';
 import { createError, foldEither } from 'sdp-func-tools';
@@ -9,17 +7,19 @@ import * as xdb from 'sdp-deploy-bin';
 
 import { resolveBundledWorkspacePath } from './paths.js';
 
+const { compose, filter, identity, last, map, startsWith } = R;
+
 export const loadProjectTask = (workspaces, projectPath) => ({
   title: 'Project loading',
-  task: ctx =>
-    loadProject(workspaces, projectPath).then(project => {
+  task: (ctx) =>
+    loadProject(workspaces, projectPath).then((project) => {
       ctx.project = project;
     }),
 });
 
 export const transformTask = (patchName, debug) => ({
   title: 'Transforming',
-  task: ctx => {
+  task: (ctx) => {
     ctx.transform = transformProject(
       ctx.project,
       patchName,
@@ -31,11 +31,11 @@ export const transformTask = (patchName, debug) => ({
 
 export const transpileTask = () => ({
   title: 'Transpiling',
-  task: ctx => {
+  task: (ctx) => {
     ctx.transpile = compose(
-      eitherCode =>
+      (eitherCode) =>
         foldEither(
-          err => {
+          (err) => {
             throw err;
           },
           identity,
@@ -48,13 +48,13 @@ export const transpileTask = () => ({
 
 export const checkBoardTask = (workspace, fqbn) => ({
   title: 'Check board',
-  task: async ctx => {
+  task: async (ctx) => {
     const boards = await xdb.listBoards(
       resolveBundledWorkspacePath(),
       workspace,
       ctx.arduinoCli
     );
-    const board = last(filter(el => el.fqbn === fqbn, boards.installed));
+    const board = last(filter((el) => el.fqbn === fqbn, boards.installed));
 
     // toolchain not installed - handle it
     if (board) {
@@ -62,7 +62,7 @@ export const checkBoardTask = (workspace, fqbn) => ({
     } else {
       const packageDep = compose(
         last,
-        filter(el => startsWith(el.package, fqbn))
+        filter((el) => startsWith(el.package, fqbn))
       )(boards.available);
       throw createError('ARDUINO_DEPENDENCIES_MISSING', {
         libraries: [],

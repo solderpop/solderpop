@@ -1,7 +1,5 @@
 import R from 'ramda';
 import chai from 'chai';
-
-const { assert } = chai;
 import { explodeMaybe } from 'sdp-func-tools';
 
 import * as CONST from '../src/constants.js';
@@ -9,6 +7,8 @@ import { BINDABLE_CUSTOM_TYPES } from '../src/custom-types.js';
 import * as PatchPathUtils from '../src/patchPathUtils.js';
 
 import * as Helper from './helpers.js';
+
+const { assert } = chai;
 
 describe('PatchPathUtils', () => {
   describe('getBaseName', () => {
@@ -253,7 +253,7 @@ describe('PatchPathUtils', () => {
       assert.isTrue(result.isRight);
 
       /* istanbul ignore next */
-      Helper.expectEitherRight(val => {
+      Helper.expectEitherRight((val) => {
         assert.equal(val, path);
       }, result);
     });

@@ -4,7 +4,7 @@ import cn from 'classnames';
 
 import DraggedNodeShadowFilter from './filters/DraggedNodeShadowFilter.jsx';
 
-const PatchSVG = ({
+function PatchSVG({
   children,
   isInPanningMode,
   isInResizingMode,
@@ -12,29 +12,31 @@ const PatchSVG = ({
   isInChangingArityLevelMode,
   svgRef,
   ...restProps
-}) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className={cn('PatchSVG', {
-      isPanning,
-      isInPanningMode,
-      isInResizingMode,
-      isInChangingArityLevelMode,
-    })}
-    width="100%"
-    height="100%"
-    ref={svgRef}
-    {...restProps}
-  >
-    {/* Nested svg to compensate bluring of strokes */}
-    <svg xmlns="http://www.w3.org/2000/svg" x="0.5" y="0.5">
-      <defs>
-        <DraggedNodeShadowFilter />
-      </defs>
-      {children}
+}) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn('PatchSVG', {
+        isPanning,
+        isInPanningMode,
+        isInResizingMode,
+        isInChangingArityLevelMode,
+      })}
+      width="100%"
+      height="100%"
+      ref={svgRef}
+      {...restProps}
+    >
+      {/* Nested svg to compensate bluring of strokes */}
+      <svg xmlns="http://www.w3.org/2000/svg" x="0.5" y="0.5">
+        <defs>
+          <DraggedNodeShadowFilter />
+        </defs>
+        {children}
+      </svg>
     </svg>
-  </svg>
-);
+  );
+}
 
 PatchSVG.propTypes = {
   children: PropTypes.oneOfType([

@@ -72,7 +72,7 @@ export const createNode = def(
  */
 export const duplicateNode = def(
   'duplicateNode :: Node -> Node',
-  R.compose(newNode => R.assoc('id', Utils.generateId(), newNode), R.clone)
+  R.compose((newNode) => R.assoc('id', Utils.generateId(), newNode), R.clone)
 );
 
 /**
@@ -288,7 +288,7 @@ export const getAllBoundValues = def(
   R.prop('boundLiterals')
 );
 
-const pathToBoundValue = pinKey => ['boundLiterals', pinKey];
+const pathToBoundValue = (pinKey) => ['boundLiterals', pinKey];
 
 /**
  * Gets bound value of a pin.
@@ -327,7 +327,7 @@ export const setBoundValue = def(
 
 export const removeBoundValue = def(
   'removeBoundValue :: PinKey -> Node -> Node',
-  R.uncurryN(2, pinKey => R.dissocPath(['boundLiterals', pinKey]))
+  R.uncurryN(2, (pinKey) => R.dissocPath(['boundLiterals', pinKey]))
 );
 
 export const dropAllBoundValues = def(

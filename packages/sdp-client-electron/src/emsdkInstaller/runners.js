@@ -16,7 +16,7 @@ export const checkEmsdkInstalled = () =>
   promisifyIpc(CHECK_EMSDK_INSTALLED)(noop, null);
 
 // :: (ProgressData -> _) -> Promise _ Error
-export const installEmsdk = onProgress =>
+export const installEmsdk = (onProgress) =>
   promisifyIpc(INSTALL_EMSDK)(onProgress, null);
 
 // :: _ -> Promise _ Error

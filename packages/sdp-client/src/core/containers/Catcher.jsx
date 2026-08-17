@@ -73,7 +73,7 @@ class Catcher extends React.Component {
     ].join('\n');
 
     const stableStateReport = R.compose(
-      stableState => JSON.stringify(stableState, null, 2),
+      (stableState) => JSON.stringify(stableState, null, 2),
       R.assocPath(['project', 'apiKey'], 'SECRET'),
       R.assocPath(['user', 'grant'], 'SECRET'),
       R.omit(['lastSavedProject', 'projectHistory'])
@@ -155,7 +155,7 @@ class Catcher extends React.Component {
           </p>
           <textarea
             readOnly
-            ref={el => (this.textareaRef = el)}
+            ref={(el) => (this.textareaRef = el)}
             onFocus={this.selectAllTextareaContent}
             value={this.getErrorReport()}
           />
@@ -168,12 +168,14 @@ class Catcher extends React.Component {
     const childElement = React.Children.only(this.props.children);
 
     return (
-      <React.Fragment>
+      <>
         {this.renderErrorReport()}
         <Provider store={this.props.store}>
-          {React.cloneElement(childElement, { ref: el => (this.appRef = el) })}
+          {React.cloneElement(childElement, {
+            ref: (el) => (this.appRef = el),
+          })}
         </Provider>
-      </React.Fragment>
+      </>
     );
   }
 }

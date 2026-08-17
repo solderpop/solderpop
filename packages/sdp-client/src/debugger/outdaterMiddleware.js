@@ -6,7 +6,7 @@ import { isDebugSession } from './selectors.js';
 import { markDebugSessionOutdated } from './actions.js';
 import { getProject } from '../project/selectors.js';
 
-export default store => next => action => {
+export default (store) => (next) => (action) => {
   const state = store.getState();
   const prevProject = getProject(state);
   const result = next(action);

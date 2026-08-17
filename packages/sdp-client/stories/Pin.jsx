@@ -22,7 +22,7 @@ const baseProps = {
 };
 
 storiesOf('Pin', module)
-  .addDecorator(story => (
+  .addDecorator((story) => (
     <PatchSVG>
       <rect width={pinCenter.x * 2} height={pinCenter.y * 2} fill="#676767" />
       <line

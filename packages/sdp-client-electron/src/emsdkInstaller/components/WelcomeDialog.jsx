@@ -25,7 +25,7 @@ class WelcomeDialog extends React.Component {
   }
 
   onToggle() {
-    this.setState(state => ({ enableSimulation: !state.enableSimulation }));
+    this.setState((state) => ({ enableSimulation: !state.enableSimulation }));
   }
 
   onContinue() {
@@ -48,7 +48,7 @@ class WelcomeDialog extends React.Component {
         <select
           id="welcome-theme-select"
           value={currentTheme}
-          onChange={e => this.handleThemeChange(e.target.value)}
+          onChange={(e) => this.handleThemeChange(e.target.value)}
         >
           {R.toPairs(themes).map(([themeKey, theme]) => (
             <option key={themeKey} value={themeKey}>
@@ -64,10 +64,7 @@ class WelcomeDialog extends React.Component {
     if (!this.props.isVisible) return null;
 
     return (
-      <div
-        className="theme-window-overlay"
-        role="presentation"
-      >
+      <div className="theme-window-overlay" role="presentation">
         <div // eslint-disable-line jsx-a11y/no-static-element-interactions
           className="theme-window"
           role="dialog"
@@ -133,7 +130,7 @@ const mapStateToProps = R.applySpec({
   themes: client.theme.selectors.getThemeList,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(client.theme.actions, dispatch),
 });
 

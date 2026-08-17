@@ -1,16 +1,17 @@
 import os from 'os';
 import R from 'ramda';
 
-const addExtensionsIntoFilters = fileFilter => {
-  const extForName = R.compose(R.join(';'), R.map(R.concat('*.')))(
-    fileFilter.extensions
-  );
+const addExtensionsIntoFilters = (fileFilter) => {
+  const extForName = R.compose(
+    R.join(';'),
+    R.map(R.concat('*.'))
+  )(fileFilter.extensions);
 
   return R.assoc('name', `${fileFilter.name} (${extForName})`, fileFilter);
 };
-const transformDialogFileFilters = filters =>
+const transformDialogFileFilters = (filters) =>
   R.compose(
-    fn => fn(filters),
+    (fn) => fn(filters),
     R.cond([
       // We have to reverse an array for MacOS, cause it takes a first extension
       // as a required extension to save a file, so if it is `xodball` — we could

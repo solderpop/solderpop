@@ -190,7 +190,7 @@ const mapStateToProps = R.applySpec({
   userAuthorised: UserSelectors.isAuthorized,
 });
 
-const mapDispatchToprops = dispatch => ({
+const mapDispatchToprops = (dispatch) => ({
   actions: bindActionCreators(
     {
       switchTab: Actions.switchTab,

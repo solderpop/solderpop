@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import clx from 'classnames';
 
-export const SaveProgressBar = ({ progress }) => {
+export function SaveProgressBar({ progress }) {
   const style = { width: `${Math.round(+progress * 100)}%` };
 
   const classNames = clx('SaveProgressBar', {
@@ -14,7 +14,7 @@ export const SaveProgressBar = ({ progress }) => {
       <div className="bar" style={style} />
     </div>
   );
-};
+}
 
 SaveProgressBar.propTypes = {
   progress: PropTypes.number,

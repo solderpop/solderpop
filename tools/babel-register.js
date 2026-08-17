@@ -7,7 +7,9 @@
 // @babel/register (e.g. a package on Babel 8 while most of the repo is
 // still on Babel 7). require.resolve's `paths` option walks up from cwd
 // first, finding the package-local install before falling back to root.
-const registerPath = require.resolve('@babel/register', { paths: [process.cwd()] });
+const registerPath = require.resolve('@babel/register', {
+  paths: [process.cwd()],
+});
 
 // rootMode: 'upward' makes Babel search up from the package's cwd for the
 // repo-root babel.config.js, so cross-package requires of another
@@ -24,9 +26,14 @@ const registerPath = require.resolve('@babel/register', { paths: [process.cwd()]
 // package's config can otherwise be served stale to a different package
 // requiring the same file under a different root/config.
 process.env.BABEL_DISABLE_CACHE = '1';
+// See the require.resolve comment above for why this can't be a static path.
+// eslint-disable-next-line import/no-dynamic-require, global-require
 const registerModule = require(registerPath);
 // Babel 7's @babel/register exports the register function directly
 // (callable, with .default pointing back at itself for interop). Babel 8's
 // is ESM-compiled-to-CJS, so the callable lives under .default instead.
-const register = typeof registerModule === 'function' ? registerModule : registerModule.default;
+const register =
+  typeof registerModule === 'function'
+    ? registerModule
+    : registerModule.default;
 register({ rootMode: 'upward', ignore: [/node_modules/] });

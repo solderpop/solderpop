@@ -29,7 +29,7 @@ const createStore = () =>
     })
   );
 
-const addMessages = store => {
+const addMessages = (store) => {
   const now = Date.now();
   store.dispatch(
     addMessagesToDebuggerLog([
@@ -59,7 +59,7 @@ const addMessages = store => {
   );
 };
 
-const addError = store => {
+const addError = (store) => {
   store.dispatch(
     addMessagesToDebuggerLog([
       {
@@ -72,7 +72,7 @@ const addError = store => {
   );
 };
 
-const addUploadingLog = store => {
+const addUploadingLog = (store) => {
   store.dispatch({
     type: 'UPLOAD',
     meta: {
@@ -118,7 +118,7 @@ const addUploadingLog = store => {
   });
 };
 
-const startDebugSession = store => {
+const startDebugSession = (store) => {
   store.dispatch(
     startDebuggerSession(
       {
@@ -134,7 +134,7 @@ const startDebugSession = store => {
 };
 
 // Container that shows Log length
-const LogLength = connect(state => ({ log: getLogForCurrentTab(state) }))(
+const LogLength = connect((state) => ({ log: getLogForCurrentTab(state) }))(
   ({ log }) => <div style={{ color: '#fff' }}>Log length: {log.length}</div>
 );
 
@@ -148,7 +148,7 @@ const idle = () => {
   const store = createStore();
 
   storiesOf('Debugger', module)
-    .addDecorator(story => <Provider store={store}>{story()}</Provider>)
+    .addDecorator((story) => <Provider store={store}>{story()}</Provider>)
     .add('idle', () => (
       <Debugger
         onUploadClick={action('onUploadClick')}
@@ -164,7 +164,7 @@ const uploading = () => {
   addUploadingLog(store);
 
   storiesOf('Debugger', module)
-    .addDecorator(story => <Provider store={store}>{story()}</Provider>)
+    .addDecorator((story) => <Provider store={store}>{story()}</Provider>)
     .add('uploading', () => (
       <Debugger
         onUploadClick={action('onUploadClick')}
@@ -192,7 +192,7 @@ const uploadingSuccess = () => {
   });
 
   storiesOf('Debugger', module)
-    .addDecorator(story => <Provider store={store}>{story()}</Provider>)
+    .addDecorator((story) => <Provider store={store}>{story()}</Provider>)
     .add('uploading sussess', () => (
       <Debugger
         onUploadClick={action('onUploadClick')}
@@ -220,7 +220,7 @@ const uploadingFail = () => {
   });
 
   storiesOf('Debugger', module)
-    .addDecorator(story => <Provider store={store}>{story()}</Provider>)
+    .addDecorator((story) => <Provider store={store}>{story()}</Provider>)
     .add('uploading fail', () => (
       <Debugger
         onUploadClick={action('onUploadClick')}
@@ -238,7 +238,7 @@ const running = () => {
   // setInterval(() => addError(store), 5000);
 
   storiesOf('Debugger', module)
-    .addDecorator(story => <Provider store={store}>{story()}</Provider>)
+    .addDecorator((story) => <Provider store={store}>{story()}</Provider>)
     .add('running', () => (
       <div>
         <LogLength />
@@ -292,7 +292,7 @@ const longMessages = () => {
   }
 
   storiesOf('Debugger', module)
-    .addDecorator(story => <Provider store={store}>{story()}</Provider>)
+    .addDecorator((story) => <Provider store={store}>{story()}</Provider>)
     .add('long messages', () => (
       <div>
         <LogLength />

@@ -15,53 +15,57 @@ import * as Selectors from '../selectors.js';
 
 import AuthForm from '../components/AuthForm.jsx';
 
-const AccountPane = ({
+function AccountPane({
   sidebarId,
   autohide,
   user,
   compilationsLeft,
   actions,
   isAuthorising,
-}) => (
-  <SidebarPanel
-    id={PANEL_IDS.ACCOUNT}
-    className="AccountPane"
-    title="Account"
-    sidebarId={sidebarId}
-    autohide={autohide}
-  >
-    <div className="AccountPane-content">
-      <div className="login-info">
+}) {
+  return (
+    <SidebarPanel
+      id={PANEL_IDS.ACCOUNT}
+      className="AccountPane"
+      title="Account"
+      sidebarId={sidebarId}
+      autohide={autohide}
+    >
+      <div className="AccountPane-content">
+        <div className="login-info">
+          {foldMaybe(
+            <div className="username">Guest Xoder</div>,
+            ({ username }) => [
+              <div className="introduction" key="introduction">
+                Logged in as
+              </div>,
+              <div className="username" key="username">
+                {username}
+              </div>,
+            ],
+            user
+          )}
+        </div>
+
+        <div className="cloudLimits">
+          <div className="title">Cloud limits</div>
+          <div>
+            Compilations:{' '}
+            {compilationsLeft == null ? 'currently offline' : compilationsLeft}
+          </div>
+        </div>
+
         {foldMaybe(
-          <div className="username">Guest Xoder</div>,
-          ({ username }) => [
-            <div className="introduction" key="introduction">
-              Logged in as
-            </div>,
-            <div className="username" key="username">
-              {username}
-            </div>,
-          ],
+          <AuthForm onLogin={actions.login} isAuthorising={isAuthorising} />,
+          () => (
+            <Button onClick={actions.logout}>Logout</Button>
+          ),
           user
         )}
       </div>
-
-      <div className="cloudLimits">
-        <div className="title">Cloud limits</div>
-        <div>
-          Compilations:{' '}
-          {compilationsLeft == null ? 'currently offline' : compilationsLeft}
-        </div>
-      </div>
-
-      {foldMaybe(
-        <AuthForm onLogin={actions.login} isAuthorising={isAuthorising} />,
-        () => <Button onClick={actions.logout}>Logout</Button>,
-        user
-      )}
-    </div>
-  </SidebarPanel>
-);
+    </SidebarPanel>
+  );
+}
 
 AccountPane.propTypes = {
   sidebarId: PropTypes.oneOf(R.values(SIDEBAR_IDS)).isRequired,
@@ -79,7 +83,7 @@ const mapStateToProps = R.applySpec({
   compilationsLeft: Selectors.getCompileLimitLeft,
   isAuthorising: Selectors.isAuthorising,
 });
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(
     {
       login: Actions.login,

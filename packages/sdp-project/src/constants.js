@@ -1,13 +1,13 @@
 import R from 'ramda';
 
-const { mapObjIndexed } = R;
-
 import PIN_TYPE from './internal/pinTypes.js';
 import {
   CUSTOM_TYPE_CONSTRUCTORS,
   BINDABLE_CUSTOM_TYPE_DEFAULT_VALUES,
   CUSTOM_TYPES_CAST_NODES,
 } from './custom-types.js';
+
+const { mapObjIndexed } = R;
 
 export { PIN_TYPE };
 

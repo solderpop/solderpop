@@ -11,7 +11,7 @@ import { def } from './types.js';
 export const roundTo = def(
   'roundTo :: Number -> Number -> Number',
   (n, number) => {
-    const mult = Math.pow(10, n);
+    const mult = 10 ** n;
     return Math.round(number * mult) / mult;
   }
 );

@@ -9,7 +9,7 @@ import {
   CLOSE_CONNECT_SERIAL_DIALOG,
 } from './actionTypes.js';
 
-export const uploadToArduino = () => dispatch => {
+export const uploadToArduino = () => (dispatch) => {
   const processId = dispatch(client.addProcess(UPLOAD));
   const deleteProcess = () => dispatch(client.deleteProcess(processId, UPLOAD));
 
@@ -50,7 +50,7 @@ export const closeConnectSerialDialog = () => ({
   type: CLOSE_CONNECT_SERIAL_DIALOG,
 });
 
-export const selectSerialPort = port => ({
+export const selectSerialPort = (port) => ({
   type: SELECT_SERIAL_PORT,
   payload: {
     port,

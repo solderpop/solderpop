@@ -1,9 +1,7 @@
-'use strict';
-
-const BeltHoles_String = require('../src/BeltHoles_String.bs.js');
 const Belt_List = require('@rescript/runtime/lib/js/Belt_List.js');
+const BeltHoles_String = require('../src/BeltHoles_String.bs.js');
 
-const list = xs => Belt_List.fromArray(xs);
+const list = (xs) => Belt_List.fromArray(xs);
 
 describe('join', () => {
   test('returns empty for empty', () => {
@@ -13,9 +11,9 @@ describe('join', () => {
     expect(BeltHoles_String.join(list(['Hello']), ', ')).toEqual('Hello');
   });
   test('inserts delimiter between pairs', () => {
-    expect(BeltHoles_String.join(list(['Hello', 'wonderful', 'world']), ', ')).toEqual(
-      'Hello, wonderful, world'
-    );
+    expect(
+      BeltHoles_String.join(list(['Hello', 'wonderful', 'world']), ', ')
+    ).toEqual('Hello, wonderful, world');
   });
 });
 
@@ -24,7 +22,9 @@ describe('indent', () => {
     expect(BeltHoles_String.indent('', 2)).toEqual('  ');
   });
   test('indents at line breaks', () => {
-    expect(BeltHoles_String.indent('foo();\nbar();', 2)).toEqual('  foo();\n' + '  bar();');
+    expect(BeltHoles_String.indent('foo();\nbar();', 2)).toEqual(
+      '  foo();\n' + '  bar();'
+    );
   });
 });
 

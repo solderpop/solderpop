@@ -7,7 +7,7 @@ import { storiesOf } from '@storybook/react';
 import '../src/core/styles/main.scss';
 
 storiesOf('Modal (SkyLight)', module)
-  .addDecorator(story => <div>{story()}</div>)
+  .addDecorator((story) => <div>{story()}</div>)
   .add('default', () => (
     <SkyLightStateless isVisible title="Popup title">
       The actual content is not styled

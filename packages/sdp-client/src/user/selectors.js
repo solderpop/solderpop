@@ -1,8 +1,8 @@
 import R from 'ramda';
 import RamdaFantasy from 'ramda-fantasy';
+import { createSelector } from 'reselect';
 
 const { Maybe } = RamdaFantasy;
-import { createSelector } from 'reselect';
 
 export const getUserState = R.prop('user');
 

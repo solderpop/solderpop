@@ -1,15 +1,15 @@
 import chai from 'chai';
 
-const { assert } = chai;
-
 import * as Node from '../src/node.js';
 import * as CONST from '../src/constants.js';
 
 import * as Helper from './helpers.js';
 
+const { assert } = chai;
+
 const emptyNode = Helper.defaultizeNode({});
 
-const nodeOfType = type => Helper.defaultizeNode({ type });
+const nodeOfType = (type) => Helper.defaultizeNode({ type });
 
 describe('Node', () => {
   // constructors
@@ -121,7 +121,7 @@ describe('Node', () => {
         existing: 'hey-ho',
       },
     });
-    const checkJust = pinName => {
+    const checkJust = (pinName) => {
       const value = Node.getBoundValue(pinName, node);
       assert.isTrue(value.isJust);
       assert.equal(value.getOrElse(null), node.boundLiterals[pinName]);

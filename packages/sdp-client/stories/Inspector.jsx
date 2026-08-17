@@ -184,7 +184,7 @@ const containerStyle = {
 };
 
 storiesOf('Inspector', module)
-  .addDecorator(story => <div style={containerStyle}>{story()}</div>)
+  .addDecorator((story) => <div style={containerStyle}>{story()}</div>)
   .add('no selection', () => <Inspector {...baseProps} />)
   .add('selected link', () => (
     <Inspector {...baseProps} selection={singleLinkSelection} />

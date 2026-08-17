@@ -39,12 +39,11 @@ class PortSelect extends React.Component {
 
     this.props
       .listPorts()
-      .catch(
-        err =>
-          err.errorCode === NO_PORTS_FOUND_ERRCODE ? [] : Promise.reject(err)
+      .catch((err) =>
+        err.errorCode === NO_PORTS_FOUND_ERRCODE ? [] : Promise.reject(err)
       )
-      .then(R.tap(ports => this.setState({ ports })))
-      .then(ports => {
+      .then(R.tap((ports) => this.setState({ ports })))
+      .then((ports) => {
         const hasSelectedPort = R.contains(this.props.selectedPort, ports);
         const defaultPort = ports && ports.length > 0 ? ports[0] : null;
         const defaultPreferredPort = R.compose(
@@ -84,7 +83,7 @@ class PortSelect extends React.Component {
         onChange={this.onPortChanged}
         value={this.getSelectedPortName()}
       >
-        {this.state.ports.map(port => (
+        {this.state.ports.map((port) => (
           <option key={port.path} value={port.path}>
             {port.path} {port.manufacturer ? `(${port.manufacturer})` : ''}
           </option>
@@ -99,7 +98,7 @@ class PortSelect extends React.Component {
     );
 
     return (
-      <React.Fragment>
+      <>
         <label htmlFor="targetPort">Serial port:</label>
         <div
           style={{
@@ -118,7 +117,7 @@ class PortSelect extends React.Component {
             Refresh
           </button>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }

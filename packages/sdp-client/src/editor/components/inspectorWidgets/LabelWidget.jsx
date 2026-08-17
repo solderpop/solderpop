@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const LabelWidget = props => {
-  const onChange = event => {
+function LabelWidget(props) {
+  const onChange = (event) => {
     props.onChange(event.target.value);
   };
   return (
@@ -20,7 +20,7 @@ const LabelWidget = props => {
       />
     </div>
   );
-};
+}
 
 LabelWidget.propTypes = {
   elementId: PropTypes.string.isRequired,

@@ -33,13 +33,13 @@ const XOD_ERROR_PREFIX = '+XOD_ERR';
 //------------------------------------------------------------------------------
 
 // :: String -> SystemMessage
-export const createSystemMessage = message => ({
+export const createSystemMessage = (message) => ({
   type: DEBUGGER_MESSAGE_TYPES.SYSTEM,
   message,
 });
 
 // :: String -> LogMessage
-export const createLogMessage = message => ({
+export const createLogMessage = (message) => ({
   type: DEBUGGER_MESSAGE_TYPES.LOG,
   message,
 });
@@ -53,7 +53,7 @@ export const isXodMessage = R.test(xodMessageRegExp);
 export const isXodErrorMessage = R.propEq('prefix', XOD_ERROR_PREFIX);
 
 // :: String -> XodMessage
-export const createXodMessage = input =>
+export const createXodMessage = (input) =>
   R.compose(
     R.applySpec({
       type: R.always(DEBUGGER_MESSAGE_TYPES.XOD),
@@ -71,7 +71,7 @@ export const createXodMessage = input =>
   )(input);
 
 // :: Error -> ErrorMessage
-export const createErrorMessage = err => ({
+export const createErrorMessage = (err) => ({
   type: DEBUGGER_MESSAGE_TYPES.ERROR,
   message: err.message,
   stack: err.stack,

@@ -50,7 +50,7 @@ class NodePinsOverlay extends React.Component {
         data-label={nodeLabel} // for func tests
       >
         <g className="pins">
-          {pinsArr.map(pin => (
+          {pinsArr.map((pin) => (
             <g key={pin.key}>
               <PinOverlay
                 {...pin}

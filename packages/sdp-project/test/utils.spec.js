@@ -1,7 +1,5 @@
 import R from 'ramda';
 import chai from 'chai';
-
-const { assert } = chai;
 import shortid from 'shortid';
 
 import * as Utils from '../src/utils.js';
@@ -9,6 +7,8 @@ import * as Node from '../src/node.js';
 import { PIN_TYPE } from '../src/constants.js';
 import { BINDABLE_CUSTOM_TYPES } from '../src/custom-types.js';
 import * as Helpers from './helpers.js';
+
+const { assert } = chai;
 
 describe('Utils', () => {
   // transforming node ids
@@ -120,7 +120,7 @@ describe('Utils', () => {
   describe('getTypeFromLiteral', () => {
     const expectType = (literal, expectedType) =>
       R.compose(
-        Helpers.expectEitherRight(actualType =>
+        Helpers.expectEitherRight((actualType) =>
           assert.strictEqual(
             actualType,
             expectedType,

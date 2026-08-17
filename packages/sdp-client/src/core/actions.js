@@ -6,7 +6,7 @@ import { isInput } from '../utils/browser.js';
 export const undoCurrentPatch = () => (dispatch, getState) => {
   if (isInput(document.activeElement)) return;
 
-  getCurrentPatchPath(getState()).map(currentPatchPath =>
+  getCurrentPatchPath(getState()).map((currentPatchPath) =>
     dispatch(undoPatch(currentPatchPath))
   );
 };
@@ -14,17 +14,17 @@ export const undoCurrentPatch = () => (dispatch, getState) => {
 export const redoCurrentPatch = () => (dispatch, getState) => {
   if (isInput(document.activeElement)) return;
 
-  getCurrentPatchPath(getState()).map(currentPatchPath =>
+  getCurrentPatchPath(getState()).map((currentPatchPath) =>
     dispatch(redoPatch(currentPatchPath))
   );
 };
 
-export const showCode = code => ({
+export const showCode = (code) => ({
   type: SHOW_CODE_REQUESTED,
   payload: { code },
 });
 
-export const recoverState = state => ({
+export const recoverState = (state) => ({
   type: RECOVER_STATE,
   payload: state,
 });

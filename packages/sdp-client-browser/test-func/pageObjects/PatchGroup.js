@@ -9,7 +9,7 @@ class PatchGroup extends BasePageObject {
   async _getTriggerClassList() {
     const trigger = await this._getTrigger();
     const classList = await this.page.evaluate(
-      el => Array.from(el.classList),
+      (el) => Array.from(el.classList),
       trigger
     );
     return classList;

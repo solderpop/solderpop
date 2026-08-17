@@ -12,7 +12,7 @@ import {
   PIN_HIGHLIGHT_RADIUS,
 } from '../nodeLayout.js';
 
-const Pin = props => {
+function Pin(props) {
   const isOutput = props.direction === PIN_DIRECTION.OUTPUT;
 
   const cls = classNames('Pin', {
@@ -82,7 +82,7 @@ const Pin = props => {
       {variadicDots}
     </g>
   );
-};
+}
 
 Pin.propTypes = {
   keyName: PropTypes.string.isRequired,

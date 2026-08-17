@@ -27,7 +27,8 @@ export default {
 
     if (messages[key]) {
       return messages[key];
-    } else if (isAmong(GLOBALS_LITERALS, `=${key}`)) {
+    }
+    if (isAmong(GLOBALS_LITERALS, `=${key}`)) {
       return messages.VALUE_MISSING;
     }
     return messages.UNKNOWN_LITERAL;

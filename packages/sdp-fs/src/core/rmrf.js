@@ -2,9 +2,9 @@ import fse from 'fs-extra';
 
 const { remove } = fse;
 
-export default path =>
+export default (path) =>
   new Promise((resolve, reject) =>
-    remove(path, err => {
+    remove(path, (err) => {
       if (err) {
         reject(err);
         return;

@@ -25,7 +25,7 @@ class Inspector extends BasePageObject {
   }
 }
 
-Inspector.findOnPage = async page => {
+Inspector.findOnPage = async (page) => {
   const elementHandle = await page.$('.Inspector');
   return new Inspector(page, elementHandle);
 };

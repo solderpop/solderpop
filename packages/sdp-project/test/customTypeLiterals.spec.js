@@ -1,11 +1,11 @@
 import chai from 'chai';
 
-const { assert } = chai;
-
 import {
   BINDABLE_CUSTOM_TYPES,
   BINDABLE_CUSTOM_TYPE_VALIDATORS,
 } from '../src/custom-types.js';
+
+const { assert } = chai;
 
 describe('Color Literal', () => {
   const validateColor =

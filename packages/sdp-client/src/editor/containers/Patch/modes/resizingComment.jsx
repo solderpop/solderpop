@@ -24,14 +24,14 @@ import { getOffsetMatrix, bindApi, getMousePosition } from '../modeUtils.js';
 
 let patchSvgRef = null;
 
-const getDeltaPosition = api =>
+const getDeltaPosition = (api) =>
   subtractPoints(api.state.mousePosition, api.state.dragStartPosition);
 
-const addDeltaToSize = R.uncurryN(2)(deltaPosition =>
+const addDeltaToSize = R.uncurryN(2)((deltaPosition) =>
   R.compose(pointToSize, addPoints(deltaPosition), sizeToPoint)
 );
 
-const addDeltaToCommentSizes = R.uncurryN(2)(deltaPosition =>
+const addDeltaToCommentSizes = R.uncurryN(2)((deltaPosition) =>
   R.map(
     R.over(
       R.lensProp('pxSize'),
@@ -116,7 +116,7 @@ const resizingCommentMode = {
         <PatchSVG
           onMouseMove={bindApi(api, this.onMouseMove)}
           onMouseUp={bindApi(api, this.onMouseUp)}
-          svgRef={svg => {
+          svgRef={(svg) => {
             patchSvgRef = svg;
           }}
         >

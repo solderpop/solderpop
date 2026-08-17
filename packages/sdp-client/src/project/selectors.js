@@ -26,10 +26,7 @@ import {
   getPinErrors,
   getPatchSearchData,
 } from '../hinting/selectors.js';
-import {
-  getRenderablePinType,
-  getNormalizedLabelsForPatch,
-} from '../project/utils.js';
+import { getRenderablePinType, getNormalizedLabelsForPatch } from './utils.js';
 import { setPxPosition, setPxSize } from './pxDimensions.js';
 
 import {
@@ -129,7 +126,7 @@ export const getConnectedPins = createMemoizedSelector(
 const assocPinIsConnected = R.curry((connectedPins, node) =>
   R.over(
     R.lensProp('pins'),
-    R.map(pin =>
+    R.map((pin) =>
       R.assoc('isConnected', !!R.path([node.id, pin.key], connectedPins), pin)
     ),
     node
@@ -137,7 +134,7 @@ const assocPinIsConnected = R.curry((connectedPins, node) =>
 );
 
 // :: IntermediateNode -> IntermediateNode
-const assocNodeIdToPins = node =>
+const assocNodeIdToPins = (node) =>
   R.over(R.lensProp('pins'), R.map(R.assoc('nodeId', node.id)), node);
 
 const addLastVariadicGroupFlag = R.curry((project, node, pins) => {
@@ -249,7 +246,7 @@ const addSpecializationsList = R.curry((project, node) => {
 const assocDeducedPinTypes = R.curry((deducedPinTypes, node) =>
   R.over(
     R.lensProp('pins'),
-    R.map(pin =>
+    R.map((pin) =>
       R.assoc(
         'deducedType',
         R.path([XP.getNodeId(node), XP.getPinKey(pin)], deducedPinTypes),
@@ -263,7 +260,7 @@ const assocDeducedPinTypes = R.curry((deducedPinTypes, node) =>
 const addPinErrors = R.curry((patchPath, errors, renderableNode) =>
   R.over(
     R.lensProp('pins'),
-    R.map(pin =>
+    R.map((pin) =>
       R.compose(
         R.assoc('isInvalid', R.__, pin),
         R.ifElse(R.isEmpty, R.F, R.T),
@@ -342,10 +339,10 @@ const markPinsAffectedByErrorRaisers = R.curry(
 
     return foldMaybe(
       node,
-      nodesPatch =>
+      (nodesPatch) =>
         R.over(
           R.lensProp('pins'),
-          R.map(pin =>
+          R.map((pin) =>
             R.compose(
               R.when(
                 () =>
@@ -462,7 +459,7 @@ export const getRenderableNodes = createMemoizedSelector(
   ) =>
     foldMaybe(
       {},
-      currentPatch =>
+      (currentPatch) =>
         R.compose(
           // If there is at least one terminal node on the patch
           // normalize empty pin labels (which equals to empty label of
@@ -472,7 +469,7 @@ export const getRenderableNodes = createMemoizedSelector(
               R.any(R.pipe(R.prop('type'), XP.isTerminalPatchPath)),
               R.values
             ),
-            renderableNodes =>
+            (renderableNodes) =>
               R.compose(
                 R.mergeWith(R.merge, renderableNodes),
                 R.map(R.objOf('normalizedLabel')),
@@ -511,10 +508,10 @@ export const getRenderableLinks = createMemoizedSelector(
   (nodes, links, curPatch, project, deducedPinTypes, errors) =>
     R.compose(
       addLinksPositioning(nodes),
-      foldMaybe({}, patchPath =>
-        R.map(link =>
+      foldMaybe({}, (patchPath) =>
+        R.map((link) =>
           R.compose(
-            newLink => {
+            (newLink) => {
               const inputNodeId = XP.getLinkInputNodeId(link);
               const inputPinKey = XP.getLinkInputPinKey(link);
               const outputNodeId = XP.getLinkOutputNodeId(link);
@@ -589,14 +586,13 @@ export const getRenderableSelection = createMemoizedSelector(
 
     return R.compose(
       R.reject(R.isNil),
-      R.map(
-        ({ entity, id }) =>
-          renderables[entity][id]
-            ? {
-                entityType: entity,
-                data: renderables[entity][id],
-              }
-            : null
+      R.map(({ entity, id }) =>
+        renderables[entity][id]
+          ? {
+              entityType: entity,
+              data: renderables[entity][id],
+            }
+          : null
       )
     )(selection);
   }
@@ -616,7 +612,7 @@ export const getSearchPatchesFn = createMemoizedSelector(
   (searchFn, indexData, maybeCurPatchPath) =>
     R.compose(
       searchFn,
-      curPatch => R.reject(R.propEq('path', curPatch), indexData),
+      (curPatch) => R.reject(R.propEq('path', curPatch), indexData),
       foldMaybe('__NO_OPENED_PATCH__', R.identity)
     )(maybeCurPatchPath)
 );

@@ -31,7 +31,7 @@ class Widget extends React.Component {
     this.lastCommitedValue = value;
 
     this.keyDownHandlers = R.compose(
-      R.map(fn => fn.bind(this)),
+      R.map((fn) => fn.bind(this)),
       R.merge(commonKeyDownHandlers)
     )(keyDownHandlers);
 

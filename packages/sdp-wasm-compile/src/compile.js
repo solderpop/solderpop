@@ -5,9 +5,6 @@ import { promisify } from 'util';
 import fse from 'fs-extra';
 import { createError } from 'sdp-func-tools';
 
-import { getEmxxEnv } from './emcc.js';
-import { ensureServer, artifactUrl } from './server.js';
-
 // Bundled alongside this package's dist output at build time (babel inlines
 // these as plain strings via babel-plugin-inline-import — see .babelrc —
 // exactly the same trick sdp-cloud-compile already uses to ship
@@ -18,6 +15,8 @@ import arduinoCpp from 'sdp-arduino/platform/wasmSimulation/Arduino.cpp';
 import wasmSerialH from 'sdp-arduino/platform/wasmSimulation/WasmSerial.h';
 import wasmSerialCpp from 'sdp-arduino/platform/wasmSimulation/WasmSerial.cpp';
 import mainCpp from 'sdp-arduino/platform/wasmSimulation/main.cpp';
+import { ensureServer, artifactUrl } from './server.js';
+import { getEmxxEnv } from './emcc.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -48,9 +47,7 @@ const EMXX_FLAGS = [
 let rootDirPromise = null;
 const getRootDir = () => {
   if (rootDirPromise === null) {
-    rootDirPromise = fse.mkdtemp(
-      path.join(os.tmpdir(), 'sdp_wasm_compile_')
-    );
+    rootDirPromise = fse.mkdtemp(path.join(os.tmpdir(), 'sdp_wasm_compile_'));
   }
   return rootDirPromise;
 };
@@ -66,7 +63,7 @@ const writeSources = async (buildDir, programCode) => {
   ]);
 };
 
-const wrapCompileError = err =>
+const wrapCompileError = (err) =>
   Promise.reject(
     createError('WASM_COMPILATION_ERROR', {
       message: err.message,
@@ -76,6 +73,9 @@ const wrapCompileError = err =>
   );
 
 // :: String -> Nullable Path -> Promise Suite Error
+// Named on purpose: matches sdp-cloud-compile/src/compile.js's own
+// compileSimulation export shape and its 9 existing consumers.
+// eslint-disable-next-line import/prefer-default-export
 export const compileSimulation = async (programCode, emsdkRoot = null) => {
   const { emxx, env } = await getEmxxEnv(emsdkRoot);
   const rootDir = await getRootDir();

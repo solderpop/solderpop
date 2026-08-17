@@ -21,6 +21,7 @@ export default class Root extends React.Component {
       composeMiddlewares(this.props.extraMiddlewares)
     );
   }
+
   componentDidMount() {
     // dispatch actions "on init"
     this.store.dispatch(setSidebarLayout(loadPanelSettings()));

@@ -9,27 +9,29 @@ import XODLink from '../Link.jsx';
 
 import { isLinkSelected } from '../../../editor/utils.js';
 
-const LinksOverlayLayer = ({ links, selection, hidden, onClick }) => (
-  <g className={cn('LinksOverlayLayer', { hidden })}>
-    {R.compose(
-      R.map(link => (
-        <XODLink
-          isOverlay
-          key={link.id}
-          id={link.id}
-          from={link.from}
-          to={link.to}
-          type={link.type}
-          dead={link.dead}
-          errors={link.errors}
-          onClick={onClick}
-          isSelected={isLinkSelected(selection, link.id)}
-        />
-      )),
-      R.values
-    )(links)}
-  </g>
-);
+function LinksOverlayLayer({ links, selection, hidden, onClick }) {
+  return (
+    <g className={cn('LinksOverlayLayer', { hidden })}>
+      {R.compose(
+        R.map((link) => (
+          <XODLink
+            isOverlay
+            key={link.id}
+            id={link.id}
+            from={link.from}
+            to={link.to}
+            type={link.type}
+            dead={link.dead}
+            errors={link.errors}
+            onClick={onClick}
+            isSelected={isLinkSelected(selection, link.id)}
+          />
+        )),
+        R.values
+      )(links)}
+    </g>
+  );
+}
 
 LinksOverlayLayer.propTypes = {
   links: PropTypes.object,

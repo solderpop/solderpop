@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const DescriptionWidget = props => {
-  const onChange = event => {
+function DescriptionWidget(props) {
+  const onChange = (event) => {
     props.onChange(event.target.value);
   };
   return (
@@ -19,7 +19,7 @@ const DescriptionWidget = props => {
       />
     </div>
   );
-};
+}
 
 DescriptionWidget.propTypes = {
   elementId: PropTypes.string.isRequired,

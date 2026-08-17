@@ -23,7 +23,7 @@ import { shallUpdatePatchMarkers, getNewPatchMarkers } from './patchMarkers.js';
 //
 // =============================================================================
 
-export default store => next => action => {
+export default (store) => (next) => (action) => {
   const oldProject = getProject(store.getState());
   const act = next(action);
   const newState = store.getState();

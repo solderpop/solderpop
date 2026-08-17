@@ -8,7 +8,7 @@ import { getRenderablePinType } from '../../utils.js';
 const INPUT_PINKEY = '__in__';
 const OUTPUT_PINKEY = '__out__';
 
-const JumperNodeBody = ({ pins }) => {
+function JumperNodeBody({ pins }) {
   const inConnected = R.path([INPUT_PINKEY, 'isConnected'], pins);
   const outConnected = R.path([OUTPUT_PINKEY, 'isConnected'], pins);
 
@@ -40,7 +40,7 @@ const JumperNodeBody = ({ pins }) => {
       />
     </g>
   );
-};
+}
 
 JumperNodeBody.propTypes = {
   pins: PropTypes.object,

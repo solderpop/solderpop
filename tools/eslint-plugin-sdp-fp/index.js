@@ -14,7 +14,7 @@
  *
  * -- no rewrite of this file needed.
  */
-const maxCompositionDepth = require('./rules/max-composition-depth');
+const maxCompositionDepth = require('./rules/max-composition-depth.js');
 
 module.exports = {
   rules: {

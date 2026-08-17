@@ -33,7 +33,7 @@ import composeMessage from '../messages/composeMessage.js';
 // Project
 //
 
-export const requestOpenProject = data => ({
+export const requestOpenProject = (data) => ({
   type: ActionType.PROJECT_OPEN_REQUESTED,
   payload: data,
 });
@@ -49,22 +49,22 @@ export const createProject = () => ({
 // -  description,
 // -  version,
 // -  apiKey,
-export const updateProjectMeta = projectMeta => ({
+export const updateProjectMeta = (projectMeta) => ({
   type: ActionType.PROJECT_UPDATE_META,
   payload: projectMeta,
 });
 
-export const openProject = project => ({
+export const openProject = (project) => ({
   type: ActionType.PROJECT_OPEN,
   payload: project,
 });
 
-export const importProject = project => ({
+export const importProject = (project) => ({
   type: ActionType.PROJECT_IMPORT,
   payload: project,
 });
 
-export const openWorkspace = libs => ({
+export const openWorkspace = (libs) => ({
   type: ActionType.PROJECT_OPEN_WORKSPACE,
   payload: libs,
 });
@@ -92,7 +92,7 @@ export const publishProject = () => (dispatch, getState) => {
   dispatch({ type: ActionType.PROJECT_PUBLISH_START });
 
   dispatch(fetchGrant()) // to obtain freshest auth token
-    .then(freshGrant => {
+    .then((freshGrant) => {
       if (freshGrant === null) {
         // could happen if user logs out in another tab
         return rejectWithCode(
@@ -107,7 +107,7 @@ export const publishProject = () => (dispatch, getState) => {
       dispatch(addConfirmation(SUCCESSFULLY_PUBLISHED));
       dispatch({ type: ActionType.PROJECT_PUBLISH_SUCCESS });
     })
-    .catch(err => {
+    .catch((err) => {
       dispatch({ type: ActionType.PROJECT_PUBLISH_FAIL });
       dispatch(addError(composeMessage(err.message)));
     });
@@ -116,17 +116,17 @@ export const publishProject = () => (dispatch, getState) => {
 //
 // Patch
 //
-export const undoPatch = patchPath => ({
+export const undoPatch = (patchPath) => ({
   type: ActionType.PATCH_HISTORY_UNDO,
   payload: { patchPath },
 });
 
-export const redoPatch = patchPath => ({
+export const redoPatch = (patchPath) => ({
   type: ActionType.PATCH_HISTORY_REDO,
   payload: { patchPath },
 });
 
-export const addPatch = baseName => (dispatch, getState) => {
+export const addPatch = (baseName) => (dispatch, getState) => {
   if (!XP.isValidUserDefinedPatchBasename(baseName)) {
     return dispatch(addError(PROJECT_BROWSER_ERRORS.INVALID_PATCH_NAME));
   }
@@ -146,31 +146,32 @@ export const addPatch = baseName => (dispatch, getState) => {
   });
 };
 
-export const renamePatch = (oldPatchPath, newBaseName) => (
-  dispatch,
-  getState
-) => {
-  if (!XP.isValidUserDefinedPatchBasename(newBaseName)) {
-    return dispatch(addError(PROJECT_BROWSER_ERRORS.INVALID_PATCH_NAME));
-  }
+export const renamePatch =
+  (oldPatchPath, newBaseName) => (dispatch, getState) => {
+    if (!XP.isValidUserDefinedPatchBasename(newBaseName)) {
+      return dispatch(addError(PROJECT_BROWSER_ERRORS.INVALID_PATCH_NAME));
+    }
 
-  const newPatchPath = XP.getLocalPath(newBaseName);
-  const state = getState();
+    const newPatchPath = XP.getLocalPath(newBaseName);
+    const state = getState();
 
-  if (newPatchPath !== oldPatchPath && isPatchPathTaken(state, newPatchPath)) {
-    return dispatch(addError());
-  }
+    if (
+      newPatchPath !== oldPatchPath &&
+      isPatchPathTaken(state, newPatchPath)
+    ) {
+      return dispatch(addError());
+    }
 
-  return dispatch({
-    type: ActionType.PATCH_RENAME,
-    payload: {
-      newPatchPath,
-      oldPatchPath,
-    },
-  });
-};
+    return dispatch({
+      type: ActionType.PATCH_RENAME,
+      payload: {
+        newPatchPath,
+        oldPatchPath,
+      },
+    });
+  };
 
-export const clonePatch = originalPatchPath => (dispatch, getState) => {
+export const clonePatch = (originalPatchPath) => (dispatch, getState) => {
   const project = getProject(getState());
   const patchExists = foldMaybe(
     false,
@@ -194,7 +195,7 @@ export const clonePatch = originalPatchPath => (dispatch, getState) => {
   dispatch(addError(cantCloneNoPatchFound(originalPatchPath)));
 };
 
-export const deletePatch = patchPath => ({
+export const deletePatch = (patchPath) => ({
   type: ActionType.PATCH_DELETE,
   payload: {
     patchPath,
@@ -221,7 +222,7 @@ export const updatePatchAttachment = (patchPath, markerName, newContents) => ({
 //
 // Node
 //
-export const addNode = (typeId, position, patchPath) => dispatch => {
+export const addNode = (typeId, position, patchPath) => (dispatch) => {
   const newNodeId = XP.generateId();
 
   dispatch({
@@ -237,23 +238,21 @@ export const addNode = (typeId, position, patchPath) => dispatch => {
   return newNodeId;
 };
 
-export const updateNodeProperty = (nodeId, propKind, propKey, propValue) => (
-  dispatch,
-  getState
-) => {
-  getCurrentPatchPath(getState()).map(patchPath =>
-    dispatch({
-      type: ActionType.NODE_PROPERTY_UPDATED,
-      payload: {
-        id: nodeId,
-        kind: propKind,
-        key: propKey,
-        value: propValue,
-        patchPath,
-      },
-    })
-  );
-};
+export const updateNodeProperty =
+  (nodeId, propKind, propKey, propValue) => (dispatch, getState) => {
+    getCurrentPatchPath(getState()).map((patchPath) =>
+      dispatch({
+        type: ActionType.NODE_PROPERTY_UPDATED,
+        payload: {
+          id: nodeId,
+          kind: propKind,
+          key: propKey,
+          value: propValue,
+          patchPath,
+        },
+      })
+    );
+  };
 
 //
 // Link
@@ -272,7 +271,7 @@ export const addLink = (pin1, pin2, patchPath) => ({
 export const addComment = () => (dispatch, getState) =>
   getCurrentPatchPath(getState()).map(
     // TODO: where to provide initial size, position and content?
-    patchPath =>
+    (patchPath) =>
       dispatch({
         type: ActionType.COMMENT_ADD,
         payload: {
@@ -282,7 +281,7 @@ export const addComment = () => (dispatch, getState) =>
   );
 
 export const resizeComment = (id, size) => (dispatch, getState) =>
-  getCurrentPatchPath(getState()).map(patchPath =>
+  getCurrentPatchPath(getState()).map((patchPath) =>
     dispatch({
       type: ActionType.COMMENT_RESIZE,
       payload: {
@@ -294,7 +293,7 @@ export const resizeComment = (id, size) => (dispatch, getState) =>
   );
 
 export const resizeNode = (id, size) => (dispatch, getState) =>
-  getCurrentPatchPath(getState()).map(patchPath =>
+  getCurrentPatchPath(getState()).map((patchPath) =>
     dispatch({
       type: ActionType.NODE_RESIZE,
       payload: {
@@ -306,7 +305,7 @@ export const resizeNode = (id, size) => (dispatch, getState) =>
   );
 
 export const editComment = (id, content) => (dispatch, getState) =>
-  getCurrentPatchPath(getState()).map(patchPath =>
+  getCurrentPatchPath(getState()).map((patchPath) =>
     dispatch({
       type: ActionType.COMMENT_SET_CONTENT,
       payload: {
@@ -356,57 +355,51 @@ export const changeArityLevel = (nodeId, patchPath, newArityLevel) => ({
   },
 });
 
-export const changeNodeSpecialization = (nodeId, newNodeType) => (
-  dispatch,
-  getState
-) => {
-  getCurrentPatchPath(getState()).map(patchPath =>
-    dispatch({
-      type: ActionType.NODE_CHANGE_SPECIALIZATION,
-      payload: {
-        nodeId,
-        patchPath,
-        nodeType: newNodeType,
-      },
-    })
-  );
-};
+export const changeNodeSpecialization =
+  (nodeId, newNodeType) => (dispatch, getState) => {
+    getCurrentPatchPath(getState()).map((patchPath) =>
+      dispatch({
+        type: ActionType.NODE_CHANGE_SPECIALIZATION,
+        payload: {
+          nodeId,
+          patchPath,
+          nodeType: newNodeType,
+        },
+      })
+    );
+  };
 
-const addLinkedNode = nodeKind => (
-  patchPath,
-  position,
-  fromNode,
-  fromPinKey
-) => ({
-  type: ActionType.ADD_LINKED_NODE,
-  payload: {
-    nodeKind,
-    patchPath,
-    pinKey: fromPinKey,
-    nodeId: XP.getNodeId(fromNode),
-    node: fromNode,
-    pin: fromNode.pins[fromPinKey],
-    position,
-  },
-});
+const addLinkedNode =
+  (nodeKind) => (patchPath, position, fromNode, fromPinKey) => ({
+    type: ActionType.ADD_LINKED_NODE,
+    payload: {
+      nodeKind,
+      patchPath,
+      pinKey: fromPinKey,
+      nodeId: XP.getNodeId(fromNode),
+      node: fromNode,
+      pin: fromNode.pins[fromPinKey],
+      position,
+    },
+  });
 
 export const addBusNode = addLinkedNode(NODE_KIND.BUS);
 export const addTerminalNode = addLinkedNode(NODE_KIND.TERMINAL);
 export const addConstantNode = addLinkedNode(NODE_KIND.CONSTANT);
 export const addInteractiveNode = addLinkedNode(NODE_KIND.INTERACTIVE);
 
-export const setApiKey = apiKey => ({
+export const setApiKey = (apiKey) => ({
   type: ActionType.PROJECT_SET_API_KEY,
   payload: apiKey,
 });
 
-const requestNewApiKey = projectName => dispatch => {
+const requestNewApiKey = (projectName) => (dispatch) => {
   if (!projectName)
     return Promise.reject(PROJECT_NAME_NEEDED_TO_GENERATE_APIKEY);
 
   return dispatch(
     requestAuthorized(
-      headers =>
+      (headers) =>
         fetch(getApiTokensUrl(), {
           method: 'POST',
           body: JSON.stringify({
@@ -423,10 +416,10 @@ const requestNewApiKey = projectName => dispatch => {
   ).then(R.prop('id'));
 };
 
-export const generateApiKey = projectName => dispatch =>
+export const generateApiKey = (projectName) => (dispatch) =>
   dispatch(requestNewApiKey(projectName))
-    .then(apiKey => dispatch(setApiKey(apiKey)))
-    .catch(errMsg => dispatch(addError(errMsg)));
+    .then((apiKey) => dispatch(setApiKey(apiKey)))
+    .catch((errMsg) => dispatch(addError(errMsg)));
 
 export const renewApiToken = () => (dispatch, getState) => {
   const project = getProject(getState());
@@ -437,7 +430,7 @@ export const renewApiToken = () => (dispatch, getState) => {
   const projectName = XP.getProjectName(project);
 
   return dispatch(
-    requestAuthorized(headers =>
+    requestAuthorized((headers) =>
       fetch(getRenewApiTokenUrl(apiKey), {
         method: 'PUT',
         body: JSON.stringify({
@@ -451,11 +444,11 @@ export const renewApiToken = () => (dispatch, getState) => {
       })
     )
   )
-    .then(resp => {
+    .then((resp) => {
       if (!R.has('token', resp)) return Promise.reject(SERVICE_UNAVAILABLE);
       return R.prop('token', resp);
     })
-    .catch(err => {
+    .catch((err) => {
       if (R.is(Error, err)) {
         if (err.status === 400 || err.status === 404)
           return Promise.reject(CANT_GET_TOKEN_BECAUSE_OF_WRONG_APIKEY);

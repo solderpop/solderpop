@@ -1,7 +1,5 @@
 import R from 'ramda';
 import RamdaFantasy from 'ramda-fantasy';
-
-const { Either } = RamdaFantasy;
 import {
   foldEither,
   explodeEither,
@@ -27,6 +25,8 @@ import {
 } from './migrations/unitlessToSlots.js';
 import { Project, def } from './types.js';
 
+const { Either } = RamdaFantasy;
+
 export const fromXodballData = def(
   'fromXodballData :: Object -> Either Error Project',
   R.compose(
@@ -45,8 +45,8 @@ export const fromXodballDataUnsafe = def(
 
 export const fromXodball = def(
   'fromXodball :: String -> Either Error Project',
-  jsonString =>
-    R.tryCatch(R.pipe(JSON.parse, Either.of), input =>
+  (jsonString) =>
+    R.tryCatch(R.pipe(JSON.parse, Either.of), (input) =>
       fail('NOT_A_JSON', { input })
     )(jsonString).chain(fromXodballData)
 );
@@ -54,7 +54,7 @@ export const fromXodball = def(
 export const toXodball = def(
   'toXodball :: Project -> String',
   R.compose(
-    p => JSON.stringify(p, null, 2),
+    (p) => JSON.stringify(p, null, 2),
     R.evolve({ patches: R.map(addPositionAndSizeUnitsToPatchEntities) }),
     omitTypeHints,
     omitEmptyOptionalProjectFields,

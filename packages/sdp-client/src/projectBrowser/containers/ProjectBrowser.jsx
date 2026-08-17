@@ -45,7 +45,8 @@ const pickPatchPartsForComparsion = R.map(
   R.pick(['isDeprecated', 'isUtility', 'dead', 'path'])
 );
 
-const checkmark = active => (active ? <span className="state">✔</span> : null);
+const checkmark = (active) =>
+  active ? <span className="state">✔</span> : null;
 
 const pickPropsForComparsion = R.compose(
   R.evolve({
@@ -74,12 +75,13 @@ class ProjectBrowser extends React.Component {
     this.renderLocalPatches = this.renderLocalPatches.bind(this);
     this.renderLibraryPatches = this.renderLibraryPatches.bind(this);
   }
+
   shouldComponentUpdate(nextProps) {
     return !R.eqBy(pickPropsForComparsion, nextProps, this.props);
   }
 
   onAddNode(patchPath) {
-    this.props.currentPatchPath.map(curPatchPath =>
+    this.props.currentPatchPath.map((curPatchPath) =>
       this.props.actions.addNode(
         patchPath,
         this.props.defaultNodePosition,
@@ -172,11 +174,8 @@ class ProjectBrowser extends React.Component {
 
     const isOpen = foldMaybe(false, R.equals(path), currentPatchPath);
 
-    const {
-      switchPatch,
-      setSelection,
-      startDraggingPatch,
-    } = this.props.actions;
+    const { switchPatch, setSelection, startDraggingPatch } =
+      this.props.actions;
 
     const collectPropsFn = this.getCollectPropsFn(path);
 
@@ -356,7 +355,7 @@ class ProjectBrowser extends React.Component {
           {this.renderPatches()}
         </SidebarPanel>
         <PatchGroupItemContextMenu
-          ref={c => {
+          ref={(c) => {
             this.patchContextMenuRef = c;
           }}
           onPatchAdd={this.onAddNode}
@@ -431,7 +430,7 @@ const mapStateToProps = R.applySpec({
   showUtilityPatches: ProjectBrowserSelectors.shouldShowUtilityPatches,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(
     {
       setEditorMode: EditorActions.setMode,

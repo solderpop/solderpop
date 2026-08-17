@@ -1,8 +1,8 @@
 import chai from 'chai';
 
-const { assert } = chai;
-
 import * as Link from '../src/link.js';
+
+const { assert } = chai;
 
 describe('Link', () => {
   // constructors

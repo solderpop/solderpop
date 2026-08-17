@@ -22,7 +22,7 @@ import {
 
 import * as ERROR_CODES from './errorCodes.js';
 
-export const expandHomeDir = pathToResolve => {
+export const expandHomeDir = (pathToResolve) => {
   const homedir =
     process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
 
@@ -35,7 +35,7 @@ export const expandHomeDir = pathToResolve => {
 
 export const isDirectory = def(
   'isDirectory :: Path -> Boolean',
-  pathToCheck => {
+  (pathToCheck) => {
     let stats;
     try {
       stats = fs.statSync(pathToCheck);
@@ -100,7 +100,7 @@ export const doesFileExist = def(
 
 export const getPatchName = def(
   'getPatchName :: Path -> PatchBaseName',
-  patchPath => {
+  (patchPath) => {
     const parts = patchPath.split(path.sep);
     return parts[parts.length - 2];
   }
@@ -134,7 +134,7 @@ export const beginsWithDot = def(
 
 export const resolveProjectFile = def(
   'resolveProjectFile :: Path -> Path',
-  dir => path.resolve(dir, 'project.xod')
+  (dir) => path.resolve(dir, 'project.xod')
 );
 
 export const hasProjectFile = def(
@@ -175,7 +175,7 @@ export const filterDefaultProject = def(
 // :: Path -> Promise Path Error
 export const resolveWorkspacePath = R.compose(
   foldEither(
-    workspacePath =>
+    (workspacePath) =>
       rejectWithCode(ERROR_CODES.INVALID_WORKSPACE_PATH, {
         path: workspacePath,
       }),
@@ -187,11 +187,11 @@ export const resolveWorkspacePath = R.compose(
 
 export const resolveLibPath = def(
   'resolveLibPath :: Path -> Path',
-  workspacePath => path.resolve(workspacePath, LIBS_DIRNAME)
+  (workspacePath) => path.resolve(workspacePath, LIBS_DIRNAME)
 );
 export const resolveDefaultProjectPath = def(
   'resolveDefaultProjectPath :: Path -> Path',
-  workspacePath => path.resolve(workspacePath, DEFAULT_PROJECT_NAME)
+  (workspacePath) => path.resolve(workspacePath, DEFAULT_PROJECT_NAME)
 );
 
 // :: * -> Path
@@ -203,7 +203,7 @@ export const ensureWorkspacePath = R.ifElse(
 
 const doesWorkspaceFileExist = def(
   'doesWorkspaceFileExist :: Path -> Boolean',
-  R.compose(doesFileExist, workspacePath =>
+  R.compose(doesFileExist, (workspacePath) =>
     path.resolve(workspacePath, WORKSPACE_FILENAME)
   )
 );
@@ -217,14 +217,14 @@ export const isWorkspaceValid = R.cond([
   [doesWorkspaceFileExist, Promise.resolve.bind(Promise)],
   [
     isWorkspaceDirEmptyOrNotExist,
-    dirPath =>
+    (dirPath) =>
       rejectWithCode(ERROR_CODES.WORKSPACE_DIR_NOT_EXIST_OR_EMPTY, {
         path: dirPath,
       }),
   ],
   [
     R.T,
-    dirPath =>
+    (dirPath) =>
       rejectWithCode(ERROR_CODES.WORKSPACE_DIR_NOT_EMPTY, { path: dirPath }),
   ],
 ]);
