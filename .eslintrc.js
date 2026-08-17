@@ -11,7 +11,7 @@ module.exports = {
     'react',
     'import',
     'mocha',
-    'xod-fp',
+    'sdp-fp',
     'prettier',
   ],
 
@@ -60,7 +60,7 @@ module.exports = {
     // extension. Re-enable once eslint-plugin-import is bumped past the
     // version that added ignorePackages.
     'import/extensions': 'off',
-    'xod-fp/max-composition-depth': ['error', {
+    'sdp-fp/max-composition-depth': ['error', {
       max: 11, // TODO: it should be lowered to 6
       ignoreCurry: true,
       ignoreMocha: true,

@@ -50,7 +50,7 @@
     "eslint-plugin-mocha": "^4.9.0",
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "6.10.0",
-    "eslint-plugin-xod-fp": "^0.1.1",
+    "eslint-plugin-sdp-fp": "file:./tools/eslint-plugin-sdp-fp",
     "findup-sync": "^2.0.0",
     "lerna": "2.11.0",
     "mocha": "^11.8.0",
