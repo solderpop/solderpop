@@ -11,8 +11,9 @@
   .logo {
     width: 25%;
 
-    circle {
-      opacity: 0.15;
+    circle,
+    ellipse,
+    path {
       filter: url(#inset-shadow);
     }
 
@@ -20,9 +21,20 @@
       fill: var(--theme-selected, $coral);
     }
 
-    .logo-ring {
+    .logo-shine {
+      fill: $white;
+      opacity: 0.4;
+    }
+
+    .logo-ring,
+    .logo-stroke {
       fill: none;
       stroke: var(--theme-selected, $coral);
+    }
+
+    .logo-stroke {
+      stroke-width: 3.5px;
+      stroke-linecap: round;
     }
   }
 }
