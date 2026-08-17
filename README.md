@@ -1,6 +1,11 @@
-# SolderPop IDE
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/solderpop-lockup-dark.svg">
+  <img alt="SolderPop" src="./.github/assets/solderpop-lockup.svg" width="260">
+</picture>
 
-SolderPop IDE is a visual programming environment for microcontrollers, built on top of [XOD](https://xod.io), an open-source visual programming language. This repository is a fork of [xodio/xod](https://github.com/xodio/xod), rebranded and retargeted at SolderPop's own ClickClack hardware line, with the XOD language core and standard library retained under their original AGPL license.
+Welcome — SolderPop IDE is a visual programming environment for [ClickClack](https://github.com/solderpop), SolderPop's microcontroller hardware line. Wire up logic on a canvas, flash it to a board, iterate.
+
+Under the hood, SolderPop IDE builds on the visual-programming engine of [XOD](https://xod.io) ([xodio/xod](https://github.com/xodio/xod)), used here under its original AGPL-3.0 license — see [License](#license) below.
 
 ![Xoding demo](./.github/xoding.gif)
 
@@ -95,9 +100,11 @@ You need `gcc` and `avr-gcc` to be installed system-wide to run C++ code tests. 
 
 ## License
 
-Copyright 2017-2019 XOD Inc.
+Copyright © 2017–2019 XOD Inc.
 
-Portions Copyright 2026 SolderPop. This is a modified, rebranded fork of [xodio/xod](https://github.com/xodio/xod) (base version 0.38.x), retargeted at SolderPop's ClickClack hardware. See individual file headers for per-file modification notices.
+Copyright © 2026 SolderPop
+
+SolderPop IDE is a modified, rebranded fork of [xodio/xod](https://github.com/xodio/xod) (base version 0.38.x), retargeted at SolderPop's ClickClack hardware. See individual file headers for per-file modification notices.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation.
 

@@ -1,7 +1,7 @@
 ---
 name: Feature description
 about: Crystalize a feature scheduled for implementation
-title: As a novice xoder I want foo so that I qux
+title: As a novice coder I want foo so that I qux
 labels: ''
 assignees: ''
 
