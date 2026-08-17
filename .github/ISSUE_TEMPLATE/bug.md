@@ -11,8 +11,8 @@ assignees: ''
 
 * Scope: desktop IDE, browser IDE, CLI
 * Version: 0.xx.x | dev <!-- Hit “Help” in the IDE main menu to view -->
-* OS: Windows 10 | macOS High Sierra (10.13) | Ubuntu 18.04
-* Machine: i3, 4 GB RAM
+* OS: Windows 11 | macOS Tahoe (26.6.1) | Ubuntu 26.04
+* Machine: i5, 8 GB RAM
 
 ### Steps to reproduce
 
