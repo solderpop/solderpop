@@ -33,6 +33,14 @@ export const fromXodballData = def(
     R.map(injectProjectTypeHints),
     foldEither(() => fail('INVALID_XODBALL_FORMAT', {}), Either.of),
     validateSanctuaryType(Project),
+    // Type hints should never be present in on-disk data (toXodball always
+    // strips them before writing), but a file resaved by older code -- or
+    // hand-edited -- can carry stale ones. sanctuary-def trusts an existing
+    // `@@type` tag rather than re-validating structurally, so a stale tag
+    // (e.g. from before the xod-project -> sdp-project rename) fails
+    // validation outright instead of just being ignored. Stripping here
+    // mirrors the same protection sdp-fs's patch-file loader already has.
+    omitTypeHints,
     migrateProjectDimensionsToSlots,
     addMissingOptionalProjectFields
   )
