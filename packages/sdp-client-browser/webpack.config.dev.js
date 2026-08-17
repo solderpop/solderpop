@@ -1,13 +1,13 @@
 const path = require('path');
 /* eslint-disable import/no-extraneous-dependencies */
 const webpack = require('webpack');
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 /* eslint-enable import/no-extraneous-dependencies */
 const baseConfig = require('./webpack.config.js');
 
 const pkgpath = subpath => path.join(__dirname, subpath);
 
-module.exports = merge.smart(baseConfig, {
+module.exports = merge(baseConfig, {
   devtool: 'eval-source-map',
   output: {
     publicPath: 'http://localhost:8080/',
@@ -22,10 +22,16 @@ module.exports = merge.smart(baseConfig, {
     hot: true,
     host: 'localhost',
     port: 8080,
-    contentBase: pkgpath('dist'),
+    static: {
+      directory: pkgpath('dist'),
+    },
     compress: true,
-    watchOptions: {
-      poll: 1000,
+    watchFiles: {
+      paths: ['**/*'],
+      options: {
+        usePolling: true,
+        interval: 1000,
+      },
     },
   },
   plugins: [

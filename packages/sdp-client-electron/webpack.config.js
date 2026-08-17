@@ -1,13 +1,13 @@
 const path = require('path');
 /* eslint-disable import/no-extraneous-dependencies */
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const webpack = require('webpack');
 /* eslint-enable import/no-extraneous-dependencies */
 const getBaseConfig = require('sdp-client/webpack.config');
 
 const pkgpath = subpath => path.resolve(__dirname, subpath);
 
-module.exports = merge.smart(getBaseConfig(__dirname), {
+module.exports = merge(getBaseConfig(__dirname), {
   target: 'electron-renderer',
   node: {
     __dirname: false,
@@ -34,19 +34,17 @@ module.exports = merge.smart(getBaseConfig(__dirname), {
         test: /\.js$/,
         loader: 'babel-loader',
         options: {
-          presets: ['es2015'],
-          plugins: ['transform-object-rest-spread'],
+          presets: ['@babel/preset-env'],
         },
       },
       {
         // Scoped strictly to this package's own assets. The base config
-        // (sdp-client/webpack.config.js) already has file-loader rules for
+        // (sdp-client/webpack.config.js) already has asset-module rules for
         // its own assets, each scoped with its own `include`. An unscoped
-        // rule here would double-process those same files (file-loader
-        // running on file-loader's own JS output), corrupting them.
+        // rule here would double-process those same files.
         include: [pkgpath('src/view/assets')],
         test: /\.(jpe?g|png|gif|svg)$/,
-        loader: 'file-loader',
+        type: 'asset/resource',
       },
     ],
   },
@@ -68,6 +66,6 @@ module.exports = merge.smart(getBaseConfig(__dirname), {
     // It happens, cause `ws` is server-side only package
     // But webpack bundles client-side code
     // And `ws` should be never used on client-size (use native `WebSocket`)
-    new webpack.IgnorePlugin(/bufferutil|utf-8-validate/),
+    new webpack.IgnorePlugin({ resourceRegExp: /bufferutil|utf-8-validate/ }),
   ],
 });

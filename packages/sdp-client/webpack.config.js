@@ -23,10 +23,9 @@ const fs = require('fs');
 const path = require('path');
 /* eslint-disable import/no-extraneous-dependencies */
 const findup = require('findup-sync');
-const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const autoprefixer = require('autoprefixer');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 /* eslint-enable import/no-extraneous-dependencies */
 
 const pkgpath = (pkgDir, subpath) => path.join(pkgDir, subpath);
@@ -39,6 +38,7 @@ const IS_DEV = (
 );
 
 module.exports = pkgDir => ({
+  mode: IS_DEV ? 'development' : 'production',
   devtool: 'source-map',
   entry: [
     'babel-polyfill',
@@ -71,8 +71,7 @@ module.exports = pkgDir => ({
         test: /\.jsx?$/,
         loader: 'babel-loader',
         options: {
-          presets: ['react', 'es2015'],
-          plugins: ['transform-object-rest-spread'],
+          presets: ['@babel/preset-react', '@babel/preset-env'],
         },
       },
       {
@@ -87,14 +86,18 @@ module.exports = pkgDir => ({
           {
             loader: 'postcss-loader',
             options: {
-              plugins: [autoprefixer()],
+              postcssOptions: {
+                plugins: [autoprefixer()],
+              },
             },
           },
           {
             loader: 'sass-loader',
             options: {
               implementation: require('sass'),
-              outputStyle: 'expanded',
+              sassOptions: {
+                style: 'expanded',
+              },
             },
           },
         ],
@@ -107,7 +110,9 @@ module.exports = pkgDir => ({
           {
             loader: 'postcss-loader',
             options: {
-              plugins: [autoprefixer()],
+              postcssOptions: {
+                plugins: [autoprefixer()],
+              },
             },
           },
         ],
@@ -115,34 +120,51 @@ module.exports = pkgDir => ({
       {
         include: assetsPath,
         test: /\.(jpe?g|png|gif|svg|ttf|eot|woff|woff2)$/,
-        loader: 'file-loader',
-        options: {
-          name: 'assets/[path][name].[ext]?[hash:6]',
-          context: assetsPath,
+        type: 'asset/resource',
+        generator: {
+          // Was file-loader's 'assets/[path][name].[ext]?[hash:6]' with
+          // `context: assetsPath` (cache-busting hash as a URL query
+          // string, scoped to a flat 'assets/<subpath-under-assetsPath>'
+          // layout). Now on webpack 5's built-in asset modules instead of
+          // file-loader -- hashed with webpack's own hash implementation
+          // rather than file-loader's (via loader-utils, which calls
+          // Node's crypto MD4, disabled by OpenSSL 3 on Node 17+ without
+          // the legacy-provider flag). Asset modules' `[path]` placeholder
+          // has no equivalent to file-loader's scoped `context` option --
+          // it's always relative to the whole compilation, which would
+          // nest this under 'assets/sdp-client/src/core/assets/...'
+          // instead of the flat layout other code (CopyWebpackPlugin's
+          // index.html, Electron's packaged resources) expects. A filename
+          // function replicates the old scoped-relative-path behavior.
+          filename: pathData => {
+            const relativeDir = path.relative(assetsPath, path.dirname(pathData.filename));
+            return `assets/${relativeDir ? `${relativeDir}/` : ''}[name].[hash:6][ext]`;
+          },
         },
       },
       {
         include: fontAwesomePath,
         test: /\.(jpe?g|png|gif|svg|ttf|eot|woff|woff2)(\?\S*)?$/,
-        loader: 'file-loader',
-        options: {
-          name: 'assets/font-awesome/[name].[ext]?[hash:6]',
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/font-awesome/[name].[hash:6][ext]',
         },
       },
     ],
   },
   plugins: [
-    new webpack.NoEmitOnErrorsPlugin(),
-    new CopyWebpackPlugin([
-      { from: findup('node_modules/sdp-client/src/core/assets/index.html') },
-      { from: findup('node_modules/sdp-client/src/core/assets/favicon.ico') },
-    ]),
-  ].concat(
-    IS_DEV ? [] : [
-      new UglifyJSPlugin({
-        sourceMap: true,
-        parallel: true,
-        uglifyOptions: {
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: findup('node_modules/sdp-client/src/core/assets/index.html') },
+        { from: findup('node_modules/sdp-client/src/core/assets/favicon.ico') },
+      ],
+    }),
+  ],
+  optimization: {
+    minimize: !IS_DEV,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
           mangle: false,
           toplevel: true,
           output: {
@@ -150,6 +172,6 @@ module.exports = pkgDir => ({
           },
         },
       }),
-    ]
-  ),
+    ],
+  },
 });

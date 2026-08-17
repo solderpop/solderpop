@@ -1,6 +1,5 @@
 {
   "name": "sdp-project",
-  "version": "0.33.0",
   "sources": [
     "src"
   ],
@@ -9,13 +8,12 @@
     "in-source": true
   },
   "suffix": ".bs.js",
-  "bs-dependencies": [
+  "dependencies": [
     "belt-holes",
     "sdp-func-tools"
   ],
   "warnings": {
-    "error" : "+a"
+    "error": "+a"
   },
-  "namespace": true,
-  "refmt": 3
+  "namespace": true
 }
