@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 @mixin custom-search-clear-button() {
   position: relative;
   width: 18px;

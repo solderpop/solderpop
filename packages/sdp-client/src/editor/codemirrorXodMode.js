@@ -1,19 +1,22 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import CodeMirror from 'codemirror';
-import 'codemirror/addon/mode/simple';
-import 'codemirror/addon/mode/overlay';
-import 'codemirror/mode/clike/clike';
+import 'codemirror/addon/mode/simple.js';
+import 'codemirror/addon/mode/overlay.js';
+import 'codemirror/mode/clike/clike.js';
 
-import 'codemirror/addon/edit/closebrackets';
-import 'codemirror/addon/edit/trailingspace';
-import 'codemirror/addon/comment/comment';
-import 'codemirror/addon/scroll/simplescrollbars';
+import 'codemirror/addon/edit/closebrackets.js';
+import 'codemirror/addon/edit/trailingspace.js';
+import 'codemirror/addon/comment/comment.js';
+import 'codemirror/addon/scroll/simplescrollbars.js';
 
 /* eslint-disable max-len */
-const XOD_TYPE_NAMES = /(Number|NodeId|Context|DirtyFlags|TimeMs|u?int\d{1,2}_t|size_t|XString|State|List|Iterator|(typeof_[A-Za-z0-9_]+))\b/gm;
+const XOD_TYPE_NAMES =
+  /(Number|NodeId|Context|DirtyFlags|TimeMs|u?int\d{1,2}_t|size_t|XString|State|List|Iterator|(typeof_[A-Za-z0-9_]+))\b/gm;
 const XOD_KEYWORDS = /\b(node|meta)\b/gm;
-const XOD_BUILTIN_NAMES = /(getValue|emitValue|isInputDirty|transactionTime|setTimeout|clearTimeout|isTimedOut|setImmediate|evaluate|getState|raiseError|isSettingUp|getError|(constant_(input|output)_[A-Za-z0-9_]+))\b/gm;
-const ARDUINO_BUILTIN_NAMES = /((digital|analog)(Read|Write)|pinMode|analogReference)\b/gm;
+const XOD_BUILTIN_NAMES =
+  /(getValue|emitValue|isInputDirty|transactionTime|setTimeout|clearTimeout|isTimedOut|setImmediate|evaluate|getState|raiseError|isSettingUp|getError|(constant_(input|output)_[A-Za-z0-9_]+))\b/gm;
+const ARDUINO_BUILTIN_NAMES =
+  /((digital|analog)(Read|Write)|pinMode|analogReference)\b/gm;
 const XOD_TAG_NAMES = /(((input|output)_[A-Za-z0-9_]+)|GENERATED_CODE)\b/gm;
 /* eslint-enable max-len */
 
@@ -22,7 +25,7 @@ const XOD_TAG_NAMES = /(((input|output)_[A-Za-z0-9_]+)|GENERATED_CODE)\b/gm;
 // E.G. `myNumber`, `newState`, `agetValue` and etc
 // :: [RegExp] -> RegExp
 const createCMHack = R.compose(
-  r => new RegExp(`[A-Za-z0-9_]+(${r})`, 'gm'),
+  (r) => new RegExp(`[A-Za-z0-9_]+(${r})`, 'gm'),
   R.join('|'),
   R.map(R.compose(R.replace('\\b', ''), R.prop('source')))
 );

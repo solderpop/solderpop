@@ -1,43 +1,43 @@
 import path from 'path';
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
-import * as remoteMain from '@electron/remote/main';
-import { autoUpdater } from 'electron-updater';
+import * as remoteMain from '@electron/remote/main/index.js';
+import electronUpdater from 'electron-updater';
 import log from 'electron-log';
 import contextMenu from 'electron-context-menu';
 import windowStateKeeper from 'electron-window-state';
-import { URL } from 'url';
-import * as R from 'ramda';
+import { URL, fileURLToPath } from 'url';
+import R from 'ramda';
 import * as xdb from 'sdp-deploy-bin';
 import { tapP, createError } from 'sdp-func-tools';
 
 import {
   URL_ACTION_PROTOCOL,
   URL_ACTION_PREFIX,
-} from 'sdp-client/dist/core/urlActions';
+} from 'sdp-client/dist/core/urlActions.js';
 
-import * as EVENTS from '../shared/events';
+import * as EVENTS from '../shared/events.js';
 import {
   listPortsHandler,
   loadTargetBoardHandler,
   saveTargetBoardHandler,
   startDebugSessionHandler,
   stopDebugSessionHandler,
-} from './arduinoActions';
+} from './arduinoActions.js';
 import {
   subscribeListBoards,
   subscribeUpload,
   subscribeUpdateIndexes,
   subscribeCheckUpdates,
   subscribeUpgradeArduinoPackages,
-} from './arduinoCli';
-import { subscribeCompileSimulation } from './wasmCompile';
+} from './arduinoCli.js';
+import subscribeCompileSimulation from './wasmCompile.js';
 import {
   subscribeOnCheckEmsdkInstalled,
   subscribeOnInstallEmsdk,
   subscribeOnUninstallEmsdk,
-} from './emsdkInstaller';
-import migrateArduinoPackages from './migrateArduinoPackages';
-import * as settings from './settings';
+} from './emsdkInstaller.js';
+import migrateArduinoPackages from './migrateArduinoPackages.js';
+import * as settings from './settings.js';
 import {
   errorToPlainObject,
   IS_DEV,
@@ -45,19 +45,28 @@ import {
   getPathToBundledWorkspace,
   setUserDataArg,
   getUserDataDir,
-} from './utils';
-import * as WA from './workspaceActions';
+} from './utils.js';
+import * as WA from './workspaceActions.js';
 import {
   subscribeOnCheckArduinoDependencies,
   subscribeOnInstallArduinoDependencies,
-} from './arduinoDependencies';
+} from './arduinoDependencies.js';
 import {
   configureAutoUpdater,
   subscribeOnAutoUpdaterEvents,
-} from './autoupdate';
-import createAppStore from './store/index';
+} from './autoupdate.js';
+import createAppStore from './store/index.js';
 
-import { STATES, getEventNameWithState } from '../shared/eventStates';
+import { STATES, getEventNameWithState } from '../shared/eventStates.js';
+
+// Main Process is real native ESM once compiled (package.json "type":
+// "module"), which has no `__dirname` global.
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// cjs-module-lexer can't statically detect electron-updater's named
+// exports, so `import { autoUpdater } from 'electron-updater'` fails
+// under real ESM even though the property exists at runtime.
+const { autoUpdater } = electronUpdater;
 
 // =============================================================================
 //
@@ -177,7 +186,7 @@ function createWindow() {
   webContents.on('will-navigate', handleRedirect);
   webContents.on('new-window', handleRedirect);
 
-  win.on('close', e => {
+  win.on('close', (e) => {
     // a bit of magic, because of weird `onbeforeunload` behaviour.
     // see https://github.com/electron/electron/issues/7977
     if (!confirmedWindowClose) {
@@ -201,13 +210,13 @@ const subscribeToRemoteAction = (processName, remoteAction) => {
   ipcMain.on(processName, (event, data) => {
     event.sender.send(getEventNameWithState(processName, STATES.PROCESS));
     remoteAction(event, data)
-      .then(result => {
+      .then((result) => {
         event.sender.send(
           getEventNameWithState(processName, STATES.COMPLETE),
           result
         );
       })
-      .catch(err => {
+      .catch((err) => {
         event.sender.send(
           getEventNameWithState(processName, STATES.ERROR),
           errorToPlainObject(err)
@@ -226,7 +235,7 @@ const onReady = () => {
   let debugPort = null;
   let userAttemptedCloseSerialPort = false;
 
-  const stopDebugSession = event => {
+  const stopDebugSession = (event) => {
     if (debugPort) {
       userAttemptedCloseSerialPort = true;
       stopDebugSessionHandler(event, debugPort).then(() =>
@@ -245,11 +254,11 @@ const onReady = () => {
   ipcMain.on(
     EVENTS.START_DEBUG_SESSION,
     startDebugSessionHandler(
-      port => {
+      (port) => {
         userAttemptedCloseSerialPort = false;
         debugPort = port;
       },
-      sendErr => {
+      (sendErr) => {
         if (!userAttemptedCloseSerialPort) {
           sendErr();
         }
@@ -306,25 +315,25 @@ const onReady = () => {
       getFileToOpen
     )
       .then(() => WA.loadWorkspacePath())
-      .then(tapP(wsPath => migrateArduinoPackages(wsPath)))
-      .then(wsPath => Promise.all([wsPath, xdb.prepareSketchDir()]))
+      .then(tapP((wsPath) => migrateArduinoPackages(wsPath)))
+      .then((wsPath) => Promise.all([wsPath, xdb.prepareSketchDir()]))
       .then(([wsPath, sketchDir]) =>
         xdb.createCli(getPathToBundledWorkspace(), wsPath, sketchDir, IS_DEV)
       )
       .then(
         R.when(
           () => IS_DEV,
-          arduinoCli =>
+          (arduinoCli) =>
             arduinoCli
               .version()
-              .then(v => {
+              .then((v) => {
                 // eslint-disable-next-line no-console
                 console.log('Arduino-cli bin: ', arduinoCli.getPathToBin());
                 // eslint-disable-next-line no-console
                 console.log('Arduino-cli version: ', v);
                 return arduinoCli.dumpConfig();
               })
-              .then(cfg => {
+              .then((cfg) => {
                 // eslint-disable-next-line no-console
                 console.log(
                   'Arduino-cli sketchbook directory:',
@@ -332,7 +341,7 @@ const onReady = () => {
                 );
                 return arduinoCli;
               })
-              .catch(err =>
+              .catch((err) =>
                 Promise.reject(
                   createError('ARDUINO_CLI_EXITED_WITH_CODE', {
                     message: err.message,
@@ -344,7 +353,7 @@ const onReady = () => {
               )
         )
       )
-      .then(arduinoCli => {
+      .then((arduinoCli) => {
         arduinoCliInstance = arduinoCli;
 
         const subscribeSwitchWorkspace = () => {
@@ -374,7 +383,7 @@ const onReady = () => {
           subscribeOnInstallArduinoDependencies(arduinoCli),
         ];
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err); // eslint-disable-line no-console
         win.webContents.send(
           EVENTS.ERROR_IN_MAIN_PROCESS,

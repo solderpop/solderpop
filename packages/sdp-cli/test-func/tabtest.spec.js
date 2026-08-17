@@ -1,18 +1,20 @@
 import { test } from '@oclif/test';
-import { assert } from 'chai';
+import chai from 'chai';
 import path from 'path';
 import os from 'os';
 import process from 'process';
 import fs from 'fs-extra';
-import { bundledWorkspacePath, createWorkingDirectory } from './helpers';
+import { bundledWorkspacePath, createWorkingDirectory } from './helpers.js';
+
+const { assert } = chai;
 
 const defaultOutputDir = path.resolve(os.tmpdir(), 'sdp-tabtest');
 
 // save process.exit for unmocking
-const exit = process.exit;
+const { exit } = process;
 
 // save tty status
-const isTTY = process.stdout.isTTY;
+const { isTTY } = process.stdout;
 
 const its = (wd, tabtestOutDir) => {
   const myWSPath = path.resolve(wd, 'workspace');
@@ -23,7 +25,7 @@ const its = (wd, tabtestOutDir) => {
     .command(['tabtest', `--workspace=${myWSPath}`])
     .it(
       `cannot find project without argument, but creates workspace, prints error to stderr, non-zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.isOk(
           await fs.pathExists(path.resolve(myWSPath, '.xodworkspace')),
           'workspace should be created'
@@ -46,7 +48,7 @@ const its = (wd, tabtestOutDir) => {
     ])
     .it(
       'fails when wrong path to project, workspace from ENV, exits with non-zero code',
-      ctx => {
+      (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.match(
           ctx.stderr,
@@ -64,7 +66,7 @@ const its = (wd, tabtestOutDir) => {
       path.resolve(bundledWorkspacePath, '__lib__', 'xod', 'bits'),
       'asdfasdfasdfasdfasdfasdfasdf',
     ])
-    .it('fails when wrong patch name, exits with non-zero code', ctx => {
+    .it('fails when wrong patch name, exits with non-zero code', (ctx) => {
       assert.equal(ctx.stdout, '', 'stdout must be empty');
       assert.match(
         ctx.stderr,
@@ -83,7 +85,7 @@ const its = (wd, tabtestOutDir) => {
     ])
     .it(
       'create output dir, run tests for whole project, but do not build (--no-build), stderr with messages, stdout is empty, exit with zero code',
-      async ctx => {
+      async (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.notEqual(ctx.stderr, '', 'stderr must be with messages');
         assert.equal(process.exitCode, 0, 'exit code must be zero');
@@ -118,7 +120,7 @@ const its = (wd, tabtestOutDir) => {
     ])
     .it(
       'create output dir, run tests for patch by full path, but do not build (--no-build), stderr with messages, stdout is empty, exit with zero code',
-      async ctx => {
+      async (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.equal(ctx.stderr, '', 'stderr must be empty');
         assert.equal(process.exitCode, 0, 'exit code must be zero');
@@ -147,7 +149,7 @@ const its = (wd, tabtestOutDir) => {
     ])
     .it(
       'create output dir, run tests for patch by project path + short patch name, but do not build (--no-build), stderr with messages, stdout is empty, exit with zero code',
-      async ctx => {
+      async (ctx) => {
         assert.isOk(
           await fs.pathExists(tabtestOutDir),
           'output dir should be created'
@@ -175,7 +177,7 @@ const its = (wd, tabtestOutDir) => {
     ])
     .it(
       'create output dir, run tests for patch by project path + long patch name, build, stderr with messages, stdout is empty, exit with zero code',
-      async ctx => {
+      async (ctx) => {
         assert.isOk(
           await fs.pathExists(tabtestOutDir),
           'output dir should be created'
@@ -210,7 +212,7 @@ describe('xodc tabtest', () => {
   describe('common', () => {
     // mock process.exit
     beforeEach(() => {
-      process.exit = code => {
+      process.exit = (code) => {
         process.exitCode = code;
       };
     });
@@ -227,7 +229,7 @@ describe('xodc tabtest', () => {
       .catch(/EEXIT: 0/)
       .it(
         `shows help in stdout, doesn't print to stderr, exits with 0`,
-        ctx => {
+        (ctx) => {
           assert.include(
             ctx.stdout,
             'ENTRYPOINT',
@@ -258,7 +260,7 @@ describe('xodc tabtest', () => {
       .catch(/EEXIT: 0/)
       .it(
         `shows version in stdout, doesn't print to stderr and exits with 0`,
-        ctx => {
+        (ctx) => {
           assert.include(ctx.stdout, 'sdp-cli', 'version string not found');
           assert.equal(ctx.stderr, '', 'stderr should be emply');
         }
@@ -273,7 +275,7 @@ describe('xodc tabtest', () => {
 
     // mock process.exit
     beforeEach(() => {
-      process.exit = code => {
+      process.exit = (code) => {
         process.exitCode = code;
       };
     });
@@ -297,7 +299,7 @@ describe('xodc tabtest', () => {
 
     // mock process.exit
     beforeEach(() => {
-      process.exit = code => {
+      process.exit = (code) => {
         process.exitCode = code;
       };
     });

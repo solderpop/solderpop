@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 .SnackBarList {
   position: absolute;
   z-index: 50;

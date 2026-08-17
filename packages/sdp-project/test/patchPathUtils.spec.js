@@ -1,12 +1,14 @@
-import * as R from 'ramda';
-import { assert } from 'chai';
+import R from 'ramda';
+import chai from 'chai';
 import { explodeMaybe } from 'sdp-func-tools';
 
-import * as CONST from '../src/constants';
-import { BINDABLE_CUSTOM_TYPES } from '../src/custom-types';
-import * as PatchPathUtils from '../src/patchPathUtils';
+import * as CONST from '../src/constants.js';
+import { BINDABLE_CUSTOM_TYPES } from '../src/custom-types.js';
+import * as PatchPathUtils from '../src/patchPathUtils.js';
 
-import * as Helper from './helpers';
+import * as Helper from './helpers.js';
+
+const { assert } = chai;
 
 describe('PatchPathUtils', () => {
   describe('getBaseName', () => {
@@ -251,7 +253,7 @@ describe('PatchPathUtils', () => {
       assert.isTrue(result.isRight);
 
       /* istanbul ignore next */
-      Helper.expectEitherRight(val => {
+      Helper.expectEitherRight((val) => {
         assert.equal(val, path);
       }, result);
     });

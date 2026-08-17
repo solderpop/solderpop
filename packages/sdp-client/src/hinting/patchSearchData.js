@@ -1,11 +1,13 @@
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
 import * as XP from 'sdp-project';
 import { isAmong, foldMaybe, notNil } from 'sdp-func-tools';
 import { createIndexData } from 'sdp-patch-search';
 
-import * as PAT from '../project/actionTypes';
-import { RECOVER_STATE } from '../core/actionTypes';
+import * as PAT from '../project/actionTypes.js';
+import { RECOVER_STATE } from '../core/actionTypes.js';
+
+const { Maybe } = RamdaFantasy;
 
 // PatchSearchData :: { path: String, keywords: [String], desription: String, fullDescription: string }
 
@@ -18,7 +20,7 @@ import { RECOVER_STATE } from '../core/actionTypes';
 // :: [PatchSearchData] -> Patch -> [PatchSearchData]
 const createPatchSearchDataForPatch = R.curry((prevIndex, patch) =>
   R.compose(
-    newPatchData =>
+    (newPatchData) =>
       R.compose(
         R.concat(newPatchData),
         R.reject(R.propEq('path', newPatchData[0].path))
@@ -99,9 +101,11 @@ export const getNewPatchSearchData = R.curry((prevIndex, project, action) =>
     [
       R.T,
       () =>
-        R.compose(createIndexData, R.reject(shouldRejectPatch), XP.listPatches)(
-          project
-        ),
+        R.compose(
+          createIndexData,
+          R.reject(shouldRejectPatch),
+          XP.listPatches
+        )(project),
     ],
   ])(action)
 );

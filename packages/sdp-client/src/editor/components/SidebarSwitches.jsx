@@ -1,25 +1,25 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import cls from 'classnames';
 
-import { SIDEBAR_IDS, PANEL_IDS } from '../constants';
+import { SIDEBAR_IDS, PANEL_IDS } from '../constants.js';
 import {
   sidebarPanelRenderer,
   getPanelsBySidebarId,
   filterMaximized,
-} from '../utils';
+} from '../utils.js';
 
 const getShowHideTooltipMessage = (panelName, maximized) =>
   maximized ? `Hide ${panelName}` : `Show ${panelName}`;
 
-const SidebarSwitches = ({
+function SidebarSwitches({
   id,
   isMinimized,
   panels,
   onTogglePanel,
   isLoggedIn = false,
-}) => {
+}) {
   const panelsForThisSidebar = getPanelsBySidebarId(id, panels);
   const maximizedPanels = filterMaximized(panelsForThisSidebar);
 
@@ -59,8 +59,9 @@ const SidebarSwitches = ({
           sidebarPanelRenderer(PANEL_IDS.ACCOUNT, ({ maximized }) => (
             <button
               key="account"
-              className={`account ${maximized && 'selected'} ${!isLoggedIn &&
-                'not-logged-in'}`}
+              className={`account ${maximized && 'selected'} ${
+                !isLoggedIn && 'not-logged-in'
+              }`}
               title={getShowHideTooltipMessage('Account Pane', maximized)}
               onClick={onToggleAccountPanel}
             />
@@ -78,7 +79,7 @@ const SidebarSwitches = ({
       )}
     </div>
   );
-};
+}
 
 SidebarSwitches.propTypes = {
   isMinimized: PropTypes.bool.isRequired,

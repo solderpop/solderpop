@@ -1,20 +1,22 @@
-import * as R from 'ramda';
-import * as fse from 'fs-extra';
+import R from 'ramda';
+import fse from 'fs-extra';
 import path from 'path';
-import { Maybe } from 'ramda-fantasy';
+import RamdaFantasy from 'ramda-fantasy';
 
 import {
   foldMaybeWith,
   createError,
   allPromises,
-  then,
+  thenP,
   explodeMaybe,
 } from 'sdp-func-tools';
 
-import download from './download';
-import unpackZip from './unzip';
-import createProgress from './progress';
-import MSG from './messages';
+import download from './download.js';
+import unpackZip from './unzip.js';
+import createProgress from './progress.js';
+import MSG from './messages.js';
+
+const { Maybe } = RamdaFantasy;
 
 // :: URL -> String
 const getProjectNameFromGithubUrl = R.match(/github.com\/.+\/(.+)\/{0,1}/);
@@ -91,15 +93,15 @@ export const checkLibrariesInstalledByUrls = R.curry(
   (onProgress, libsPath, libUrls) => {
     const progress = createProgress(libUrls.length);
     return R.compose(
-      then(R.zipObj(libUrls)),
+      thenP(R.zipObj(libUrls)),
       allPromises,
-      R.map(url =>
+      R.map((url) =>
         R.compose(
           foldMaybeWith(
             () => Promise.reject(createError('CANT_GET_LIBRARY_NAME', { url })),
-            libName =>
+            (libName) =>
               checkLibraryInstalled(libsPath, libName).then(
-                R.tap(isInstalled =>
+                R.tap((isInstalled) =>
                   onProgress(
                     progress(
                       isInstalled
@@ -137,7 +139,7 @@ export const installLibrariesByUrls = R.curry(
 
     return R.composeP(
       allPromises,
-      R.map(urlToInstall => {
+      R.map((urlToInstall) => {
         const libName = R.pipe(
           getLibraryNameFromUrl,
           explodeMaybe('IMPOSIBLE ERROR') // because `checkLibrariesInstalledByUrls` already checked all URLs
@@ -153,7 +155,7 @@ export const installLibrariesByUrls = R.curry(
             )
           )
           .then(unpackZip)
-          .then(unpackedDir =>
+          .then((unpackedDir) =>
             fse.rename(path.resolve(libsPath, unpackedDir), libraryDir)
           )
           .then(() => fse.remove(archivePath))

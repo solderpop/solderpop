@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'react-fa';
@@ -6,16 +6,16 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 
-import * as Actions from '../actions';
-import * as Selectors from '../selectors';
-import * as UserSelectors from '../../user/selectors';
-import { assocIndexes, indexById } from '../../utils/array';
-import deepSCU from '../../utils/deepSCU';
-import TabsContainer from '../components/TabsContainer';
-import TabsItem from '../components/TabsItem';
-import SidebarSwitches from '../components/SidebarSwitches';
+import * as Actions from '../actions.js';
+import * as Selectors from '../selectors.js';
+import * as UserSelectors from '../../user/selectors.js';
+import { assocIndexes, indexById } from '../../utils/array.js';
+import deepSCU from '../../utils/deepSCU.js';
+import TabsContainer from '../components/TabsContainer.jsx';
+import TabsItem from '../components/TabsItem.jsx';
+import SidebarSwitches from '../components/SidebarSwitches.jsx';
 
-import { SIDEBAR_IDS } from '../constants';
+import { SIDEBAR_IDS } from '../constants.js';
 
 const SortableItem = sortableElement(({ value }) => (
   <TabsItem
@@ -190,7 +190,7 @@ const mapStateToProps = R.applySpec({
   userAuthorised: UserSelectors.isAuthorized,
 });
 
-const mapDispatchToprops = dispatch => ({
+const mapDispatchToprops = (dispatch) => ({
   actions: bindActionCreators(
     {
       switchTab: Actions.switchTab,

@@ -1,8 +1,8 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 import * as XF from 'sdp-func-tools';
 
-import { def } from './types';
+import { def } from './types.js';
 
 export const convertProjectToProjectFileContents = def(
   'convertProjectToProjectFileContents :: Project -> ProjectFileContents',
@@ -34,7 +34,7 @@ export const convertPatchToPatchFileContents = def(
 
 export const convertPatchFileContentsToPatch = def(
   'convertPatchFileContentsToPatch :: PatchFileContents -> Patch',
-  fsPatch =>
+  (fsPatch) =>
     R.compose(
       XP.upsertLinks(
         R.map(R.assoc('@@type', 'sdp-project/Link'), R.values(fsPatch.links))

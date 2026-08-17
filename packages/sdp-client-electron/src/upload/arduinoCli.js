@@ -1,8 +1,8 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { noop, isAmong } from 'sdp-func-tools';
 
-import promisifyIpc from '../view/promisifyIpc';
-import { LIST_BOARDS, UPLOAD_TO_ARDUINO } from '../shared/events';
+import promisifyIpc from '../view/promisifyIpc.js';
+import { LIST_BOARDS, UPLOAD_TO_ARDUINO } from '../shared/events.js';
 
 const listBoardsIpc = promisifyIpc(LIST_BOARDS);
 

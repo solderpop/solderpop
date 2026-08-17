@@ -1,14 +1,16 @@
-import * as R from 'ramda';
-import { assert } from 'chai';
+import R from 'ramda';
+import chai from 'chai';
 
-import { migrateProjectDimensionsToSlots } from '../src/migrations/unitlessToSlots';
-import * as Project from '../src/project';
-import * as Patch from '../src/patch';
-import * as Node from '../src/node';
-import * as Comment from '../src/comment';
-import { addMissingOptionalProjectFields } from '../src/optionalFieldsUtils';
+import { migrateProjectDimensionsToSlots } from '../src/migrations/unitlessToSlots.js';
+import * as Project from '../src/project.js';
+import * as Patch from '../src/patch.js';
+import * as Node from '../src/node.js';
+import * as Comment from '../src/comment.js';
+import { addMissingOptionalProjectFields } from '../src/optionalFieldsUtils.js';
 
-import * as Helper from './helpers';
+import * as Helper from './helpers.js';
+
+const { assert } = chai;
 
 describe('Migration: old dimensions to slots', () => {
   const loadXodballWithoutMigrating = R.compose(

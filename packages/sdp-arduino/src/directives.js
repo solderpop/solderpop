@@ -1,1 +1,1 @@
-export * from './Directives_Js.bs';
+export * from './Directives_Js.bs.js';

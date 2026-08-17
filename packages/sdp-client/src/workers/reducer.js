@@ -1,5 +1,5 @@
-import * as R from 'ramda';
-import * as EAT from '../editor/actionTypes';
+import R from 'ramda';
+import * as EAT from '../editor/actionTypes.js';
 
 const workersReducer = (state = [], action) => {
   switch (action.type) {

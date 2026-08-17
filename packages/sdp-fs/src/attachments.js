@@ -1,13 +1,13 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import path from 'path';
 import fs from 'fs-extra';
 import * as XF from 'sdp-func-tools';
 import * as XP from 'sdp-project';
 
-import { def } from './types';
-import { readDir } from './read';
-import { BASE64_EXTNAMES, ATTACHMENT_EXTNAMES } from './constants';
-import { extAmong } from './utils';
+import { def } from './types.js';
+import { readDir } from './read.js';
+import { BASE64_EXTNAMES, ATTACHMENT_EXTNAMES } from './constants.js';
+import { extAmong } from './utils.js';
 
 const isBase64Extname = def(
   'isBase64Extname :: Path -> Boolean',
@@ -22,16 +22,17 @@ const getEncodingByExtname = def(
 const encodeBuffer = def(
   'encodeBuffer :: Path -> Buffer -> String',
   (filePath, buffer) =>
-    R.compose(encoding => buffer.toString(encoding), getEncodingByExtname)(
-      filePath
-    )
+    R.compose(
+      (encoding) => buffer.toString(encoding),
+      getEncodingByExtname
+    )(filePath)
 );
 
 // Loads and returns a single Attachment
 // :: Path -> Path -> Promise Attachment Error
 const loadAttachment = R.curry((patchDirPath, filePath) =>
   R.composeP(
-    content => ({
+    (content) => ({
       filename: path.relative(patchDirPath, filePath),
       encoding: getEncodingByExtname(filePath),
       content,

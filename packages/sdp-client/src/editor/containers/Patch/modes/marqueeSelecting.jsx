@@ -1,15 +1,15 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import className from 'classnames';
 
-import { COMMAND } from '../../../../utils/constants';
-import { getNewSelection } from '../../../utils';
+import { COMMAND } from '../../../../utils/constants.js';
+import { getNewSelection } from '../../../utils.js';
 
-import PatchSVG from '../../../../project/components/PatchSVG';
-import * as Layers from '../../../../project/components/layers';
+import PatchSVG from '../../../../project/components/PatchSVG.jsx';
+import * as Layers from '../../../../project/components/layers/index.js';
 
-import { bindApi, getMousePosition, getOffsetMatrix } from '../modeUtils';
+import { bindApi, getMousePosition, getOffsetMatrix } from '../modeUtils.js';
 
 import {
   isInclusiveSelection,
@@ -18,7 +18,7 @@ import {
   filterLinksByInclusiveBox,
   filterNodesByInclusiveBox,
   filterNodesByBox,
-} from '../../../marqueeGeometry';
+} from '../../../marqueeGeometry.js';
 
 // =============================================================================
 //
@@ -26,19 +26,19 @@ import {
 //
 // =============================================================================
 
-const isSelectionModifierPressed = event => event.metaKey || event.ctrlKey;
+const isSelectionModifierPressed = (event) => event.metaKey || event.ctrlKey;
 
 // New, dependent on arguments
 const findSelectedItems = (api, startPos, endPos) => {
   const inclusive = isInclusiveSelection(startPos, endPos);
   const selectionBox = getSelectionBox(startPos, endPos);
 
-  const filterLinksFn = (inclusive
-    ? filterLinksByInclusiveBox
-    : filterLinksByBox)(selectionBox);
-  const filterNodesFn = (inclusive
-    ? filterNodesByInclusiveBox
-    : filterNodesByBox)(selectionBox);
+  const filterLinksFn = (
+    inclusive ? filterLinksByInclusiveBox : filterLinksByBox
+  )(selectionBox);
+  const filterNodesFn = (
+    inclusive ? filterNodesByInclusiveBox : filterNodesByBox
+  )(selectionBox);
 
   return R.compose(
     R.evolve({
@@ -176,7 +176,7 @@ const marqueeSelectingMode = {
         <PatchSVG
           onMouseMove={bindApi(api, this.onMouseMove)}
           onMouseUp={bindApi(api, this.onMouseUp)}
-          svgRef={svg => {
+          svgRef={(svg) => {
             patchSvgRef = svg;
           }}
         >

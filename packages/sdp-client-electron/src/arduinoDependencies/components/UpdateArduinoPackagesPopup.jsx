@@ -1,9 +1,9 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { PopupForm } from 'sdp-client';
 
-import { checkArduinoDependencyUpdates, updateIndexFiles } from '../runners';
+import { checkArduinoDependencyUpdates, updateIndexFiles } from '../runners.js';
 
 class UpdateArduinoPackagesPopup extends React.Component {
   constructor(props) {
@@ -36,7 +36,7 @@ class UpdateArduinoPackagesPopup extends React.Component {
     this.setState({ cores: null });
     updateIndexFiles()
       .then(checkArduinoDependencyUpdates)
-      .then(cores => this.setState({ cores }));
+      .then((cores) => this.setState({ cores }));
   }
 
   renderCores() {
@@ -53,7 +53,7 @@ class UpdateArduinoPackagesPopup extends React.Component {
         <p>Packages to upgrade:</p>
         <ul>
           {R.map(
-            core => (
+            (core) => (
               <li key={core.ID}>
                 {core.Name}: {core.Installed} &rarr; {core.Latest}
               </li>

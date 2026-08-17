@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -6,7 +6,7 @@ import {
   NODE_CORNER_RADIUS,
   VARIADIC_HANDLE_WIDTH,
   VARIADIC_HANDLE_HEIGHT,
-} from '../../nodeLayout';
+} from '../../nodeLayout.js';
 
 const COMPENSATE_BLURING = 0.5;
 
@@ -20,7 +20,7 @@ const COMPENSATE_BLURING = 0.5;
  *
  * :: { width, height } -> String
  */
-const getVariadicPoints = pxSize => {
+const getVariadicPoints = (pxSize) => {
   const xRight = pxSize.width - COMPENSATE_BLURING;
   const xLeft = pxSize.width - VARIADIC_HANDLE_WIDTH - COMPENSATE_BLURING;
   const yTop = (pxSize.height - VARIADIC_HANDLE_HEIGHT) / 2;
@@ -36,25 +36,27 @@ const getVariadicPoints = pxSize => {
   return R.compose(R.join(' '), R.unnest)(points);
 };
 
-const VariadicHandle = props => (
-  <g className="VariadicHandle">
-    <rect
-      className="VariadicHandle--clickArea"
-      rx={NODE_CORNER_RADIUS}
-      ry={NODE_CORNER_RADIUS}
-      x={props.pxSize.width - VARIADIC_HANDLE_WIDTH * 2}
-      y={-1}
-      width={VARIADIC_HANDLE_WIDTH * 2 + 2}
-      height={props.pxSize.height + 1}
-      fill="rgba(255,0,0,.5)"
-      onMouseDown={props.onMouseDown}
-    />
-    <polygon
-      className="VariadicHandle--grip"
-      points={getVariadicPoints(props.pxSize)}
-    />
-  </g>
-);
+function VariadicHandle(props) {
+  return (
+    <g className="VariadicHandle">
+      <rect
+        className="VariadicHandle--clickArea"
+        rx={NODE_CORNER_RADIUS}
+        ry={NODE_CORNER_RADIUS}
+        x={props.pxSize.width - VARIADIC_HANDLE_WIDTH * 2}
+        y={-1}
+        width={VARIADIC_HANDLE_WIDTH * 2 + 2}
+        height={props.pxSize.height + 1}
+        fill="rgba(255,0,0,.5)"
+        onMouseDown={props.onMouseDown}
+      />
+      <polygon
+        className="VariadicHandle--grip"
+        points={getVariadicPoints(props.pxSize)}
+      />
+    </g>
+  );
+}
 
 VariadicHandle.propTypes = {
   pxSize: PropTypes.shape({

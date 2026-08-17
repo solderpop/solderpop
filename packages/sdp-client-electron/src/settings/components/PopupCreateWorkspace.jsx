@@ -1,10 +1,10 @@
-import { propOr } from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { PopupForm } from 'sdp-client';
 
-const getForce = propOr(false, 'force');
-const getPath = propOr('', 'path');
+const getForce = R.propOr(false, 'force');
+const getPath = R.propOr('', 'path');
 
 class PopupCreateWorkspace extends React.Component {
   constructor(props) {

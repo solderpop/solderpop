@@ -1,14 +1,16 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { resolve } from 'path';
 import { promisifyChildProcess } from 'promisify-child-process';
 import crossSpawn from 'cross-spawn';
 import YAML from 'yamljs';
-import { remove } from 'fs-extra';
+import fse from 'fs-extra';
 
-import { saveConfig, configure, setPackageIndexUrls } from './config';
-import { patchBoardsWithOptions } from './optionParser';
-import listAvailableBoards from './listAvailableBoards';
-import parseProgressLog from './parseProgressLog';
+import { saveConfig, configure, setPackageIndexUrls } from './config.js';
+import { patchBoardsWithOptions } from './optionParser.js';
+import listAvailableBoards from './listAvailableBoards.js';
+import parseProgressLog from './parseProgressLog.js';
+
+const { remove } = fse;
 
 const spawn = (bin, args, options) =>
   promisifyChildProcess(crossSpawn(bin, args, options), {
@@ -30,10 +32,10 @@ const ArduinoCli = (pathToBin, config = null) => {
   const configDir = configureVal.dir;
   let runningProcesses = [];
 
-  const appendProcess = proc => {
+  const appendProcess = (proc) => {
     runningProcesses = R.append(proc, runningProcesses);
   };
-  const deleteProcess = proc => {
+  const deleteProcess = (proc) => {
     runningProcesses = R.reject(R.equals(proc), runningProcesses);
   };
 
@@ -45,8 +47,8 @@ const ArduinoCli = (pathToBin, config = null) => {
     const proc = spawn(pathToBin, spawnArgs, {
       stdio: ['inherit', 'pipe', 'pipe'],
     });
-    proc.stdout.on('data', data => onProgress(data.toString()));
-    proc.stderr.on('data', data => onProgress(data.toString()));
+    proc.stdout.on('data', (data) => onProgress(data.toString()));
+    proc.stderr.on('data', (data) => onProgress(data.toString()));
     proc.on('exit', () => deleteProcess(proc));
 
     appendProcess(proc);
@@ -54,9 +56,10 @@ const ArduinoCli = (pathToBin, config = null) => {
     return proc.then(R.prop('stdout'));
   };
 
-  const sketch = name => resolve(cfg.directories.user, name);
+  const sketch = (name) => resolve(cfg.directories.user, name);
 
-  const runAndParseJson = args => runWithProgress(noop, args).then(JSON.parse);
+  const runAndParseJson = (args) =>
+    runWithProgress(noop, args).then(JSON.parse);
 
   const listCores = () =>
     runWithProgress(noop, ['core', 'list', '--format=json'])
@@ -77,7 +80,7 @@ const ArduinoCli = (pathToBin, config = null) => {
   return {
     getPathToBin: () => pathToBin,
     killProcesses: () => {
-      R.forEach(proc => {
+      R.forEach((proc) => {
         proc.kill('SIGTERM');
         deleteProcess(proc);
       }, runningProcesses);
@@ -85,7 +88,7 @@ const ArduinoCli = (pathToBin, config = null) => {
     },
     getRunningProcesses: () => runningProcesses,
     dumpConfig: getConfig,
-    updateConfig: newConfig => {
+    updateConfig: (newConfig) => {
       const newCfg = saveConfig(configPath, newConfig);
       configPath = newCfg.path;
       cfg = newCfg.config;
@@ -135,25 +138,25 @@ const ArduinoCli = (pathToBin, config = null) => {
           ])
         ),
       list: listCores,
-      search: query =>
+      search: (query) =>
         runWithProgress(noop, ['core', 'search', query, '--format=json'])
           .then(R.prop('Platforms'))
           .then(R.defaultTo([])),
-      uninstall: pkgName =>
+      uninstall: (pkgName) =>
         runWithProgress(noop, ['core', 'uninstall', pkgName]),
       updateIndex: () => runWithProgress(noop, ['core', 'update-index']),
-      upgrade: onProgress =>
+      upgrade: (onProgress) =>
         runWithProgress(parseProgressLog(onProgress), ['core', 'upgrade']),
     },
     version: () =>
       runAndParseJson(['version', '--format=json']).then(
         R.prop('VersionString')
       ),
-    createSketch: sketchName =>
+    createSketch: (sketchName) =>
       runWithProgress(noop, ['sketch', 'new', sketch(sketchName)]).then(
         R.always(resolve(cfg.directories.user, sketchName, `${sketchName}.ino`))
       ),
-    setPackageIndexUrls: urls => setPackageIndexUrls(configPath, urls),
+    setPackageIndexUrls: (urls) => setPackageIndexUrls(configPath, urls),
   };
 };
 

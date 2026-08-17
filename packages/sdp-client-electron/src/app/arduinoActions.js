@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
 import { rejectWithCode, delay } from 'sdp-func-tools';
 import * as xd from 'sdp-deploy';
@@ -6,12 +6,12 @@ import {
   createSystemMessage,
   parseDebuggerMessage,
   createErrorMessage,
-} from 'sdp-client/dist/debugger/debugProtocol';
+} from 'sdp-client/dist/debugger/debugProtocol.js';
 
-import * as settings from './settings';
-import * as MESSAGES from '../shared/messages';
-import * as ERROR_CODES from '../shared/errorCodes';
-import * as EVENTS from '../shared/events';
+import * as settings from './settings.js';
+import * as MESSAGES from '../shared/messages.js';
+import * as ERROR_CODES from '../shared/errorCodes.js';
+import * as EVENTS from '../shared/events.js';
 
 // =============================================================================
 //
@@ -35,7 +35,7 @@ export const loadTargetBoard = () =>
 /**
  * Saves a specified Board into Settings and returns itself.
  */
-export const saveTargetBoard = board =>
+export const saveTargetBoard = (board) =>
   R.compose(
     R.always(board),
     settings.save,
@@ -70,10 +70,10 @@ const hasPort = R.curry((port, ports) =>
  * or Rejected Promise with Error Code and object, that contain port
  * and list of available ports.
  */
-export const checkPort = port =>
+export const checkPort = (port) =>
   listPorts()
     .then(
-      R.ifElse(hasPort(port), R.always(port), ports => {
+      R.ifElse(hasPort(port), R.always(port), (ports) => {
         throw Object.assign(new Error(`Port ${port.path} not found`), {
           port,
           ports,
@@ -137,91 +137,100 @@ const isDeviceNotFound = R.propEq(
  *                   really error occured, so it's passed as argument and
  *                   called in the main process.
  */
-export const startDebugSessionHandler = (onOpenCb, onCloseCb) => (
-  event,
-  { port, sessionKind, board }
-) => {
-  let сollectedMessages = [];
-  const throttleDelay = 100; // ms
+export const startDebugSessionHandler =
+  (onOpenCb, onCloseCb) =>
+  (event, { port, sessionKind, board }) => {
+    let сollectedMessages = [];
+    const throttleDelay = 100; // ms
 
-  const messageCollectorIntervalId = setInterval(() => {
-    if (сollectedMessages.length > 0) {
-      event.sender.send(
-        EVENTS.SERIAL_SESSION_MESSAGE_RECEIVE,
+    const messageCollectorIntervalId = setInterval(() => {
+      if (сollectedMessages.length > 0) {
+        event.sender.send(
+          EVENTS.SERIAL_SESSION_MESSAGE_RECEIVE,
+          сollectedMessages
+        );
+        сollectedMessages = [];
+      }
+    }, throttleDelay);
+
+    const onData = (data) => {
+      сollectedMessages = R.append(
+        parseDebuggerMessage(data),
         сollectedMessages
       );
-      сollectedMessages = [];
-    }
-  }, throttleDelay);
+    };
 
-  const onData = data => {
-    сollectedMessages = R.append(parseDebuggerMessage(data), сollectedMessages);
-  };
-
-  const onClose = () => {
-    clearInterval(messageCollectorIntervalId);
-    onCloseCb(() => {
-      const errorMessage = R.compose(
-        R.omit('stack'), // Lost connection is not a big deal, we don't want a stacktrace here
-        createErrorMessage
-      )(new Error(MESSAGES.DEBUG_LOST_CONNECTION));
-      event.sender.send(EVENTS.SERIAL_SESSION_MESSAGE_RECEIVE, [errorMessage]);
-    });
-    event.sender.send(
-      EVENTS.SERIAL_PORT_CLOSED,
-      createSystemMessage(`${sessionKind} session stopped`)
-    );
-  };
-
-  let triesToSearchDevice = 0;
-  const maxTriesToSearch = 7;
-  const searchDelay = 300;
-
-  const disableRts = R.propOr(false, 'disableRts', board);
-
-  const runDebug = () =>
-    openPortForReading(port, disableRts, onData, onClose).catch(async err => {
-      if (triesToSearchDevice >= maxTriesToSearch || !isDeviceNotFound(err)) {
-        return err;
-      }
-
-      triesToSearchDevice += 1;
-      await delay(searchDelay);
-      return await runDebug();
-    });
-
-  return runDebug()
-    .then(
-      R.tap(debugPort => {
-        onOpenCb(debugPort, messageCollectorIntervalId);
-      })
-    )
-    .catch(err => {
+    const onClose = () => {
       clearInterval(messageCollectorIntervalId);
-      event.sender.send(EVENTS.SERIAL_SESSION_MESSAGE_RECEIVE, [
-        createErrorMessage(err),
-      ]);
-    });
-};
+      onCloseCb(() => {
+        const errorMessage = R.compose(
+          R.omit('stack'), // Lost connection is not a big deal, we don't want a stacktrace here
+          createErrorMessage
+        )(new Error(MESSAGES.DEBUG_LOST_CONNECTION));
+        event.sender.send(EVENTS.SERIAL_SESSION_MESSAGE_RECEIVE, [
+          errorMessage,
+        ]);
+      });
+      event.sender.send(
+        EVENTS.SERIAL_PORT_CLOSED,
+        createSystemMessage(`${sessionKind} session stopped`)
+      );
+    };
+
+    let triesToSearchDevice = 0;
+    const maxTriesToSearch = 7;
+    const searchDelay = 300;
+
+    const disableRts = R.propOr(false, 'disableRts', board);
+
+    const runDebug = () =>
+      openPortForReading(port, disableRts, onData, onClose).catch(
+        async (err) => {
+          if (
+            triesToSearchDevice >= maxTriesToSearch ||
+            !isDeviceNotFound(err)
+          ) {
+            return err;
+          }
+
+          triesToSearchDevice += 1;
+          await delay(searchDelay);
+          return await runDebug();
+        }
+      );
+
+    return runDebug()
+      .then(
+        R.tap((debugPort) => {
+          onOpenCb(debugPort, messageCollectorIntervalId);
+        })
+      )
+      .catch((err) => {
+        clearInterval(messageCollectorIntervalId);
+        event.sender.send(EVENTS.SERIAL_SESSION_MESSAGE_RECEIVE, [
+          createErrorMessage(err),
+        ]);
+      });
+  };
 
 export const stopDebugSessionHandler = (event, port) => xd.closePort(port);
 
-export const listPortsHandler = event =>
+export const listPortsHandler = (event) =>
   listPorts()
-    .then(ports =>
+    .then((ports) =>
       event.sender.send(EVENTS.LIST_PORTS, {
         err: false,
         data: ports,
       })
     )
-    .catch(err =>
+    .catch((err) =>
       event.sender.send(EVENTS.LIST_PORTS, {
         err: true,
         data: err,
       })
     );
 
-export const loadTargetBoardHandler = event =>
+export const loadTargetBoardHandler = (event) =>
   event.sender.send(EVENTS.GET_SELECTED_BOARD, {
     err: false,
     data: loadTargetBoard(),

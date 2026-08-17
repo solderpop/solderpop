@@ -1,4 +1,4 @@
-import { SERVER_URL } from '../server.config';
+import { SERVER_URL } from '../server.config.js';
 
 export default async function getPage(browser) {
   const page = await browser.newPage();

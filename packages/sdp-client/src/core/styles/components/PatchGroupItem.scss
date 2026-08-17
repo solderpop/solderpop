@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 .PatchGroupItem {
   color: $sidebar-color-text;
   background-color: $sidebar-color-bg;

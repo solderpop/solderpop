@@ -1,5 +1,5 @@
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
 
 import * as XP from 'sdp-project';
 import {
@@ -21,47 +21,47 @@ import {
   CLIPBOARD_DATA_TYPE,
   FOCUS_AREAS,
   PANEL_IDS,
-} from './constants';
-import { LINK_ERRORS } from '../project/messages';
+} from './constants.js';
+import { LINK_ERRORS } from '../project/messages.js';
 import {
   libInstalled,
   CLIPBOARD_RECURSION_PASTE_ERROR,
   clipboardMissingPatchPasteError,
-} from './messages';
+} from './messages.js';
 
-import * as ActionType from './actionTypes';
-import * as ProjectActionType from '../project/actionTypes';
+import * as ActionType from './actionTypes.js';
+import * as ProjectActionType from '../project/actionTypes.js';
 
 import {
   addNode,
   addLink,
   bulkMoveNodesAndComments,
   bulkDeleteNodesAndComments,
-} from '../project/actions';
+} from '../project/actions.js';
 import {
   addError,
   addConfirmation,
   addNotification,
-} from '../messages/actions';
-import composeMessage from '../messages/composeMessage';
+} from '../messages/actions.js';
+import composeMessage from '../messages/composeMessage.js';
 
-import * as Selectors from './selectors';
-import * as ProjectSelectors from '../project/selectors';
-import * as DebuggerSelectors from '../debugger/selectors';
+import * as Selectors from './selectors.js';
+import * as ProjectSelectors from '../project/selectors.js';
+import * as DebuggerSelectors from '../debugger/selectors.js';
 
-import { parseDebuggerMessage } from '../debugger/debugProtocol';
-import { addMessagesToDebuggerLog } from '../debugger/actions';
-import { removeLastNodeIdInChain } from '../debugger/utils';
-import runWasmWorker from '../workers/run';
-import { getAccessToken } from '../user/selectors';
-import { updateBalances } from '../user/actions';
+import { parseDebuggerMessage } from '../debugger/debugProtocol.js';
+import { addMessagesToDebuggerLog } from '../debugger/actions.js';
+import { removeLastNodeIdInChain } from '../debugger/utils.js';
+import runWasmWorker from '../workers/run.js';
+import { getAccessToken } from '../user/selectors.js';
+import { updateBalances } from '../user/actions.js';
 
 import {
   getRenderablePin,
   getLinkingError,
   getInitialPatchOffset,
   patchToNodeProps,
-} from '../project/utils';
+} from '../project/utils.js';
 
 import {
   getBBoxTopLeftPosition,
@@ -72,16 +72,18 @@ import {
   getSelectedEntityIdsOfType,
   regenerateIds,
   resetClipboardEntitiesPosition,
-} from './utils';
-import { isInput, isEdge } from '../utils/browser';
-import { getPmSwaggerUrl, HOSTNAME } from '../utils/urls';
+} from './utils.js';
+import { isInput, isEdge } from '../utils/browser.js';
+import { getPmSwaggerUrl, HOSTNAME } from '../utils/urls.js';
 import {
   addPoints,
   subtractPoints,
   DEFAULT_PANNING_OFFSET,
-} from '../project/nodeLayout';
+} from '../project/nodeLayout.js';
 
-import { ClipboardEntities } from '../types';
+import { ClipboardEntities } from '../types.js';
+
+const { Maybe } = RamdaFantasy;
 
 export const setPinSelection = (nodeId, pinKey) => ({
   type: ActionType.EDITOR_SELECT_PIN,
@@ -127,7 +129,7 @@ export const selectComment = selectEntity(SELECTION_ENTITY_TYPE.COMMENT);
 export const selectLink = selectEntity(SELECTION_ENTITY_TYPE.LINK);
 
 // :: { nodes :: [Node], links :: [Link], comments :: [Comment] } -> Action
-export const setEditorSelection = entities => ({
+export const setEditorSelection = (entities) => ({
   type: ActionType.EDITOR_SET_SELECION,
   payload: { entities },
 });
@@ -142,14 +144,11 @@ export const selectAll = () => (dispatch, getState) => {
   return dispatch(setEditorSelection(selection));
 };
 
-export const addAndSelectNode = (
-  typeId,
-  position,
-  currentPatchPath
-) => dispatch => {
-  const newId = dispatch(addNode(typeId, position, currentPatchPath));
-  dispatch(selectNode(newId));
-};
+export const addAndSelectNode =
+  (typeId, position, currentPatchPath) => (dispatch) => {
+    const newId = dispatch(addNode(typeId, position, currentPatchPath));
+    dispatch(selectNode(newId));
+  };
 
 export const linkPin = (nodeId, pinKey) => (dispatch, getState) => {
   const state = getState();
@@ -219,7 +218,7 @@ export const linkPin = (nodeId, pinKey) => (dispatch, getState) => {
     dispatch(
       foldMaybe(
         clearPinSelection(),
-        patchPath => addLink(linkingFrom, linkingTo, patchPath),
+        (patchPath) => addLink(linkingFrom, linkingTo, patchPath),
         Selectors.getCurrentPatchPath(state)
       )
     );
@@ -230,7 +229,7 @@ export const deleteSelection = () => (dispatch, getState) => {
   const state = getState();
   const selection = Selectors.getSelection(state);
 
-  Selectors.getCurrentPatchPath(state).map(currentPatchPath =>
+  Selectors.getCurrentPatchPath(state).map((currentPatchPath) =>
     dispatch(
       bulkDeleteNodesAndComments(
         getSelectedEntityIdsOfType(SELECTION_ENTITY_TYPE.NODE, selection),
@@ -242,11 +241,11 @@ export const deleteSelection = () => (dispatch, getState) => {
   );
 };
 
-export const moveSelection = deltaPosition => (dispatch, getState) => {
+export const moveSelection = (deltaPosition) => (dispatch, getState) => {
   const state = getState();
   const selection = Selectors.getSelection(state);
 
-  Selectors.getCurrentPatchPath(state).map(currentPatchPath =>
+  Selectors.getCurrentPatchPath(state).map((currentPatchPath) =>
     dispatch(
       bulkMoveNodesAndComments(
         getSelectedEntityIdsOfType(SELECTION_ENTITY_TYPE.NODE, selection),
@@ -258,46 +257,45 @@ export const moveSelection = deltaPosition => (dispatch, getState) => {
   );
 };
 
-export const patchWorkareaResized = slotSize => ({
+export const patchWorkareaResized = (slotSize) => ({
   type: ActionType.PATCH_WORKAREA_RESIZED,
   payload: slotSize,
 });
 
-export const setCurrentPatchOffset = newOffset => ({
+export const setCurrentPatchOffset = (newOffset) => ({
   type: ActionType.SET_CURRENT_PATCH_OFFSET,
   payload: newOffset,
 });
 
-const setPatchOffsetByEntitiesBoundingBox = getDesiredOffset => (
-  dispatch,
-  getState
-) => {
-  const state = getState();
-  const maybeCurrentPatchPath = Selectors.getCurrentPatchPath(state);
-  if (maybeCurrentPatchPath.isNothing) return;
+const setPatchOffsetByEntitiesBoundingBox =
+  (getDesiredOffset) => (dispatch, getState) => {
+    const state = getState();
+    const maybeCurrentPatchPath = Selectors.getCurrentPatchPath(state);
+    if (maybeCurrentPatchPath.isNothing) return;
 
-  const currentPatchPath = explodeMaybe(
-    'Imposible error: No currentPatchPath to autopan',
-    maybeCurrentPatchPath
-  );
-  const project = ProjectSelectors.getProject(state);
-  const currentPatch = XP.getPatchByPathUnsafe(currentPatchPath, project);
+    const currentPatchPath = explodeMaybe(
+      'Imposible error: No currentPatchPath to autopan',
+      maybeCurrentPatchPath
+    );
+    const project = ProjectSelectors.getProject(state);
+    const currentPatch = XP.getPatchByPathUnsafe(currentPatchPath, project);
 
-  const entitiesBoundingBox = getBoundingBox(currentPatch, project, {
-    nodes: XP.listNodes(currentPatch),
-    comments: XP.listComments(currentPatch),
-  });
+    const entitiesBoundingBox = getBoundingBox(currentPatch, project, {
+      nodes: XP.listNodes(currentPatch),
+      comments: XP.listComments(currentPatch),
+    });
 
-  const patchBoundingRect = Selectors.getPatchWorkareaSize(state);
+    const patchBoundingRect = Selectors.getPatchWorkareaSize(state);
 
-  R.compose(dispatch, setCurrentPatchOffset, getDesiredOffset)(
-    entitiesBoundingBox,
-    patchBoundingRect
-  );
-};
+    R.compose(
+      dispatch,
+      setCurrentPatchOffset,
+      getDesiredOffset
+    )(entitiesBoundingBox, patchBoundingRect);
+  };
 
 export const setCurrentPatchOffsetToOrigin = () =>
-  setPatchOffsetByEntitiesBoundingBox(entitiesBB =>
+  setPatchOffsetByEntitiesBoundingBox((entitiesBB) =>
     subtractPoints(DEFAULT_PANNING_OFFSET, entitiesBB)
   );
 
@@ -307,14 +305,14 @@ export const setCurrentPatchOffsetToCenter = () =>
     y: (patchBB.height - entitiesBB.height) / 2 - entitiesBB.y,
   }));
 
-export const switchPatchUnsafe = patchPath => ({
+export const switchPatchUnsafe = (patchPath) => ({
   type: ActionType.EDITOR_SWITCH_PATCH,
   payload: {
     patchPath,
   },
 });
 
-export const switchPatch = patchPath => (dispatch, getState) => {
+export const switchPatch = (patchPath) => (dispatch, getState) => {
   const state = getState();
 
   const patchDoesNotExist = R.compose(
@@ -346,7 +344,7 @@ export const switchPatch = patchPath => (dispatch, getState) => {
   }
 };
 
-export const openAttachmentEditor = markerName => ({
+export const openAttachmentEditor = (markerName) => ({
   type: ActionType.EDITOR_OPEN_ATTACHMENT,
   payload: markerName,
 });
@@ -355,14 +353,14 @@ export const closeAttachmentEditor = () => ({
   type: ActionType.EDITOR_CLOSE_ATTACHMENT,
 });
 
-export const switchTab = tabId => ({
+export const switchTab = (tabId) => ({
   type: ActionType.EDITOR_SWITCH_TAB,
   payload: {
     tabId,
   },
 });
 
-export const startDraggingPatch = patchPath => (dispatch, getState) => {
+export const startDraggingPatch = (patchPath) => (dispatch, getState) => {
   const state = getState();
 
   const previewSize = R.compose(
@@ -378,24 +376,24 @@ export const startDraggingPatch = patchPath => (dispatch, getState) => {
   });
 };
 
-export const closeTab = id => ({
+export const closeTab = (id) => ({
   type: ActionType.TAB_CLOSE,
   payload: {
     id,
   },
 });
 
-export const sortTabs = newOrderObject => ({
+export const sortTabs = (newOrderObject) => ({
   type: ActionType.TAB_SORT,
   payload: newOrderObject,
 });
 
-export const setFocusedArea = area => ({
+export const setFocusedArea = (area) => ({
   type: ActionType.SET_FOCUSED_AREA,
   payload: area,
 });
 
-export const showSuggester = placePosition => ({
+export const showSuggester = (placePosition) => ({
   type: ActionType.SHOW_SUGGESTER,
   payload: placePosition,
 });
@@ -404,7 +402,7 @@ export const hideSuggester = () => ({
   type: ActionType.HIDE_SUGGESTER,
 });
 
-export const highlightSugessterItem = patchPath => ({
+export const highlightSugessterItem = (patchPath) => ({
   type: ActionType.HIGHLIGHT_SUGGESTER_ITEM,
   payload: {
     patchPath,
@@ -425,20 +423,20 @@ export const hideLibSuggester = () => ({
 const getClipboardDataType = () => (isEdge() ? 'Text' : CLIPBOARD_DATA_TYPE);
 
 // :: State -> Maybe ClipboardEntities
-const getClipboardEntities = state => {
+const getClipboardEntities = (state) => {
   const selection = Selectors.getSelection(state);
   if (R.isEmpty(selection)) return Maybe.Nothing();
 
-  return Selectors.getCurrentPatchPath(state).chain(currentPatchPath =>
+  return Selectors.getCurrentPatchPath(state).chain((currentPatchPath) =>
     R.compose(
-      R.map(currentPatch => getEntitiesToCopy(currentPatch, selection)),
+      R.map((currentPatch) => getEntitiesToCopy(currentPatch, selection)),
       XP.getPatchByPath(currentPatchPath),
       ProjectSelectors.getProject
     )(state)
   );
 };
 
-export const copyEntities = event => (dispatch, getState) => {
+export const copyEntities = (event) => (dispatch, getState) => {
   // If user clicked somewhere on Patch (select Node or something else
   // except editing comment node) activeElement will be <div />
   // with className `PatchWrapper`.
@@ -447,7 +445,7 @@ export const copyEntities = event => (dispatch, getState) => {
 
     // linter confuses array and a Maybe
     // eslint-disable-next-line array-callback-return
-    getClipboardEntities(state).map(entities => {
+    getClipboardEntities(state).map((entities) => {
       event.clipboardData.setData(
         getClipboardDataType(),
         JSON.stringify(entities, null, 2)
@@ -457,7 +455,7 @@ export const copyEntities = event => (dispatch, getState) => {
   }
 };
 
-export const pasteEntities = event => (dispatch, getState) => {
+export const pasteEntities = (event) => (dispatch, getState) => {
   if (isInput(document.activeElement)) return;
 
   const state = getState();
@@ -492,9 +490,10 @@ export const pasteEntities = event => (dispatch, getState) => {
 
   const project = ProjectSelectors.getProject(state);
 
-  const availablePatches = R.compose(R.map(XP.getPatchPath), XP.listPatches)(
-    project
-  );
+  const availablePatches = R.compose(
+    R.map(XP.getPatchPath),
+    XP.listPatches
+  )(project);
   const missingPatches = R.without(availablePatches, pastedNodeTypes);
 
   if (!R.isEmpty(missingPatches)) {
@@ -559,7 +558,7 @@ export const pasteEntities = event => (dispatch, getState) => {
   });
 };
 
-export const cutEntities = event => (dispatch, getState) => {
+export const cutEntities = (event) => (dispatch, getState) => {
   if (isInput(document.activeElement)) return;
 
   const state = getState();
@@ -574,7 +573,7 @@ export const cutEntities = event => (dispatch, getState) => {
 };
 
 export const installLibraryComplete = R.curry(
-  (libParams, projects) => dispatch => {
+  (libParams, projects) => (dispatch) => {
     dispatch({
       type: ActionType.INSTALL_LIBRARIES_COMPLETE,
       payload: {
@@ -591,7 +590,7 @@ export const installLibraryComplete = R.curry(
   }
 );
 
-export const installLibraries = libParams => (dispatch, getState) => {
+export const installLibraries = (libParams) => (dispatch, getState) => {
   dispatch({
     type: ActionType.INSTALL_LIBRARIES_BEGIN,
     payload: libParams,
@@ -605,8 +604,8 @@ export const installLibraries = libParams => (dispatch, getState) => {
   )(getState());
 
   fetchLibsWithDependencies(getPmSwaggerUrl(), existingLibNames, libQueries)
-    .then(projects => dispatch(installLibraryComplete(libParams, projects)))
-    .catch(err => {
+    .then((projects) => dispatch(installLibraryComplete(libParams, projects)))
+    .catch((err) => {
       dispatch({
         type: ActionType.INSTALL_LIBRARIES_FAILED,
         payload: {
@@ -619,28 +618,28 @@ export const installLibraries = libParams => (dispatch, getState) => {
     });
 };
 
-export const setSidebarLayout = settings => ({
+export const setSidebarLayout = (settings) => ({
   type: ActionType.SET_SIDEBAR_LAYOUT,
   payload: settings,
 });
-export const resizePanels = sizes => ({
+export const resizePanels = (sizes) => ({
   type: ActionType.RESIZE_PANELS,
   payload: sizes,
 });
 export const resizePanel = (name, size) => resizePanels({ [name]: size });
-export const minimizePanel = panelId => ({
+export const minimizePanel = (panelId) => ({
   type: ActionType.MINIMIZE_PANEL,
   payload: {
     panelId,
   },
 });
-export const maximizePanel = panelId => ({
+export const maximizePanel = (panelId) => ({
   type: ActionType.MAXIMIZE_PANEL,
   payload: {
     panelId,
   },
 });
-export const togglePanel = panelId => (dispatch, getState) =>
+export const togglePanel = (panelId) => (dispatch, getState) =>
   R.compose(
     R.ifElse(
       R.equals(true),
@@ -657,7 +656,7 @@ export const movePanel = (sidebarId, panelId) => ({
     sidebarId,
   },
 });
-export const togglePanelAutohide = panelId => ({
+export const togglePanelAutohide = (panelId) => ({
   type: ActionType.TOGGLE_PANEL_AUTOHIDE,
   payload: {
     panelId,
@@ -694,7 +693,7 @@ export const toggleHelp = () => (dispatch, getState) => {
 export const splitLinksToBuses = () => (dispatch, getState) => {
   const state = getState();
 
-  Selectors.getCurrentPatchPath(state).map(patchPath => {
+  Selectors.getCurrentPatchPath(state).map((patchPath) => {
     const linkIds = R.compose(
       getSelectedEntityIdsOfType(SELECTION_ENTITY_TYPE.LINK),
       Selectors.getSelection
@@ -737,18 +736,18 @@ export const abortTabtest = () => (dispatch, getState) => {
   });
 };
 
-export const runTabtest = patchPath => (dispatch, getState) => {
+export const runTabtest = (patchPath) => (dispatch, getState) => {
   dispatch({ type: ActionType.TABTEST_RUN_REQUESTED });
   const state = getState();
   const suiteP = R.compose(
     eitherToPromise,
-    p => generatePatchSuite(p, patchPath),
+    (p) => generatePatchSuite(p, patchPath),
     ProjectSelectors.getProject
   )(state);
 
   const ABORT_ERROR_TYPE = 'ABORT_BY_USER';
   const shouldContinue = () => Selectors.isTabtestRunning(getState());
-  const abortOrPass = fn => x => {
+  const abortOrPass = (fn) => (x) => {
     if (!shouldContinue()) {
       return Promise.reject(createError(ABORT_ERROR_TYPE, {}));
     }
@@ -774,8 +773,8 @@ export const runTabtest = patchPath => (dispatch, getState) => {
       )
     )
     .then(
-      abortOrPass(suite =>
-        runWasmWorker(suite, worker =>
+      abortOrPass((suite) =>
+        runWasmWorker(suite, (worker) =>
           dispatch({
             type: ActionType.TABTEST_LAUNCHED,
             payload: { worker },
@@ -788,9 +787,10 @@ export const runTabtest = patchPath => (dispatch, getState) => {
         dispatch(
           addConfirmation({
             title: 'Tests passed',
-            note: R.compose(R.join('\n'), R.reject(R.startsWith('======')))(
-              stdout
-            ),
+            note: R.compose(
+              R.join('\n'),
+              R.reject(R.startsWith('======'))
+            )(stdout),
             persistent: true,
           })
         );
@@ -803,7 +803,7 @@ export const runTabtest = patchPath => (dispatch, getState) => {
         });
       })
     )
-    .catch(err => {
+    .catch((err) => {
       if (err.type === ABORT_ERROR_TYPE) return;
       if (err.worker) err.worker.terminate();
       dispatch({
@@ -835,110 +835,112 @@ export const abortSimulation = () => (dispatch, getState) => {
   });
 };
 
-export const runSimulation = (
-  simulationPatchPath,
-  nodeIdsMap,
-  nodePinKeysMap,
-  tableLogNodeIds,
-  code,
-  pinsAffectedByErrorRaisers,
-  globals,
-  tetheringInetNodeId,
-  compileSimulationLocally
-) => (dispatch, getState) => {
-  dispatch({ type: ActionType.SIMULATION_GENERATED_CPP });
-  const state = getState();
-  const ABORT_ERROR_TYPE = 'ABORT_BY_USER';
-  const shouldContinue = () => DebuggerSelectors.isPreparingSimulation(state);
-  const abortOrPass = fn => x => {
-    if (!shouldContinue()) {
-      return Promise.reject(createError(ABORT_ERROR_TYPE, {}));
-    }
-    return fn(x);
+export const runSimulation =
+  (
+    simulationPatchPath,
+    nodeIdsMap,
+    nodePinKeysMap,
+    tableLogNodeIds,
+    code,
+    pinsAffectedByErrorRaisers,
+    globals,
+    tetheringInetNodeId,
+    compileSimulationLocally
+  ) =>
+  (dispatch, getState) => {
+    dispatch({ type: ActionType.SIMULATION_GENERATED_CPP });
+    const state = getState();
+    const ABORT_ERROR_TYPE = 'ABORT_BY_USER';
+    const shouldContinue = () => DebuggerSelectors.isPreparingSimulation(state);
+    const abortOrPass = (fn) => (x) => {
+      if (!shouldContinue()) {
+        return Promise.reject(createError(ABORT_ERROR_TYPE, {}));
+      }
+      return fn(x);
+    };
+
+    const accessToken = foldMaybe(null, R.identity, getAccessToken(state));
+
+    // sdp-client-electron's App overrides `compileSimulationLocally` to run
+    // this through a bundled Emscripten toolchain via IPC instead — see
+    // App.jsx's `this.compileSimulationLocally`. sdp-client-browser has no
+    // Node/child_process access to do that, so it stays on the cloud path.
+    const compile = compileSimulationLocally
+      ? compileSimulationLocally(code)
+      : XCC.compileSimulation(HOSTNAME, accessToken, code);
+
+    compile
+      .then(
+        abortOrPass(
+          R.tap(() => dispatch({ type: ActionType.SIMULATION_COMPILED }))
+        )
+      )
+      .then(
+        abortOrPass((suite) =>
+          runWasmWorker(suite, (worker) => {
+            dispatch({
+              type: ActionType.SIMULATION_LAUNCHED,
+              payload: {
+                worker,
+                nodeIdsMap,
+                nodePinKeysMap,
+                tableLogNodeIds,
+                pinsAffectedByErrorRaisers,
+                patchPath: simulationPatchPath,
+                globals,
+                tetheringInetNodeId,
+              },
+            });
+
+            let incomingData = '';
+            let throttledLog = [];
+            const flushLog = () => {
+              if (throttledLog.length === 0) return;
+              dispatch(addMessagesToDebuggerLog(throttledLog));
+              throttledLog = [];
+            };
+            setInterval(flushLog, 100);
+            // eslint-disable-next-line no-param-reassign
+            worker.onReceive = (data) => {
+              incomingData = incomingData.concat(data);
+              while (incomingData.indexOf('\n') !== -1) {
+                const nlIndex = incomingData.indexOf('\n');
+                const line = incomingData.slice(0, nlIndex);
+                incomingData = incomingData.slice(nlIndex + 1);
+                throttledLog.push(parseDebuggerMessage(line));
+              }
+            };
+          })
+        )
+      )
+      .catch((err) => {
+        if (err.type === ABORT_ERROR_TYPE) return;
+        if (err.worker) err.worker.terminate();
+        if (err.type === 'EMCC_NOT_FOUND') {
+          dispatch(
+            addNotification(
+              {
+                title: 'Local Simulate not installed',
+                solution:
+                  'Simulate needs the Emscripten toolchain (~300 MB) to compile locally.',
+                button: 'Download & Install',
+                persistent: true,
+              },
+              INSTALL_EMSDK_MSG
+            )
+          );
+        }
+        dispatch({
+          type: ActionType.SIMULATION_ERROR,
+          payload: err,
+          meta: { worker: err.worker },
+        });
+      })
+      .then(() => dispatch(updateBalances(false)));
   };
 
-  const accessToken = foldMaybe(null, R.identity, getAccessToken(state));
-
-  // sdp-client-electron's App overrides `compileSimulationLocally` to run
-  // this through a bundled Emscripten toolchain via IPC instead — see
-  // App.jsx's `this.compileSimulationLocally`. sdp-client-browser has no
-  // Node/child_process access to do that, so it stays on the cloud path.
-  const compile = compileSimulationLocally
-    ? compileSimulationLocally(code)
-    : XCC.compileSimulation(HOSTNAME, accessToken, code);
-
-  compile
-    .then(
-      abortOrPass(
-        R.tap(() => dispatch({ type: ActionType.SIMULATION_COMPILED }))
-      )
-    )
-    .then(
-      abortOrPass(suite =>
-        runWasmWorker(suite, worker => {
-          dispatch({
-            type: ActionType.SIMULATION_LAUNCHED,
-            payload: {
-              worker,
-              nodeIdsMap,
-              nodePinKeysMap,
-              tableLogNodeIds,
-              pinsAffectedByErrorRaisers,
-              patchPath: simulationPatchPath,
-              globals,
-              tetheringInetNodeId,
-            },
-          });
-
-          let incomingData = '';
-          let throttledLog = [];
-          const flushLog = () => {
-            if (throttledLog.length === 0) return;
-            dispatch(addMessagesToDebuggerLog(throttledLog));
-            throttledLog = [];
-          };
-          setInterval(flushLog, 100);
-          // eslint-disable-next-line no-param-reassign
-          worker.onReceive = data => {
-            incomingData = incomingData.concat(data);
-            while (incomingData.indexOf('\n') !== -1) {
-              const nlIndex = incomingData.indexOf('\n');
-              const line = incomingData.slice(0, nlIndex);
-              incomingData = incomingData.slice(nlIndex + 1);
-              throttledLog.push(parseDebuggerMessage(line));
-            }
-          };
-        })
-      )
-    )
-    .catch(err => {
-      if (err.type === ABORT_ERROR_TYPE) return;
-      if (err.worker) err.worker.terminate();
-      if (err.type === 'EMCC_NOT_FOUND') {
-        dispatch(
-          addNotification(
-            {
-              title: 'Local Simulate not installed',
-              solution:
-                'Simulate needs the Emscripten toolchain (~300 MB) to compile locally.',
-              button: 'Download & Install',
-              persistent: true,
-            },
-            INSTALL_EMSDK_MSG
-          )
-        );
-      }
-      dispatch({
-        type: ActionType.SIMULATION_ERROR,
-        payload: err,
-        meta: { worker: err.worker },
-      });
-    })
-    .then(() => dispatch(updateBalances(false)));
-};
-
-export const sendTweakPulse = tweakNodeId => (dispatch, getState) => {
-  Selectors.getCurrentPatchPath(getState()).map(patchPath =>
+export const sendTweakPulse = (tweakNodeId) => (dispatch, getState) => {
+  Selectors.getCurrentPatchPath(getState()).map((patchPath) =>
     dispatch({
       type: ActionType.TWEAK_PULSE_SENT,
       payload: {
@@ -949,7 +951,7 @@ export const sendTweakPulse = tweakNodeId => (dispatch, getState) => {
   );
 };
 
-export const showColorPickerWidget = widgetId => ({
+export const showColorPickerWidget = (widgetId) => ({
   type: ActionType.SHOW_COLORPICKER_WIDGET,
   payload: { widgetId },
 });
@@ -958,28 +960,26 @@ export const hideColorPickerWidget = () => ({
   type: ActionType.HIDE_COLORPICKER_WIDGET,
 });
 
-export const tweakNodeProperty = (nodeId, kind, key, value) => (
-  dispatch,
-  getState
-) => {
-  Selectors.getCurrentPatchPath(getState()).map(patchPath =>
-    dispatch({
-      type: ActionType.NODE_PROPERTY_UPDATING,
-      payload: {
-        id: nodeId,
-        kind,
-        key,
-        value,
-        patchPath,
-      },
-    })
-  );
-};
+export const tweakNodeProperty =
+  (nodeId, kind, key, value) => (dispatch, getState) => {
+    Selectors.getCurrentPatchPath(getState()).map((patchPath) =>
+      dispatch({
+        type: ActionType.NODE_PROPERTY_UPDATING,
+        payload: {
+          id: nodeId,
+          kind,
+          key,
+          value,
+          patchPath,
+        },
+      })
+    );
+  };
 
-export const openTableLogTab = nodeId => (dispatch, getState) => {
+export const openTableLogTab = (nodeId) => (dispatch, getState) => {
   const state = getState();
   return R.compose(
-    nodeIdToOpen => {
+    (nodeIdToOpen) => {
       const sheets = DebuggerSelectors.getTableLogsByNodeId(
         nodeIdToOpen,
         state
@@ -1039,7 +1039,7 @@ export const changeTableLogSource = (tabId, nodeId) => (dispatch, getState) => {
   });
 };
 
-export const setZoom = zoom => ({
+export const setZoom = (zoom) => ({
   type: ActionType.SET_ZOOM,
   payload: zoom,
 });

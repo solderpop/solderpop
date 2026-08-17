@@ -1,7 +1,14 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import $ from 'sanctuary-def';
 import $type from 'sanctuary-type-identifiers';
-import HMDef from 'hm-def';
+import HMDefModule from 'hm-def';
+
+// Native ESM's default interop (mocha/babel-register, modules:false) leaves
+// HMDefModule as hm-def's raw double-wrapped CJS export, needing one more
+// `.default`. Babel's own CommonJS transform (Jest, modules:"commonjs")
+// already unwraps one layer while compiling this very import statement, so
+// HMDefModule is already the real module there. Tolerate both shapes.
+const HMDef = HMDefModule.create ? HMDefModule : HMDefModule.default;
 
 /* Types are by convention starts with a capital leter, so: */
 /* eslint-disable new-cap */
@@ -19,7 +26,7 @@ const dUrl = 'http://solderpop.io/docs/dev/sdp-func-tools/#';
 // correctly with moands from 'ramda-fantasy'. So there is a little hack.
 // Also it used to test 'sanctuary-def/Type'.
 const checkTypeId = R.curry((expectedType, obj) => {
-  const eq = fn => R.compose(R.equals(expectedType), fn);
+  const eq = (fn) => R.compose(R.equals(expectedType), fn);
   return R.anyPass([
     eq(R.path(['constructor', 'prototype', '@@type'])),
     eq($type),
@@ -38,7 +45,9 @@ const typeUrl = R.curry((docUrl, typeName) => `${docUrl}${typeName}`);
 export const hasType = R.curry((type, x) => type.validate(x).isRight);
 
 // hasOneOfType :: [Type] -> (x -> Boolean)
-export const hasOneOfType = R.curry(types => R.anyPass(R.map(hasType, types)));
+export const hasOneOfType = R.curry((types) =>
+  R.anyPass(R.map(hasType, types))
+);
 
 // NullaryType :: String -> String -> String -> (Any -> Boolean) -> Type
 export const NullaryType = R.curry((packageName, docUrl, typeName, predicate) =>
@@ -141,7 +150,7 @@ export const Pair = BinaryType(
   pkgName,
   dUrl,
   'Pair',
-  x => x instanceof Array && x.length === 2,
+  (x) => x instanceof Array && x.length === 2,
   R.compose(R.of, R.head),
   R.compose(R.of, R.last)
 );
@@ -150,7 +159,7 @@ export const $Promise = NullaryType(
   pkgName,
   dUrl,
   'Promise',
-  x => x instanceof Promise
+  (x) => x instanceof Promise
 );
 
 // In case that sanctuary-def Record type could have only required fields
@@ -165,7 +174,7 @@ export const Stanza = NullaryType(
   pkgName,
   dUrl,
   'Stanza',
-  x => x !== null && typeof x === 'object' && Array.isArray(x) === false
+  (x) => x !== null && typeof x === 'object' && Array.isArray(x) === false
 );
 
 //-----------------------------------------------------------------------------
@@ -179,7 +188,7 @@ export const $Maybe = $.UnaryType(
   maybeTypeId,
   'https://github.com/ramda/ramda-fantasy/blob/master/docs/Maybe.md',
   checkTypeId(maybeTypeId),
-  maybe => (maybe.isJust ? [maybe.value] : [])
+  (maybe) => (maybe.isJust ? [maybe.value] : [])
 );
 
 const eitherTypeId = 'ramda-fantasy/Either';
@@ -187,8 +196,8 @@ export const $Either = $.BinaryType(
   eitherTypeId,
   'https://github.com/ramda/ramda-fantasy/blob/master/docs/Either.md',
   checkTypeId(eitherTypeId),
-  either => (either.isLeft ? [either.value] : []),
-  either => (either.isRight ? [either.value] : [])
+  (either) => (either.isLeft ? [either.value] : []),
+  (either) => (either.isRight ? [either.value] : [])
 );
 
 //-----------------------------------------------------------------------------

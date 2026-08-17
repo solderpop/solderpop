@@ -1,15 +1,15 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as XP from 'sdp-project';
 
-import { NODE_PROPERTY_KIND } from '../../project/constants';
-import { Widget, getNodeWidgetConfig } from './inspectorWidgets';
+import { NODE_PROPERTY_KIND } from '../../project/constants.js';
+import { Widget, getNodeWidgetConfig } from './inspectorWidgets/index.js';
 
-const PinWidgetsGroup = ({ node, onPropUpdate }) =>
-  R.compose(
-    widgets => <React.Fragment>{widgets}</React.Fragment>,
-    R.map(renderablePin => {
+function PinWidgetsGroup({ node, onPropUpdate }) {
+  return R.compose(
+    (widgets) => <>{widgets}</>,
+    R.map((renderablePin) => {
       const widgetProps = R.applySpec({
         entityId: R.prop('nodeId'),
         kind: R.always(NODE_PROPERTY_KIND.PIN),
@@ -44,6 +44,7 @@ const PinWidgetsGroup = ({ node, onPropUpdate }) =>
     R.values,
     R.prop('pins')
   )(node);
+}
 
 PinWidgetsGroup.propTypes = {
   node: PropTypes.any,

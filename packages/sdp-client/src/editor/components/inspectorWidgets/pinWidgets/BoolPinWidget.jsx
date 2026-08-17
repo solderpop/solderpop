@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import PinWidget from './PinWidget';
+import PinWidget from './PinWidget.jsx';
 
 function BoolWidget(props) {
-  const onChange = event => props.onChange(event.target.value);
+  const onChange = (event) => props.onChange(event.target.value);
 
   return (
     <PinWidget

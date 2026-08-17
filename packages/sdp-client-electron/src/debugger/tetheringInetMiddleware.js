@@ -1,15 +1,15 @@
-import * as R from 'ramda';
-import AtNet from 'sdp-tethering-inet';
+import R from 'ramda';
+import { create as createAtNet } from 'sdp-tethering-inet';
 import client from 'sdp-client';
 import { allPromises } from 'sdp-func-tools';
 import { ipcRenderer } from 'electron';
 
-import { DEBUG_SERIAL_SEND } from '../shared/events';
+import { DEBUG_SERIAL_SEND } from '../shared/events.js';
 
 const EOT = String.fromCharCode(4); // end of transmittion
 const ACK = String.fromCharCode(6); // acknowledge
 
-const formatUnhandledTetheringErrorMessage = err => ({
+const formatUnhandledTetheringErrorMessage = (err) => ({
   title: 'Tethering Internet Error',
   note: err.message,
   solution: 'If you believe this is a bug, report it to SolderPop developers.',
@@ -17,7 +17,7 @@ const formatUnhandledTetheringErrorMessage = err => ({
 
 // Places the new chunks in the end of mutable `chunksToSend` list (SIDE-EFFECT)
 // :: [String] -> [String]
-const queueChunks = dispatch => newChunks =>
+const queueChunks = (dispatch) => (newChunks) =>
   dispatch(client.tetheringInetChunksAdded(newChunks));
 
 // :: String -> [String]
@@ -33,7 +33,7 @@ const splitDataOnChunks = R.curry((maxChunkSize, nodeId, data) => {
     const pkgSize = 3; // max 2 digits + delimeter: "63:"
     const dataMaxLength = maxChunkSize - pkgSize - prefix.length;
 
-    const formatChunk = chunkData =>
+    const formatChunk = (chunkData) =>
       R.compose(
         R.concat(prefix),
         R.concat(chunkData.length.toString(10)),
@@ -82,75 +82,77 @@ const clearQueueOnCloseConnection = R.curry((dispatch, command) =>
   )(command)
 );
 
-export default ({ getState, dispatch }) => next => action => {
-  const state = getState();
-  const result = next(action);
+export default ({ getState, dispatch }) =>
+  (next) =>
+  (action) => {
+    const state = getState();
+    const result = next(action);
 
-  // Simulation
-  if (
-    action.type === client.SIMULATION_LAUNCHED &&
-    action.payload.tetheringInetNodeId !== null
-  ) {
-    const nodeId = action.payload.tetheringInetNodeId;
-    const worker = action.payload.worker;
-    const transmit = createTransmitter(dispatch, worker.sendToWasm);
-    const listener = createListener(dispatch, transmit, nodeId);
-    const write = R.compose(
-      AtNet.create(listener),
-      R.tap(clearQueueOnCloseConnection(dispatch))
-    );
-    dispatch(
-      client.tetheringInetCreated(
-        action.payload.tetheringInetNodeId,
-        write,
-        transmit
-      )
-    );
-  }
+    // Simulation
+    if (
+      action.type === client.SIMULATION_LAUNCHED &&
+      action.payload.tetheringInetNodeId !== null
+    ) {
+      const nodeId = action.payload.tetheringInetNodeId;
+      const { worker } = action.payload;
+      const transmit = createTransmitter(dispatch, worker.sendToWasm);
+      const listener = createListener(dispatch, transmit, nodeId);
+      const write = R.compose(
+        createAtNet(listener),
+        R.tap(clearQueueOnCloseConnection(dispatch))
+      );
+      dispatch(
+        client.tetheringInetCreated(
+          action.payload.tetheringInetNodeId,
+          write,
+          transmit
+        )
+      );
+    }
 
-  // Debug
-  if (
-    action.type === client.DEBUG_SESSION_STARTED &&
-    action.payload.tetheringInetNodeId !== null
-  ) {
-    const nodeId = action.payload.tetheringInetNodeId;
-    const transmit = createTransmitter(dispatch, chunk =>
-      ipcRenderer.send(DEBUG_SERIAL_SEND, chunk)
-    );
-    const listener = createListener(dispatch, transmit, nodeId);
-    const write = AtNet.create(listener);
-    dispatch(
-      client.tetheringInetCreated(
-        action.payload.tetheringInetNodeId,
-        write,
-        transmit
-      )
-    );
-  }
+    // Debug
+    if (
+      action.type === client.DEBUG_SESSION_STARTED &&
+      action.payload.tetheringInetNodeId !== null
+    ) {
+      const nodeId = action.payload.tetheringInetNodeId;
+      const transmit = createTransmitter(dispatch, (chunk) =>
+        ipcRenderer.send(DEBUG_SERIAL_SEND, chunk)
+      );
+      const listener = createListener(dispatch, transmit, nodeId);
+      const write = createAtNet(listener);
+      dispatch(
+        client.tetheringInetCreated(
+          action.payload.tetheringInetNodeId,
+          write,
+          transmit
+        )
+      );
+    }
 
-  // Send command to AtInternet either for Simulation or Debug
-  if (action.type === client.DEBUGGER_LOG_ADD_MESSAGES) {
-    const write = client.tetheringInetSender(state);
-    const transmit = client.tetheringInetTransmitter(state);
-    if (!write) return result;
+    // Send command to AtInternet either for Simulation or Debug
+    if (action.type === client.DEBUGGER_LOG_ADD_MESSAGES) {
+      const write = client.tetheringInetSender(state);
+      const transmit = client.tetheringInetTransmitter(state);
+      if (!write) return result;
 
-    const isTetheringMessage = R.compose(
-      R.propEq('nodeId'),
-      R.toString, // Message data contains NodeId in string format
-      client.tetheringInetNodeId
-    )(state);
+      const isTetheringMessage = R.compose(
+        R.propEq('nodeId'),
+        R.toString, // Message data contains NodeId in string format
+        client.tetheringInetNodeId
+      )(state);
 
-    R.compose(
-      allPromises,
-      R.map(R.ifElse(isReadOkResponse, transmit, write)),
-      R.pluck('content'),
-      R.filter(isTetheringMessage)
-    )(action.payload).catch(err => {
-      dispatch(client.addError(formatUnhandledTetheringErrorMessage(err)));
-      // eslint-disable-next-line no-console
-      console.error(err);
-    });
-  }
+      R.compose(
+        allPromises,
+        R.map(R.ifElse(isReadOkResponse, transmit, write)),
+        R.pluck('content'),
+        R.filter(isTetheringMessage)
+      )(action.payload).catch((err) => {
+        dispatch(client.addError(formatUnhandledTetheringErrorMessage(err)));
+        // eslint-disable-next-line no-console
+        console.error(err);
+      });
+    }
 
-  return result;
-};
+    return result;
+  };

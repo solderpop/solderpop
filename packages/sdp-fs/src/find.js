@@ -1,10 +1,10 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { statSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { rejectWithCode } from 'sdp-func-tools';
 
-import { isBasename, isExtname, isDirectory } from './utils';
-import * as ERROR_CODES from './errorCodes';
+import { isBasename, isExtname, isDirectory } from './utils.js';
+import * as ERROR_CODES from './errorCodes.js';
 
 function getParentDirectories(path) {
   function loop(currentPath, parentDirectories) {
@@ -73,7 +73,7 @@ export const getPathToXodProject = R.composeP(
     [R.either(isBasename('patch.xodp'), isDirectory), findClosestProjectDir],
     [
       R.T,
-      filePath =>
+      (filePath) =>
         rejectWithCode(
           ERROR_CODES.TRIED_TO_OPEN_NOT_XOD_FILE,
           new Error(`Tried to open not a xod file: ${filePath}`)

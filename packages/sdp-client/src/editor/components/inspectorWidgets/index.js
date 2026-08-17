@@ -1,25 +1,25 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import Big from 'big.js';
 import { unquote, enquote } from 'sdp-func-tools';
 import { BINDABLE_CUSTOM_TYPES, PIN_TYPE, isGenericType } from 'sdp-project';
 
-import BoolWidget from './pinWidgets/BoolPinWidget';
-import NumberWidget from './pinWidgets/NumberPinWidget';
-import PulseWidget from './pinWidgets/PulsePinWidget';
-import StringWidget from './pinWidgets/StringPinWidget';
-import GenericPinWidget from './pinWidgets/GenericPinWidget';
-import ColorPinWidget from './pinWidgets/ColorPinWidget';
-import DisabledInputWidget from './pinWidgets/DisabledInputWidget';
-import DescriptionWidget from './DescriptionWidget';
-import LabelWidget from './LabelWidget';
+import BoolWidget from './pinWidgets/BoolPinWidget.jsx';
+import NumberWidget from './pinWidgets/NumberPinWidget.jsx';
+import PulseWidget from './pinWidgets/PulsePinWidget.jsx';
+import StringWidget from './pinWidgets/StringPinWidget.jsx';
+import GenericPinWidget from './pinWidgets/GenericPinWidget.jsx';
+import ColorPinWidget from './pinWidgets/ColorPinWidget.jsx';
+import DisabledInputWidget from './pinWidgets/DisabledInputWidget.jsx';
+import DescriptionWidget from './DescriptionWidget.jsx';
+import LabelWidget from './LabelWidget.jsx';
 
-import { WIDGET_TYPE } from '../../constants';
-import { KEYCODE } from '../../../utils/constants';
-import normalizeByte from '../../../utils/normalizeByte';
-import normalizeNumber from '../../../utils/normalizeNumber';
-import normalizePort from '../../../utils/normalizePort';
-import normalizeGenericValue from '../../../utils/normalizeGenericValue';
-import normalizeColor from '../../../utils/normalizeColor';
+import { WIDGET_TYPE } from '../../constants.js';
+import { KEYCODE } from '../../../utils/constants.js';
+import normalizeByte from '../../../utils/normalizeByte.js';
+import normalizeNumber from '../../../utils/normalizeNumber.js';
+import normalizePort from '../../../utils/normalizePort.js';
+import normalizeGenericValue from '../../../utils/normalizeGenericValue.js';
+import normalizeColor from '../../../utils/normalizeColor.js';
 
 function createArrowKeyHandler(bigStep, smallStep) {
   return function arrowKeyHandler(event) {
@@ -122,7 +122,7 @@ const WIDGET_MAPPING = {
   },
 };
 
-const getGenericTypeWidget = dataType => ({
+const getGenericTypeWidget = (dataType) => ({
   component: GenericPinWidget,
   dataType,
   keyDownHandlers: submitOnEnter,
@@ -130,7 +130,7 @@ const getGenericTypeWidget = dataType => ({
   normalizeValue: normalizeGenericValue,
 });
 
-const getDisabledWidget = dataType => ({
+const getDisabledWidget = (dataType) => ({
   component: DisabledInputWidget,
   props: { dataType },
 });
@@ -143,20 +143,16 @@ export const getNodeWidgetConfig = R.cond([
   [R.T, getDisabledWidget],
 ]);
 
-export { default as Widget } from './Widget';
+export { default as Widget } from './Widget.jsx';
 
-export { default as HintWidget } from './HintWidget';
-export { default as BoolWidget } from './pinWidgets/BoolPinWidget';
-export { default as NumberWidget } from './pinWidgets/NumberPinWidget';
-export { default as PulseWidget } from './pinWidgets/PulsePinWidget';
-export { default as StringWidget } from './pinWidgets/StringPinWidget';
-export { default as GenericPinWidget } from './pinWidgets/GenericPinWidget';
-export {
-  default as DisabledInputWidget,
-} from './pinWidgets/DisabledInputWidget';
-export { default as DescriptionWidget } from './DescriptionWidget';
-export { default as LabelWidget } from './LabelWidget';
-export { default as PulseTweakWidget } from './PulseTweakWidget';
-export {
-  default as NodeSpecializationWidget,
-} from './NodeSpecializationWidget';
+export { default as HintWidget } from './HintWidget.jsx';
+export { default as BoolWidget } from './pinWidgets/BoolPinWidget.jsx';
+export { default as NumberWidget } from './pinWidgets/NumberPinWidget.jsx';
+export { default as PulseWidget } from './pinWidgets/PulsePinWidget.jsx';
+export { default as StringWidget } from './pinWidgets/StringPinWidget.jsx';
+export { default as GenericPinWidget } from './pinWidgets/GenericPinWidget.jsx';
+export { default as DisabledInputWidget } from './pinWidgets/DisabledInputWidget.jsx';
+export { default as DescriptionWidget } from './DescriptionWidget.jsx';
+export { default as LabelWidget } from './LabelWidget.jsx';
+export { default as PulseTweakWidget } from './PulseTweakWidget.jsx';
+export { default as NodeSpecializationWidget } from './NodeSpecializationWidget.jsx';

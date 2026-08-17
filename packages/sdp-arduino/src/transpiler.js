@@ -1,5 +1,5 @@
-import * as R from 'ramda';
-import { Maybe, Either } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
 
 import {
   explodeMaybe,
@@ -14,10 +14,10 @@ import {
   catMaybies,
 } from 'sdp-func-tools';
 import * as XP from 'sdp-project';
-import { def } from './types';
+import { def } from './types.js';
 
-import { withTetheringInetNode, renderProject } from './templates';
-import { LIVENESS } from './constants';
+import { withTetheringInetNode, renderProject } from './templates.js';
+import { LIVENESS } from './constants.js';
 
 import {
   areTimeoutsEnabled,
@@ -28,7 +28,9 @@ import {
   getEvaluateOnPinSettings,
   doesCatchErrors,
   findRequireUrls,
-} from './directives';
+} from './directives.js';
+
+const { Maybe, Either } = RamdaFantasy;
 
 //-----------------------------------------------------------------------------
 //
@@ -59,9 +61,9 @@ const toposortProject = def(
   'toposortProject :: PatchPath -> Project -> Either Error Object',
   (path, project) =>
     R.compose(
-      R.chain(nodeIdsMap =>
+      R.chain((nodeIdsMap) =>
         R.compose(
-          R.map(transformedProject => ({
+          R.map((transformedProject) => ({
             transformedProject,
             nodeIdsMap,
           })),
@@ -98,7 +100,7 @@ const arrangeTPatchesInTopologicalOrder = def(
   'arrangeTPatchesInTopologicalOrder :: PatchPath -> Project -> Map PatchPath TPatch -> [TPatch]',
   (entryPath, project, tpatchesMap) =>
     R.compose(
-      R.map(patchPath => tpatchesMap[patchPath]),
+      R.map((patchPath) => tpatchesMap[patchPath]),
       R.uniq,
       R.map(R.nth(1)),
       R.sortBy(R.head),
@@ -127,7 +129,7 @@ const getPatchImpl = def(
     [XP.isUnpackRecordPatch, R.always(GENERATIVE_IMPLEMENTATION)],
     [
       R.T,
-      patch =>
+      (patch) =>
         R.compose(
           explodeMaybe(
             `Implementation for ${XP.getPatchPath(patch)} not found`
@@ -140,11 +142,11 @@ const getPatchImpl = def(
 
 const convertPatchToTPatch = def(
   'convertPatchToTPatch :: Patch -> TPatch',
-  patch => {
+  (patch) => {
     const patchPath = XP.getPatchPath(patch);
     const impl = getPatchImpl(patch);
 
-    const isDirtyable = pin =>
+    const isDirtyable = (pin) =>
       XP.getPinType(pin) === XP.PIN_TYPE.PULSE ||
       isDirtienessEnabled(impl, `${pin.direction}_${pin.label}`);
 
@@ -162,7 +164,7 @@ const convertPatchToTPatch = def(
       () => XP.isUnpackRecordPatch(patch),
       R.compose(
         R.fromPairs,
-        R.map(pin => [XP.getPinKey(pin), XP.getPinLabel(pin)]),
+        R.map((pin) => [XP.getPinKey(pin), XP.getPinLabel(pin)]),
         R.map(R.over(pinLabelLens, cppEscape)),
         XP.normalizeEmptyPinLabelsOppositeDirection,
         XP.listOutputPins
@@ -269,9 +271,9 @@ const getConstructorPatchPaths = def(
       R.converge(XP.sortGraph, [R.pipe(R.flatten, R.uniq), R.identity]),
       // [[PatchPath, PatchPath]]
       R.unnest,
-      R.map(typePath =>
+      R.map((typePath) =>
         R.compose(
-          R.map(referencedType => [typePath, referencedType]),
+          R.map((referencedType) => [typePath, referencedType]),
           R.reject(R.either(XP.isBuiltInType, R.equals(typePath))),
           R.uniq,
           getReferencedCustomTypes,
@@ -305,7 +307,7 @@ const addConstructionPatchesAtTheTop = def(
 );
 
 // :: [TPatch] -> Set PatchPath
-const listTemplatableCustomTypes = toposortedTPatches => {
+const listTemplatableCustomTypes = (toposortedTPatches) => {
   const constructorPatches = R.filter(
     R.prop('isConstructor'),
     toposortedTPatches
@@ -330,7 +332,7 @@ const listTemplatableCustomTypes = toposortedTPatches => {
   return templatableCustomTypes;
 };
 
-const assignPinFlags = toposortedTPatches => {
+const assignPinFlags = (toposortedTPatches) => {
   const templatableCustomTypes = listTemplatableCustomTypes(toposortedTPatches);
 
   if (R.isEmpty(templatableCustomTypes)) {
@@ -342,10 +344,10 @@ const assignPinFlags = toposortedTPatches => {
 
   return R.map(
     R.compose(
-      tPatch =>
+      (tPatch) =>
         R.over(
           R.lensProp('outputs'),
-          R.map(pin => {
+          R.map((pin) => {
             const pinFlags = R.applySpec({
               // "output-self" type is erased in createPinFromTerminalNode
               // (pin type becomes the same as the patch path)
@@ -356,7 +358,7 @@ const assignPinFlags = toposortedTPatches => {
                 R.compose(
                   foldMaybe('', R.prop('pinKey')),
                   maybeFind(
-                    i => i.type === type && `${i.pinKey}U0027` === pinKey
+                    (i) => i.type === type && `${i.pinKey}U0027` === pinKey
                   )
                 )(tPatch.inputs),
             })(pin);
@@ -367,7 +369,7 @@ const assignPinFlags = toposortedTPatches => {
         ),
       R.over(
         R.lensProp('inputs'),
-        R.map(pin =>
+        R.map((pin) =>
           R.assoc(
             'isTemplatableCustomTypePin',
             isTemplatableCustomTypePin(pin),
@@ -389,7 +391,7 @@ const createTPatches = def(
       // that are used without an explicit constructor.
       // Otherwise, generated source code won't have
       // type definitions for them.
-      tPatches =>
+      (tPatches) =>
         R.compose(
           addConstructionPatchesAtTheTop(tPatches, R.__, originalProject),
           getConstructorPatchPaths
@@ -462,7 +464,7 @@ const getTNodeOutputDestinations = def(
 
         const inputPinKeysByLabel = R.compose(
           R.map(XP.getPinKey),
-          R.indexBy(R.pipe(XP.getPinLabel, cppEscape, l => `input_${l}`)),
+          R.indexBy(R.pipe(XP.getPinLabel, cppEscape, (l) => `input_${l}`)),
           XP.normalizeEmptyPinLabels,
           XP.listInputPins
         )(patch);
@@ -475,12 +477,12 @@ const getTNodeOutputDestinations = def(
             );
 
             const exceptionPinKeys = exceptions.map(
-              l => inputPinKeysByLabel[l]
+              (l) => inputPinKeysByLabel[l]
             );
 
             return enabled
-              ? !exceptionPinKeys.some(pk => inputPinKeys.includes(pk)) // if not ALL inputs are blacklisted
-              : exceptionPinKeys.some(pk => inputPinKeys.includes(pk)); // if at least one input is whitelisted
+              ? !exceptionPinKeys.some((pk) => inputPinKeys.includes(pk)) // if not ALL inputs are blacklisted
+              : exceptionPinKeys.some((pk) => inputPinKeys.includes(pk)); // if at least one input is whitelisted
           },
           getEvaluateOnPinSettings,
           getPatchImpl
@@ -592,10 +594,10 @@ const calculateUpstreamErrorRaisers = R.compose(
   R.sortBy(R.prop('id')),
   R.values,
   R.reduce((accTNodesMap, tNode) => {
-    const inputsWithCalculatedUpstreamErrorRaisers = R.map(tNodeInput => {
+    const inputsWithCalculatedUpstreamErrorRaisers = R.map((tNodeInput) => {
       const upstreamRaisersForPin = R.compose(
         R.reject(R.propEq('nodeId', tNode.id)), // could happen with defers
-        foldMaybe([], upstreamTNode =>
+        foldMaybe([], (upstreamTNode) =>
           R.concat(
             upstreamTNode.patch.raisesErrors
               ? [
@@ -633,12 +635,12 @@ const calculateUpstreamErrorRaisers = R.compose(
   R.converge(R.concat, [R.filter(R.path(['patch', 'isDefer'])), R.identity])
 );
 
-const calculateNearestDownstreamErrorCatchers = tNodes => {
+const calculateNearestDownstreamErrorCatchers = (tNodes) => {
   const tNodesById = R.indexBy(R.prop('id'), tNodes);
 
   function findDownstreamErrorCatchersForOutput(tNodeOutput) {
     return R.compose(
-      R.chain(downStreamNodeId => {
+      R.chain((downStreamNodeId) => {
         const downstreamTNode = tNodesById[downStreamNodeId];
 
         return downstreamTNode.patch.catchesErrors
@@ -653,12 +655,12 @@ const calculateNearestDownstreamErrorCatchers = tNodes => {
     )(tNodeOutput);
   }
 
-  return R.map(tNode => {
+  return R.map((tNode) => {
     if (!tNode.patch.raisesErrors) return tNode;
 
     return R.over(
       R.lensProp('outputs'),
-      R.map(tNodeOutput => {
+      R.map((tNodeOutput) => {
         const nearestDownstreamCatchers = R.compose(
           R.uniq,
           findDownstreamErrorCatchersForOutput
@@ -723,7 +725,7 @@ const removeUnusedNodes = def(
 
 const checkForNativePatchesWithTooManyOutputs = def(
   'checkForNativePatchesWithTooManyOutputs :: TProject -> Either Error TProject',
-  tProject => {
+  (tProject) => {
     const nodeWithTooManyOutputs = R.find(
       R.pipe(R.prop('outputs'), R.length, R.lt(7)),
       tProject.patches
@@ -763,10 +765,10 @@ const transformProjectWithImpls = def(
     R.compose(
       R.chain(checkForNativePatchesWithTooManyOutputs),
       // Fill `globals` array with { key: globName } objects for each global referred in the project
-      R.map(tProject =>
+      R.map((tProject) =>
         R.compose(
           R.assocPath(['config', 'globals'], R.__, tProject),
-          R.map(globalName => ({ key: globalName })),
+          R.map((globalName) => ({ key: globalName })),
           getGlobalNamesFromTProject
         )(tProject)
       ),
@@ -810,7 +812,7 @@ export const getNodeIdsMap = def(
   'getNodeIdsMap :: TProject -> Map NodeId String',
   R.compose(
     R.fromPairs,
-    R.map(node => [node.originalId, String(node.id)]),
+    R.map((node) => [node.originalId, String(node.id)]),
     R.prop('nodes')
   )
 );
@@ -819,7 +821,7 @@ export const getNodePinKeysMap = def(
   'getNodePinKeysMap :: TProject -> Map NodeId [PinKey]',
   R.compose(
     R.fromPairs,
-    R.map(node => [node.originalId, R.pluck('pinKey', node.patch.outputs)]),
+    R.map((node) => [node.originalId, R.pluck('pinKey', node.patch.outputs)]),
     R.prop('nodes')
   )
 );
@@ -881,9 +883,11 @@ const getUpstreamPinPairsByPinPair = def(
     project,
     { originalPinKey, upstreamErrorRaisers, ownerNodeId, ownerNodeType }
   ) => {
-    const parentNodeId = R.compose(R.join('~'), R.init, R.split('~'))(
-      ownerNodeId
-    );
+    const parentNodeId = R.compose(
+      R.join('~'),
+      R.init,
+      R.split('~')
+    )(ownerNodeId);
     const finalNodeId = R.compose(R.last, R.split('~'))(ownerNodeId);
     const maybeParentPatch = getParentPatch(ownerNodeId, currentPatch, project);
     const maybeNode = R.chain(XP.getNodeById(finalNodeId), maybeParentPatch);
@@ -893,7 +897,7 @@ const getUpstreamPinPairsByPinPair = def(
     return R.compose(
       R.map(([pin, node, parentPatch]) =>
         R.compose(
-          pinPairs => ({
+          (pinPairs) => ({
             pinPairs,
             upstreamErrorRaisers,
             parentNodeId,
@@ -938,7 +942,7 @@ export const getPinsAffectedByErrorRaisers = def(
 
     const convertPinPairGroupsToPinPairs = R.compose(
       R.reduce((acc, next) => R.mergeDeepWith(R.concat, acc, next), {}),
-      R.map(pinPairsGroup =>
+      R.map((pinPairsGroup) =>
         R.compose(
           createAffectedPinsTree(pinPairsGroup.upstreamErrorRaisers),
           R.map(
@@ -946,12 +950,10 @@ export const getPinsAffectedByErrorRaisers = def(
               R.over(R.lensIndex(0), XP.getPinKey),
               R.over(
                 R.lensIndex(1),
-                R.pipe(
-                  XP.getNodeId,
-                  nId =>
-                    pinPairsGroup.parentPatch === currentPatch
-                      ? nId
-                      : `${pinPairsGroup.parentNodeId}~${nId}`
+                R.pipe(XP.getNodeId, (nId) =>
+                  pinPairsGroup.parentPatch === currentPatch
+                    ? nId
+                    : `${pinPairsGroup.parentNodeId}~${nId}`
                 )
               )
             )
@@ -1014,7 +1016,7 @@ export const getPinsAffectedByErrorRaisers = def(
         (acc, tNode) =>
           R.compose(
             R.concat(acc),
-            R.map(tInput => ({
+            R.map((tInput) => ({
               originalPinKey: tInput.originalPinKey,
               upstreamErrorRaisers: tInput.upstreamErrorRaisers,
               ownerNodeId: tNode.originalId,

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { getAuthFormUrl, getPasswordResetUrl } from '../../utils/urls';
+import { getAuthFormUrl, getPasswordResetUrl } from '../../utils/urls.js';
 
-import Button from '../../core/components/Button';
+import Button from '../../core/components/Button.jsx';
 
 class AuthForm extends React.Component {
   constructor(props) {

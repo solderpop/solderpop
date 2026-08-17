@@ -2,7 +2,9 @@
 import Listr from 'listr';
 import VerboseRenderer from 'listr-verbose-renderer';
 import UpdateRenderer from 'listr-update-renderer';
-import { mergeDeepRight } from 'ramda';
+import R from 'ramda';
+
+const { mergeDeepRight } = R;
 
 // here we mocks and unmocks the stdout with the stderr for the listr renderers
 

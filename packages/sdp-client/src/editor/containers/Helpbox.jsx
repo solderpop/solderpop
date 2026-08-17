@@ -1,23 +1,25 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
-import { Maybe } from 'ramda-fantasy';
+import RamdaFantasy from 'ramda-fantasy';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Patch as PatchType } from 'sdp-project';
 import { $Maybe } from 'sdp-func-tools';
 
-import * as Actions from '../actions';
-import { isHelpboxVisible, getFocusedArea } from '../selectors';
-import { getPatchForHelpbox } from '../../core/selectors';
-import PatchDocs from '../components/PatchDocs';
-import sanctuaryPropType from '../../utils/sanctuaryPropType';
+import * as Actions from '../actions.js';
+import { isHelpboxVisible, getFocusedArea } from '../selectors.js';
+import { getPatchForHelpbox } from '../../core/selectors.js';
+import PatchDocs from '../components/PatchDocs.jsx';
+import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
 
-import PointingPopup from '../components/PointingPopup';
+import PointingPopup from '../components/PointingPopup.jsx';
 
-import { FOCUS_AREAS } from '../constants';
+import { FOCUS_AREAS } from '../constants.js';
 
-const getSelectorByFocusedArea = focusedArea => {
+const { Maybe } = RamdaFantasy;
+
+const getSelectorByFocusedArea = (focusedArea) => {
   switch (focusedArea) {
     case FOCUS_AREAS.PROJECT_BROWSER:
       return '.PatchGroupItem.isSelected';
@@ -36,6 +38,7 @@ class Helpbox extends React.Component {
       selector: getSelectorByFocusedArea(props.focusedArea),
     };
   }
+
   componentDidUpdate() {
     if (this.props.focusedArea !== this.state.focusedArea) {
       const { focusedArea } = this.props;
@@ -46,12 +49,13 @@ class Helpbox extends React.Component {
       });
     }
   }
+
   render() {
     const { maybeSelectedPatch, isVisible, actions } = this.props;
     if (!isVisible) return null;
 
     const docs = maybeSelectedPatch
-      .map(patch => <PatchDocs patch={patch} />)
+      .map((patch) => <PatchDocs patch={patch} />)
       .getOrElse(null);
 
     if (!this.state.selector) return null;
@@ -84,7 +88,7 @@ const mapStateToProps = R.applySpec({
   maybeSelectedPatch: getPatchForHelpbox,
   focusedArea: getFocusedArea,
 });
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(
     {
       hideHelpbox: Actions.hideHelpbox,

@@ -1,9 +1,9 @@
-import * as R from 'ramda';
-import * as ProcessSelectors from './selectors';
+import R from 'ramda';
+import * as ProcessSelectors from './selectors.js';
 
-import { STATUS } from '../utils/constants';
+import { STATUS } from '../utils/constants.js';
 
-export const addProcess = type => (dispatch, getState) => {
+export const addProcess = (type) => (dispatch, getState) => {
   const processes = ProcessSelectors.getProccesses(getState());
   const newId = ProcessSelectors.getNewId(processes);
 
@@ -15,26 +15,32 @@ export const addProcess = type => (dispatch, getState) => {
   return newId;
 };
 
-export const progressProcess = (id, type, payload = {}) => dispatch =>
-  dispatch({
-    type,
-    payload: R.merge(payload, { id }),
-    meta: { status: STATUS.PROGRESSED },
-  });
+export const progressProcess =
+  (id, type, payload = {}) =>
+  (dispatch) =>
+    dispatch({
+      type,
+      payload: R.merge(payload, { id }),
+      meta: { status: STATUS.PROGRESSED },
+    });
 
-export const successProcess = (id, type, payload = {}) => dispatch =>
-  dispatch({
-    type,
-    payload: R.merge(payload, { id }),
-    meta: { status: STATUS.SUCCEEDED },
-  });
+export const successProcess =
+  (id, type, payload = {}) =>
+  (dispatch) =>
+    dispatch({
+      type,
+      payload: R.merge(payload, { id }),
+      meta: { status: STATUS.SUCCEEDED },
+    });
 
-export const failProcess = (id, type, payload = {}) => dispatch =>
-  dispatch({
-    type,
-    payload: R.merge(payload, { id }),
-    meta: { status: STATUS.FAILED },
-  });
+export const failProcess =
+  (id, type, payload = {}) =>
+  (dispatch) =>
+    dispatch({
+      type,
+      payload: R.merge(payload, { id }),
+      meta: { status: STATUS.FAILED },
+    });
 
 export const deleteProcess = (id, type) => ({
   type,
@@ -42,7 +48,7 @@ export const deleteProcess = (id, type) => ({
   meta: { status: STATUS.DELETED },
 });
 
-export const createProcess = type => () => dispatch => {
+export const createProcess = (type) => () => (dispatch) => {
   const processId = dispatch(addProcess(type));
 
   const deleteThisProcess = () => dispatch(deleteProcess(processId, type));

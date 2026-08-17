@@ -1,22 +1,23 @@
 import path from 'path';
-import * as R from 'ramda';
-import { assert } from 'chai';
-import thunk from 'redux-thunk';
+import { fileURLToPath } from 'url';
+import R from 'ramda';
+import chai from 'chai';
+import thunkModule from 'redux-thunk';
 import { createStore, applyMiddleware } from 'redux';
 import * as XP from 'sdp-project';
 
-import { loadXodball } from 'sdp-project/test/helpers';
+import { loadXodball } from 'sdp-project/test/helpers.js';
 
-import initialState from '../src/core/state';
-import generateReducers from '../src/core/reducer';
-import hintingMiddleware from '../src/hinting/middleware';
+import initialState from '../src/core/state.js';
+import generateReducers from '../src/core/reducer.js';
+import hintingMiddleware from '../src/hinting/middleware.js';
 import {
   getPatchErrors,
   getDeducedTypes,
   getPatchSearchData,
-} from '../src/hinting/selectors';
+} from '../src/hinting/selectors.js';
 
-import { switchPatchUnsafe } from '../src/editor/actions';
+import { switchPatchUnsafe } from '../src/editor/actions.js';
 import {
   createProject,
   openProject,
@@ -27,13 +28,19 @@ import {
   updateNodeProperty,
   bulkMoveNodesAndComments,
   addNode,
-} from '../src/project/actions';
-import * as PAT from '../src/project/actionTypes';
+} from '../src/project/actions.js';
+import * as PAT from '../src/project/actionTypes.js';
 
-import { getProject } from '../src/project/selectors';
+import { getProject } from '../src/project/selectors.js';
 
-import UPDATE_HINTING from '../src/hinting/actionType';
-import { UPDATE_ERRORS_POLICY as POLICY } from '../src/hinting/validation.internal';
+import UPDATE_HINTING from '../src/hinting/actionType.js';
+import { UPDATE_ERRORS_POLICY as POLICY } from '../src/hinting/validation.internal.js';
+
+const { assert } = chai;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const thunk =
+  typeof thunkModule === 'function' ? thunkModule : thunkModule.default;
 
 // =============================================================================
 //
@@ -43,7 +50,7 @@ import { UPDATE_ERRORS_POLICY as POLICY } from '../src/hinting/validation.intern
 
 const assertActionTypeEqual = (type, action) => assert.equal(action.type, type);
 
-const assertActionUpdatesErrors = action =>
+const assertActionUpdatesErrors = (action) =>
   assert.equal(
     action.type,
     UPDATE_HINTING,
@@ -51,7 +58,7 @@ const assertActionUpdatesErrors = action =>
   );
 
 // :: Action -> Nullable ErrorsUpdateData
-const getErrorsUpdateData = action =>
+const getErrorsUpdateData = (action) =>
   R.cond([
     [R.propEq('type', UPDATE_HINTING), R.path(['payload', 'errors'])],
     [R.T, assertActionUpdatesErrors],
@@ -67,14 +74,16 @@ const assertPolicyEquals = (policy, action) => {
 
 // :: (Function with asserts) -> Action -> _
 const assertErrorsWith = R.curry((assertsFn, action) =>
-  R.compose(errs => assertsFn(errs), R.prop('errors'), getErrorsUpdateData)(
-    action
-  )
+  R.compose(
+    (errs) => assertsFn(errs),
+    R.prop('errors'),
+    getErrorsUpdateData
+  )(action)
 );
 
 // :: (Function with asserts) -> Action -> _
 const assertPatchSearchDataWith = R.curry((assertsFn, action) =>
-  R.compose(data => assertsFn(data), getPatchSearchDataFromAction)(action)
+  R.compose((data) => assertsFn(data), getPatchSearchDataFromAction)(action)
 );
 
 const assertErrorsUnchanged = R.compose(assert.isNull, getErrorsUpdateData);
@@ -102,7 +111,7 @@ describe('Hinting', () => {
         thunk,
         hintingMiddleware,
         // Next middleware collects dispatched actions for testing purposes
-        () => next => action => {
+        () => (next) => (action) => {
           dispatchedActions = R.append(action, dispatchedActions);
           return next(action);
         }
@@ -119,7 +128,7 @@ describe('Hinting', () => {
       store.dispatch(createProject());
       const project = getProject(store.getState());
       assertPolicyEquals(POLICY.OVERWRITE, dispatchedActions[1]);
-      assertErrorsWith(errors => {
+      assertErrorsWith((errors) => {
         const patchesInProject = XP.listPatchPaths(project);
         assert.sameMembers(R.keys(errors), patchesInProject);
       }, dispatchedActions[1]);
@@ -131,7 +140,7 @@ describe('Hinting', () => {
       store.dispatch(openProject(proj));
       const project = getProject(store.getState());
       assertPolicyEquals(POLICY.OVERWRITE, dispatchedActions[1]);
-      assertErrorsWith(errors => {
+      assertErrorsWith((errors) => {
         const patchesInProject = XP.listPatchPaths(project);
         assert.sameMembers(R.keys(errors), patchesInProject);
         const patchErrors = getPatchErrors('@/main', errors);
@@ -143,7 +152,7 @@ describe('Hinting', () => {
       store.dispatch(addPatch('lala'));
       assertPolicyEquals(POLICY.ASSOC, dispatchedActions[1]);
       assertErrorsWith(
-        errors =>
+        (errors) =>
           assert.deepEqual(errors, {
             '@/lala': { errors: {}, nodes: {}, links: {} },
           }),
@@ -186,7 +195,7 @@ describe('Hinting', () => {
         );
         assertPolicyEquals(POLICY.ASSOC, dispatchedActions[1]);
         assertErrorsWith(
-          errors => assert.hasAllKeys(errors, ['@/main']),
+          (errors) => assert.hasAllKeys(errors, ['@/main']),
           dispatchedActions[1]
         );
       });
@@ -199,7 +208,7 @@ describe('Hinting', () => {
         );
         assertPolicyEquals(POLICY.ASSOC, dispatchedActions[1]);
         assertErrorsWith(
-          errors => assert.hasAllKeys(errors, ['@/blink', '@/main']),
+          (errors) => assert.hasAllKeys(errors, ['@/blink', '@/main']),
           dispatchedActions[1]
         );
       });
@@ -239,7 +248,7 @@ describe('Hinting', () => {
         );
         assertPolicyEquals(POLICY.MERGE, dispatchedActions[1]);
         assertErrorsWith(
-          errors => assert.hasAllKeys(errors, ['@/named-pins', '@/main']),
+          (errors) => assert.hasAllKeys(errors, ['@/named-pins', '@/main']),
           dispatchedActions[1]
         );
       });
@@ -281,7 +290,7 @@ describe('Hinting', () => {
       assertErrorsUnchanged(dispatchedActions[1]);
       assertPatchSearchDataWith(
         R.compose(
-          desc => assert.strictEqual(desc, 'yo'),
+          (desc) => assert.strictEqual(desc, 'yo'),
           R.prop('description'),
           R.find(R.propEq('path', '@/main'))
         ),
@@ -292,7 +301,7 @@ describe('Hinting', () => {
     it('updates data on renaming patch', () => {
       store.dispatch(renamePatch('@/main', 'new-one'));
       assert.lengthOf(dispatchedActions, 2);
-      assertPatchSearchDataWith(data => {
+      assertPatchSearchDataWith((data) => {
         assert.notExists(R.find(R.propEq('path', '@/main'), data));
         assert.exists(R.find(R.propEq('path', '@/new-one'), data));
       }, dispatchedActions[1]);
@@ -301,7 +310,7 @@ describe('Hinting', () => {
     it('updates data on adding new patch', () => {
       store.dispatch(addPatch('hey-ho'));
       assert.lengthOf(dispatchedActions, 2);
-      assertPatchSearchDataWith(data => {
+      assertPatchSearchDataWith((data) => {
         assert.exists(R.find(R.propEq('path', '@/hey-ho'), data));
       }, dispatchedActions[1]);
     });

@@ -1,21 +1,25 @@
 import path from 'path';
-import * as R from 'ramda';
-import * as fse from 'fs-extra';
-import chai, { assert } from 'chai';
+import { fileURLToPath } from 'url';
+import R from 'ramda';
+import fse from 'fs-extra';
+import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import chaiFs from 'chai-fs';
 
 import {
   checkLibrariesInstalledByUrls,
   installLibrariesByUrls,
-} from '../src/libraryManager';
+} from '../src/libraryManager.js';
+
+const { assert } = chai;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 chai.use(chaiAsPromised);
 chai.use(chaiFs);
 
 describe('Library Manager', () => {
   let progress = [];
-  const onProgress = data => {
+  const onProgress = (data) => {
     progress = R.append(data, progress);
   };
 
@@ -85,7 +89,7 @@ describe('Library Manager', () => {
       ]);
       return Promise.all([
         // Check Promise contents
-        res.then(libs =>
+        res.then((libs) =>
           assert.sameMembers(libs, [
             'GSM',
             'UnoWiFi_Developer_Edition_Lib',
@@ -96,7 +100,7 @@ describe('Library Manager', () => {
         res.then(
           R.tap(
             R.map(
-              R.pipe(x => path.resolve(tmpDir, x), assert.notIsEmptyDirectory)
+              R.pipe((x) => path.resolve(tmpDir, x), assert.notIsEmptyDirectory)
             )
           )
         ),
@@ -105,7 +109,7 @@ describe('Library Manager', () => {
           R.tap(
             R.map(
               R.pipe(
-                x => path.resolve(tmpDir, `${x}.zip`),
+                (x) => path.resolve(tmpDir, `${x}.zip`),
                 assert.notPathExists
               )
             )

@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 .ModalBody {
   color: $modal-fg-color;
   padding: 0 14px 14px 14px;

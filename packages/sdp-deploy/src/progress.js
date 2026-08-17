@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { roundTo } from 'sdp-func-tools';
 
 // ProgressData :: { note: String, total: Number, current: Number, percentage: Number }
@@ -9,14 +9,14 @@ import { roundTo } from 'sdp-func-tools';
  *
  * :: Number -> (String -> ProgressData)
  */
-export default total => {
+export default (total) => {
   let current = 0;
 
   /**
    * Increments `current` and returns `ProgressData`.
    * :: String -> ProgressData
    */
-  const next = note => {
+  const next = (note) => {
     current += 1;
     return {
       total,
@@ -38,7 +38,7 @@ export default total => {
    */
   const wrap = R.pipe(R.prop('note'), next);
 
-  const fn = note => next(note);
-  fn.wrap = data => wrap(data);
+  const fn = (note) => next(note);
+  fn.wrap = (data) => wrap(data);
   return fn;
 };

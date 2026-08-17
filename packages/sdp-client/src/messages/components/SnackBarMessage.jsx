@@ -1,10 +1,10 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { MESSAGE_TYPE } from '../constants';
-import Button from '../../core/components/Button';
-import CloseButton from '../../core/components/CloseButton';
+import { MESSAGE_TYPE } from '../constants.js';
+import Button from '../../core/components/Button.jsx';
+import CloseButton from '../../core/components/CloseButton.jsx';
 
 const ANIMATION_TIMEOUT = 100;
 
@@ -33,7 +33,7 @@ class SnackBarMessage extends React.Component {
 
   getMessageTrace() {
     const { message } = this.props;
-    const trace = message.payload.trace;
+    const { trace } = message.payload;
     if (!trace || trace.length === 0) return null;
 
     return (
@@ -47,13 +47,13 @@ class SnackBarMessage extends React.Component {
     const { message, onClickMessageButton } = this.props;
 
     const solution = message.payload.solution ? (
-      <React.Fragment>
+      <>
         <br />
         {message.payload.solution}
-      </React.Fragment>
+      </>
     ) : null;
 
-    const button = R.unless(R.isNil, text => (
+    const button = R.unless(R.isNil, (text) => (
       <Button small light onClick={() => onClickMessageButton(message.id)}>
         {text}
       </Button>
@@ -81,7 +81,7 @@ class SnackBarMessage extends React.Component {
   }
 
   hide() {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.setHidden(true);
       setTimeout(resolve, ANIMATION_TIMEOUT);
     }).then(() => {

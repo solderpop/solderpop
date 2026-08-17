@@ -1,10 +1,13 @@
 import R from 'ramda';
-import { assert } from 'chai';
+import chai from 'chai';
 
 import path from 'path';
-import { loadLibrary, loadLibs } from '../src/loadLibs';
-import { resolveLibPath } from '../src/utils';
+import { fileURLToPath } from 'url';
+import { loadLibrary, loadLibs } from '../src/loadLibs.js';
+import { resolveLibPath } from '../src/utils.js';
 
+const { assert } = chai;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const workspaceDir = './fixtures/workspace';
 
 describe('Library loader', () => {
@@ -12,7 +15,7 @@ describe('Library loader', () => {
   const libDir = resolveLibPath(workspace);
 
   it('should load xod/core libs from ./fixtures/workspace/lib', () => {
-    loadLibrary(['xod/core'], libDir).then(libs => {
+    loadLibrary(['xod/core'], libDir).then((libs) => {
       assert.sameMembers(R.keys(libs), [
         'xod/core/and',
         'xod/core/led',
@@ -23,7 +26,7 @@ describe('Library loader', () => {
   });
 
   it('should load all libs from ./fixtures/workspace/lib', () =>
-    loadLibs([libDir]).then(libs => {
+    loadLibs([libDir]).then((libs) => {
       assert.sameMembers(R.keys(libs), [
         'user/utils/test',
         'user/with-omitted-optionals/empty-lib-patch',
@@ -40,7 +43,7 @@ describe('Library loader', () => {
     const bundledLibDir = resolveLibPath(
       path.resolve(__dirname, '../../../workspace')
     );
-    return loadLibs([libDir, bundledLibDir]).then(libs => {
+    return loadLibs([libDir, bundledLibDir]).then((libs) => {
       const libPatchPaths = R.keys(libs);
 
       // Check that libs is loaded

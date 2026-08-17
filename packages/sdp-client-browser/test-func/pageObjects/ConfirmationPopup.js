@@ -1,11 +1,11 @@
-import BasePageObject from './BasePageObject';
+import BasePageObject from './BasePageObject.js';
 
 class ConfirmationPopup extends BasePageObject {
   async getTitle() {
     const titleElementHandle = await this.elementHandle.$('.skylight-title');
 
     const title = await this.page.evaluate(
-      el => el.textContent,
+      (el) => el.textContent,
       titleElementHandle
     );
 
@@ -20,7 +20,7 @@ class ConfirmationPopup extends BasePageObject {
   }
 }
 
-ConfirmationPopup.findOnPage = async page => {
+ConfirmationPopup.findOnPage = async (page) => {
   const elementHandle = await page.$('.PopupConfirm');
   if (!elementHandle) return null;
   return new ConfirmationPopup(page, elementHandle);

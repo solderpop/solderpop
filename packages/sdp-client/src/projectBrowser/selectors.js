@@ -1,12 +1,12 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { createSelector } from 'reselect';
 
 import * as XP from 'sdp-project';
 
-import { createMemoizedSelector } from '../utils/selectorTools';
-import * as ProjectSelectors from '../project/selectors';
-import * as HintingSelectors from '../hinting/selectors';
-import { isPatchDeadTerminal } from '../project/utils';
+import { createMemoizedSelector } from '../utils/selectorTools.js';
+import * as ProjectSelectors from '../project/selectors.js';
+import * as HintingSelectors from '../hinting/selectors.js';
+import { isPatchDeadTerminal } from '../project/utils.js';
 
 export const getProjectBrowser = R.prop('projectBrowser');
 
@@ -32,16 +32,18 @@ export const getProjectName = createSelector(
 
 // :: HintingErrors -> Patch -> Patch
 const markDeadPatches = R.curry((errors, patch) =>
-  R.pipe(XP.getPatchPath, R.has(R.__, errors), R.assoc('dead', R.__, patch))(
-    patch
-  )
+  R.pipe(
+    XP.getPatchPath,
+    R.has(R.__, errors),
+    R.assoc('dead', R.__, patch)
+  )(patch)
 );
 
 // :: StrMap PatchPath PathFlags -> Patch -> Patch
 const markDeprecatedPatches = R.curry((patchMarkers, patch) =>
   R.compose(
     R.assoc('isDeprecated', R.__, patch),
-    patchPath => R.pathOr(false, [patchPath, 'deprecated'], patchMarkers),
+    (patchPath) => R.pathOr(false, [patchPath, 'deprecated'], patchMarkers),
     XP.getPatchPath
   )(patch)
 );
@@ -50,7 +52,7 @@ const markDeprecatedPatches = R.curry((patchMarkers, patch) =>
 const markUtilityPatches = R.curry((patchMarkers, patch) =>
   R.compose(
     R.assoc('isUtility', R.__, patch),
-    patchPath => R.pathOr(false, [patchPath, 'utility'], patchMarkers),
+    (patchPath) => R.pathOr(false, [patchPath, 'utility'], patchMarkers),
     XP.getPatchPath
   )(patch)
 );

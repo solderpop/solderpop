@@ -1,7 +1,7 @@
-import * as ERROR_CODES from './errorCodes';
+import * as ERROR_CODES from './errorCodes.js';
 
-export { default as pack } from './pack';
-export { arrangeByFiles, fsSafeName } from './unpack';
+export { default as pack } from './pack.js';
+export { arrangeByFiles, fsSafeName } from './unpack.js';
 export {
   saveAll,
   saveArrangedFiles,
@@ -9,33 +9,30 @@ export {
   saveProjectEntirely,
   saveLibraryEntirely,
   saveAllLibrariesEntirely,
-} from './save';
-export { writeJSON, writeFile } from './write';
-export { spawnWorkspaceFile, spawnStdLib, spawnDefaultProject } from './spawn';
-export { readDir, readFile, readJSON } from './read';
+} from './save.js';
+export { writeJSON, writeFile } from './write.js';
+export { spawnWorkspaceFile, spawnDefaultProject } from './spawn.js';
+export { readDir, readFile, readJSON } from './read.js';
 export {
   getProjects,
   getLocalProjects,
   loadProject,
   loadProjectWithLibs,
   loadProjectWithoutLibs,
-} from './load';
-export {
-  scanWorkspaceForLibNames,
-  loadLibsFromWorkspaceList,
-} from './loadLibs';
-export * from './utils';
+} from './load.js';
+export { scanWorkspaceForLibNames, loadLibs } from './loadLibs.js';
+export * from './utils.js';
 export {
   findClosestProjectDir,
   findClosestWorkspaceDir,
   isWorkspaceDir,
   getPathToXodProject,
-} from './find';
-export { default as messages } from './messages';
+} from './find.js';
+export { default as messages } from './messages.js';
 
-export * from './constants';
+export * from './constants.js';
 
-export { default as rmrf } from './core/rmrf';
-export { default as copy } from './core/copy';
+export { default as rmrf } from './core/rmrf.js';
+export { default as copy } from './core/copy.js';
 
 export { ERROR_CODES };

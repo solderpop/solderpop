@@ -1,5 +1,5 @@
-import * as R from 'ramda';
-import { Maybe, Either } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
 import {
   foldEither,
   foldMaybe,
@@ -9,15 +9,17 @@ import {
   inSet,
 } from 'sdp-func-tools';
 
-import * as Link from './link';
-import * as Node from './node';
-import * as Patch from './patch';
-import * as Project from './project';
-import * as Pin from './pin';
-import * as Utils from './utils';
-import * as PPU from './patchPathUtils';
-import { def } from './types';
-import { sortGraph } from './gmath';
+import * as Link from './link.js';
+import * as Node from './node.js';
+import * as Patch from './patch.js';
+import * as Project from './project.js';
+import * as Pin from './pin.js';
+import * as Utils from './utils.js';
+import * as PPU from './patchPathUtils.js';
+import { def } from './types.js';
+import { sortGraph } from './gmath.js';
+
+const { Maybe, Either } = RamdaFantasy;
 
 //
 // Pin types deduction
@@ -49,14 +51,14 @@ const getPinTypesFromLinks = (
 ) =>
   R.compose(
     catMaybies,
-    R.map(link => {
+    R.map((link) => {
       const outwardNodeId = getOutwardNodeIdFromLink(link);
       const outwardPinKey = getOutwardPinKeyFromLink(link);
       const maybeOutwardNode = Patch.getNodeById(outwardNodeId, entryPatch);
 
       // :: Maybe (PinKey, DataType)
       return R.chain(
-        outwardNode =>
+        (outwardNode) =>
           R.compose(
             R.map(R.pair(getOwnPinKeyFromLink(link))),
             R.chain(
@@ -85,21 +87,22 @@ const getPinKeysByGenericType = (node, patch) =>
 
 const leftIfDifferent = (eitherA, eitherB) =>
   foldEither(
-    contradictingAs =>
+    (contradictingAs) =>
       foldEither(
-        contradictingBs =>
-          R.compose(Either.Left, R.uniq, R.concat)(
-            contradictingAs,
-            contradictingBs
-          ),
-        okB => R.compose(Either.Left, R.uniq, R.append)(okB, contradictingAs),
+        (contradictingBs) =>
+          R.compose(
+            Either.Left,
+            R.uniq,
+            R.concat
+          )(contradictingAs, contradictingBs),
+        (okB) => R.compose(Either.Left, R.uniq, R.append)(okB, contradictingAs),
         eitherB
       ),
-    okA =>
+    (okA) =>
       foldEither(
-        contradictingBs =>
+        (contradictingBs) =>
           R.compose(Either.Left, R.uniq, R.append)(okA, contradictingBs),
-        okB => (okA === okB ? Either.Right(okA) : Either.Left([okA, okB])),
+        (okB) => (okA === okB ? Either.Right(okA) : Either.Left([okA, okB])),
         eitherB
       ),
     eitherA
@@ -152,7 +155,7 @@ const deducePinTypesForNode = (
             R.compose(
               Maybe.of,
               R.fromPairs,
-              R.map(pk => [pk, dataType]),
+              R.map((pk) => [pk, dataType]),
               R.propOr([], R.__, pinKeysByGenericType)
             ),
             // No need to include types of static(non-generic) pins in resolution results.
@@ -326,7 +329,8 @@ export const deducePinTypesWithoutBuses = def(
           R.filter(
             R.compose(
               R.isNil,
-              pinKey => R.path([abstractNodeId, pinKey], stronglyResolvedTypes),
+              (pinKey) =>
+                R.path([abstractNodeId, pinKey], stronglyResolvedTypes),
               Link.getLinkOutputPinKey
             )
           ),

@@ -1,5 +1,5 @@
-import * as R from 'ramda';
-import { Either } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
 import {
   foldEither,
   foldMaybe,
@@ -10,14 +10,16 @@ import {
   prependTraceToError,
 } from 'sdp-func-tools';
 
-import * as Node from './node';
-import * as Patch from './patch';
-import * as Project from './project';
-import * as Pin from './pin';
-import * as Utils from './utils';
-import * as PPU from './patchPathUtils';
-import { def } from './types';
-import { deducePinTypes } from './TypeDeduction_Js.bs';
+import * as Node from './node.js';
+import * as Patch from './patch.js';
+import * as Project from './project.js';
+import * as Pin from './pin.js';
+import * as Utils from './utils.js';
+import * as PPU from './patchPathUtils.js';
+import { def } from './types.js';
+import { deducePinTypes } from './TypeDeduction_Js.bs.js';
+
+const { Either } = RamdaFantasy;
 
 //
 // Autoresolving abstract nodes
@@ -68,7 +70,7 @@ const getDeducedTypesForGenericPins = (project, genericNode, deducedTypes) => {
   const deducedTypesForGenerics = R.compose(
     R.sortBy(R.head),
     R.uniqBy(R.head),
-    R.map(pin => [Pin.getPinType(pin), pinTypes[Pin.getPinKey(pin)]]),
+    R.map((pin) => [Pin.getPinType(pin), pinTypes[Pin.getPinKey(pin)]]),
     R.filter(Pin.isGenericPin),
     Patch.listPins
   )(genericPatch);
@@ -135,11 +137,12 @@ const findOrCreateSpecialization = R.curry(
       R.pluck(1)
     )(deducedTypesForGenericPins);
 
-    const genericBaseName = R.compose(PPU.getLocalPath, PPU.getBaseName)(
-      genericNodeType
-    );
+    const genericBaseName = R.compose(
+      PPU.getLocalPath,
+      PPU.getBaseName
+    )(genericNodeType);
     const customTypeSpecializationNodesWithoutSuffix = R.compose(
-      R.map(library => PPU.resolvePatchPath(genericBaseName, library)),
+      R.map((library) => PPU.resolvePatchPath(genericBaseName, library)),
       R.reject(Utils.isBuiltInType),
       R.pluck(1)
     )(deducedTypesForGenericPins);
@@ -193,9 +196,10 @@ const findOrCreateSpecialization = R.curry(
       )(project);
     }
 
-    const specializationPatchPath = R.compose(Patch.getPatchPath, R.head)(
-      matchingSpecializations
-    );
+    const specializationPatchPath = R.compose(
+      Patch.getPatchPath,
+      R.head
+    )(matchingSpecializations);
     return R.compose(
       R.map(R.pair(specializationPatchPath)),
       // in case specialization itself uses generic nodes
@@ -209,9 +213,9 @@ const autoresolveTypes = def(
   (entryPatchPath, project) =>
     R.compose(
       prependTraceToError(entryPatchPath),
-      R.chain(entryPatch =>
+      R.chain((entryPatch) =>
         R.compose(
-          deducedTypes =>
+          (deducedTypes) =>
             reduceEither(
               (updatedProject, node) => {
                 const nodeType = Node.getNodeType(node);

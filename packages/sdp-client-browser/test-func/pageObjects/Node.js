@@ -1,18 +1,18 @@
-import hasClass from '../utils/hasClass';
-import getBoundingClientRect from '../utils/getBoundingClientRect';
-import getCenterPositon from '../utils/getCenterPositon';
-import drag from '../utils/drag';
-import BasePageObject from './BasePageObject';
-import Pin from './Pin';
+import hasClass from '../utils/hasClass.js';
+import getBoundingClientRect from '../utils/getBoundingClientRect.js';
+import getCenterPositon from '../utils/getCenterPositon.js';
+import drag from '../utils/drag.js';
+import BasePageObject from './BasePageObject.js';
+import Pin from './Pin.js';
 
 class Node extends BasePageObject {
   getId() {
-    return this.page.evaluate(el => el.id, this.elementHandle);
+    return this.page.evaluate((el) => el.id, this.elementHandle);
   }
 
   async getName() {
     return this.page.evaluate(
-      el => el.textContent,
+      (el) => el.textContent,
       await this.elementHandle.$('.nodeLabel')
     );
   }
@@ -65,17 +65,17 @@ Node.findById = async (page, nodeId) => {
 
 export default Node;
 
-export const getAllNodes = async page => {
+export const getAllNodes = async (page) => {
   const elementHandles = await page.$$('.Node');
-  return elementHandles.map(eh => new Node(page, eh));
+  return elementHandles.map((eh) => new Node(page, eh));
 };
 
-export const getAllNodeIds = async page => {
+export const getAllNodeIds = async (page) => {
   const nodes = await getAllNodes(page);
-  return Promise.all(nodes.map(node => node.getId()));
+  return Promise.all(nodes.map((node) => node.getId()));
 };
 
-export const getSelectedNodes = async page => {
+export const getSelectedNodes = async (page) => {
   const elementHandles = await page.$$('.Node.is-selected');
-  return elementHandles.map(eh => new Node(page, eh));
+  return elementHandles.map((eh) => new Node(page, eh));
 };

@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import path from 'path';
 import fse from 'fs-extra';
 import fetch from 'node-fetch';
@@ -12,7 +12,7 @@ import { tapP } from 'sdp-func-tools';
 export default R.curry((url, destinationPath) =>
   fetch(url)
     .then(tapP(() => fse.ensureDir(path.dirname(destinationPath))))
-    .then(res => {
+    .then((res) => {
       const partPath = `${destinationPath}.part`;
       const file = fse.createWriteStream(partPath);
       return new Promise((resolve, reject) => {
@@ -24,6 +24,6 @@ export default R.curry((url, destinationPath) =>
           });
       });
     })
-    .then(partPath => fse.rename(partPath, destinationPath))
+    .then((partPath) => fse.rename(partPath, destinationPath))
     .then(R.always(destinationPath))
 );

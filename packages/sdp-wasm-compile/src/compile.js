@@ -2,11 +2,8 @@ import os from 'os';
 import path from 'path';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
-import * as fse from 'fs-extra';
+import fse from 'fs-extra';
 import { createError } from 'sdp-func-tools';
-
-import { getEmxxEnv } from './emcc';
-import { ensureServer, artifactUrl } from './server';
 
 // Bundled alongside this package's dist output at build time (babel inlines
 // these as plain strings via babel-plugin-inline-import — see .babelrc —
@@ -18,6 +15,8 @@ import arduinoCpp from 'sdp-arduino/platform/wasmSimulation/Arduino.cpp';
 import wasmSerialH from 'sdp-arduino/platform/wasmSimulation/WasmSerial.h';
 import wasmSerialCpp from 'sdp-arduino/platform/wasmSimulation/WasmSerial.cpp';
 import mainCpp from 'sdp-arduino/platform/wasmSimulation/main.cpp';
+import { ensureServer, artifactUrl } from './server.js';
+import { getEmxxEnv } from './emcc.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -48,9 +47,7 @@ const EMXX_FLAGS = [
 let rootDirPromise = null;
 const getRootDir = () => {
   if (rootDirPromise === null) {
-    rootDirPromise = fse.mkdtemp(
-      path.join(os.tmpdir(), 'sdp_wasm_compile_')
-    );
+    rootDirPromise = fse.mkdtemp(path.join(os.tmpdir(), 'sdp_wasm_compile_'));
   }
   return rootDirPromise;
 };
@@ -66,7 +63,7 @@ const writeSources = async (buildDir, programCode) => {
   ]);
 };
 
-const wrapCompileError = err =>
+const wrapCompileError = (err) =>
   Promise.reject(
     createError('WASM_COMPILATION_ERROR', {
       message: err.message,
@@ -76,7 +73,7 @@ const wrapCompileError = err =>
   );
 
 // :: String -> Nullable Path -> Promise Suite Error
-export const compileSimulation = async (programCode, emsdkRoot = null) => {
+const compileSimulation = async (programCode, emsdkRoot = null) => {
   const { emxx, env } = await getEmxxEnv(emsdkRoot);
   const rootDir = await getRootDir();
   const buildDir = await fse.mkdtemp(path.join(rootDir, 'build_'));
@@ -115,3 +112,5 @@ export const compileSimulation = async (programCode, emsdkRoot = null) => {
     options: { noExitRuntime: true },
   };
 };
+
+export default compileSimulation;

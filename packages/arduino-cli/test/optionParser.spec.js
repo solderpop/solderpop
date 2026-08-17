@@ -1,5 +1,6 @@
 import path from 'path';
-import { assert } from 'chai';
+import { fileURLToPath } from 'url';
+import chai from 'chai';
 import fse from 'fs-extra';
 
 import {
@@ -10,7 +11,10 @@ import {
   convertIntermediateOptions,
   parseOptions,
   patchBoardsWithOptions,
-} from '../src/optionParser';
+} from '../src/optionParser.js';
+
+const { assert } = chai;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const fixtureDir = path.resolve(__dirname, 'fixtures');
 
@@ -217,5 +221,5 @@ describe('Option Parser', () => {
         { ID: 'fictional:fake', Installed: '1.2.3' },
       ],
       boards
-    ).then(res => assert.sameDeepMembers(res, expectedBoards)));
+    ).then((res) => assert.sameDeepMembers(res, expectedBoards)));
 });

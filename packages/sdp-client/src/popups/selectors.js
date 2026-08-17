@@ -1,7 +1,7 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { createSelector } from 'reselect';
 
-import { POPUP_ID } from './constants';
+import { POPUP_ID } from './constants.js';
 
 // =============================================================================
 //
@@ -38,8 +38,8 @@ export const getProjectBrowserPopups = createSelector(
   ])
 );
 
-export const getPopupVisibility = popupId =>
+export const getPopupVisibility = (popupId) =>
   createSelector(getPopups, isPopupVisible(popupId));
 
-export const getPopupData = popupId =>
+export const getPopupData = (popupId) =>
   createSelector(getPopups, extractPopupData(popupId));

@@ -14,10 +14,10 @@
 import os from 'os';
 import path from 'path';
 import { spawn } from 'child_process';
-import * as fse from 'fs-extra';
-import download from 'sdp-deploy/dist/download';
-import unpackZip from 'sdp-deploy/dist/unzip';
-import createProgress from 'sdp-deploy/dist/progress';
+import fse from 'fs-extra';
+import download from 'sdp-deploy/dist/download.js';
+import unpackZip from 'sdp-deploy/dist/unzip.js';
+import createProgress from 'sdp-deploy/dist/progress.js';
 import { isEmsdkInstalled } from 'sdp-wasm-compile';
 import { createError } from 'sdp-func-tools';
 
@@ -25,9 +25,9 @@ import {
   CHECK_EMSDK_INSTALLED,
   INSTALL_EMSDK,
   UNINSTALL_EMSDK,
-} from '../shared/events';
-import subscribeIpc from './subscribeIpc';
-import { getUserDataDir } from './utils';
+} from '../shared/events.js';
+import subscribeIpc from './subscribeIpc.js';
+import { getUserDataDir } from './utils.js';
 
 const EMSDK_SCRIPTS_URL =
   'https://github.com/emscripten-core/emsdk/archive/refs/heads/main.zip';
@@ -43,10 +43,10 @@ const runEmsdkCommand = (emsdkRoot, args, onLine) =>
       os.platform() === 'win32' ? 'emsdk.bat' : 'emsdk'
     );
     const proc = spawn(script, args, { cwd: emsdkRoot });
-    proc.stdout.on('data', data => onLine(data.toString()));
-    proc.stderr.on('data', data => onLine(data.toString()));
+    proc.stdout.on('data', (data) => onLine(data.toString()));
+    proc.stderr.on('data', (data) => onLine(data.toString()));
     proc.on('error', reject);
-    proc.on('exit', code => {
+    proc.on('exit', (code) => {
       if (code === 0) {
         resolve();
         return;
@@ -73,7 +73,7 @@ const installEmsdkScripts = async (onProgress, emsdkRoot) => {
 };
 
 // :: (ProgressData -> _) -> Promise _ Error
-export const installEmsdk = async onProgress => {
+export const installEmsdk = async (onProgress) => {
   const emsdkRoot = getEmsdkRoot();
 
   await installEmsdkScripts(onProgress, emsdkRoot);
@@ -81,7 +81,7 @@ export const installEmsdk = async onProgress => {
   // emsdk's own install/activate output doesn't come with a percentage —
   // forwarded as log lines instead, same as Debugger.jsx already handles
   // for other installers when percentage is absent.
-  const onLine = message => onProgress({ note: message.trim() });
+  const onLine = (message) => onProgress({ note: message.trim() });
   await runEmsdkCommand(emsdkRoot, ['install', 'latest'], onLine);
   await runEmsdkCommand(emsdkRoot, ['activate', 'latest'], onLine);
 };
@@ -90,10 +90,7 @@ export const installEmsdk = async onProgress => {
 export const uninstallEmsdk = () => fse.remove(getEmsdkRoot());
 
 export const subscribeOnCheckEmsdkInstalled = () =>
-  subscribeIpc(
-    () => isEmsdkInstalled(getEmsdkRoot()),
-    CHECK_EMSDK_INSTALLED
-  );
+  subscribeIpc(() => isEmsdkInstalled(getEmsdkRoot()), CHECK_EMSDK_INSTALLED);
 
 export const subscribeOnInstallEmsdk = () =>
   subscribeIpc((_, __, onProgress) => installEmsdk(onProgress), INSTALL_EMSDK);

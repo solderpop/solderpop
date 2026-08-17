@@ -1,6 +1,6 @@
-import * as R from 'ramda';
-import * as ActionType from './actionTypes';
-import { MESSAGE_TYPE } from './constants';
+import R from 'ramda';
+import * as ActionType from './actionTypes.js';
+import { MESSAGE_TYPE } from './constants.js';
 
 const getTimestamp = () => new Date().getTime();
 
@@ -21,7 +21,7 @@ export const addMessage = (type, messageData, id = null) => ({
   },
 });
 
-export const deleteMessage = id => ({
+export const deleteMessage = (id) => ({
   type: ActionType.MESSAGE_DELETE,
   payload: {
     id,
@@ -37,7 +37,7 @@ export const addConfirmation = (...args) =>
 export const addNotification = (...args) =>
   addMessage(MESSAGE_TYPE.NOTIFICATION, ...args);
 
-export const messageButtonClick = messageId => ({
+export const messageButtonClick = (messageId) => ({
   type: ActionType.MESSAGE_BUTTON_CLICKED,
   payload: messageId,
 });

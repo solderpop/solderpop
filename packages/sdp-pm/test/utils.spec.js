@@ -1,14 +1,18 @@
-import { assert } from 'chai';
-import { Maybe } from 'ramda-fantasy';
+import chai from 'chai';
+import RamdaFantasy from 'ramda-fantasy';
 
 import {
   parseLibQuery,
   prependVIfNeeded,
   defaultToLatest,
   rejectUnexistingVersion,
-} from '../src/utils';
+} from '../src/utils.js';
 
-import * as ERR_CODES from '../src/errorCodes';
+import * as ERR_CODES from '../src/errorCodes.js';
+
+const { assert } = chai;
+
+const { Maybe } = RamdaFantasy;
 
 describe('Utils', () => {
   describe('parseLibQuery()', () => {
@@ -66,31 +70,31 @@ describe('Utils', () => {
 
   describe('rejectUnexistingVersion()', () => {
     it('returns resolved Promise for existing version or "latest" request', () => {
-      const req = version => ({ owner: 'xod', name: 'core', version });
+      const req = (version) => ({ owner: 'xod', name: 'core', version });
       const fixture = {
         versions: ['0.15.0', '0.14.0'],
       };
 
       return Promise.all([
-        rejectUnexistingVersion(req('0.15.0'), fixture).then(res =>
+        rejectUnexistingVersion(req('0.15.0'), fixture).then((res) =>
           assert.equal(res, fixture)
         ),
-        rejectUnexistingVersion(req('0.14.0'), fixture).then(res =>
+        rejectUnexistingVersion(req('0.14.0'), fixture).then((res) =>
           assert.equal(res, fixture)
         ),
-        rejectUnexistingVersion(req('latest'), fixture).then(res =>
+        rejectUnexistingVersion(req('latest'), fixture).then((res) =>
           assert.equal(res, fixture)
         ),
       ]);
     });
 
     it('rejectUnexistingVersion() returns rejected Promise for unexisting version', () => {
-      const req = version => ({ owner: 'xod', name: 'core', version });
+      const req = (version) => ({ owner: 'xod', name: 'core', version });
       const fixture = {
         versions: ['0.15.0', '0.14.0'],
       };
 
-      return rejectUnexistingVersion(req('0.16.0'), fixture).catch(err =>
+      return rejectUnexistingVersion(req('0.16.0'), fixture).catch((err) =>
         assert.propertyVal(err, 'errorCode', ERR_CODES.CANT_FIND_LIB_VERSION)
       );
     });

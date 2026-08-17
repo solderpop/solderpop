@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 import { catMaybies, foldMaybe } from 'sdp-func-tools';
 
@@ -10,8 +10,8 @@ import {
   sizeToPoint,
   subtractPoints,
   GAP_IN_SLOTS,
-} from '../project/nodeLayout';
-import { SELECTION_ENTITY_TYPE, PANEL_IDS } from './constants';
+} from '../project/nodeLayout.js';
+import { SELECTION_ENTITY_TYPE, PANEL_IDS } from './constants.js';
 
 export const getTabByPatchPath = R.curry((patchPath, tabs) =>
   R.compose(R.find(R.propEq('patchPath', patchPath)), R.values)(tabs)
@@ -40,9 +40,10 @@ export const isPinSelected = (linkingPin, renderablePin) =>
   linkingPin.pinKey === renderablePin.key;
 
 export const getSelectedEntityIdsOfType = R.curry((entityType, selection) =>
-  R.compose(R.map(R.prop('id')), R.filter(R.propEq('entity', entityType)))(
-    selection
-  )
+  R.compose(
+    R.map(R.prop('id')),
+    R.filter(R.propEq('entity', entityType))
+  )(selection)
 );
 
 // :: SELECTION_ENTITY_TYPE -> String -> SelectionEntity
@@ -65,19 +66,19 @@ export const getNewSelection = R.compose(
   R.evolve({
     nodes: R.map(
       R.compose(
-        id => ({ entity: SELECTION_ENTITY_TYPE.NODE, id }),
+        (id) => ({ entity: SELECTION_ENTITY_TYPE.NODE, id }),
         XP.getNodeId
       )
     ),
     comments: R.map(
       R.compose(
-        id => ({ entity: SELECTION_ENTITY_TYPE.COMMENT, id }),
+        (id) => ({ entity: SELECTION_ENTITY_TYPE.COMMENT, id }),
         XP.getCommentId
       )
     ),
     links: R.map(
       R.compose(
-        id => ({ entity: SELECTION_ENTITY_TYPE.LINK, id }),
+        (id) => ({ entity: SELECTION_ENTITY_TYPE.LINK, id }),
         XP.getLinkId
       )
     ),
@@ -177,7 +178,7 @@ export const getBoundingBox = R.curry((currentPatch, project, entities) => {
   +-----------------+
 */
 // :: ClipboardEntities -> ClipboardEntities
-export const resetClipboardEntitiesPosition = entities => {
+export const resetClipboardEntitiesPosition = (entities) => {
   const bBoxTopLeftPosition = getBBoxTopLeftPosition(entities);
 
   // TODO: better name
@@ -207,9 +208,9 @@ export const getEntitiesToCopy = R.curry((patch, selection) => {
   // [ (markerPath, attachmentContents) ]
   const attachments = R.compose(
     catMaybies,
-    R.map(markerPatchPath =>
+    R.map((markerPatchPath) =>
       XP.getAttachmentManagedByMarker(markerPatchPath, patch).map(
-        attachmentContents => [markerPatchPath, attachmentContents]
+        (attachmentContents) => [markerPatchPath, attachmentContents]
       )
     ),
     R.filter(R.has(R.__, XP.MANAGED_ATTACHMENT_FILENAMES)),
@@ -220,7 +221,7 @@ export const getEntitiesToCopy = R.curry((patch, selection) => {
   // we completely ignore what links are selected and just
   // copy all the links between selected nodes
   const links = R.compose(
-    R.filter(link => {
+    R.filter((link) => {
       const linkNodeIds = XP.getLinkNodeIds(link);
       return R.contains(linkNodeIds, selectedNodeIdPairs);
     }),
@@ -241,7 +242,7 @@ export const getEntitiesToCopy = R.curry((patch, selection) => {
 });
 
 // before insertion
-export const regenerateIds = entities => {
+export const regenerateIds = (entities) => {
   // { oldId: newId }
   const nodeIdReplacements = R.compose(
     R.converge(R.zipObj, [R.identity, R.map(XP.generateId)]),
@@ -276,7 +277,7 @@ export const regenerateIds = entities => {
 export const loadPanelSettings = () =>
   R.compose(
     R.reject(R.isNil),
-    R.map(panelId =>
+    R.map((panelId) =>
       R.compose(
         R.tryCatch(JSON.parse.bind(JSON), () => {
           // remove broken item from localStorage

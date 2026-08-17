@@ -15,11 +15,11 @@
 
 import path from 'path';
 import { parse } from 'url';
-import * as R from 'ramda';
-import * as fse from 'fs-extra';
+import R from 'ramda';
+import fse from 'fs-extra';
 import versionCompare from 'tiny-version-compare';
 
-import { ADDITIONAL_URLS_PATH } from './config';
+import { ADDITIONAL_URLS_PATH } from './config.js';
 
 const ORIGINAL_PACKAGE_INDEX_FILE = 'package_index.json';
 
@@ -37,7 +37,7 @@ const getPackageIndexFiles = async (getConfig, packagesDir) => {
   const config = await getConfig();
   const urls = R.pathOr([], ADDITIONAL_URLS_PATH, config);
   const filepaths = R.compose(
-    R.map(fname => path.join(packagesDir, fname)),
+    R.map((fname) => path.join(packagesDir, fname)),
     R.append(ORIGINAL_PACKAGE_INDEX_FILE),
     R.map(R.compose(R.last, R.split('/'), R.prop('pathname'), parse))
   )(urls);
@@ -50,7 +50,7 @@ const getPackageIndexFiles = async (getConfig, packagesDir) => {
  *
  * :: [Path] -> Promise [Object] Error
  */
-const readPackages = R.composeP(R.unnest, R.pluck('packages'), x =>
+const readPackages = R.composeP(R.unnest, R.pluck('packages'), (x) =>
   Promise.all(R.map(fse.readJson, x))
 );
 
@@ -61,11 +61,11 @@ const sortByVersion = R.sort(
 // :: [Object] -> [AvailableBoard]
 const getAvailableBoards = R.compose(
   R.unnest,
-  R.map(pkg =>
+  R.map((pkg) =>
     R.compose(
       R.unnest,
       R.values,
-      R.map(arch =>
+      R.map((arch) =>
         R.compose(
           R.map(
             R.compose(

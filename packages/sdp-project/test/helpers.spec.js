@@ -1,8 +1,12 @@
 import R from 'ramda';
-import { Either } from 'ramda-fantasy';
-import { assert } from 'chai';
+import RamdaFantasy from 'ramda-fantasy';
+import chai from 'chai';
 
-import * as Helper from './helpers';
+import * as Helper from './helpers.js';
+
+const { Either } = RamdaFantasy;
+
+const { assert } = chai;
 
 describe('Helpers', () => {
   describe('expectEither', () => {
@@ -19,7 +23,7 @@ describe('Helpers', () => {
       assert.throws(eitherLeft, Error, 'LEFT');
     });
     it('should return Right value', () => {
-      Helper.expectEitherRight(val => assert.deepEqual(val, rightObj), right);
+      Helper.expectEitherRight((val) => assert.deepEqual(val, rightObj), right);
     });
   });
 });

@@ -1,13 +1,13 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import {
   DEFAULT_VALUE_OF_TYPE,
   PIN_TYPE,
   isLikeCharLiteral,
 } from 'sdp-project';
 
-const parseDec = x => parseInt(x, 10);
-const parseBin = x => parseInt(x, 2);
-const parseHex = x => parseInt(x, 16);
+const parseDec = (x) => parseInt(x, 10);
+const parseBin = (x) => parseInt(x, 2);
+const parseHex = (x) => parseInt(x, 16);
 
 // 300 -> 255
 // -5 -> 0
@@ -21,27 +21,27 @@ const limitByte = R.cond([
 // 25 -> 00011001b
 const toBin = R.compose(
   R.concat(R.__, 'b'),
-  x => x.padStart(8, '0'),
-  x => x.toString(2),
+  (x) => x.padStart(8, '0'),
+  (x) => x.toString(2),
   limitByte
 );
 
 // 15 -> 0Fh
 const toHex = R.compose(
   R.concat(R.__, 'h'),
-  x => x.padStart(2, '0'),
+  (x) => x.padStart(2, '0'),
   R.toUpper,
-  x => x.toString(16),
+  (x) => x.toString(16),
   limitByte
 );
 
 // 15 -> 15d
-const toDec = R.pipe(limitByte, x => x.toString(10), R.concat(R.__, 'd'));
+const toDec = R.pipe(limitByte, (x) => x.toString(10), R.concat(R.__, 'd'));
 
-const decValueOrDefault = inputStr =>
+const decValueOrDefault = (inputStr) =>
   R.compose(
     R.ifElse(
-      parsed => isNaN(parsed) || parsed.toString(10) !== inputStr,
+      (parsed) => isNaN(parsed) || parsed.toString(10) !== inputStr,
       R.always(DEFAULT_VALUE_OF_TYPE[PIN_TYPE.BYTE]),
       toDec
     ),

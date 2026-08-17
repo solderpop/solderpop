@@ -1,9 +1,9 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { notNil } from 'sdp-func-tools';
 
-import initialState from './state';
-import UPDATE_HINTING from './actionType';
-import { mergeErrors } from './validation';
+import initialState from './state.js';
+import UPDATE_HINTING from './actionType.js';
+import { mergeErrors } from './validation.js';
 
 const errorsLens = R.lensProp('errors');
 // =============================================================================
@@ -23,7 +23,7 @@ const updateErrors = R.curry((action, state) =>
   R.compose(
     R.ifElse(
       notNil,
-      errs => R.over(errorsLens, mergeErrors(R.__, errs), state),
+      (errs) => R.over(errorsLens, mergeErrors(R.__, errs), state),
       R.always(state)
     ),
     getErrorsFromAction

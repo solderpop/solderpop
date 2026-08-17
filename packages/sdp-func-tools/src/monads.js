@@ -1,6 +1,8 @@
-import * as R from 'ramda';
-import { Maybe, Either } from 'ramda-fantasy';
-import { def } from './types';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+import { def } from './types.js';
+
+const { Maybe, Either } = RamdaFantasy;
 
 /*
  * Shortcuts for easier ReasonML interop
@@ -89,7 +91,7 @@ export const explode = R.cond([
   [Either.isRight, R.unnest],
   [
     Either.isLeft,
-    val => {
+    (val) => {
       throw new Error(
         `Either expected to be Right, but its Left with value: ${val}`
       );
@@ -97,7 +99,7 @@ export const explode = R.cond([
   ],
   [
     R.T,
-    input => {
+    (input) => {
       throw new Error(
         `Maybe or Either should be passed into explode function. Passed: ${input}`
       );
@@ -136,7 +138,7 @@ export const catMaybies = R.compose(
  */
 export const explodeEither = def(
   'explodeEither :: Either a b -> b',
-  foldEither(err => {
+  foldEither((err) => {
     throw new Error(`Explosion failed: ${err}`);
   }, R.identity)
 );
@@ -149,8 +151,8 @@ export const eitherToPromise = foldEither(
 
 // :: (() -> b) -> (a -> a) -> Maybe a -> Promise a b
 export const maybeToPromise = R.curry((nothingFn, justFn, maybe) =>
-  new Promise(
-    (resolve, reject) => (maybe.isJust ? resolve(maybe.value) : reject())
+  new Promise((resolve, reject) =>
+    maybe.isJust ? resolve(maybe.value) : reject()
   ).then(justFn, nothingFn)
 );
 
@@ -166,7 +168,7 @@ export const maybeToPromise = R.curry((nothingFn, justFn, maybe) =>
 export const reduceM = def(
   'reduceM :: (b -> m b) -> (b -> a -> m b) -> b -> [a] -> m c',
   (m, fn, initial, list) =>
-    R.reduce((acc, a) => R.chain(val => fn(val, a), acc), m(initial), list)
+    R.reduce((acc, a) => R.chain((val) => fn(val, a), acc), m(initial), list)
 );
 
 /**

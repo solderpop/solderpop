@@ -1,8 +1,8 @@
-import reducer from './reducer';
-import state from './state';
-import * as actions from './actions';
-import * as actionTypes from './actionTypes';
-import { ProjectBrowser } from './containers/ProjectBrowser';
+import reducer from './reducer.js';
+import state from './state.js';
+import * as actions from './actions.js';
+import * as actionTypes from './actionTypes.js';
+import ProjectBrowser from './containers/ProjectBrowser.jsx';
 
 export { reducer, state, actions, actionTypes, ProjectBrowser };
 

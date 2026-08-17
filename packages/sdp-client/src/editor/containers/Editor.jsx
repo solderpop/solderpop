@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import $ from 'sanctuary-def';
 import PropTypes from 'prop-types';
@@ -10,36 +10,41 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FocusTrap } from 'react-hotkeys';
 import * as XP from 'sdp-project';
-import debounce from 'throttle-debounce/debounce';
+import debounce from 'throttle-debounce/debounce.js';
 
-import * as Actions from '../actions';
-import * as ProjectActions from '../../project/actions';
-import * as ProjectSelectors from '../../project/selectors';
-import * as DebuggerSelectors from '../../debugger/selectors';
-import * as EditorSelectors from '../selectors';
+import * as Actions from '../actions.js';
+import * as ProjectActions from '../../project/actions.js';
+import * as ProjectSelectors from '../../project/selectors.js';
+import * as DebuggerSelectors from '../../debugger/selectors.js';
+import * as EditorSelectors from '../selectors.js';
 
-import { isInputTarget } from '../../utils/browser';
-import sanctuaryPropType from '../../utils/sanctuaryPropType';
-import { FOCUS_AREAS, TAB_TYPES, SIDEBAR_IDS, PANEL_IDS } from '../constants';
+import { isInputTarget } from '../../utils/browser.js';
+import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
+import {
+  FOCUS_AREAS,
+  TAB_TYPES,
+  SIDEBAR_IDS,
+  PANEL_IDS,
+} from '../constants.js';
 
-import Patch from './Patch';
-import CppImplementationEditor from '../components/CppImplementationEditor';
-import TabtestEditor from '../components/TabtestEditor';
-import NoPatch from '../components/NoPatch';
-import Suggester from '../components/Suggester';
-import PanelContextMenu from '../components/PanelContextMenu';
-import LibSuggester from '../components/LibSuggester';
-import DebuggerTopPane from '../../debugger/containers/DebuggerTopPane';
-import Sidebar from './Sidebar';
-import SnackBar from '../../messages/containers/SnackBar';
-import Helpbox from './Helpbox';
+import Patch from './Patch/index.jsx';
+import CppImplementationEditor from '../components/CppImplementationEditor.jsx';
+import TabtestEditor from '../components/TabtestEditor.jsx';
+import NoPatch from '../components/NoPatch.jsx';
+import Suggester from '../components/Suggester.jsx';
+import PanelContextMenu from '../components/PanelContextMenu.jsx';
+import LibSuggester from '../components/LibSuggester.jsx';
+import DebuggerTopPane from '../../debugger/containers/DebuggerTopPane.jsx';
+import Sidebar from './Sidebar.jsx';
+import SnackBar from '../../messages/containers/SnackBar.jsx';
+import Helpbox from './Helpbox.jsx';
 
-import Tooltip from '../../tooltip/components/Tooltip';
-import Workarea from './Workarea';
+import Tooltip from '../../tooltip/components/Tooltip.jsx';
+import Workarea from './Workarea.jsx';
 
-import Tabs from './Tabs';
-import DragLayer from './DragLayer';
-import TableLog from './TableLog';
+import Tabs from './Tabs.jsx';
+import DragLayer from './DragLayer.jsx';
+import TableLog from './TableLog.jsx';
 
 const pickPropsToCheck = R.compose(
   R.evolve({ panelSettings: R.map(R.omit(['size'])) }),
@@ -77,7 +82,7 @@ class Editor extends React.Component {
       this.props.suggesterPlacePosition || this.props.defaultNodePosition;
 
     this.hideSuggester();
-    this.props.currentPatchPath.map(currentPatchPath =>
+    this.props.currentPatchPath.map((currentPatchPath) =>
       this.props.actions.addNode(patchPath, position, currentPatchPath)
     );
   }
@@ -85,9 +90,11 @@ class Editor extends React.Component {
   onInstallLibrary(libParams) {
     return this.props.actions.installLibraries([libParams]);
   }
+
   onWorkareaFocus() {
     this.props.actions.setFocusedArea(FOCUS_AREAS.WORKAREA);
   }
+
   onLibSuggesterFocus() {
     this.props.actions.setFocusedArea(FOCUS_AREAS.LIB_SUGGESTER);
   }
@@ -111,7 +118,7 @@ class Editor extends React.Component {
 
     return foldMaybe(
       <NoPatch />,
-      tab => {
+      (tab) => {
         // Render <Patch /> component only for PATCH or DEBUGGER
         // tab types
         if (tab.type !== TAB_TYPES.PATCH && tab.type !== TAB_TYPES.DEBUGGER)
@@ -131,7 +138,7 @@ class Editor extends React.Component {
         );
         return (
           <Patch
-            ref={el => {
+            ref={(el) => {
               this.patchRef = el;
             }}
             patchPath={curPatchPath}
@@ -150,7 +157,7 @@ class Editor extends React.Component {
 
     return foldMaybe(
       null,
-      tab => {
+      (tab) => {
         // Render only for TABLE_LOG tab type
         if (tab.type !== TAB_TYPES.TABLE_LOG) return null;
 
@@ -169,7 +176,7 @@ class Editor extends React.Component {
   renderOpenedAttachmentEditorTabs() {
     return foldMaybe(
       null,
-      currentTab => {
+      (currentTab) => {
         const tabs = this.props.attachmentEditorTabs.map(
           ({ id, type, patchPath, editedAttachment }) => {
             // Render only for PATCH or DEBUGGER tab types
@@ -194,7 +201,7 @@ class Editor extends React.Component {
                     key={id}
                     isActive={id === currentTab.id}
                     source={attachmentContents}
-                    onChange={newContents =>
+                    onChange={(newContents) =>
                       this.props.actions.updatePatchAttachment(
                         patchPath,
                         editedAttachment,
@@ -215,7 +222,7 @@ class Editor extends React.Component {
                     key={id}
                     isActive={id === currentTab.id}
                     source={attachmentContents}
-                    onChange={newContents =>
+                    onChange={(newContents) =>
                       this.updatePatchAttachmentDebounced(
                         patchPath,
                         editedAttachment,
@@ -384,7 +391,7 @@ const mapStateToProps = R.applySpec({
   panelsSettings: EditorSelectors.getAllPanelsSettings,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(
     {
       updateNodeProperty: ProjectActions.updateNodeProperty,

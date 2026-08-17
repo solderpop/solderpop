@@ -1,7 +1,9 @@
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
 import * as XP from 'sdp-project';
 import { foldMaybe } from 'sdp-func-tools';
+
+const { Maybe } = RamdaFantasy;
 
 // SVG elements with thin stroke has to be moved by 0.5px
 // to make pixel perfect stroke instead of blurred one
@@ -61,26 +63,26 @@ export const TEXT_OFFSET_FROM_PIN_BORDER = 3;
 
 // :: Size -> Size
 export const pixelSizeToSlots = R.evolve({
-  width: px => px / SLOT_SIZE.WIDTH,
-  height: px => px / SLOT_SIZE.HEIGHT,
+  width: (px) => px / SLOT_SIZE.WIDTH,
+  height: (px) => px / SLOT_SIZE.HEIGHT,
 });
 
 // :: Size -> Size
 export const slotSizeToPixels = R.evolve({
-  width: slots => slots * SLOT_SIZE.WIDTH,
-  height: slots => slots * SLOT_SIZE.HEIGHT - SLOT_SIZE.GAP,
+  width: (slots) => slots * SLOT_SIZE.WIDTH,
+  height: (slots) => slots * SLOT_SIZE.HEIGHT - SLOT_SIZE.GAP,
 });
 
 // :: Position -> Position
 export const pixelPositionToSlots = R.evolve({
-  x: px => px / SLOT_SIZE.WIDTH,
-  y: px => px / SLOT_SIZE.HEIGHT,
+  x: (px) => px / SLOT_SIZE.WIDTH,
+  y: (px) => px / SLOT_SIZE.HEIGHT,
 });
 
 // :: Position -> Position
 export const slotPositionToPixels = R.evolve({
-  x: slots => Math.ceil(slots * SLOT_SIZE.WIDTH),
-  y: slots => Math.ceil(slots * SLOT_SIZE.HEIGHT),
+  x: (slots) => Math.ceil(slots * SLOT_SIZE.WIDTH),
+  y: (slots) => Math.ceil(slots * SLOT_SIZE.HEIGHT),
 });
 
 // =============================================================================
@@ -90,7 +92,7 @@ export const slotPositionToPixels = R.evolve({
 // =============================================================================
 
 // :: { input: Number, output: Number } -> Size
-const nodeSizeByPinsInSlots = pinCountByDirection => ({
+const nodeSizeByPinsInSlots = (pinCountByDirection) => ({
   width: Math.max(pinCountByDirection.input, pinCountByDirection.output, 1),
   height: 1,
 });
@@ -124,7 +126,7 @@ export const calculatePinPosition = R.curry((nodeSize, pin) => {
  * adds `size` to node and `position` to node's pins
  * @param node - dereferenced node
  */
-export const addNodePositioning = node => {
+export const addNodePositioning = (node) => {
   const calculatedSize = R.compose(
     slotSizeToPixels,
     calcutaleNodeSizeFromPins,
@@ -138,7 +140,7 @@ export const addNodePositioning = node => {
 
   const pxPosition = slotPositionToPixels(node.position);
 
-  const pins = R.map(pin => {
+  const pins = R.map((pin) => {
     const pinPosition = calculatePinPosition(pxSize, pin);
     return R.merge(pin, { position: pinPosition });
   }, node.pins);
@@ -167,10 +169,10 @@ export const subtractPoints = R.curry((a, b) => ({
  * @param nodes — dereferenced nodes with added positioning data
  * @param links - dereferenced links
  */
-export const addLinksPositioning = nodes =>
-  R.map(link => {
+export const addLinksPositioning = (nodes) =>
+  R.map((link) => {
     const { input, output } = R.map(
-      pin =>
+      (pin) =>
         R.assoc('position', nodes[pin.nodeId].pins[pin.pinKey].position, pin),
       R.pick(['input', 'output'], link)
     );
@@ -185,8 +187,8 @@ export const addLinksPositioning = nodes =>
  * get position in slots
  */
 export const nodePositionInPixelsToSlots = R.evolve({
-  x: x => Math.floor(x / SLOT_SIZE.WIDTH),
-  y: y => Math.floor(y / SLOT_SIZE.HEIGHT),
+  x: (x) => Math.floor(x / SLOT_SIZE.WIDTH),
+  y: (y) => Math.floor(y / SLOT_SIZE.HEIGHT),
 });
 
 export const pointToSize = ({ x, y }) => ({ width: x, height: y });
@@ -212,8 +214,8 @@ export const snapNodePositionToSlots = R.compose(
 export const snapNodeSizeToSlots = R.compose(
   pointToSize,
   R.evolve({
-    x: x => Math.ceil(x),
-    y: y => Math.ceil(y),
+    x: (x) => Math.ceil(x),
+    y: (y) => Math.ceil(y),
   }),
   sizeToPoint,
   pixelSizeToSlots
@@ -226,10 +228,10 @@ export const findPosition = R.uncurryN(3)((xFn, yFn) =>
     R.always(Maybe.Nothing()),
     R.compose(
       Maybe.Just,
-      R.converge((x, y) => ({ x, y }), [
-        R.compose(xFn, R.map(R.prop('x'))),
-        R.compose(yFn, R.map(R.prop('y'))),
-      ])
+      R.converge(
+        (x, y) => ({ x, y }),
+        [R.compose(xFn, R.map(R.prop('x'))), R.compose(yFn, R.map(R.prop('y')))]
+      )
     )
   )
 );

@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
 export function getViewableSize(defaultWidth = 0, defaultHeight = 0) {
   const sizes = {
@@ -42,7 +42,8 @@ export const isInput = R.compose(
   R.prop('nodeName')
 );
 
-export const isInputTarget = event => isInput(event.target || event.srcElement);
+export const isInputTarget = (event) =>
+  isInput(event.target || event.srcElement);
 
 export const isEdge = () =>
   R.compose(R.test(/Edge/), R.pathOr('', ['navigator', 'userAgent']))(window);
@@ -53,5 +54,5 @@ export const restoreFocusOnApp = () => {
   document.getElementById('App').focus();
 };
 
-export const elementHasFocusFunction = el =>
+export const elementHasFocusFunction = (el) =>
   el && typeof el.focus === 'function';

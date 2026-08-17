@@ -1,8 +1,35 @@
 import os from 'os';
 import path from 'path';
 import which from 'which';
-import * as fse from 'fs-extra';
+import fse from 'fs-extra';
 import { createError } from 'sdp-func-tools';
+
+const findBundledNode = async (emsdkRoot) => {
+  const nodeRoot = path.join(emsdkRoot, 'node');
+  const versions = await fse.readdir(nodeRoot).catch(() => []);
+  if (versions.length === 0) {
+    throw createError('EMCC_NOT_FOUND', { emsdkRoot });
+  }
+  const nodeBin =
+    os.platform() === 'win32' ? 'node.exe' : path.join('bin', 'node');
+  return path.join(nodeRoot, versions[0], nodeBin);
+};
+
+// Fallback for a system-wide emscripten install (e.g. installed via a
+// package manager, already exporting a working em++ on $PATH with no
+// EMSDK/EMSDK_NODE needed — those are only required for emsdk's own
+// bundled, relocatable toolchain layout).
+const getSystemEmxxEnv = () =>
+  new Promise((resolve, reject) => {
+    const emxxBin = os.platform() === 'win32' ? 'em++.bat' : 'em++';
+    which(emxxBin, (err, emxxPath) => {
+      if (err) {
+        reject(createError('EMCC_NOT_FOUND', {}));
+        return;
+      }
+      resolve({ emxx: emxxPath, env: process.env });
+    });
+  });
 
 // Locates an emsdk root and returns the `em++` binary path plus the extra
 // environment variables it needs to run standalone (found empirically:
@@ -42,45 +69,19 @@ export const getEmxxEnv = async (installedEmsdkRoot = null) => {
 
   return {
     emxx,
-    env: Object.assign({}, process.env, {
+    env: {
+      ...process.env,
       EMSDK: emsdkRoot,
       EMSDK_NODE: nodeBin,
       PATH: [emsdkRoot, upstreamDir, process.env.PATH].join(path.delimiter),
-    }),
+    },
   };
 };
 
 // :: Nullable Path -> Promise Boolean Error
-export const isEmsdkInstalled = installedEmsdkRoot => {
+export const isEmsdkInstalled = (installedEmsdkRoot) => {
   if (!installedEmsdkRoot) return Promise.resolve(false);
   const upstreamDir = path.join(installedEmsdkRoot, 'upstream', 'emscripten');
   const emxxBin = os.platform() === 'win32' ? 'em++.bat' : 'em++';
   return fse.pathExists(path.join(upstreamDir, emxxBin));
 };
-
-const findBundledNode = async emsdkRoot => {
-  const nodeRoot = path.join(emsdkRoot, 'node');
-  const versions = await fse.readdir(nodeRoot).catch(() => []);
-  if (versions.length === 0) {
-    throw createError('EMCC_NOT_FOUND', { emsdkRoot });
-  }
-  const nodeBin =
-    os.platform() === 'win32' ? 'node.exe' : path.join('bin', 'node');
-  return path.join(nodeRoot, versions[0], nodeBin);
-};
-
-// Fallback for a system-wide emscripten install (e.g. installed via a
-// package manager, already exporting a working em++ on $PATH with no
-// EMSDK/EMSDK_NODE needed — those are only required for emsdk's own
-// bundled, relocatable toolchain layout).
-const getSystemEmxxEnv = () =>
-  new Promise((resolve, reject) => {
-    const emxxBin = os.platform() === 'win32' ? 'em++.bat' : 'em++';
-    which(emxxBin, (err, emxxPath) => {
-      if (err) {
-        reject(createError('EMCC_NOT_FOUND', {}));
-        return;
-      }
-      resolve({ emxx: emxxPath, env: process.env });
-    });
-  });

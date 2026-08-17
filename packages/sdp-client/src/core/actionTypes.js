@@ -1,6 +1,6 @@
-export * from '../editor/actionTypes';
-export * from '../project/actionTypes';
-export * from '../messages/actionTypes';
+export * from '../editor/actionTypes.js';
+export * from '../project/actionTypes.js';
+export * from '../messages/actionTypes.js';
 
 export const SHOW_CODE_REQUESTED = 'SHOW_CODE_REQUESTED';
 

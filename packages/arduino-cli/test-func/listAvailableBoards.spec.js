@@ -1,6 +1,6 @@
 import path from 'path';
 import { assert } from 'chai';
-import listAvailableBoards from '../src/listAvailableBoards';
+import listAvailableBoards from '../src/listAvailableBoards.js';
 
 const fixturesDir = path.join(__dirname, 'fixtures');
 
@@ -202,5 +202,5 @@ describe('listAvailableBoards()', () => {
         },
       }),
       fixturesDir
-    ).then(res => assert.sameDeepMembers(res, boards)));
+    ).then((res) => assert.sameDeepMembers(res, boards)));
 });

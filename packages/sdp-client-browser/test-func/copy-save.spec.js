@@ -3,10 +3,10 @@ import { tmpdir } from 'os';
 import { promises as fs } from 'fs';
 import { resolve } from 'path';
 
-import { SERVER_URL } from '../tools/staticServer';
-import getPage from './utils/getPage';
+import { SERVER_URL } from '../tools/staticServer.js';
+import getPage from './utils/getPage.js';
 
-import Debugger from './pageObjects/Debugger';
+import Debugger from './pageObjects/Debugger.js';
 
 describe('copy & save log', () => {
   beforeEach(async () => {
@@ -15,7 +15,7 @@ describe('copy & save log', () => {
     // pane will be in a default initial state
     await page.evaluate(() => localStorage.clear());
   });
-  const openIdeAndDeploymentPane = async browser => {
+  const openIdeAndDeploymentPane = async (browser) => {
     const page = await getPage(browser);
     // TODO: Replace with `const` and do not find the DOM elment on the page
     //       after opening it, when rerendering of the element will be fixed

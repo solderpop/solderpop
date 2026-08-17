@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cls from 'classnames';
 
-const NodeSpecializationWidget = props => {
-  const onChange = event => props.onChange(props.nodeId, event.target.value);
+function NodeSpecializationWidget(props) {
+  const onChange = (event) => props.onChange(props.nodeId, event.target.value);
 
   const hasSpecializations =
     props.specializations && props.specializations.length > 0;
 
   const specializations = hasSpecializations ? (
-    props.specializations.map(spec => (
+    props.specializations.map((spec) => (
       <option key={spec} value={spec}>
         {spec}
       </option>
@@ -38,7 +38,7 @@ const NodeSpecializationWidget = props => {
       </select>
     </div>
   );
-};
+}
 
 /* eslint-disable react/no-unused-prop-types */
 NodeSpecializationWidget.propTypes = {

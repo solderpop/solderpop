@@ -1,21 +1,21 @@
 import { notEquals } from 'sdp-func-tools';
 
-import { getProject } from '../project/selectors';
+import { getProject } from '../project/selectors.js';
 
 import {
   getDeducedTypes,
   getErrors,
   getPatchSearchData,
   getPatchMarkers,
-} from './selectors';
-import updateHinting from './actions';
-import { shallDeduceTypes, deduceTypes } from './typeDeduction';
-import { shallValidate, validateProject } from './validation';
+} from './selectors.js';
+import updateHinting from './actions.js';
+import { shallDeduceTypes, deduceTypes } from './typeDeduction.js';
+import { shallValidate, validateProject } from './validation.js';
 import {
   shallUpdatePatchSearchData,
   getNewPatchSearchData,
-} from './patchSearchData';
-import { shallUpdatePatchMarkers, getNewPatchMarkers } from './patchMarkers';
+} from './patchSearchData.js';
+import { shallUpdatePatchMarkers, getNewPatchMarkers } from './patchMarkers.js';
 
 // =============================================================================
 //
@@ -23,7 +23,7 @@ import { shallUpdatePatchMarkers, getNewPatchMarkers } from './patchMarkers';
 //
 // =============================================================================
 
-export default store => next => action => {
+export default (store) => (next) => (action) => {
   const oldProject = getProject(store.getState());
   const act = next(action);
   const newState = store.getState();

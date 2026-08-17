@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import $ from 'sanctuary-def';
@@ -9,29 +9,29 @@ import { FocusTrap } from 'react-hotkeys';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import * as XP from 'sdp-project';
 import { $Maybe, mapIndexed, notEquals } from 'sdp-func-tools';
-import debounce from 'throttle-debounce/debounce';
+import debounce from 'throttle-debounce/debounce.js';
 
-import HelpPanel from './HelpPanel';
-import Inspector from '../components/Inspector';
-import AccountPane from '../../user/containers/AccountPane';
-import ProjectBrowser from '../../projectBrowser/containers/ProjectBrowser';
-import SidebarSwitches from '../components/SidebarSwitches';
+import HelpPanel from './HelpPanel.jsx';
+import Inspector from '../components/Inspector.jsx';
+import AccountPane from '../../user/containers/AccountPane.jsx';
+import ProjectBrowser from '../../projectBrowser/containers/ProjectBrowser.jsx';
+import SidebarSwitches from '../components/SidebarSwitches.jsx';
 
-import * as EditorActions from '../actions';
-import * as EditorSelectors from '../selectors';
-import * as ProjectActions from '../../project/actions';
-import * as ProjectSelectors from '../../project/selectors';
-import * as UserSelectors from '../../user/selectors';
-import * as DebuggerSelectors from '../../debugger/selectors';
-import { RenderableSelection } from '../../types';
-import sanctuaryPropType from '../../utils/sanctuaryPropType';
-import { SIDEBAR_IDS, PANEL_IDS, FOCUS_AREAS } from '../constants';
+import * as EditorActions from '../actions.js';
+import * as EditorSelectors from '../selectors.js';
+import * as ProjectActions from '../../project/actions.js';
+import * as ProjectSelectors from '../../project/selectors.js';
+import * as UserSelectors from '../../user/selectors.js';
+import * as DebuggerSelectors from '../../debugger/selectors.js';
+import { RenderableSelection } from '../../types.js';
+import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
+import { SIDEBAR_IDS, PANEL_IDS, FOCUS_AREAS } from '../constants.js';
 import {
   sidebarPanelRenderer,
   getPanelsBySidebarId,
   getMaximizedPanelsBySidebarId,
   filterMaximized,
-} from '../utils';
+} from '../utils.js';
 
 const MIN_SIZE = 200;
 
@@ -49,11 +49,12 @@ const pickPropsToCheck = R.compose(
   ])
 );
 
-const getSizes = props => {
+const getSizes = (props) => {
   const panels = getMaximizedPanelsBySidebarId(props.id, props.panels);
-  return R.compose(R.fromPairs, R.map(R.over(R.lensIndex(1), R.prop('size'))))(
-    panels
-  );
+  return R.compose(
+    R.fromPairs,
+    R.map(R.over(R.lensIndex(1), R.prop('size')))
+  )(panels);
 };
 
 class Sidebar extends React.Component {
@@ -79,34 +80,42 @@ class Sidebar extends React.Component {
 
     this.resizePanelsAction = debounce(300, this.props.actions.resizePanels);
   }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.panels !== nextProps.panels && !this.state.sizes) {
       this.setState(R.assoc('sizes', getSizes(nextProps)));
     }
   }
+
   shouldComponentUpdate(nextProps) {
     // Optimize rendering of the sidebars
     return notEquals(pickPropsToCheck(nextProps), pickPropsToCheck(this.props));
   }
+
   onResizePane(event) {
     const { name, flex } = event.component.props;
     this.setState(R.assocPath(['sizes', name], flex));
     this.resizePanelsAction(this.state.sizes);
   }
+
   onProjectBrowserFocus() {
     this.props.actions.setFocusedArea(FOCUS_AREAS.PROJECT_BROWSER);
   }
+
   onInspectorFocus() {
     this.props.actions.setFocusedArea(FOCUS_AREAS.INSPECTOR);
   }
+
   getPanelSize(panelId) {
     return R.pathOr(0.5, ['sizes', panelId], this.state);
   }
+
   setContainerRef(el) {
     this.containerRef = el;
     // to render it once when we can calculate height
     this.forceUpdate();
   }
+
   isResizable() {
     const panelsCount = getMaximizedPanelsBySidebarId(
       this.props.id,
@@ -117,6 +126,7 @@ class Sidebar extends React.Component {
       this.containerRef.clientHeight > MIN_SIZE * panelsCount
     );
   }
+
   renderProjectBrowser(settings) {
     return (
       <FocusTrap
@@ -131,6 +141,7 @@ class Sidebar extends React.Component {
       </FocusTrap>
     );
   }
+
   renderInspector(settings) {
     return (
       <FocusTrap
@@ -154,6 +165,7 @@ class Sidebar extends React.Component {
       </FocusTrap>
     );
   }
+
   // eslint-disable-next-line class-methods-use-this
   renderHelpbar(settings) {
     return (
@@ -164,6 +176,7 @@ class Sidebar extends React.Component {
       />
     );
   }
+
   // eslint-disable-next-line class-methods-use-this
   renderAccountPane(settings) {
     return (
@@ -174,6 +187,7 @@ class Sidebar extends React.Component {
       />
     );
   }
+
   renderPanel(panelSettings) {
     return R.cond([
       sidebarPanelRenderer(
@@ -185,6 +199,7 @@ class Sidebar extends React.Component {
       sidebarPanelRenderer(PANEL_IDS.ACCOUNT, this.renderAccountPane),
     ])(panelSettings);
   }
+
   render() {
     const panels = getPanelsBySidebarId(this.props.id, this.props.panels);
     const maximizedPanels = filterMaximized(panels);
@@ -219,10 +234,9 @@ class Sidebar extends React.Component {
                 >
                   {this.renderPanel(panel)}
                 </ReflexElement>,
-                index !== lastIndex &&
-                  this.isResizable() && (
-                    <ReflexSplitter key={`splitter_${panel[0]}`} propagate />
-                  ),
+                index !== lastIndex && this.isResizable() && (
+                  <ReflexSplitter key={`splitter_${panel[0]}`} propagate />
+                ),
               ])
             )(maximizedPanels)}
           </ReflexContainer>
@@ -269,7 +283,7 @@ const mapStateToProps = R.applySpec({
   userAuthorised: UserSelectors.isAuthorized,
   isDebugSession: DebuggerSelectors.isDebugSession,
 });
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(
     {
       updateNodeProperty: ProjectActions.updateNodeProperty,

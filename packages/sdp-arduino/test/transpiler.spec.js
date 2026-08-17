@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import R from 'ramda';
-import { assert } from 'chai';
+import chai from 'chai';
 
 import { explode, foldEither, explodeEither } from 'sdp-func-tools';
 import { loadProject } from 'sdp-fs';
@@ -10,8 +11,11 @@ import {
   transformProject,
   getNodeIdsMap,
   commentXodPragmas,
-} from '../src/transpiler';
-import { LIVENESS } from '../src/constants';
+} from '../src/transpiler.js';
+import { LIVENESS } from '../src/constants.js';
+
+const { assert } = chai;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Returns patch relative to repo’s `workspace` subdir
 const wsPath = (...subpath) =>
@@ -19,7 +23,7 @@ const wsPath = (...subpath) =>
 
 describe('sdp-arduino transpiler', () => {
   describe('correctly transpiles workspace fixture', () => {
-    const testFixture = projName => {
+    const testFixture = (projName) => {
       const expectedCpp = fs.readFileSync(
         wsPath(projName, '__fixtures__/arduino.cpp'),
         'utf-8'
@@ -29,7 +33,7 @@ describe('sdp-arduino transpiler', () => {
         .then(transformProject(R.__, '@/main', LIVENESS.NONE))
         .then(R.map(transpile))
         .then(explode)
-        .then(result =>
+        .then((result) =>
           assert.strictEqual(
             result,
             expectedCpp,
@@ -50,7 +54,7 @@ describe('sdp-arduino transpiler', () => {
   it('returns error for non-existing-patch entry point', () =>
     loadProject([wsPath()], wsPath('blink'))
       .then(transformProject(R.__, '@/non-existing-patch', LIVENESS.NONE))
-      .then(result => assert.equal(result.isLeft, true)));
+      .then((result) => assert.equal(result.isLeft, true)));
 
   it('returns error if some native node has more than 7 outputs', () =>
     loadProject([wsPath()], wsPath('faulty'))
@@ -58,7 +62,7 @@ describe('sdp-arduino transpiler', () => {
       .then(R.map(transpile))
       .then(
         foldEither(
-          err => {
+          (err) => {
             assert.strictEqual(
               err.message,
               'TOO_MANY_OUTPUTS_FOR_NATIVE_NODE {"patchPath":"@/too-many-outputs"}'
@@ -77,10 +81,11 @@ describe('sdp-arduino transpiler', () => {
           R.prop('nodes')
         )
       )
-      .then(nodes => {
-        const patchPaths = R.compose(R.pluck('patchPath'), R.pluck('patch'))(
-          nodes
-        );
+      .then((nodes) => {
+        const patchPaths = R.compose(
+          R.pluck('patchPath'),
+          R.pluck('patch')
+        )(nodes);
 
         assert.deepEqual(patchPaths, [
           'xod/core/constant-boolean', // EN
@@ -109,7 +114,7 @@ describe('sdp-arduino transpiler', () => {
     )
       .then(transformProject(R.__, '@/main', LIVENESS.NONE))
       .then(explodeEither)
-      .then(tProject => {
+      .then((tProject) => {
         const actualPatchPaths = R.compose(
           R.map(R.prop('patchPath')),
           R.prop('patches')
@@ -132,7 +137,7 @@ describe('sdp-arduino transpiler', () => {
     return loadProject([wsPath()], xodball)
       .then(transformProject(R.__, '@/main', LIVENESS.NONE))
       .then(explodeEither)
-      .then(tProject => {
+      .then((tProject) => {
         const actualPatchPaths = R.compose(
           R.map(R.prop('patchPath')),
           R.prop('patches')
@@ -189,7 +194,7 @@ describe('getNodeIdsMap', () => {
       .then(transformProject(R.__, '@/main', LIVENESS.NONE))
       .then(R.map(getNodeIdsMap))
       .then(explode)
-      .then(result =>
+      .then((result) =>
         R.mapObjIndexed(
           (nodeId, origNodeId) =>
             assert.propertyVal(result, origNodeId, nodeId),

@@ -1,6 +1,6 @@
-import { assert } from 'chai';
-import { identity, F } from 'ramda';
-import { Maybe, Either } from 'ramda-fantasy';
+import chai from 'chai';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
 
 import {
   explode,
@@ -15,7 +15,11 @@ import {
   reduceEither,
   reduceMaybe,
   leftIf,
-} from '../src/monads';
+} from '../src/monads.js';
+
+const { assert } = chai;
+const { identity, F } = R;
+const { Maybe, Either } = RamdaFantasy;
 
 describe('moands', () => {
   describe('explode()', () => {
@@ -73,10 +77,24 @@ describe('moands', () => {
   });
   describe('foldMaybeWith()', () => {
     it('should return function result for Nothing', () => {
-      assert.equal(foldMaybeWith(() => 42, () => null, Maybe.Nothing()), 42);
+      assert.equal(
+        foldMaybeWith(
+          () => 42,
+          () => null,
+          Maybe.Nothing()
+        ),
+        42
+      );
     });
     it('should return function result for Just', () => {
-      assert.equal(foldMaybeWith(() => null, a => a, Maybe.Just(42)), 42);
+      assert.equal(
+        foldMaybeWith(
+          () => null,
+          (a) => a,
+          Maybe.Just(42)
+        ),
+        42
+      );
     });
     it('should not call function for Nothing when Maybe is Just', () => {
       let called = false;
@@ -86,7 +104,7 @@ describe('moands', () => {
           () => {
             called = true;
           },
-          a => a,
+          (a) => a,
           Maybe.Just(42)
         ),
         42
@@ -107,9 +125,9 @@ describe('moands', () => {
 
   describe('eitherToPromise()', () => {
     it('returns resolved promise contained Right value', () =>
-      eitherToPromise(Either.Right(52)).then(val => assert.equal(val, 52)));
+      eitherToPromise(Either.Right(52)).then((val) => assert.equal(val, 52)));
     it('returns rejected promise contained Left value', () =>
-      eitherToPromise(Either.Left('err')).catch(val =>
+      eitherToPromise(Either.Left('err')).catch((val) =>
         assert.equal(val, 'err')
       ));
   });
@@ -118,24 +136,26 @@ describe('moands', () => {
     it('returns resolved promise contained Just value', () =>
       maybeToPromise(
         () => assert.fail('', '', 'This function should not been called!'),
-        a => a + 5,
+        (a) => a + 5,
         Maybe.Just(52)
-      ).then(val => assert.equal(val, 57)));
+      ).then((val) => assert.equal(val, 57)));
     it('returns rejected promise', () =>
       maybeToPromise(
         () => new Error('It is Nothing!'),
-        a => assert.fail(a, undefined, 'This function should not been called!'),
+        (a) =>
+          assert.fail(a, undefined, 'This function should not been called!'),
         Maybe.Nothing()
-      ).catch(err => {
+      ).catch((err) => {
         assert.instanceOf(err, Error);
         assert.equal(err.message, 'It is Nothing!');
       }));
     it('returns rejected promise without nesting', () =>
       maybeToPromise(
         () => Promise.reject(new Error('It is Nothing!')),
-        a => assert.fail(a, undefined, 'This function should not been called!'),
+        (a) =>
+          assert.fail(a, undefined, 'This function should not been called!'),
         Maybe.Nothing()
-      ).catch(err => {
+      ).catch((err) => {
         assert.instanceOf(err, Error);
         assert.equal(err.message, 'It is Nothing!');
       }));
@@ -177,7 +197,10 @@ describe('moands', () => {
     });
 
     describe('leftIf()', () => {
-      const validateMoreThan5 = leftIf(x => x > 5, x => `${x} less than 5`);
+      const validateMoreThan5 = leftIf(
+        (x) => x > 5,
+        (x) => `${x} less than 5`
+      );
 
       it('returns Either.Right 5 for truthy condition', () => {
         const res = validateMoreThan5(6);

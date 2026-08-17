@@ -1,15 +1,21 @@
 /* eslint-disable no-param-reassign */
 import { exit, stdout } from 'process';
-import { pick } from 'ramda';
+import R from 'ramda';
 import { flags } from '@oclif/command';
 import { writeFile, resolvePath } from 'sdp-fs';
 
-import BaseCommand from '../baseCommand';
-import * as commonArgs from '../args';
-import * as myFlags from '../flags';
-import { getListr } from '../listr';
-import { loadProjectTask, transformTask, transpileTask } from '../listrTasks';
-import { resolveBundledWorkspacePath } from '../paths';
+import BaseCommand from '../baseCommand.js';
+import * as commonArgs from '../args.js';
+import * as myFlags from '../flags.js';
+import { getListr } from '../listr.js';
+import {
+  loadProjectTask,
+  transformTask,
+  transpileTask,
+} from '../listrTasks.js';
+import { resolveBundledWorkspacePath } from '../paths.js';
+
+const { pick } = R;
 
 class TranspileCommand extends BaseCommand {
   async run() {
@@ -21,11 +27,11 @@ class TranspileCommand extends BaseCommand {
     const workspaces = [this.flags.workspace, resolveBundledWorkspacePath()];
     const patchName = this.args.patchName || '@/main';
 
-    const saveToFileTask = out => ({
+    const saveToFileTask = (out) => ({
       title: 'Saving',
-      skip: ctx => !(ctx.transpile && out),
-      task: ctx =>
-        writeFile(out, ctx.transpile, 'utf-8').then(r => {
+      skip: (ctx) => !(ctx.transpile && out),
+      task: (ctx) =>
+        writeFile(out, ctx.transpile, 'utf-8').then((r) => {
           ctx.status = `Saved to ${r.path}`;
         }),
     });
@@ -41,7 +47,7 @@ class TranspileCommand extends BaseCommand {
       { collapse: false }
     )
       .run()
-      .then(async ctx => {
+      .then(async (ctx) => {
         if (output && ctx.status) {
           this.info(ctx.status);
         }
@@ -51,7 +57,7 @@ class TranspileCommand extends BaseCommand {
         }
       })
       .then(() => exit(0))
-      .catch(err => {
+      .catch((err) => {
         this.printError(err);
         return exit(100);
       });
@@ -70,7 +76,7 @@ TranspileCommand.flags = {
     description: 'C++ output file path, default to stdout',
     env: 'XOD_OUTPUT',
     helpValue: 'path',
-    parse: p => resolvePath(p),
+    parse: (p) => resolvePath(p),
   }),
 };
 

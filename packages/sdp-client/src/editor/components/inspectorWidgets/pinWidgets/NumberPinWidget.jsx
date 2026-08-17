@@ -1,10 +1,10 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import PinWidget from './PinWidget';
+import PinWidget from './PinWidget.jsx';
 
-const NumberWidget = props => {
+function NumberWidget(props) {
   const onChange = R.pipe(R.path(['target', 'value']), props.onChange);
 
   return (
@@ -30,7 +30,7 @@ const NumberWidget = props => {
       />
     </PinWidget>
   );
-};
+}
 
 NumberWidget.propTypes = {
   elementId: PropTypes.string.isRequired,

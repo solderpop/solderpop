@@ -1,10 +1,10 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { noop } from 'sdp-func-tools';
 
-import { KEYCODE } from '../../../utils/constants';
-import deepSCU from '../../../utils/deepSCU';
+import { KEYCODE } from '../../../utils/constants.js';
+import deepSCU from '../../../utils/deepSCU.js';
 
 const commonKeyDownHandlers = {
   [KEYCODE.ESCAPE]: function escape(event) {
@@ -31,7 +31,7 @@ class Widget extends React.Component {
     this.lastCommitedValue = value;
 
     this.keyDownHandlers = R.compose(
-      R.map(fn => fn.bind(this)),
+      R.map((fn) => fn.bind(this)),
       R.merge(commonKeyDownHandlers)
     )(keyDownHandlers);
 

@@ -1,9 +1,9 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 import { foldMaybeWith } from 'sdp-func-tools';
 
-import { defaultValidateFunctions } from './validation.funcs';
-import { getActingPatchPath } from './actionUtils';
+import { defaultValidateFunctions } from './validation.funcs.js';
+import { getActingPatchPath } from './actionUtils.js';
 
 // PinValidateFn :: Patch -> Project -> Map PinKey PinErrors
 // NodeValidateFn :: Patch -> Project -> Map NodeId NodeErrors
@@ -34,15 +34,15 @@ const validateNodes = R.curry(
     R.compose(
       R.map(R.merge({ errors: {}, pins: {} })),
       // :: Map NodeId NodeErrors
-      nodeErrorsMap =>
+      (nodeErrorsMap) =>
         R.compose(
           R.mergeDeepWith(R.concat, nodeErrorsMap),
           // :: Map NodeId { pins: Map PinKey (Map ErrorType (Maybe [Error])) }
           R.map(R.objOf('pins')),
-          R.map(node =>
+          R.map((node) =>
             R.compose(
               mergeAllDeepWithConcat,
-              R.map(fn => fn(patch, project, node, prevErrors))
+              R.map((fn) => fn(patch, project, node, prevErrors))
             )(pinValidators)
           ),
           R.indexBy(XP.getNodeId),
@@ -52,7 +52,7 @@ const validateNodes = R.curry(
       R.map(R.objOf('errors')),
       // :: Map NodeId (Map ErrorType [Error])
       mergeAllDeepWithConcat,
-      R.map(fn => fn(patch, project, prevErrors))
+      R.map((fn) => fn(patch, project, prevErrors))
     )(nodeValidators)
 );
 
@@ -61,11 +61,13 @@ const validateLinks = R.curry(
   (validators, patch, project, allDeducedPinTypes, prevErrors) =>
     R.compose(
       mergeAllDeepWithConcat,
-      R.map(link =>
+      R.map((link) =>
         R.compose(
           R.map(R.objOf('errors')),
           mergeAllDeepWithConcat,
-          R.map(fn => fn(link, patch, project, allDeducedPinTypes, prevErrors))
+          R.map((fn) =>
+            fn(link, patch, project, allDeducedPinTypes, prevErrors)
+          )
         )(validators)
       ),
       XP.listLinks
@@ -151,7 +153,7 @@ const haveNoPatchErrors = R.allPass([
 // :: Map ActionType (Action -> * -> a) -> (Action -> * -> a) -> Action -> (Action -> * -> a)
 export const getFunctionByActionOrDefault = R.curry((fnMap, defFn, action) =>
   R.compose(
-    fn => R.partial(fn, [action]),
+    (fn) => R.partial(fn, [action]),
     R.propOr(defFn, R.__, fnMap),
     R.prop('type')
   )(action)
@@ -167,7 +169,7 @@ export const getFunctionByActionOrDefault = R.curry((fnMap, defFn, action) =>
  *                         including library patches.
  */
 // :: Map PatchPath PatchErrors -> { policy: UPDATE_ERRORS_POLICY, errors: Map PatchPath PatchErrors }
-export const setOverwritePolicy = errors => ({
+export const setOverwritePolicy = (errors) => ({
   policy: UPDATE_ERRORS_POLICY.OVERWRITE,
   errors,
 });
@@ -177,7 +179,7 @@ export const setOverwritePolicy = errors => ({
  *                         patch or patches.
  */
 // :: Map PatchPath PatchErrors -> { policy: UPDATE_ERRORS_POLICY, errors: Map PatchPath PatchErrors }
-export const setMergePolicy = errors => ({
+export const setMergePolicy = (errors) => ({
   policy: UPDATE_ERRORS_POLICY.MERGE,
   errors,
 });
@@ -188,7 +190,7 @@ export const setMergePolicy = errors => ({
  *                         E.G. `validateLocalPatches` or `validateChangedPatches`.
  */
 // :: Map PatchPath PatchErrors -> { policy: UPDATE_ERRORS_POLICY, errors: Map PatchPath PatchErrors }
-export const setAssocPolicy = errors => ({
+export const setAssocPolicy = (errors) => ({
   policy: UPDATE_ERRORS_POLICY.ASSOC,
   errors,
 });
@@ -220,7 +222,7 @@ export const validatePatches = R.curry(
     patches
   ) =>
     R.compose(
-      R.map(patch =>
+      R.map((patch) =>
         mergeAllDeepWithConcat([
           { errors: {}, nodes: {}, links: {} },
           getLinkErrors(
@@ -395,7 +397,7 @@ export const defaultValidateFunction = (
         prevErrors
       ),
     // PatchPath exists -> Validate this Patch first
-    patchPath =>
+    (patchPath) =>
       R.compose(
         setAssocPolicy,
         validatePatchesGenerally(project, allDeducedPinTypes, prevErrors),

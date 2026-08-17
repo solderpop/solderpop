@@ -1,5 +1,7 @@
-import { curry } from 'ramda';
+import R from 'ramda';
 import URL from 'url-parse';
+
+const { curry } = R;
 
 // :: String -> String -> { utm_source :: String, utm_campaign :: String, utm_medium :: String}
 const getUtmParams = (campaign, medium) => ({
@@ -56,4 +58,4 @@ export const getApiBillingUrl = () => `${getApiUrl()}/billing`;
 
 export const getApiTokensUrl = () => `${getApiUrl()}/iot/tokens`;
 
-export const getRenewApiTokenUrl = apiKey => `${getApiTokensUrl()}/${apiKey}`;
+export const getRenewApiTokenUrl = (apiKey) => `${getApiTokensUrl()}/${apiKey}`;

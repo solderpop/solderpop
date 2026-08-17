@@ -1,3 +1,3 @@
-import SnackBar from './containers/SnackBar';
+import SnackBar from './containers/SnackBar.jsx';
 
 export default SnackBar;

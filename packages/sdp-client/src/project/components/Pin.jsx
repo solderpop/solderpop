@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { isGenericType, PIN_DIRECTION } from 'sdp-project';
 
-import { getRenderablePinType } from '../utils';
+import { getRenderablePinType } from '../utils.js';
 
 import {
   PIN_RADIUS,
   PIN_INNER_RADIUS,
   PIN_RADIUS_WITH_OUTER_STROKE,
   PIN_HIGHLIGHT_RADIUS,
-} from '../nodeLayout';
+} from '../nodeLayout.js';
 
-const Pin = props => {
+function Pin(props) {
   const isOutput = props.direction === PIN_DIRECTION.OUTPUT;
 
   const cls = classNames('Pin', {
@@ -82,7 +82,7 @@ const Pin = props => {
       {variadicDots}
     </g>
   );
-};
+}
 
 Pin.propTypes = {
   keyName: PropTypes.string.isRequired,

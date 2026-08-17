@@ -6,7 +6,7 @@ import { action } from '@storybook/addon-actions';
 import { PIN_TYPE } from 'sdp-project';
 
 import '../src/core/styles/main.scss';
-import Inspector from '../src/editor/components/Inspector';
+import Inspector from '../src/editor/components/Inspector.jsx';
 
 const somePoint = { x: 0, y: 0 };
 
@@ -184,7 +184,7 @@ const containerStyle = {
 };
 
 storiesOf('Inspector', module)
-  .addDecorator(story => <div style={containerStyle}>{story()}</div>)
+  .addDecorator((story) => <div style={containerStyle}>{story()}</div>)
   .add('no selection', () => <Inspector {...baseProps} />)
   .add('selected link', () => (
     <Inspector {...baseProps} selection={singleLinkSelection} />

@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as XP from 'sdp-project';
 
-import { WIDGET_TYPE } from '../constants';
-import { Widget, getNodeWidgetConfig } from './inspectorWidgets';
+import { WIDGET_TYPE } from '../constants.js';
+import { Widget, getNodeWidgetConfig } from './inspectorWidgets/index.js';
 
-import sanctuaryPropType from '../../utils/sanctuaryPropType';
+import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
 
 class PatchInspector extends React.PureComponent {
   constructor(props) {

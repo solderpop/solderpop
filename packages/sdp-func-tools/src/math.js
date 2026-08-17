@@ -1,4 +1,4 @@
-import { def } from './types';
+import { def } from './types.js';
 
 /**
  * Rounds a number to a desired number of digits after the dot.
@@ -11,7 +11,7 @@ import { def } from './types';
 export const roundTo = def(
   'roundTo :: Number -> Number -> Number',
   (n, number) => {
-    const mult = Math.pow(10, n);
+    const mult = 10 ** n;
     return Math.round(number * mult) / mult;
   }
 );

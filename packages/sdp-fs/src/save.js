@@ -1,6 +1,6 @@
 import os from 'os';
 import path from 'path';
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 import fse from 'fs-extra';
 import { rejectWithCode, allPromises } from 'sdp-func-tools';
@@ -11,20 +11,20 @@ import {
   isProjectFile,
   resolveLibPath,
   doesDirectoryExist,
-} from './utils';
-import { writeFile, writeJSON } from './write';
-import { Backup } from './backup';
-import { arrangeByFiles, arrangePatchByFiles, fsSafeName } from './unpack';
+} from './utils.js';
+import { writeFile, writeJSON } from './write.js';
+import { Backup } from './backup.js';
+import { arrangeByFiles, arrangePatchByFiles, fsSafeName } from './unpack.js';
 import {
   convertProjectToProjectFileContents,
   omitDefaultOptionsFromPatchFileContents,
   omitDefaultOptionsFromProjectFileContents,
-} from './convertTypes';
-import * as ERROR_CODES from './errorCodes';
-import { CHANGE_TYPES } from './constants';
-import { calculateDiff } from './patchDiff';
+} from './convertTypes.js';
+import * as ERROR_CODES from './errorCodes.js';
+import { CHANGE_TYPES } from './constants.js';
+import { calculateDiff } from './patchDiff.js';
 
-import { def } from './types';
+import { def } from './types.js';
 
 // :: Path -> AnyXodFile -> Promise AnyXodFile Error
 const saveVirtualFile = R.curry((rootDir, virtualFile) => {
@@ -60,7 +60,7 @@ export const saveArrangedFiles = R.curry((rootDir, virtualFile) => {
       .make()
       .then(() => Promise.all(dataToSave.map(saveVirtualFile(realRootDir))))
       .then(backup.clear)
-      .catch(err => backup.restore().then(() => Promise.reject(err)));
+      .catch((err) => backup.restore().then(() => Promise.reject(err)));
   });
 });
 
@@ -102,7 +102,7 @@ export const saveLibraryEntirely = R.curry((owner, project, workspacePath) =>
   Promise.resolve(workspacePath)
     .then(
       R.compose(
-        libPath =>
+        (libPath) =>
           path.resolve(
             libPath,
             fsSafeName(owner),
@@ -111,12 +111,12 @@ export const saveLibraryEntirely = R.curry((owner, project, workspacePath) =>
         resolveLibPath
       )
     )
-    .then(dirPath => saveProjectEntirely(dirPath, project))
+    .then((dirPath) => saveProjectEntirely(dirPath, project))
     .catch(rejectWithCode(ERROR_CODES.CANT_SAVE_LIBRARY))
 );
 
 // :: Path -> Map LibName Project -> Promise [Project] Error
-export const saveAllLibrariesEntirely = R.uncurryN(2, workspacePath =>
+export const saveAllLibrariesEntirely = R.uncurryN(2, (workspacePath) =>
   R.compose(
     allPromises,
     R.values,
@@ -136,7 +136,7 @@ const savePatchChanges = def(
       R.map(
         R.compose(
           fse.remove,
-          patchName => path.resolve(projectDir, patchName),
+          (patchName) => path.resolve(projectDir, patchName),
           XP.getBaseName,
           R.prop('path')
         )
@@ -194,8 +194,8 @@ export const saveProjectAsXodball = def(
     const projectDir = path.dirname(projectPath);
     return R.composeP(
       R.always(projectPath),
-      virtualXodball => saveVirtualFile(projectDir, virtualXodball),
-      content => ({
+      (virtualXodball) => saveVirtualFile(projectDir, virtualXodball),
+      (content) => ({
         path: path.basename(projectPath),
         content,
       }),
@@ -219,7 +219,7 @@ export const saveProject = def(
 
     // save only changes in the local patches
     return R.compose(
-      localChanges =>
+      (localChanges) =>
         savePatchChanges(projectPath, localChanges).then(() =>
           saveProjectMeta(projectPath, project)
         ),
@@ -229,14 +229,14 @@ export const saveProject = def(
 );
 
 // :: Patch -> Patch
-const convertLibPatchToLocalPatch = patch => {
+const convertLibPatchToLocalPatch = (patch) => {
   const patchPath = XP.getPatchPath(patch);
   const libName = XP.getLibraryName(patchPath);
   const libNameRegExp = new RegExp(`^(${libName})`);
   const newName = XP.convertToLocalPath(patchPath);
 
   const newNodes = R.compose(
-    R.map(node =>
+    R.map((node) =>
       R.compose(
         XP.setNodeType(R.__, node),
         XP.convertToLocalPath,
@@ -255,7 +255,7 @@ export const saveLibraries = def(
   (workspacePath, changes, project) =>
     R.compose(
       allPromises,
-      R.map(libName => {
+      R.map((libName) => {
         const libDir = path.resolve(resolveLibPath(workspacePath), libName);
         const name = XP.getBaseName(libName);
 
@@ -264,7 +264,7 @@ export const saveLibraries = def(
           const owner = R.split('/', libName)[0];
           return R.compose(
             saveLibraryEntirely(owner, R.__, workspacePath),
-            patches =>
+            (patches) =>
               R.compose(
                 XP.upsertPatches(R.map(convertLibPatchToLocalPatch, patches)),
                 XP.setProjectDescription(`My fork of "${libName}"`),
@@ -280,7 +280,7 @@ export const saveLibraries = def(
 
         // save only changes in the library
         return R.compose(
-          libChanges => savePatchChanges(libDir, libChanges),
+          (libChanges) => savePatchChanges(libDir, libChanges),
           R.map(
             R.when(
               R.has('data'),

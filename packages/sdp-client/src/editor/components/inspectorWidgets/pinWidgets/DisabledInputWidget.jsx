@@ -1,19 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import PinWidget from './PinWidget';
+import PinWidget from './PinWidget.jsx';
 
-const DisabledInputWidget = props => (
-  <PinWidget
-    elementId={props.elementId}
-    label={props.label}
-    dataType={props.dataType}
-    isConnected={props.isConnected}
-    isLastVariadicGroup={props.isLastVariadicGroup}
-    isBindable={props.isBindable}
-    direction={props.direction}
-  />
-);
+function DisabledInputWidget(props) {
+  return (
+    <PinWidget
+      elementId={props.elementId}
+      label={props.label}
+      dataType={props.dataType}
+      isConnected={props.isConnected}
+      isLastVariadicGroup={props.isLastVariadicGroup}
+      isBindable={props.isBindable}
+      direction={props.direction}
+    />
+  );
+}
 
 DisabledInputWidget.propTypes = {
   elementId: PropTypes.string.isRequired,

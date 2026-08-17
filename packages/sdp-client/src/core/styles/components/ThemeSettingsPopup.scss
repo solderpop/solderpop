@@ -1,3 +1,6 @@
+@use 'sass:color';
+@use '../abstracts' as *;
+
 .theme-window-overlay {
   position: fixed;
   top: 0;
@@ -306,6 +309,6 @@
   background-color: $coral;
 
   &:hover {
-    background-color: darken($coral, 8%);
+    background-color: color.adjust($coral, $lightness: -8%);
   }
 }

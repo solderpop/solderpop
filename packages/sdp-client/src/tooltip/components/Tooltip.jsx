@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 
-import { SHOW_GLOBAL_TOOLTIP, HIDE_GLOBAL_TOOLTIP } from '../events';
+import { SHOW_GLOBAL_TOOLTIP, HIDE_GLOBAL_TOOLTIP } from '../events.js';
 
 class Tooltip extends React.Component {
   constructor(props) {
@@ -23,6 +23,7 @@ class Tooltip extends React.Component {
     window.addEventListener(SHOW_GLOBAL_TOOLTIP, this.showTooltip);
     window.addEventListener(HIDE_GLOBAL_TOOLTIP, this.hideTooltip);
   }
+
   componentWillUnmount() {
     window.removeEventListener(SHOW_GLOBAL_TOOLTIP, this.showTooltip);
     window.removeEventListener(HIDE_GLOBAL_TOOLTIP, this.hideTooltip);

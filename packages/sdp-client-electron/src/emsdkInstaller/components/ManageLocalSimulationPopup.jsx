@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { PopupForm } from 'sdp-client';
 
-import { checkEmsdkInstalled, uninstallEmsdk } from '../runners';
+import { checkEmsdkInstalled, uninstallEmsdk } from '../runners.js';
 
 class ManageLocalSimulationPopup extends React.Component {
   constructor(props) {
@@ -29,7 +29,7 @@ class ManageLocalSimulationPopup extends React.Component {
 
   checkStatus() {
     this.setState({ installed: null });
-    checkEmsdkInstalled().then(installed => this.setState({ installed }));
+    checkEmsdkInstalled().then((installed) => this.setState({ installed }));
   }
 
   onInstallClick() {
@@ -57,8 +57,7 @@ class ManageLocalSimulationPopup extends React.Component {
     }
     return (
       <span>
-        Not installed. Simulate needs it to compile locally (~300 MB
-        download).
+        Not installed. Simulate needs it to compile locally (~300 MB download).
       </span>
     );
   }

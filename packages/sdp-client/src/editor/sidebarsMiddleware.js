@@ -1,12 +1,12 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import {
   RESIZE_PANELS,
   MINIMIZE_PANEL,
   MAXIMIZE_PANEL,
   MOVE_PANEL,
   TOGGLE_PANEL_AUTOHIDE,
-} from './actionTypes';
-import { getPanelSettings } from './selectors';
+} from './actionTypes.js';
+import { getPanelSettings } from './selectors.js';
 
 const changeSidebarActions = [
   MINIMIZE_PANEL,
@@ -19,9 +19,9 @@ const savePanelSettings = R.curry((panelId, settings) =>
   window.localStorage.setItem(`Sidebar.${panelId}`, JSON.stringify(settings))
 );
 
-export default store => next => action => {
+export default (store) => (next) => (action) => {
   if (R.contains(action.type, changeSidebarActions)) {
-    const panelId = action.payload.panelId;
+    const { panelId } = action.payload;
     const res = next(action);
     R.compose(
       savePanelSettings(panelId),
@@ -37,10 +37,11 @@ export default store => next => action => {
     const state = store.getState();
 
     R.map(
-      panelId =>
-        R.compose(savePanelSettings(panelId), getPanelSettings(R.__, state))(
-          panelId
-        ),
+      (panelId) =>
+        R.compose(
+          savePanelSettings(panelId),
+          getPanelSettings(R.__, state)
+        )(panelId),
       panelIds
     );
 

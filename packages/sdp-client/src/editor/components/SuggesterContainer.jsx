@@ -32,23 +32,23 @@ class SuggesterContainer extends React.Component {
 
   getScrollPosition() {
     if (this.scrollRef) {
-      const contentWrapper = this.scrollRef.contentWrapper;
+      const { contentWrapper } = this.scrollRef;
 
-      const highlighted = contentWrapper.getElementsByClassName(
-        'is-highlighted'
-      );
+      const highlighted =
+        contentWrapper.getElementsByClassName('is-highlighted');
       if (highlighted.length > 0) {
         const top = highlighted[0].offsetTop;
         const height = highlighted[0].clientHeight;
         const containerHeight = contentWrapper.clientHeight;
-        const scrollPos = this.scrollRef.state.scrollPos;
+        const { scrollPos } = this.scrollRef.state;
 
         const isOutsideUp = top < scrollPos;
         const isOutsideDown = top + height > scrollPos + containerHeight;
 
         if (isOutsideDown) {
           return top + height - containerHeight;
-        } else if (isOutsideUp) {
+        }
+        if (isOutsideUp) {
           return top;
         }
 

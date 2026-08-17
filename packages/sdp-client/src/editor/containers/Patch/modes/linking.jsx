@@ -2,19 +2,19 @@ import React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import * as XP from 'sdp-project';
 
-import { COMMAND } from '../../../../utils/constants';
+import { COMMAND } from '../../../../utils/constants.js';
 
-import PatchSVG from '../../../../project/components/PatchSVG';
-import * as Layers from '../../../../project/components/layers';
+import PatchSVG from '../../../../project/components/PatchSVG.jsx';
+import * as Layers from '../../../../project/components/layers/index.js';
 
 import {
   snapPositionToSlots,
   pixelPositionToSlots,
-} from '../../../../project/nodeLayout';
+} from '../../../../project/nodeLayout.js';
 
-import { getOffsetMatrix, bindApi, getMousePosition } from '../modeUtils';
+import { getOffsetMatrix, bindApi, getMousePosition } from '../modeUtils.js';
 
-const abort = api => {
+const abort = (api) => {
   api.props.actions.deselectAll();
   api.goToDefaultMode();
 };
@@ -146,7 +146,7 @@ const linkingMode = {
       <HotKeys handlers={this.getHotkeyHandlers(api)} className="PatchWrapper">
         <PatchSVG
           onMouseMove={bindApi(api, this.onMouseMove)}
-          svgRef={svg => {
+          svgRef={(svg) => {
             patchSvgRef = svg;
           }}
         >

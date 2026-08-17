@@ -1,5 +1,5 @@
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
 import * as XP from 'sdp-project';
 import { maybeProp, foldMaybe, foldEither } from 'sdp-func-tools';
 
@@ -8,9 +8,11 @@ import {
   calcutaleNodeSizeFromPins,
   calculatePinPosition,
   slotSizeToPixels,
-} from './nodeLayout';
+} from './nodeLayout.js';
 
-import { LINK_ERRORS } from '../editor/constants';
+import { LINK_ERRORS } from '../editor/constants.js';
+
+const { Maybe } = RamdaFantasy;
 
 // :: NodeId -> PinKey -> RenderableNodes -> RenderablePin
 export const getRenderablePin = R.uncurryN(3, (nodeId, pinKey) =>
@@ -18,7 +20,7 @@ export const getRenderablePin = R.uncurryN(3, (nodeId, pinKey) =>
 );
 
 // :: [NodeId] -> Link -> Boolean
-export const isLinkConnectedToNodeIds = R.uncurryN(2, nodeIds =>
+export const isLinkConnectedToNodeIds = R.uncurryN(2, (nodeIds) =>
   R.compose(R.complement(R.isEmpty), R.intersection(nodeIds), XP.getLinkNodeIds)
 );
 
@@ -113,7 +115,7 @@ export const patchToNodeProps = R.curry(
       pins: R.compose(
         R.when(
           () => isVariadic,
-          renderablePins =>
+          (renderablePins) =>
             R.compose(
               R.merge(renderablePins),
               R.indexBy(R.prop('keyName')),
@@ -155,7 +157,7 @@ export const isNotImplementedInXodNode = R.compose(
   XP.getNodeType
 );
 
-export const getRenderablePinType = pin =>
+export const getRenderablePinType = (pin) =>
   R.compose(
     R.unless(
       R.either(XP.isBuiltInType, R.equals('conflicting')),

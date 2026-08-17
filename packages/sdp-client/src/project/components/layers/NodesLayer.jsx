@@ -1,15 +1,15 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import pureDeepEqual from '../../../utils/pureDeepEqual';
+import pureDeepEqual from '../../../utils/pureDeepEqual.js';
 
-import { isNodeSelected } from '../../../editor/utils';
-import { getPinLinkabilityValidator } from '../../utils';
+import { isNodeSelected } from '../../../editor/utils.js';
+import { getPinLinkabilityValidator } from '../../utils.js';
 
-import Node from '../Node';
+import Node from '../Node.jsx';
 
-const NodesLayer = ({
+function NodesLayer({
   nodes,
   selection,
   linkingPin,
@@ -22,13 +22,13 @@ const NodesLayer = ({
   onVariadicHandleDown,
   onResizeHandleMouseDown,
   noNodeHovering,
-}) => {
+}) {
   const pinLinkabilityValidator = getPinLinkabilityValidator(linkingPin, nodes);
 
   return (
     <g className="NodesLayer">
       {R.compose(
-        R.map(node => (
+        R.map((node) => (
           <Node
             key={node.id}
             id={node.id}
@@ -67,7 +67,7 @@ const NodesLayer = ({
       )(nodes)}
     </g>
   );
-};
+}
 
 NodesLayer.defaultProps = {
   areDragged: false,

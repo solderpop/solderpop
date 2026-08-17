@@ -1,5 +1,5 @@
-import * as R from 'ramda';
-import { errorToPlainObject } from './utils';
+import R from 'ramda';
+import { errorToPlainObject } from './utils.js';
 import {
   APP_UPDATE_AVAILABLE,
   APP_UPDATE_PROGRESS,
@@ -7,7 +7,7 @@ import {
   APP_UPDATE_ERROR,
   APP_UPDATE_DOWNLOAD_REQUEST,
   APP_UPDATE_DOWNLOAD_STARTED,
-} from '../shared/events';
+} from '../shared/events.js';
 
 // =============================================================================
 //
@@ -46,12 +46,12 @@ const subscribeOnUpdateProgress = R.curry((callback, autoUpdater) =>
 
 // :: (Error -> ()) -> autoUpdater -> autoUpdater
 const subscribeOnUpdateError = R.curry((callback, autoUpdater) =>
-  autoUpdater.on('error', err => callback(errorToPlainObject(err)))
+  autoUpdater.on('error', (err) => callback(errorToPlainObject(err)))
 );
 
 // :: (Info -> ()) -> autoUpdater -> autoUpdater
 const subscribeOnUpdateDownloaded = R.curry((callback, autoUpdater) =>
-  autoUpdater.on('update-downloaded', info => {
+  autoUpdater.on('update-downloaded', (info) => {
     callback(info);
     autoUpdater.quitAndInstall();
   })
@@ -73,10 +73,10 @@ export const subscribeOnAutoUpdaterEvents = (send, ipcMain, autoUpdater) =>
       () => send(APP_UPDATE_DOWNLOAD_STARTED),
       ipcMain
     ),
-    subscribeOnUpdateError(err => send(APP_UPDATE_ERROR, err)),
-    subscribeOnUpdateAvailable(info => send(APP_UPDATE_AVAILABLE, info)),
-    subscribeOnUpdateProgress(progressObj =>
+    subscribeOnUpdateError((err) => send(APP_UPDATE_ERROR, err)),
+    subscribeOnUpdateAvailable((info) => send(APP_UPDATE_AVAILABLE, info)),
+    subscribeOnUpdateProgress((progressObj) =>
       send(APP_UPDATE_PROGRESS, progressObj)
     ),
-    subscribeOnUpdateDownloaded(info => send(APP_UPDATE_DOWNLOADED, info))
+    subscribeOnUpdateDownloaded((info) => send(APP_UPDATE_DOWNLOADED, info))
   )(autoUpdater);

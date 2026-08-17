@@ -29,7 +29,7 @@ const os = require('os');
 const path = require('path');
 const fs = require('fs').promises;
 const fse = require('fs-extra');
-const exec = require('child_process').exec;
+const { exec } = require('child_process');
 const R = require('ramda');
 const { loadProject, saveProjectAsXodball } = require('sdp-fs');
 
@@ -119,14 +119,14 @@ const getH1 = R.compose(
 const getExerciseNumber = R.compose(R.head, R.match(/^(\d{3})/g));
 
 // Lists patch directories
-const getProjectPatchDirs = projectPath =>
+const getProjectPatchDirs = (projectPath) =>
   fs
     .readdir(projectPath)
     .then(R.reject(R.anyPass([R.equals('project.xod'), R.equals('.DS_Store')])))
-    .then(R.map(p => path.join(projectPath, p)));
+    .then(R.map((p) => path.join(projectPath, p)));
 
 // Saves a multifile project as Xodball
-const saveAsXodball = source => {
+const saveAsXodball = (source) => {
   const output = path.resolve(options.output, XODBALL_FILE);
   const bundledWs = path.resolve(__dirname, '..', 'workspace');
   return loadProject([bundledWs], source).then(saveProjectAsXodball(output));
@@ -138,12 +138,12 @@ const isIntroPart = R.test(/^\d00-/);
 // =============================================================================
 // Project converters & comment extractors
 // =============================================================================
-const extractCommentsFromPatch = xodpPath =>
+const extractCommentsFromPatch = (xodpPath) =>
   fs
     .readFile(xodpPath)
-    .then(str => JSON.parse(str))
+    .then((str) => JSON.parse(str))
     .then(
-      R.tap(content => {
+      R.tap((content) => {
         const patchName = path.basename(path.dirname(xodpPath));
         comments[patchName] = R.compose(
           R.join('\n\n'),
@@ -157,13 +157,15 @@ const extractCommentsFromPatch = xodpPath =>
       })
     )
     .then(R.omit(['comments']))
-    .then(content => JSON.stringify(content, null, 2))
-    .then(content => fs.writeFile(xodpPath, content));
+    .then((content) => JSON.stringify(content, null, 2))
+    .then((content) => fs.writeFile(xodpPath, content));
 
-const extractCommentsFromProject = projectPath =>
+const extractCommentsFromProject = (projectPath) =>
   getProjectPatchDirs(projectPath)
-    .then(R.map(p => path.join(p, 'patch.xodp')))
-    .then(xodpFiles => Promise.all(R.map(extractCommentsFromPatch, xodpFiles)));
+    .then(R.map((p) => path.join(p, 'patch.xodp')))
+    .then((xodpFiles) =>
+      Promise.all(R.map(extractCommentsFromPatch, xodpFiles))
+    );
 
 // =============================================================================
 // Store non-empty patch paths into `nonEmptyPatchPaths` variable
@@ -173,10 +175,10 @@ const extractCommentsFromProject = projectPath =>
 const storeNonEmptyPatchPaths = () =>
   fse.readJSON(path.join(options.output, XODBALL_FILE)).then(
     R.compose(
-      _nonEmptyPatchPaths => {
+      (_nonEmptyPatchPaths) => {
         nonEmptyPatchPaths = _nonEmptyPatchPaths;
       },
-      arr => arr.sort(),
+      (arr) => arr.sort(),
       R.map(R.replace('@/', '')),
       R.keys,
       R.reject(
@@ -187,7 +189,7 @@ const storeNonEmptyPatchPaths = () =>
       ),
       R.prop('patches')
     ),
-    err => {
+    (err) => {
       process.stderr.write(err);
       process.exit(1);
     }
@@ -197,7 +199,7 @@ const storeNonEmptyPatchPaths = () =>
 // Screenshotter command generator
 // =============================================================================
 
-const formatScreenshotCommand = patchName =>
+const formatScreenshotCommand = (patchName) =>
   `"$SHOT" "$SRC" ${patchName} ./${patchName}/${patchName}.patch.png`;
 
 const generateScreenshotScript = () =>
@@ -237,10 +239,10 @@ const generatePaginator = (prev, next) => `
 
 `;
 
-const generateTutorials = projectPath =>
-  getProjectPatchDirs(projectPath).then(patchPaths =>
+const generateTutorials = (projectPath) =>
+  getProjectPatchDirs(projectPath).then((patchPaths) =>
     Promise.all(
-      R.map(async patchPath => {
+      R.map(async (patchPath) => {
         const patchName = path.basename(patchPath);
         const patchContent = comments[patchName];
         if (!patchContent) return Promise.resolve();
@@ -326,7 +328,7 @@ const generateRootIndex = () => {
     R.join('\n'),
     R.map(
       R.compose(
-        sectionContent => `<ol class="ui list">${sectionContent}</ol>`,
+        (sectionContent) => `<ol class="ui list">${sectionContent}</ol>`,
         R.join('\n'),
         R.map(([patchName, content]) =>
           [
@@ -368,7 +370,7 @@ ${patchIndex}
 // RUN
 // =============================================================================
 
-fs.mkdtemp(path.join(os.tmpdir(), 'tutorial-docs-')).then(tmpDir => {
+fs.mkdtemp(path.join(os.tmpdir(), 'tutorial-docs-')).then((tmpDir) => {
   const CONVERTED_PROJECT = path.join(tmpDir, `${PROJECT_NAME}.w`);
 
   return fse
@@ -389,7 +391,7 @@ fs.mkdtemp(path.join(os.tmpdir(), 'tutorial-docs-')).then(tmpDir => {
         cwd: options.output,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err);
     })
     .then(() => fse.remove(tmpDir));

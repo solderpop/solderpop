@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -17,35 +17,36 @@ import {
 } from 'sdp-project';
 import { isAmong, notEquals, $Maybe, foldMaybe } from 'sdp-func-tools';
 
-import * as ProjectActions from '../../project/actions';
-import * as ProjectBrowserActions from '../actions';
-import * as EditorActions from '../../editor/actions';
-import * as PopupActions from '../../popups/actions';
+import * as ProjectActions from '../../project/actions.js';
+import * as ProjectBrowserActions from '../actions.js';
+import * as EditorActions from '../../editor/actions.js';
+import * as PopupActions from '../../popups/actions.js';
 
-import * as ProjectBrowserSelectors from '../selectors';
-import * as PopupSelectors from '../../popups/selectors';
-import * as EditorSelectors from '../../editor/selectors';
+import * as ProjectBrowserSelectors from '../selectors.js';
+import * as PopupSelectors from '../../popups/selectors.js';
+import * as EditorSelectors from '../../editor/selectors.js';
 
-import { COMMAND } from '../../utils/constants';
-import sanctuaryPropType from '../../utils/sanctuaryPropType';
+import { COMMAND } from '../../utils/constants.js';
+import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
 
-import SidebarPanel from '../../editor/components/SidebarPanel';
-import PatchGroup from '../components/PatchGroup';
-import PatchGroupItem from '../components/PatchGroupItem';
-import ProjectBrowserPopups from '../components/ProjectBrowserPopups';
-import PatchGroupItemContextMenu from '../components/PatchGroupItemContextMenu';
+import SidebarPanel from '../../editor/components/SidebarPanel.jsx';
+import PatchGroup from '../components/PatchGroup.jsx';
+import PatchGroupItem from '../components/PatchGroupItem.jsx';
+import ProjectBrowserPopups from '../components/ProjectBrowserPopups.jsx';
+import PatchGroupItemContextMenu from '../components/PatchGroupItemContextMenu.jsx';
 
 import {
   PATCH_GROUP_CONTEXT_MENU_ID,
   FILTER_CONTEXT_MENU_ID,
-} from '../constants';
-import { PANEL_IDS, SIDEBAR_IDS } from '../../editor/constants';
+} from '../constants.js';
+import { PANEL_IDS, SIDEBAR_IDS } from '../../editor/constants.js';
 
 const pickPatchPartsForComparsion = R.map(
   R.pick(['isDeprecated', 'isUtility', 'dead', 'path'])
 );
 
-const checkmark = active => (active ? <span className="state">✔</span> : null);
+const checkmark = (active) =>
+  active ? <span className="state">✔</span> : null;
 
 const pickPropsForComparsion = R.compose(
   R.evolve({
@@ -74,12 +75,13 @@ class ProjectBrowser extends React.Component {
     this.renderLocalPatches = this.renderLocalPatches.bind(this);
     this.renderLibraryPatches = this.renderLibraryPatches.bind(this);
   }
+
   shouldComponentUpdate(nextProps) {
     return !R.eqBy(pickPropsForComparsion, nextProps, this.props);
   }
 
   onAddNode(patchPath) {
-    this.props.currentPatchPath.map(curPatchPath =>
+    this.props.currentPatchPath.map((curPatchPath) =>
       this.props.actions.addNode(
         patchPath,
         this.props.defaultNodePosition,
@@ -172,11 +174,8 @@ class ProjectBrowser extends React.Component {
 
     const isOpen = foldMaybe(false, R.equals(path), currentPatchPath);
 
-    const {
-      switchPatch,
-      setSelection,
-      startDraggingPatch,
-    } = this.props.actions;
+    const { switchPatch, setSelection, startDraggingPatch } =
+      this.props.actions;
 
     const collectPropsFn = this.getCollectPropsFn(path);
 
@@ -356,7 +355,7 @@ class ProjectBrowser extends React.Component {
           {this.renderPatches()}
         </SidebarPanel>
         <PatchGroupItemContextMenu
-          ref={c => {
+          ref={(c) => {
             this.patchContextMenuRef = c;
           }}
           onPatchAdd={this.onAddNode}
@@ -431,10 +430,9 @@ const mapStateToProps = R.applySpec({
   showUtilityPatches: ProjectBrowserSelectors.shouldShowUtilityPatches,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(
     {
-      setEditorMode: EditorActions.setMode,
       switchPatch: EditorActions.switchPatch,
       startDraggingPatch: EditorActions.startDraggingPatch,
 

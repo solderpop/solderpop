@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import EventEmitter from 'events';
 import path from 'path';
 
@@ -23,10 +23,10 @@ import {
   foldMaybeWith,
 } from 'sdp-func-tools';
 
-import * as settings from './settings';
-import * as ERROR_CODES from '../shared/errorCodes';
-import { errorToPlainObject, getPathToBundledWorkspace } from './utils';
-import * as EVENTS from '../shared/events';
+import * as settings from './settings.js';
+import * as ERROR_CODES from '../shared/errorCodes.js';
+import { errorToPlainObject, getPathToBundledWorkspace } from './utils.js';
+import * as EVENTS from '../shared/events.js';
 
 // =============================================================================
 //
@@ -103,13 +103,13 @@ const catchInvalidWorkspace = R.curry((catchFn, err) =>
 
 // :: () -> Promise Path Error
 export const loadWorkspacePath = R.compose(
-  workspacePath => Promise.resolve(workspacePath),
+  (workspacePath) => Promise.resolve(workspacePath),
   settings.getWorkspacePath,
   settings.load
 );
 
 // :: Path -> Promise Path Error
-export const saveWorkspacePath = workspacePath =>
+export const saveWorkspacePath = (workspacePath) =>
   R.compose(
     R.always(Promise.resolve(workspacePath)),
     settings.save,
@@ -125,7 +125,7 @@ export const saveLibraries = R.curry((event, payload) =>
       event.sender.send(EVENTS.INSTALL_LIBRARIES_COMPLETE, payload.request);
       return payload;
     },
-    wsPath =>
+    (wsPath) =>
       R.compose(
         allPromises,
         R.values,
@@ -135,7 +135,7 @@ export const saveLibraries = R.curry((event, payload) =>
         })
       )(payload.projects),
     loadWorkspacePath
-  )().catch(err => {
+  )().catch((err) => {
     event.sender.send(EVENTS.INSTALL_LIBRARIES_FAILED, errorToPlainObject(err));
   })
 );
@@ -197,7 +197,7 @@ export const onSaveAll = R.curry(
 
 // :: (Path -> ()) -> (String -> a -> ()) -> Path -> Promise Project Error
 export const onLoadProject = R.curry((updateProjectPath, send, pathToOpen) =>
-  loadProjectByPath(updateProjectPath, pathToOpen).then(project =>
+  loadProjectByPath(updateProjectPath, pathToOpen).then((project) =>
     send(EVENTS.REQUEST_SHOW_PROJECT, project)
   )
 );
@@ -209,7 +209,7 @@ export const onSelectProject = R.curry(
     const projectPath = await getPathToXodProject(projectXodPath);
 
     return pathGetter()
-      .then(wsPath =>
+      .then((wsPath) =>
         loadProject([wsPath, getPathToBundledWorkspace()], projectPath)
       )
       .then(requestShowProject(send))
@@ -233,14 +233,16 @@ export const onOpenBundledProject = (send, updateProjectPath, projectName) => {
 
 // :: (String -> a -> ()) -> (Path -> Promise Path Error) -> Path -> Promise ProjectMeta[] Error
 export const onCreateWorkspace = R.curry((send, pathSaver, workspacePath) =>
-  R.pipeP(spawnWorkspaceFile, pathSaver, updateWorkspace(send, ''))(
-    workspacePath
-  ).catch(handleError(send))
+  R.pipeP(
+    spawnWorkspaceFile,
+    pathSaver,
+    updateWorkspace(send, '')
+  )(workspacePath).catch(handleError(send))
 );
 
 // :: Path -> Promise Path Error
-const ensureWorkspace = workspacePath =>
-  validateWorkspace(workspacePath).catch(err => {
+const ensureWorkspace = (workspacePath) =>
+  validateWorkspace(workspacePath).catch((err) => {
     if (err.errorCode === FS_ERROR_CODES.WORKSPACE_DIR_NOT_EXIST_OR_EMPTY) {
       return spawnWorkspaceFile(workspacePath);
     }
@@ -269,11 +271,11 @@ export const onIDELaunch = R.curry(
 
     return R.pipeP(
       pathGetter,
-      R.tap(p => {
+      R.tap((p) => {
         oldPath = p;
       }),
       ensureWorkspacePath,
-      R.tap(p => {
+      R.tap((p) => {
         newPath = p;
       }),
       pathSaver,
@@ -282,15 +284,15 @@ export const onIDELaunch = R.curry(
       () =>
         foldMaybeWith(
           () => openBundledProject(send, updateProjectPath, oldPath),
-          projectPath =>
-            onLoadProject(updateProjectPath, send, projectPath).catch(err => {
+          (projectPath) =>
+            onLoadProject(updateProjectPath, send, projectPath).catch((err) => {
               handleError(send, err); // send error to renderer process
               return openBundledProject(send, updateProjectPath, oldPath);
             }),
           getFileToOpen()
         )
     )().catch(
-      catchInvalidWorkspace(err => {
+      catchInvalidWorkspace((err) => {
         const isHomeDir = oldPath !== newPath;
         const forceCreate =
           err.errorCode === FS_ERROR_CODES.WORKSPACE_DIR_NOT_EMPTY;
@@ -310,7 +312,7 @@ export const onSwitchWorkspace = R.curry((send, pathSaver, workspacePath) =>
     .then(pathSaver)
     .then(updateWorkspace(send, ''))
     .catch(
-      catchInvalidWorkspace(err => {
+      catchInvalidWorkspace((err) => {
         const force = err.errorCode === FS_ERROR_CODES.WORKSPACE_DIR_NOT_EMPTY;
         requestCreateWorkspace(send, workspacePath, force);
       })
@@ -319,7 +321,7 @@ export const onSwitchWorkspace = R.curry((send, pathSaver, workspacePath) =>
 );
 
 // :: (Path -> ()) -> void
-export const onCreateProject = updateProjectPath => updateProjectPath(null);
+export const onCreateProject = (updateProjectPath) => updateProjectPath(null);
 
 // =============================================================================
 //
@@ -328,7 +330,7 @@ export const onCreateProject = updateProjectPath => updateProjectPath(null);
 // =============================================================================
 
 // :: ipcEvent -> (String -> Any -> ())
-const ipcSender = event => (eventName, arg) =>
+const ipcSender = (event) => (eventName, arg) =>
   event.sender.send(eventName, arg);
 
 // This event is subscribed by subscribeRemoteAction function
@@ -343,7 +345,7 @@ export const subscribeToSaveAll = R.curry((store, event, saveData) =>
 );
 
 // onSelectProject
-export const subscribeToSelectProjectEvent = R.uncurryN(2, store =>
+export const subscribeToSelectProjectEvent = R.uncurryN(2, (store) =>
   WorkspaceEvents.on(EVENTS.SELECT_PROJECT, ({ send, projectMeta }) =>
     onSelectProject(
       store.dispatch.updateProjectPath,
@@ -355,7 +357,7 @@ export const subscribeToSelectProjectEvent = R.uncurryN(2, store =>
 );
 
 // Pass through IPC event into EventEmitter
-export const subscribeToSelectProject = ipcMain =>
+export const subscribeToSelectProject = (ipcMain) =>
   ipcMain.on(EVENTS.SELECT_PROJECT, (event, projectMeta) =>
     emitSelectProject(ipcSender(event), projectMeta)
   );
@@ -378,13 +380,13 @@ export const subscribeToCreateProject = R.curry((store, ipcMain) =>
 );
 
 // onCreateWorkspace
-export const subscribeToCreateWorkspace = ipcMain =>
+export const subscribeToCreateWorkspace = (ipcMain) =>
   ipcMain.on(EVENTS.CREATE_WORKSPACE, (event, workspacePath) =>
     onCreateWorkspace(ipcSender(event), saveWorkspacePath, workspacePath)
   );
 
 // onSwitchWorkspace
-export const subscribeToSwitchWorkspace = ipcMain =>
+export const subscribeToSwitchWorkspace = (ipcMain) =>
   ipcMain.on(EVENTS.SWITCH_WORKSPACE, (event, workspacePath) =>
     onSwitchWorkspace(ipcSender(event), saveWorkspacePath, workspacePath)
   );

@@ -1,15 +1,15 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
-import { editorLens } from '../editor/selectors';
-import { currentTabLens, selectionLens } from '../editor/reducer';
-import { SELECTION_ENTITY_TYPE } from '../editor/constants';
+import { editorLens } from '../editor/selectors.js';
+import { currentTabLens, selectionLens } from '../editor/reducer.js';
+import { SELECTION_ENTITY_TYPE } from '../editor/constants.js';
 import {
   getCurrentPatchLinks,
   getCurrentPatchNodes,
   getCurrentPatchComments,
-} from '../project/selectors';
+} from '../project/selectors.js';
 
-const removeInvalidSelections = state => {
+const removeInvalidSelections = (state) => {
   const nodes = getCurrentPatchNodes(state);
   const links = getCurrentPatchLinks(state);
   const comments = getCurrentPatchComments(state);

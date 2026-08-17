@@ -1,11 +1,11 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { maybePath, foldMaybe, maybeProp } from 'sdp-func-tools';
 
 // :: { errors: StrMap [Error] } -> [Error]
 export const getErrors = R.pipe(R.prop('errors'), R.values, R.flatten);
 
 // :: NodeErrors -> [Error]
-const mergeNodeErrors = nodeErrors =>
+const mergeNodeErrors = (nodeErrors) =>
   R.concat(
     getErrors(nodeErrors),
     R.pipe(R.prop('pins'), R.values, R.map(getErrors), R.unnest)(nodeErrors)

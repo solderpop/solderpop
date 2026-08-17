@@ -1,12 +1,12 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as XP from 'sdp-project';
 
-import NodeLabel from './NodeLabel';
+import NodeLabel from './NodeLabel.jsx';
 
-const TerminalNodeBody = props => {
+function TerminalNodeBody(props) {
   const isInput = XP.isInputTerminalPath(props.type);
   const radius = props.pxSize.width / 2;
   const yOffset = isInput ? props.pxSize.height - props.pxSize.width : 0;
@@ -16,9 +16,10 @@ const TerminalNodeBody = props => {
     r: radius,
   };
 
-  const terminalLabel = R.when(R.isEmpty, R.always(props.normalizedLabel))(
-    props.label
-  );
+  const terminalLabel = R.when(
+    R.isEmpty,
+    R.always(props.normalizedLabel)
+  )(props.label);
 
   return (
     <g className="terminal-node">
@@ -41,7 +42,7 @@ const TerminalNodeBody = props => {
       />
     </g>
   );
-};
+}
 
 TerminalNodeBody.propTypes = {
   type: PropTypes.string,

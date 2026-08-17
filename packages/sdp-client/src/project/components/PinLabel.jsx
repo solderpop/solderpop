@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { PINLABEL_WIDTH, getPinLabelProps } from '../nodeLayout';
+import { PINLABEL_WIDTH, getPinLabelProps } from '../nodeLayout.js';
 
-const PinLabel = ({ label, direction, position }) => {
+function PinLabel({ label, direction, position }) {
   const textProps = getPinLabelProps(direction, position);
 
   return label ? (
@@ -17,7 +17,7 @@ const PinLabel = ({ label, direction, position }) => {
       </div>
     </foreignObject>
   ) : null;
-};
+}
 
 PinLabel.propTypes = {
   label: PropTypes.string,

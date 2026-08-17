@@ -1,28 +1,28 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import cn from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 
 import { getBaseName } from 'sdp-project';
 
-import pureDeepEqual from '../../../utils/pureDeepEqual';
+import pureDeepEqual from '../../../utils/pureDeepEqual.js';
 
-import NodePinsOverlay from '../NodePinsOverlay';
-import { getPinLinkabilityValidator } from '../../utils';
+import NodePinsOverlay from '../NodePinsOverlay.jsx';
+import { getPinLinkabilityValidator } from '../../utils.js';
 
-const NodePinsOverlayLayer = ({
+function NodePinsOverlayLayer({
   nodes,
   linkingPin,
   hidden,
   onPinMouseUp,
   onPinMouseDown,
-}) => {
+}) {
   const pinLinkabilityValidator = getPinLinkabilityValidator(linkingPin, nodes);
 
   return (
     <g className={cn('PinsOverlayLayer', { hidden })}>
       {R.compose(
-        R.map(node => (
+        R.map((node) => (
           <NodePinsOverlay
             key={node.id}
             id={node.id}
@@ -40,7 +40,7 @@ const NodePinsOverlayLayer = ({
       )(nodes)}
     </g>
   );
-};
+}
 
 NodePinsOverlayLayer.propTypes = {
   nodes: PropTypes.objectOf(PropTypes.object),

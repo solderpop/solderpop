@@ -1,15 +1,15 @@
 import fs from 'fs-extra';
 import path from 'path';
-import * as R from 'ramda';
+import R from 'ramda';
 
 import * as XF from 'sdp-func-tools';
 import * as XP from 'sdp-project';
 
-import pack from './pack';
-import { getPathToXodProject } from './find';
-import { loadLibs } from './loadLibs';
-import { readDir, readJSON } from './read';
-import * as ERROR_CODES from './errorCodes';
+import pack from './pack.js';
+import { getPathToXodProject } from './find.js';
+import { loadLibs } from './loadLibs.js';
+import { readDir, readJSON } from './read.js';
+import * as ERROR_CODES from './errorCodes.js';
 import {
   isExtname,
   resolvePath,
@@ -20,14 +20,14 @@ import {
   basenameAmong,
   getPatchName,
   rejectOnInvalidPatchFileContents,
-} from './utils';
-import { ProjectFileContents } from './types';
-import { loadAttachments } from './attachments';
+} from './utils.js';
+import { ProjectFileContents } from './types.js';
+import { loadAttachments } from './attachments.js';
 import {
   convertPatchFileContentsToPatch,
   addMissingOptionsToPatchFileContents,
   addMissingOptionsToProjectFileContents,
-} from './convertTypes';
+} from './convertTypes.js';
 
 // =============================================================================
 //
@@ -39,11 +39,11 @@ import {
 // =============================================================================
 
 // :: Project -> Promise Project Error
-const validateLoadedProject = project =>
+const validateLoadedProject = (project) =>
   R.compose(
     R.ifElse(
-      corrupted => corrupted.length,
-      patchPaths =>
+      (corrupted) => corrupted.length,
+      (patchPaths) =>
         Promise.reject(
           XF.createError(ERROR_CODES.PROJECT_LOADED_WITH_INVALID_PATCH_PATHS, {
             patchPaths,
@@ -65,7 +65,7 @@ const validateLoadedProject = project =>
 // =============================================================================
 
 // :: Path -> Promise (XodFile ProjectFileContents) Object
-const readProjectMetaFile = projectFile =>
+const readProjectMetaFile = (projectFile) =>
   readJSON(projectFile)
     .then(addMissingOptionsToProjectFileContents)
     .then(
@@ -75,17 +75,17 @@ const readProjectMetaFile = projectFile =>
       )
     )
     .then(R.assoc('path', path.dirname(projectFile)))
-    .catch(err => ({
+    .catch((err) => ({
       error: true,
       message: err.toString(),
       path: projectFile,
     }));
 
 // :: Path -> Promise ProjectMeta Error
-const readProjectDirectories = projectDirectory =>
+const readProjectDirectories = (projectDirectory) =>
   R.compose(
     R.composeP(
-      content => ({ path: projectDirectory, content }),
+      (content) => ({ path: projectDirectory, content }),
       addMissingOptionsToProjectFileContents,
       fs.readJson
     ),
@@ -94,12 +94,12 @@ const readProjectDirectories = projectDirectory =>
 
 // :: Path -> Promise ProjectMeta[] Error
 export const getLocalProjects = R.compose(
-  workspacePath =>
+  (workspacePath) =>
     R.composeP(
       Promise.all.bind(Promise),
       R.map(readProjectDirectories),
       R.filter(isLocalProjectDirectory),
-      R.map(filename => path.resolve(workspacePath, filename)),
+      R.map((filename) => path.resolve(workspacePath, filename)),
       fs.readdir
     )(workspacePath).catch(
       XF.rejectWithCode(ERROR_CODES.CANT_ENUMERATE_PROJECTS)
@@ -109,7 +109,7 @@ export const getLocalProjects = R.compose(
 
 // Returns a Promise of all project metas for given workspace path
 // :: Path -> Promise ProjectMeta[] Error
-export const getProjects = workspacePath =>
+export const getProjects = (workspacePath) =>
   R.composeP(
     XF.allPromises,
     R.map(readProjectMetaFile),
@@ -120,8 +120,8 @@ export const getProjects = workspacePath =>
   );
 
 // :: String -> String -> Promise { path :: String, content :: Object, id :: String }
-const readXodFile = projectPath => xodfile =>
-  readJSON(xodfile).then(data => {
+const readXodFile = (projectPath) => (xodfile) =>
+  readJSON(xodfile).then((data) => {
     const { base, dir } = path.parse(xodfile);
 
     const projectFolder = path.resolve(projectPath, '..');
@@ -129,11 +129,11 @@ const readXodFile = projectPath => xodfile =>
 
     return R.composeP(
       XF.omitNilValues,
-      content => ({ path: `./${filePath}`, content }),
+      (content) => ({ path: `./${filePath}`, content }),
       R.cond([
         [
           () => base === 'patch.xodp',
-          patch =>
+          (patch) =>
             R.composeP(
               loadAttachments(dir),
               R.assoc('path', XP.getLocalPath(getPatchName(xodfile))),
@@ -152,7 +152,7 @@ const readXodFile = projectPath => xodfile =>
   });
 
 // :: Path -> Promise [File] Error
-export const loadProjectWithoutLibs = projectPath =>
+export const loadProjectWithoutLibs = (projectPath) =>
   R.composeP(
     XF.allPromises,
     R.map(readXodFile(projectPath)),
@@ -173,7 +173,7 @@ export const loadProjectWithLibs = R.curry((workspaceDirs, projectPath) => {
     loadLibs(libDirPaths),
   ])
     .then(([projectFiles, libs]) => ({ project: projectFiles, libs }))
-    .catch(err =>
+    .catch((err) =>
       Promise.reject(
         Object.assign(err, {
           libPaths: libDirPaths,
@@ -226,9 +226,10 @@ export const loadProjectFromDir = R.curry((workspaceDirs, projectPath) =>
 export const loadProjectFromXodball = R.curry((workspaceDirs, xodballPath) =>
   Promise.all([
     fs.readFile(xodballPath, 'utf8').then(XP.fromXodball),
-    R.compose(loadLibs, R.map(R.compose(resolvePath, resolveLibPath)))(
-      workspaceDirs
-    ),
+    R.compose(
+      loadLibs,
+      R.map(R.compose(resolvePath, resolveLibPath))
+    )(workspaceDirs),
   ])
     .then(([eitherProject, libs]) =>
       eitherProject.map(
@@ -251,7 +252,7 @@ export const loadProjectFromXodball = R.curry((workspaceDirs, xodballPath) =>
  * rejected Promise with Error. Otherwise, Promise Project.
  */
 // :: [Path] -> Path -> Promise Promise Error
-export const loadProject = R.uncurryN(2, workspaceDirs =>
+export const loadProject = R.uncurryN(2, (workspaceDirs) =>
   R.composeP(
     validateLoadedProject,
     XP.migrateBoundValuesToBoundLiterals,

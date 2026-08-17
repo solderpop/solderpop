@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react';
 
 import { createPatchSearcher } from 'sdp-patch-search';
 
-import Suggester from '../src/editor/components/Suggester';
+import Suggester from '../src/editor/components/Suggester.jsx';
 import '../src/core/styles/main.scss';
 
 const indexData = [
@@ -59,7 +59,7 @@ const indexData = [
 ];
 
 storiesOf('Suggester', module)
-  .addDecorator(story => (
+  .addDecorator((story) => (
     <div
       style={{
         position: 'absolute',
@@ -76,7 +76,7 @@ storiesOf('Suggester', module)
   .add('basic', () => (
     <Suggester
       searchPatches={createPatchSearcher()(indexData)}
-      onAddNode={val => {
+      onAddNode={(val) => {
         // eslint-disable-next-line
         alert(`Node "${val}" will be placed!`);
       }}

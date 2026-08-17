@@ -1,3 +1,6 @@
+@use 'sass:math';
+@use '../abstracts' as *;
+
 .Comment {
   // A slot should contain exactly three lines. A slot is 50px in height
   // plus 1px for the line. So the line height is 51 / 3 = 17px
@@ -109,7 +112,7 @@
     h3, h4, h5, h6 {
       font-size: 12px;
       font-weight: bold;
-      margin: ($line-height / 2) 0;
+      margin: math.div($line-height, 2) 0;
     }
 
     p:not(:first-child) {

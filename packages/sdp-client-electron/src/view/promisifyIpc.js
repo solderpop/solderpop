@@ -1,6 +1,6 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { ipcRenderer } from 'electron';
-import { getAllStatesForEvent } from '../shared/eventStates';
+import { getAllStatesForEvent } from '../shared/eventStates.js';
 
 // :: Map EVENT_STATE EVENT_NAME_WITH_STATE -> _
 const removeListenersForAllEventStates = R.compose(
@@ -9,7 +9,7 @@ const removeListenersForAllEventStates = R.compose(
 );
 
 // :: EVENT_NAME -> ((a -> _) -> Object -> Promise a Error)
-export default eventName => {
+export default (eventName) => {
   const EVENT_STATES = getAllStatesForEvent(eventName);
 
   return (onProgress, payload) =>

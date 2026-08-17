@@ -1,14 +1,14 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { mapIndexed } from 'sdp-func-tools';
 
-import { noop } from '../../utils/ramda';
-import { PIN_RADIUS, LINK_HOTSPOT_SIZE } from '../nodeLayout';
+import { noop } from '../../utils/ramda.js';
+import { PIN_RADIUS, LINK_HOTSPOT_SIZE } from '../nodeLayout.js';
 
-import TooltipHOC from '../../tooltip/components/TooltipHOC';
-import formatErrorMessage from '../../core/formatErrorMessage';
+import TooltipHOC from '../../tooltip/components/TooltipHOC.jsx';
+import formatErrorMessage from '../../core/formatErrorMessage.js';
 
 // :: [Error] -> [ReactNode]
 const renderTooltipContent = mapIndexed((err, idx) => (

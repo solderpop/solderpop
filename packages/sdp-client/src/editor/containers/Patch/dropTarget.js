@@ -1,11 +1,11 @@
 import { DropTarget } from 'react-dnd';
 
-import { EDITOR_MODE, DRAGGED_ENTITY_TYPE } from '../../constants';
+import { EDITOR_MODE, DRAGGED_ENTITY_TYPE } from '../../constants.js';
 
 import {
   snapNodePositionToSlots,
   slotPositionToPixels,
-} from '../../../project/nodeLayout';
+} from '../../../project/nodeLayout.js';
 
 const getDraggedPatchPosition = (props, monitor, component) => {
   const globalDropPosition = monitor.getClientOffset();

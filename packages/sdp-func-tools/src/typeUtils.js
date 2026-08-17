@@ -1,10 +1,12 @@
-import * as R from 'ramda';
-import { Either } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
 
-export const sanctuaryDefEitherToRamdaFantasyEither = sdEither =>
+const { Either } = RamdaFantasy;
+
+export const sanctuaryDefEitherToRamdaFantasyEither = (sdEither) =>
   sdEither.isLeft ? Either.Left(sdEither.value) : Either.Right(sdEither.value);
 
-export const validateSanctuaryType = R.uncurryN(2, SanctuaryType =>
+export const validateSanctuaryType = R.uncurryN(2, (SanctuaryType) =>
   R.compose(
     sanctuaryDefEitherToRamdaFantasyEither,
     SanctuaryType.validate.bind(SanctuaryType)

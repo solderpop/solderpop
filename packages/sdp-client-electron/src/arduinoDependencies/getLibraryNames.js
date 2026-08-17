@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { catMaybies } from 'sdp-func-tools';
 import { getLibraryNameFromUrl } from 'sdp-deploy';
 
@@ -9,6 +9,6 @@ import { getLibraryNameFromUrl } from 'sdp-deploy';
 export default R.pipe(
   R.map(getLibraryNameFromUrl),
   catMaybies, // If there is any Error in the URL it should throw error earlier
-  R.map(name => `"${name}"`),
+  R.map((name) => `"${name}"`),
   R.join(', ')
 );

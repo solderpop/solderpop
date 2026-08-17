@@ -1,15 +1,17 @@
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
 import { mapIndexed } from 'sdp-func-tools';
 
-import * as CONST from './constants';
-import * as PatchPathUtils from './patchPathUtils';
-import * as Patch from './patch';
-import * as Node from './node';
-import * as Link from './link';
-import * as Pin from './pin';
+import * as CONST from './constants.js';
+import * as PatchPathUtils from './patchPathUtils.js';
+import * as Patch from './patch.js';
+import * as Node from './node.js';
+import * as Link from './link.js';
+import * as Pin from './pin.js';
 
-import { getGenuinePatchByPath } from './internal/project';
+import { getGenuinePatchByPath } from './internal/project.js';
+
+const { Maybe } = RamdaFantasy;
 
 // =============================================================================
 //
@@ -29,7 +31,7 @@ const CONCAT_PATCH_PATH = 'xod/core/concat';
 // Creates an unpack record patch
 //
 // :: Patch -> Maybe Patch
-export const createUnpackRecordPatch = recordPatch => {
+export const createUnpackRecordPatch = (recordPatch) => {
   const type = Patch.getPatchPath(recordPatch);
   const inputTypeTerminal = PatchPathUtils.getTerminalPath(
     CONST.PIN_DIRECTION.INPUT,
@@ -38,9 +40,9 @@ export const createUnpackRecordPatch = recordPatch => {
 
   const nodesForUnpackPatch = R.compose(
     R.reject(R.isNil),
-    R.map(node =>
+    R.map((node) =>
       R.compose(
-        fn => fn(node),
+        (fn) => fn(node),
         R.cond([
           // * :: NodeType -> (NodeType -> Node -> Node)
           // output-self -> input-patchPath
@@ -118,9 +120,10 @@ export const createToJsonRecordSpecialization = (recordPatch, project) => {
   // Note:
   // unpack-record output pin keys is equal to input pins of a record
   // so it might be used as is to generate `to-json(record)` patch
-  const recordPins = R.compose(Pin.normalizeEmptyPinLabels, Patch.listPins)(
-    recordPatch
-  );
+  const recordPins = R.compose(
+    Pin.normalizeEmptyPinLabels,
+    Patch.listPins
+  )(recordPatch);
 
   const recordInputPins = R.filter(Pin.isInputPin, recordPins);
   const recordOutputPin = R.find(Pin.isOutputPin, recordPins);

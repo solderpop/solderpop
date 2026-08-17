@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
 /**
  * Function without any operation.
@@ -23,11 +23,11 @@ export const enumerate = R.curry((separator, lastSeparator, items) => {
   )(lastItems);
 });
 
-export const memoizeOnlyLast = f => {
+export const memoizeOnlyLast = (f) => {
   let lastArg;
   let result;
 
-  return arg => {
+  return (arg) => {
     if (arg !== lastArg) {
       result = f(arg);
       lastArg = arg;

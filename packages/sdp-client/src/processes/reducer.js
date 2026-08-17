@@ -1,6 +1,6 @@
-import * as R from 'ramda';
-import { STATUS } from '../utils/constants';
-import { getNewId } from './selectors';
+import R from 'ramda';
+import { STATUS } from '../utils/constants.js';
+import { getNewId } from './selectors.js';
 
 const makeProcess = (id, state, action) =>
   R.assoc(
@@ -13,7 +13,7 @@ const makeProcess = (id, state, action) =>
     state
   );
 
-const isProcess = action => action.meta && action.meta.status;
+const isProcess = (action) => action.meta && action.meta.status;
 
 export default (processes = {}, action) => {
   if (!isProcess(action)) {

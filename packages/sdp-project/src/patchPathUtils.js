@@ -1,18 +1,20 @@
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
 import { failOnFalse, maybePath, isAmong } from 'sdp-func-tools';
 
-import { def } from './types';
-import * as CONST from './constants';
-import { isBuiltInType, isGenericType } from './utils';
+import { def } from './types.js';
+import * as CONST from './constants.js';
+import { isBuiltInType, isGenericType } from './utils.js';
 import {
   isPathLocal,
   isPathLibrary,
   isValidPatchPath,
   isValidPatchBasename,
   terminalPatchPathRegExp,
-} from './internal/patchPathUtils';
-import { BINDABLE_CUSTOM_TYPES_LIST } from './custom-types';
+} from './internal/patchPathUtils.js';
+import { BINDABLE_CUSTOM_TYPES_LIST } from './custom-types.js';
+
+const { Maybe } = RamdaFantasy;
 
 export {
   isLocalMarker,
@@ -34,7 +36,7 @@ export {
   isBuiltInLibName,
   getExpandedVariadicPatchPath,
   getSpecializationSuffix,
-} from './internal/patchPathUtils';
+} from './internal/patchPathUtils.js';
 
 // :: String -> Identifier
 export const toIdentifier = R.compose(
@@ -49,7 +51,7 @@ export const toIdentifier = R.compose(
 // general-purpose utils
 //
 
-export const getLocalPath = baseName => `@/${baseName}`;
+export const getLocalPath = (baseName) => `@/${baseName}`;
 
 /**
  * Checks if a path is a valid for entities like
@@ -59,7 +61,7 @@ export const getLocalPath = baseName => `@/${baseName}`;
  * @param {string} path - string to check
  * @returns {Either<Error|string>} error or valid path
  */
-export const validatePath = patchPath =>
+export const validatePath = (patchPath) =>
   failOnFalse('INVALID_PATCH_PATH', { patchPath }, isValidPatchPath)(patchPath);
 
 /**
@@ -67,7 +69,7 @@ export const validatePath = patchPath =>
  * Those are reserved for terminals, which are auto-generated.
  */
 const reservedBaseNameRegExp = R.compose(
-  dirs => new RegExp(`^(${dirs})-`),
+  (dirs) => new RegExp(`^(${dirs})-`),
   R.join('|'),
   R.values
 )(CONST.PIN_DIRECTION);
@@ -118,12 +120,14 @@ const PATCH_NODES_LIB_NAME = 'xod/patch-nodes';
 const dataTypes = R.values(CONST.PIN_TYPE);
 
 // :: Map BaseName PatchPath
-const bindableCustomTypesMap = R.compose(R.mergeAll, R.indexBy(getBaseName))(
-  BINDABLE_CUSTOM_TYPES_LIST
-);
-const bindableTypes = R.compose(R.concat(dataTypes), R.keys)(
-  bindableCustomTypesMap
-);
+const bindableCustomTypesMap = R.compose(
+  R.mergeAll,
+  R.indexBy(getBaseName)
+)(BINDABLE_CUSTOM_TYPES_LIST);
+const bindableTypes = R.compose(
+  R.concat(dataTypes),
+  R.keys
+)(bindableCustomTypesMap);
 
 // :: String -> Direction
 export const getTerminalDirection = R.compose(
@@ -133,7 +137,7 @@ export const getTerminalDirection = R.compose(
 
 export const getTerminalDataType = def(
   'getTerminalDataType :: PatchPath -> DataType',
-  terminalPatchPath => {
+  (terminalPatchPath) => {
     const baseType = R.match(terminalPatchPathRegExp, terminalPatchPath)[2];
 
     // using isBuiltInType from ./utils here won't catch
@@ -177,23 +181,23 @@ export const getTerminalPath = R.curry((direction, type) => {
 // :: PatchPath -> PatchPath
 export const getUnpackRecordPath = R.compose(
   // basename => `@/unpack-${basename}`,
-  R.converge((lib, basename) => `${lib}/unpack-${basename}`, [
-    getLibraryName,
-    getBaseName,
-  ])
+  R.converge(
+    (lib, basename) => `${lib}/unpack-${basename}`,
+    [getLibraryName, getBaseName]
+  )
 );
 
 // :: PatchPath -> PatchPath
 export const getToJsonRecordPath = R.compose(
   // basename => `@/to-json(${basename})`,
-  R.converge((lib, basename) => `${lib}/to-json(${basename})`, [
-    getLibraryName,
-    getBaseName,
-  ])
+  R.converge(
+    (lib, basename) => `${lib}/to-json(${basename})`,
+    [getLibraryName, getBaseName]
+  )
 );
 
 export const normalizeTypeNameForAbstractsResolution = R.unless(
-  t => isBuiltInType(t),
+  (t) => isBuiltInType(t),
   // for complex types matching is done by
   // a type basename (color, not bob/fun/color)
   getBaseName
@@ -221,13 +225,13 @@ const variadicOrPassRegExp = new RegExp(
 
 // :: PatchPath -> ArityStep
 export const getArityStepFromPatchPath = R.compose(
-  x => parseInt(x, 10),
+  (x) => parseInt(x, 10),
   R.nth(1),
   R.match(variadicOrPassRegExp)
 );
 
 // :: NonZeroNaturalNumber -> PatchPath
-export const getVariadicPath = n => `${PATCH_NODES_LIB_NAME}/variadic-${n}`;
+export const getVariadicPath = (n) => `${PATCH_NODES_LIB_NAME}/variadic-${n}`;
 
 //
 // utils for cast patches
@@ -290,7 +294,7 @@ export const getConstantNodeType = R.compose(
 
 export const getInternalTerminalPath = def(
   'getInternalTerminalPath :: DataType -> PatchPath',
-  type => `xod/internal/terminal-${type}`
+  (type) => `xod/internal/terminal-${type}`
 );
 
 // :: String -> String
@@ -298,7 +302,7 @@ export const convertToInternalTerminalPath = R.compose(
   getInternalTerminalPath,
   // we can safely convert custom terminals to generics
   // since they never have bound values
-  R.unless(t => isBuiltInType(t), R.always(CONST.PIN_TYPE.T1)),
+  R.unless((t) => isBuiltInType(t), R.always(CONST.PIN_TYPE.T1)),
   getTerminalDataType
 );
 
@@ -353,7 +357,7 @@ const tweakPathRegExp = new RegExp(
 // :: DataType -> Maybe PatchPath
 export const getTweakPatchPath = R.ifElse(
   R.both(isAmong(bindableTypes), R.complement(isGenericType)),
-  type =>
+  (type) =>
     Maybe.of(
       type === CONST.PIN_TYPE.STRING
         ? 'xod/debug/tweak-string-16'
@@ -378,7 +382,7 @@ export const getTweakType = R.compose(
 export const getStringTweakLength = R.pipe(
   R.match(/^xod\/debug\/tweak-string-(\d+)/),
   R.nth(1),
-  n => parseInt(n, 10)
+  (n) => parseInt(n, 10)
 );
 
 // :: PatchPath -> Boolean

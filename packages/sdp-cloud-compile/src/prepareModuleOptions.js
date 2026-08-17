@@ -1,6 +1,6 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
-export default compiledSuite =>
+export default (compiledSuite) =>
   R.compose(
     R.merge({
       noFSInit: false,

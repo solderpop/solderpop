@@ -1,24 +1,32 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { assert } from 'chai';
+import chai from 'chai';
 
 import { readFileSync } from 'fs';
-import { resolve } from 'path';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import R from 'ramda';
-import { Either, Maybe } from 'ramda-fantasy';
+import RamdaFantasy from 'ramda-fantasy';
 import { foldEither, mapIndexed } from 'sdp-func-tools';
 
-import * as XP from '../src';
+import * as XP from '../src/index.js';
+
+const { assert } = chai;
+
+const { Either, Maybe } = RamdaFantasy;
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export const expectEitherRight = R.curry((testFunction, object) => {
   foldEither(
-    err => assert(false, `Expected Either.Right, but got Either.Left: ${err}`),
+    (err) =>
+      assert(false, `Expected Either.Right, but got Either.Left: ${err}`),
     testFunction,
     object
   );
 });
 
 export const expectEitherError = R.curry((originalMessage, err) => {
-  const check = errObj => {
+  const check = (errObj) => {
     assert.typeOf(errObj, 'Error');
     assert.strictEqual(
       errObj.message,
@@ -35,12 +43,13 @@ export const expectEitherError = R.curry((originalMessage, err) => {
 
   foldEither(
     check,
-    val => assert(false, `Expected Either.Left, but got Either.Right: ${val}`),
+    (val) =>
+      assert(false, `Expected Either.Left, but got Either.Right: ${val}`),
     err
   );
 });
 
-export const expectMaybeNothing = maybeActual =>
+export const expectMaybeNothing = (maybeActual) =>
   assert(
     Maybe.isNothing(maybeActual),
     'Expected Maybe.Nothing, bot got Maybe.Just'
@@ -189,7 +198,7 @@ const derandomizeEntityIds = (computeNodeId, patch) => {
 
   // check that generated ids are unique for a given patch
   const nodesWithTheSameComputedIds = R.compose(
-    R.find(ns => ns.length > 1),
+    R.find((ns) => ns.length > 1),
     R.values,
     R.groupBy(computeNodeId)
   )(originalNodes);
@@ -203,7 +212,7 @@ const derandomizeEntityIds = (computeNodeId, patch) => {
   const getReplacementId = R.compose(
     R.flip(R.prop),
     R.fromPairs,
-    R.map(n => [XP.getNodeId(n), computeNodeId(n)])
+    R.map((n) => [XP.getNodeId(n), computeNodeId(n)])
   )(originalNodes);
 
   const nodes = R.map(
@@ -252,8 +261,8 @@ export const assertPatchesAreStructurallyEqual = (
 
 export const loadJSON = R.compose(
   JSON.parse,
-  filePath => readFileSync(filePath, 'utf8'),
-  filePath => resolve(__dirname, filePath)
+  (filePath) => readFileSync(filePath, 'utf8'),
+  (filePath) => resolve(__dirname, filePath)
 );
 
 export const loadXodball = R.compose(XP.fromXodballDataUnsafe, loadJSON);

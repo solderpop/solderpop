@@ -1,8 +1,12 @@
 import fs from 'fs';
 import path from 'path';
-import { assert } from 'chai';
+import { fileURLToPath } from 'url';
+import chai from 'chai';
 
-import parseImplementation from '../src/parseImplementation';
+import parseImplementation from '../src/parseImplementation.js';
+
+const { assert } = chai;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 describe('parseImplementation', () => {
   it('extracts code before, inside, and after node definition', () => {

@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
@@ -6,11 +6,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { noop } from 'sdp-func-tools';
 
-import * as selectors from '../selectors';
-import * as actions from '../actions';
-import { LOG_TAB_TYPE } from '../constants';
+import * as selectors from '../selectors.js';
+import * as actions from '../actions.js';
+import { LOG_TAB_TYPE } from '../constants.js';
 
-import Autoscroll from '../../utils/components/Autoscroll';
+import Autoscroll from '../../utils/components/Autoscroll.jsx';
 
 class Log extends React.PureComponent {
   constructor(props) {
@@ -76,7 +76,7 @@ class Log extends React.PureComponent {
     return (
       <Autoscroll
         className={cn('log', { compact })}
-        ref={el => (this.autoscrollRef = el)}
+        ref={(el) => (this.autoscrollRef = el)}
         onScrolledFromBottom={
           isSkipOnScrollEnabled && !doNotSkipLines
             ? startSkippingNewLogLines
@@ -127,7 +127,7 @@ const mapStateToProps = R.applySpec({
   numberOfSkippedSerialLogLines: selectors.getNumberOfSkippedSerialLogLines,
 });
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       startSkippingNewLogLines: actions.startSkippingNewLogLines,

@@ -1,15 +1,17 @@
-import BasePageObject from './BasePageObject';
-import hasClass from '../utils/hasClass';
-import getBoundingClientRect from '../utils/getBoundingClientRect';
-import getCenterPositon from '../utils/getCenterPositon';
+import BasePageObject from './BasePageObject.js';
+import hasClass from '../utils/hasClass.js';
+import getBoundingClientRect from '../utils/getBoundingClientRect.js';
+import getCenterPositon from '../utils/getCenterPositon.js';
 
 class Debugger extends BasePageObject {
   async isCollapsed() {
     return await hasClass(this.page, this.elementHandle, 'isCollapsed');
   }
+
   async isOpened() {
-    return !await this.isCollapsed();
+    return !(await this.isCollapsed());
   }
+
   async click() {
     // see https://github.com/GoogleChrome/puppeteer/issues/1247
     const rect = await getBoundingClientRect(this.page, this.elementHandle);
@@ -20,12 +22,13 @@ class Debugger extends BasePageObject {
   async findCopyLogButton() {
     return await this.elementHandle.$('.copy-log');
   }
+
   async findSaveLogButton() {
     return await this.elementHandle.$('.save-log');
   }
 }
 
-Debugger.findOnPage = async page => {
+Debugger.findOnPage = async (page) => {
   const elementHandle = await page.$('.Debugger');
   return new Debugger(page, elementHandle);
 };

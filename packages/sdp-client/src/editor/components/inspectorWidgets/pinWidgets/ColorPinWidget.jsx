@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -9,12 +9,12 @@ import {
   showColorPickerWidget,
   hideColorPickerWidget,
   tweakNodeProperty,
-} from '../../../actions';
-import PinWidget from './PinWidget';
-import { hex2color } from '../../ColorPicker';
-import ColorPickerWidget from '../ColorPickerWidget';
-import { isSessionActive } from '../../../../debugger/selectors';
-import { getVisibleColorPickerWidgetId } from '../../../selectors';
+} from '../../../actions.js';
+import PinWidget from './PinWidget.jsx';
+import { hex2color } from '../../ColorPicker/index.jsx';
+import ColorPickerWidget from '../ColorPickerWidget.jsx';
+import { isSessionActive } from '../../../../debugger/selectors.js';
+import { getVisibleColorPickerWidgetId } from '../../../selectors.js';
 
 class ColorPinWidget extends React.Component {
   constructor(props) {
@@ -42,24 +42,29 @@ class ColorPinWidget extends React.Component {
     const { entityId, kind, keyName, tweakColor } = this.props;
     return tweakColor(entityId, kind, keyName, value);
   }
+
   onChangeHandler(value) {
     this.props.onChange(value);
     if (this.props.isActiveSession) {
       this.onValueTweaked(value);
     }
   }
+
   onInputChange(event) {
     this.onChangeHandler(event.target.value);
   }
+
   onWidgetChange(color) {
     this.onChangeHandler(color.hex);
   }
+
   onFocus(event) {
     this.setState({
       focused: true,
       selection: [event.target.selectionStart, event.target.selectionEnd],
     });
   }
+
   onBlur() {
     this.setState({
       focused: false,
@@ -71,6 +76,7 @@ class ColorPinWidget extends React.Component {
   showColorPickerWidget() {
     this.props.showColorPickerWidget(this.props.elementId);
   }
+
   hideColorPickerWidget() {
     this.props.hideColorPickerWidget();
   }
@@ -163,7 +169,7 @@ export default connect(
     isActiveSession: isSessionActive,
     visibleColorPickerWidgetId: getVisibleColorPickerWidgetId,
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         showColorPickerWidget,

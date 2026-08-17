@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import * as XP from 'sdp-project';
 import { noop } from 'sdp-func-tools';
 
-import { NODE_CORNER_RADIUS } from '../../nodeLayout';
-import NodeLabel from './NodeLabel';
-import VariadicHandle from './VariadicHandle';
-import ResizeHandle from './ResizeHandle';
+import { NODE_CORNER_RADIUS } from '../../nodeLayout.js';
+import NodeLabel from './NodeLabel.jsx';
+import VariadicHandle from './VariadicHandle.jsx';
+import ResizeHandle from './ResizeHandle.jsx';
 
 const NODE_BODY_RECT_PROPS = {
   rx: NODE_CORNER_RADIUS,
@@ -21,28 +21,30 @@ const NODE_BODY_RECT_PROPS = {
 // and has reduced width by doubled value
 const NODE_LABEL_MARGIN = 2;
 
-const RegularNodeBody = props => (
-  <g>
-    <rect className="body" {...NODE_BODY_RECT_PROPS} />
-    <NodeLabel
-      text={props.label || XP.getBaseName(props.type)}
-      width={props.pxSize.width - NODE_LABEL_MARGIN * 2}
-      height={props.pxSize.height}
-      x={NODE_LABEL_MARGIN}
-    />
-    <rect className="outline" {...NODE_BODY_RECT_PROPS} />
-    {props.isVariadic ? (
-      <VariadicHandle
-        pxSize={props.pxSize}
-        onMouseDown={event => {
-          event.stopPropagation();
-          props.onVariadicHandleDown(event, props.id);
-        }}
+function RegularNodeBody(props) {
+  return (
+    <g>
+      <rect className="body" {...NODE_BODY_RECT_PROPS} />
+      <NodeLabel
+        text={props.label || XP.getBaseName(props.type)}
+        width={props.pxSize.width - NODE_LABEL_MARGIN * 2}
+        height={props.pxSize.height}
+        x={NODE_LABEL_MARGIN}
       />
-    ) : null}
-    {props.isResizable ? <ResizeHandle {...props} /> : null}
-  </g>
-);
+      <rect className="outline" {...NODE_BODY_RECT_PROPS} />
+      {props.isVariadic ? (
+        <VariadicHandle
+          pxSize={props.pxSize}
+          onMouseDown={(event) => {
+            event.stopPropagation();
+            props.onVariadicHandleDown(event, props.id);
+          }}
+        />
+      ) : null}
+      {props.isResizable ? <ResizeHandle {...props} /> : null}
+    </g>
+  );
+}
 
 RegularNodeBody.defaultProps = {
   onVariadicHandleDown: noop,

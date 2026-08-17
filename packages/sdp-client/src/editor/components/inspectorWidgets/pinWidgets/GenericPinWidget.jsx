@@ -1,32 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import PinWidget from './PinWidget';
+import PinWidget from './PinWidget.jsx';
 
-const GenericPinWidget = props => (
-  <PinWidget
-    elementId={props.elementId}
-    label={props.label}
-    dataType={props.dataType}
-    isConnected={props.isConnected}
-    isInvalid={props.isInvalid}
-    deducedType={props.deducedType}
-    isLastVariadicGroup={props.isLastVariadicGroup}
-    isBindable={props.isBindable}
-    direction={props.direction}
-  >
-    <input
-      className="inspectorTextInput"
-      type="text"
-      id={props.elementId}
-      value={props.value}
-      onChange={event => props.onChange(event.target.value)}
-      onBlur={props.onBlur}
-      onKeyDown={props.onKeyDown}
-      spellCheck={false}
-    />
-  </PinWidget>
-);
+function GenericPinWidget(props) {
+  return (
+    <PinWidget
+      elementId={props.elementId}
+      label={props.label}
+      dataType={props.dataType}
+      isConnected={props.isConnected}
+      isInvalid={props.isInvalid}
+      deducedType={props.deducedType}
+      isLastVariadicGroup={props.isLastVariadicGroup}
+      isBindable={props.isBindable}
+      direction={props.direction}
+    >
+      <input
+        className="inspectorTextInput"
+        type="text"
+        id={props.elementId}
+        value={props.value}
+        onChange={(event) => props.onChange(event.target.value)}
+        onBlur={props.onBlur}
+        onKeyDown={props.onKeyDown}
+        spellCheck={false}
+      />
+    </PinWidget>
+  );
+}
 
 GenericPinWidget.propTypes = {
   elementId: PropTypes.string.isRequired,
