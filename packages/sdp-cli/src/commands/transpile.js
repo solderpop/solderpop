@@ -80,11 +80,11 @@ TranspileCommand.args = [commonArgs.entrypoint];
 
 TranspileCommand.examples = [
   'Transpile a program using the cwd patch as entry point, print to stdout\n' +
-    '$ xodc transpile\n',
+    '$ sdpc transpile\n',
   'Transpile the current project with `main` patch as entry point, save the output in `x.cpp`\n' +
-    '$ xodc transpile main -o x.cpp\n',
+    '$ sdpc transpile main -o x.cpp\n',
   'Transpile a project in the xodball with `main` patch as entry point\n' +
-    '$ xodc transpile foo.xodball main',
+    '$ sdpc transpile foo.xodball main',
 ];
 
 TranspileCommand.strict = false;

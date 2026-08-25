@@ -211,8 +211,8 @@ PublishCommand.args = [commonArgs.project];
 
 PublishCommand.examples = [
   'Publish the current project with the version defined in `project.xod`\n' +
-    '$ xodc publish\n',
-  'Publish a project saved as xodball\n$ xodc publish foo.xodball',
+    '$ sdpc publish\n',
+  'Publish a project saved as xodball\n$ sdpc publish foo.xodball',
 ];
 
 PublishCommand.strict = false;

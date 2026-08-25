@@ -102,7 +102,7 @@ const its = wd => {
     );
 };
 
-describe('xodc boards', () => {
+describe('sdpc boards', () => {
   // working directory, workspace, src project path
   const wd = createWorkingDirectory('boards');
 

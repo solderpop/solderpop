@@ -136,7 +136,7 @@ class PopupProjectPreferences extends React.Component {
           />
         </div>
         <div className="ModalContent">
-          <label htmlFor="cloudApiKey">XOD Cloud API Key: </label>
+          <label htmlFor="cloudApiKey">SolderPop Cloud API Key: </label>
           <div
             style={{
               display: 'flex',

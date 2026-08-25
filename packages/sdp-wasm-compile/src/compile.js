@@ -55,7 +55,11 @@ const getRootDir = () => {
   return rootDirPromise;
 };
 
-const writeSources = async (buildDir, programCode) => {
+// Exported for testing: the only pieces of this module testable without a
+// real, installed Emscripten toolchain (see docs/branch-changelist.md for
+// why the actual compile step -- the execFileAsync(emxx, ...) call below --
+// isn't covered here).
+export const writeSources = async (buildDir, programCode) => {
   await Promise.all([
     fse.writeFile(path.join(buildDir, 'sketch.ino'), programCode),
     fse.writeFile(path.join(buildDir, 'Arduino.h'), arduinoH),
@@ -66,7 +70,7 @@ const writeSources = async (buildDir, programCode) => {
   ]);
 };
 
-const wrapCompileError = err =>
+export const wrapCompileError = err =>
   Promise.reject(
     createError('WASM_COMPILATION_ERROR', {
       message: err.message,

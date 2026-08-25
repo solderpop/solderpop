@@ -128,11 +128,11 @@ CompileCommand.args = [commonArgs.entrypoint];
 
 CompileCommand.examples = [
   'Compile a program using the current patch as entry point\n' +
-    '$ xodc compile -b arduino:avr:uno\n',
+    '$ sdpc compile -b arduino:avr:uno\n',
   // 'Compile the current project with `main` patch as entry point, use cloud compilation\n' +
-  //   '$ xodc compile -b arduino:avr:uno --cloud main\n',
+  //   '$ sdpc compile -b arduino:avr:uno --cloud main\n',
   'Compile the patch `main` from the xodball project and save binaries in `bin/uno.hex`\n' +
-    '$ xodc compile -b arduino:arv:uno foo.xodball main -o bin/uno.hex',
+    '$ sdpc compile -b arduino:arv:uno foo.xodball main -o bin/uno.hex',
 ];
 
 CompileCommand.strict = false;

@@ -193,7 +193,7 @@ const its = (wd, tabtestOutDir) => {
     );
 };
 
-describe('xodc tabtest', () => {
+describe('sdpc tabtest', () => {
   // working directory
   const wd = createWorkingDirectory('tabtest');
   const tabtestOutDir = path.resolve(wd, 'tabtests');

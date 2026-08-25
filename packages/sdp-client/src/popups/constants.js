@@ -25,4 +25,5 @@ export const POPUP_ID = {
 
   WELCOME: 'welcome',
   MANAGE_LOCAL_SIMULATION: 'manageLocalSimulation',
+  ABOUT: 'about',
 };

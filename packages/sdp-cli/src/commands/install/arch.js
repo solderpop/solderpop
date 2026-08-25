@@ -49,7 +49,7 @@ InstallArchCommand.args = [
     required: true,
     hidden: false,
     description:
-      'Board FQBN. `arduino:sam` for example. See `xodc boards` list for the full list.',
+      'Board FQBN. `arduino:sam` for example. See `sdpc boards` list for the full list.',
   },
 ];
 

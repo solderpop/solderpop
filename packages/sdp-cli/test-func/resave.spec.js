@@ -114,7 +114,7 @@ const its = wd => {
     );
 };
 
-describe('xodc resave', () => {
+describe('sdpc resave', () => {
   // working directory, workspace, src project path
   const wd = createWorkingDirectory('resave');
 

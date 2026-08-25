@@ -2,11 +2,11 @@
 
 This package is a part of the [SolderPop IDE](https://github.com/solderpop/solderpop) project.
 
-The package contains implemetation of `xodc` command line utility.
+The package contains implemetation of `sdpc` command line utility.
 
 Basically it’s a collection of thin wrappers around NodeJS API’s available via other packages. The responsibility of `sdp-cli` is to parse command line arguments, call API, and format the result on stdout/stderr properly.
 
-`xodc` uses subcommands like `git` does to perform various functions. The subcommands handling could be found in `src/commands/*.js`.
+`sdpc` uses subcommands like `git` does to perform various functions. The subcommands handling could be found in `src/commands/*.js`.
 
 <!-- toc -->
 * [sdp-cli](#sdp-cli)
@@ -34,24 +34,24 @@ Almost any flag can be replaced with the appropriate environment variable. For e
 # Commands
 
 <!-- commands -->
-* [`xodc autocomplete [SHELL]`](#xodc-autocomplete-shell)
-* [`xodc boards [options]`](#xodc-boards-options)
-* [`xodc compile [options] [entrypoint]`](#xodc-compile-options-entrypoint)
-* [`xodc help [COMMAND]`](#xodc-help-command)
-* [`xodc install:arch [fqbn]`](#xodc-installarch-fqbn)
-* [`xodc publish [options] [project]`](#xodc-publish-options-project)
-* [`xodc resave [options] [project]`](#xodc-resave-options-project)
-* [`xodc tabtest [options] [entrypoint]`](#xodc-tabtest-options-entrypoint)
-* [`xodc transpile [options] [entrypoint]`](#xodc-transpile-options-entrypoint)
-* [`xodc upload [options] [entrypoint]`](#xodc-upload-options-entrypoint)
+* [`sdpc autocomplete [SHELL]`](#sdpc-autocomplete-shell)
+* [`sdpc boards [options]`](#sdpc-boards-options)
+* [`sdpc compile [options] [entrypoint]`](#sdpc-compile-options-entrypoint)
+* [`sdpc help [COMMAND]`](#sdpc-help-command)
+* [`sdpc install:arch [fqbn]`](#sdpc-installarch-fqbn)
+* [`sdpc publish [options] [project]`](#sdpc-publish-options-project)
+* [`sdpc resave [options] [project]`](#sdpc-resave-options-project)
+* [`sdpc tabtest [options] [entrypoint]`](#sdpc-tabtest-options-entrypoint)
+* [`sdpc transpile [options] [entrypoint]`](#sdpc-transpile-options-entrypoint)
+* [`sdpc upload [options] [entrypoint]`](#sdpc-upload-options-entrypoint)
 
-## `xodc autocomplete [SHELL]`
+## `sdpc autocomplete [SHELL]`
 
 display autocomplete installation instructions
 
 ```
 USAGE
-  $ xodc autocomplete [SHELL]
+  $ sdpc autocomplete [SHELL]
 
 ARGUMENTS
   SHELL  shell type
@@ -60,21 +60,21 @@ OPTIONS
   -r, --refresh-cache  Refresh cache (ignores displaying instructions)
 
 EXAMPLES
-  $ xodc autocomplete
-  $ xodc autocomplete bash
-  $ xodc autocomplete zsh
-  $ xodc autocomplete --refresh-cache
+  $ sdpc autocomplete
+  $ sdpc autocomplete bash
+  $ sdpc autocomplete zsh
+  $ sdpc autocomplete --refresh-cache
 ```
 
 _See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.1.0/src/commands/autocomplete/index.ts)_
 
-## `xodc boards [options]`
+## `sdpc boards [options]`
 
 show available boards
 
 ```
 USAGE
-  $ xodc boards [options]
+  $ sdpc boards [options]
 
 OPTIONS
   -V, --version         show CLI version
@@ -85,13 +85,13 @@ OPTIONS
 
 _See code: [src/commands/boards.js](https://github.com/solderpop/solderpop/blob/main/packages/sdp-cli/src/commands/boards.js)_
 
-## `xodc compile [options] [entrypoint]`
+## `sdpc compile [options] [entrypoint]`
 
 compiles (verifies) a XOD program
 
 ```
 USAGE
-  $ xodc compile [options] [entrypoint]
+  $ sdpc compile [options] [entrypoint]
 
 ARGUMENTS
   ENTRYPOINT
@@ -106,7 +106,7 @@ ARGUMENTS
 
 OPTIONS
   -V, --version         show CLI version
-  -b, --board=fqbn      (required) target board identifier (see `xodc boards` output)
+  -b, --board=fqbn      (required) target board identifier (see `sdpc boards` output)
   -h, --help            show CLI help
 
   -o, --output=path     save the result binary to the directory; the same directory is used for intermediate build
@@ -120,21 +120,21 @@ OPTIONS
 
 EXAMPLES
   Compile a program using the current patch as entry point
-  $ xodc compile -b arduino:avr:uno
+  $ sdpc compile -b arduino:avr:uno
 
   Compile the patch `main` from the xodball project and save binaries in `bin/uno.hex`
-  $ xodc compile -b arduino:arv:uno foo.xodball main -o bin/uno.hex
+  $ sdpc compile -b arduino:arv:uno foo.xodball main -o bin/uno.hex
 ```
 
 _See code: [src/commands/compile.js](https://github.com/solderpop/solderpop/blob/main/packages/sdp-cli/src/commands/compile.js)_
 
-## `xodc help [COMMAND]`
+## `sdpc help [COMMAND]`
 
-display help for xodc
+display help for sdpc
 
 ```
 USAGE
-  $ xodc help [COMMAND]
+  $ sdpc help [COMMAND]
 
 ARGUMENTS
   COMMAND  command to show help for
@@ -145,16 +145,16 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.1.4/src/commands/help.ts)_
 
-## `xodc install:arch [fqbn]`
+## `sdpc install:arch [fqbn]`
 
 install toolchains
 
 ```
 USAGE
-  $ xodc install:arch [fqbn]
+  $ sdpc install:arch [fqbn]
 
 ARGUMENTS
-  FQBN  Board FQBN. `arduino:sam` for example. See `xodc boards` list for the full list.
+  FQBN  Board FQBN. `arduino:sam` for example. See `sdpc boards` list for the full list.
 
 OPTIONS
   -V, --version         show CLI version
@@ -165,13 +165,13 @@ OPTIONS
 
 _See code: [src/commands/install/arch.js](https://github.com/solderpop/solderpop/blob/main/packages/sdp-cli/src/commands/install/arch.js)_
 
-## `xodc publish [options] [project]`
+## `sdpc publish [options] [project]`
 
 publish a library
 
 ```
 USAGE
-  $ xodc publish [options] [project]
+  $ sdpc publish [options] [project]
 
 ARGUMENTS
   PROJECT
@@ -187,28 +187,28 @@ OPTIONS
   -h, --help            show CLI help
   -q, --quiet           do not log messages other than errors
   -w, --workspace=path  [default: ~/xod] use the workspace specified, defaults to $HOME/xod
-  --api=hostname        [default: xod.io] XOD API hostname
+  --api=hostname        [default: solderpop.io] XOD API hostname
   --on-behalf=username  publish on behalf of the username
   --password=password   XOD API password
   --username=username   XOD API username
 
 EXAMPLES
   Publish the current project with the version defined in `project.xod`
-  $ xodc publish
+  $ sdpc publish
 
   Publish a project saved as xodball
-  $ xodc publish foo.xodball
+  $ sdpc publish foo.xodball
 ```
 
 _See code: [src/commands/publish.js](https://github.com/solderpop/solderpop/blob/main/packages/sdp-cli/src/commands/publish.js)_
 
-## `xodc resave [options] [project]`
+## `sdpc resave [options] [project]`
 
 opens a project and saves it in another location or format
 
 ```
 USAGE
-  $ xodc resave [options] [project]
+  $ sdpc resave [options] [project]
 
 ARGUMENTS
   PROJECT
@@ -228,27 +228,27 @@ OPTIONS
 
 EXAMPLES
   Exports the current multifile project to a xodball
-  $ xodc resave . -o ~/foo.xodball
+  $ sdpc resave . -o ~/foo.xodball
 
   Outputs the current multifile project as a xodball to stdout
-  $ xodc resave
+  $ sdpc resave
 
   Resaves one xodball into another (useful for applying migrations)
-  $ xodc resave foo.xodball -o bar.xodball
+  $ sdpc resave foo.xodball -o bar.xodball
 
   Converts a xodball to a multifile project
-  $ xodc resave foo.xodball -o /some/new/dir
+  $ sdpc resave foo.xodball -o /some/new/dir
 ```
 
 _See code: [src/commands/resave.js](https://github.com/solderpop/solderpop/blob/main/packages/sdp-cli/src/commands/resave.js)_
 
-## `xodc tabtest [options] [entrypoint]`
+## `sdpc tabtest [options] [entrypoint]`
 
 tabtest project
 
 ```
 USAGE
-  $ xodc tabtest [options] [entrypoint]
+  $ sdpc tabtest [options] [entrypoint]
 
 ARGUMENTS
   ENTRYPOINT
@@ -271,21 +271,21 @@ OPTIONS
 
 EXAMPLES
   Build tabtests for project in current working directory
-  $ xodc tabtest
+  $ sdpc tabtest
 
   Specify target directory and project, only generate tests
-  $ xodc tabtest --no-build --output-dir=/tmp/sdp-tabtest ./workspace/__lib__/xod/net
+  $ sdpc tabtest --no-build --output-dir=/tmp/sdp-tabtest ./workspace/__lib__/xod/net
 ```
 
 _See code: [src/commands/tabtest.js](https://github.com/solderpop/solderpop/blob/main/packages/sdp-cli/src/commands/tabtest.js)_
 
-## `xodc transpile [options] [entrypoint]`
+## `sdpc transpile [options] [entrypoint]`
 
 transpiles (generates C++) a XOD program
 
 ```
 USAGE
-  $ xodc transpile [options] [entrypoint]
+  $ sdpc transpile [options] [entrypoint]
 
 ARGUMENTS
   ENTRYPOINT
@@ -308,24 +308,24 @@ OPTIONS
 
 EXAMPLES
   Transpile a program using the cwd patch as entry point, print to stdout
-  $ xodc transpile
+  $ sdpc transpile
 
   Transpile the current project with `main` patch as entry point, save the output in `x.cpp`
-  $ xodc transpile main -o x.cpp
+  $ sdpc transpile main -o x.cpp
 
   Transpile a project in the xodball with `main` patch as entry point
-  $ xodc transpile foo.xodball main
+  $ sdpc transpile foo.xodball main
 ```
 
 _See code: [src/commands/transpile.js](https://github.com/solderpop/solderpop/blob/main/packages/sdp-cli/src/commands/transpile.js)_
 
-## `xodc upload [options] [entrypoint]`
+## `sdpc upload [options] [entrypoint]`
 
 uploads a XOD program to the board
 
 ```
 USAGE
-  $ xodc upload [options] [entrypoint]
+  $ sdpc upload [options] [entrypoint]
 
 ARGUMENTS
   ENTRYPOINT
@@ -340,7 +340,7 @@ ARGUMENTS
 
 OPTIONS
   -V, --version         show CLI version
-  -b, --board=fqbn      (required) target board identifier (see `xodc boards` output)
+  -b, --board=fqbn      (required) target board identifier (see `sdpc boards` output)
   -h, --help            show CLI help
   -p, --port=port       (required) port to use for upload
   -q, --quiet           do not log messages other than errors
@@ -349,7 +349,7 @@ OPTIONS
 
 EXAMPLE
   Compile a program using the current patch as entry point, upload to ttyACM1
-  $ xodc upload -b arduino:avr:uno -p /dev/ttyACM1
+  $ sdpc upload -b arduino:avr:uno -p /dev/ttyACM1
 ```
 
 _See code: [src/commands/upload.js](https://github.com/solderpop/solderpop/blob/main/packages/sdp-cli/src/commands/upload.js)_
