@@ -1,7 +1,11 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import R from 'ramda';
-import { assert } from 'chai';
+import chai from 'chai';
+
+const { assert } = chai;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 import { explode, foldEither, explodeEither } from 'sdp-func-tools';
 import { loadProject } from 'sdp-fs';
@@ -10,8 +14,8 @@ import {
   transformProject,
   getNodeIdsMap,
   commentXodPragmas,
-} from '../src/transpiler';
-import { LIVENESS } from '../src/constants';
+} from '../src/transpiler.js';
+import { LIVENESS } from '../src/constants.js';
 
 // Returns patch relative to repo’s `workspace` subdir
 const wsPath = (...subpath) =>

@@ -1,7 +1,7 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { tmpdir } from 'os';
 import { resolve } from 'path';
-import * as fse from 'fs-extra';
+import fse from 'fs-extra';
 import YAML from 'yamljs';
 
 export const ADDITIONAL_URLS_PATH = ['board_manager', 'additional_urls'];

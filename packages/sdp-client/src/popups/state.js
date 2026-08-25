@@ -1,6 +1,6 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
-import { POPUP_ID } from './constants';
+import { POPUP_ID } from './constants.js';
 
 const defaultPopupState = {
   visible: false,

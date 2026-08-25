@@ -1,5 +1,7 @@
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 import { createSelector } from 'reselect';
 
 export const getUserState = R.prop('user');

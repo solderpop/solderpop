@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 
 import '../src/core/styles/main.scss';
-import PatchGroupItem from '../src/projectBrowser/components/PatchGroupItem';
+import PatchGroupItem from '../src/projectBrowser/components/PatchGroupItem.jsx';
 
 storiesOf('PatchGroupItem', module).add('default', () => (
   <div style={{ width: '200px', backgroundColor: 'tomato' }}>

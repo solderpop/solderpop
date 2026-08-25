@@ -1,5 +1,5 @@
-export * from './constants';
-export { default as messages } from './messages';
+export * from './constants.js';
+export { default as messages } from './messages.js';
 export {
   checkUpdates,
   compile,
@@ -14,4 +14,4 @@ export {
   upgradeArduinoPackages,
   uploadThroughUSB,
   wrapUploadError,
-} from './arduinoCli';
+} from './arduinoCli.js';

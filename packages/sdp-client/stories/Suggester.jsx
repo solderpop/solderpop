@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react';
 
 import { createPatchSearcher } from 'sdp-patch-search';
 
-import Suggester from '../src/editor/components/Suggester';
+import Suggester from '../src/editor/components/Suggester.jsx';
 import '../src/core/styles/main.scss';
 
 const indexData = [

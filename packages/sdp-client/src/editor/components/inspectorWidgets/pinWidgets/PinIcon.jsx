@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { noop } from '../../../../utils/ramda';
-import Pin from '../../../../project/components/Pin';
-import { PIN_RADIUS_WITH_SHADOW } from '../../../../project/nodeLayout';
+import { noop } from '../../../../utils/ramda.js';
+import Pin from '../../../../project/components/Pin.jsx';
+import { PIN_RADIUS_WITH_SHADOW } from '../../../../project/nodeLayout.js';
 
 const pinPos = { x: PIN_RADIUS_WITH_SHADOW, y: PIN_RADIUS_WITH_SHADOW };
 

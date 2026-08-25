@@ -1,8 +1,10 @@
-import { assert } from 'chai';
+import chai from 'chai';
 import { listGenuinePatches } from 'sdp-project';
-import { defaultizeProject } from 'sdp-project/test/helpers';
+import { defaultizeProject } from 'sdp-project/test/helpers.js';
 
-import createPatchIndexData from '../src/mapper';
+import createPatchIndexData from '../src/mapper.js';
+
+const { assert } = chai;
 
 describe('sdp-patch-search/mapper', () => {
   const fixture = {

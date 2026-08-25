@@ -1,12 +1,14 @@
-import { curry } from 'ramda';
+import R from 'ramda';
 import path from 'path';
 import copy from 'recursive-copy';
 import { rejectWithCode } from 'sdp-func-tools';
 
-import { writeFile } from './write';
-import { resolvePath, resolveDefaultProjectPath } from './utils';
-import { WORKSPACE_FILENAME } from './constants';
-import * as ERROR_CODES from './errorCodes';
+const { curry } = R;
+
+import { writeFile } from './write.js';
+import { resolvePath, resolveDefaultProjectPath } from './utils.js';
+import { WORKSPACE_FILENAME } from './constants.js';
+import * as ERROR_CODES from './errorCodes.js';
 
 const copyOptions = {
   overwrite: true,

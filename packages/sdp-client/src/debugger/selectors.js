@@ -1,17 +1,19 @@
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 import { foldMaybe, isAmong, memoizeOnlyLast } from 'sdp-func-tools';
 import { createSelector } from 'reselect';
 import {
   getCurrentTabId,
   getBreadcrumbChunks,
   getBreadcrumbActiveIndex,
-} from '../editor/selectors';
-import { DEBUGGER_TAB_ID } from '../editor/constants';
-import { SESSION_TYPE } from './constants';
+} from '../editor/selectors.js';
+import { DEBUGGER_TAB_ID } from '../editor/constants.js';
+import { SESSION_TYPE } from './constants.js';
 
-import { createMemoizedSelector } from '../utils/selectorTools';
-import { getTableLogSourceLabels, removeLastNodeIdInChain } from './utils';
+import { createMemoizedSelector } from '../utils/selectorTools.js';
+import { getTableLogSourceLabels, removeLastNodeIdInChain } from './utils.js';
 
 export const getDebuggerState = R.prop('debugger');
 

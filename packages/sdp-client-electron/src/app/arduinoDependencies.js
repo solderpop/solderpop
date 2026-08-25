@@ -8,7 +8,7 @@
  * and the renderer process and checks/installs dependencies.
  */
 
-import * as R from 'ramda';
+import R from 'ramda';
 import path from 'path';
 import {
   checkLibrariesInstalledByUrls,
@@ -19,10 +19,10 @@ import { ARDUINO_LIBRARIES_DIRNAME } from 'sdp-deploy-bin';
 import {
   CHECK_ARDUINO_DEPENDENCIES_INSTALLED,
   INSTALL_ARDUINO_DEPENDENCIES,
-} from '../shared/events';
-import subscribeIpc from './subscribeIpc';
-import { getPathToBundledWorkspace } from './utils';
-import { loadWorkspacePath } from './workspaceActions';
+} from '../shared/events.js';
+import subscribeIpc from './subscribeIpc.js';
+import { getPathToBundledWorkspace } from './utils.js';
+import { loadWorkspacePath } from './workspaceActions.js';
 
 export const getArdulibsPath = p => path.resolve(p, ARDUINO_LIBRARIES_DIRNAME);
 export const getBundledArdulibsPath = () =>

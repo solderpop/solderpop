@@ -3,10 +3,10 @@ import { tmpdir } from 'os';
 import { promises as fs } from 'fs';
 import { resolve } from 'path';
 
-import { SERVER_URL } from '../tools/staticServer';
-import getPage from './utils/getPage';
+import { SERVER_URL } from '../tools/staticServer.js';
+import getPage from './utils/getPage.js';
 
-import Debugger from './pageObjects/Debugger';
+import Debugger from './pageObjects/Debugger.js';
 
 describe('copy & save log', () => {
   beforeEach(async () => {

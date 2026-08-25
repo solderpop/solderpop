@@ -1,4 +1,4 @@
-import { def } from './types';
+import { def } from './types.js';
 
 /**
  * Rounds a number to a desired number of digits after the dot.

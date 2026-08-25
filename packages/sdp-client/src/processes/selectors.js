@@ -1,5 +1,5 @@
-import * as R from 'ramda';
-import { STATUS } from '../utils/constants';
+import R from 'ramda';
+import { STATUS } from '../utils/constants.js';
 
 export const getProccesses = R.prop('processes');
 

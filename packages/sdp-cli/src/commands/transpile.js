@@ -1,15 +1,17 @@
 /* eslint-disable no-param-reassign */
 import { exit, stdout } from 'process';
-import { pick } from 'ramda';
+import R from 'ramda';
+
+const { pick } = R;
 import { flags } from '@oclif/command';
 import { writeFile, resolvePath } from 'sdp-fs';
 
-import BaseCommand from '../baseCommand';
-import * as commonArgs from '../args';
-import * as myFlags from '../flags';
-import { getListr } from '../listr';
-import { loadProjectTask, transformTask, transpileTask } from '../listrTasks';
-import { resolveBundledWorkspacePath } from '../paths';
+import BaseCommand from '../baseCommand.js';
+import * as commonArgs from '../args.js';
+import * as myFlags from '../flags.js';
+import { getListr } from '../listr.js';
+import { loadProjectTask, transformTask, transpileTask } from '../listrTasks.js';
+import { resolveBundledWorkspacePath } from '../paths.js';
 
 class TranspileCommand extends BaseCommand {
   async run() {
@@ -78,11 +80,11 @@ TranspileCommand.args = [commonArgs.entrypoint];
 
 TranspileCommand.examples = [
   'Transpile a program using the cwd patch as entry point, print to stdout\n' +
-    '$ xodc transpile\n',
+    '$ sdpc transpile\n',
   'Transpile the current project with `main` patch as entry point, save the output in `x.cpp`\n' +
-    '$ xodc transpile main -o x.cpp\n',
+    '$ sdpc transpile main -o x.cpp\n',
   'Transpile a project in the xodball with `main` patch as entry point\n' +
-    '$ xodc transpile foo.xodball main',
+    '$ sdpc transpile foo.xodball main',
 ];
 
 TranspileCommand.strict = false;

@@ -2,7 +2,9 @@
 import path from 'path';
 import { exit } from 'process';
 import { tmpdir } from 'os';
-import { append, compose, identity, map, pick, toPairs } from 'ramda';
+import R from 'ramda';
+
+const { append, compose, identity, map, pick, toPairs } = R;
 import fs from 'fs-extra';
 import { flags } from '@oclif/command';
 
@@ -11,17 +13,17 @@ import { createError, foldEither, allPromises } from 'sdp-func-tools';
 import { loadProject, resolvePath } from 'sdp-fs';
 import * as Tabtest from 'sdp-tabtest';
 
-import BaseCommand from '../baseCommand';
-import * as commonArgs from '../args';
-import * as myFlags from '../flags';
-import { getListr } from '../listr';
+import BaseCommand from '../baseCommand.js';
+import * as commonArgs from '../args.js';
+import * as myFlags from '../flags.js';
+import { getListr } from '../listr.js';
 import {
   resolveBundledCatch2Path,
   resolveBundledCatch2UtilsPath,
   resolveBundledTabtestSrcPath,
   resolveBundledTabtestWorkspacePath,
   resolveBundledWorkspacePath,
-} from '../paths';
+} from '../paths.js';
 
 const defaultOutputDir = path.resolve(tmpdir(), 'sdp-tabtest');
 
@@ -164,9 +166,9 @@ TabtestCommand.args = [commonArgs.entrypoint];
 
 TabtestCommand.examples = [
   `Build tabtests for project in current working directory\n` +
-    `$ xodc tabtest\n`,
+    `$ sdpc tabtest\n`,
   `Specify target directory and project, only generate tests\n` +
-    `$ xodc tabtest --no-build --output-dir=/tmp/sdp-tabtest ./workspace/__lib__/xod/net`,
+    `$ sdpc tabtest --no-build --output-dir=/tmp/sdp-tabtest ./workspace/__lib__/xod/net`,
 ];
 
 TabtestCommand.strict = false;

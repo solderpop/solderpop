@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { noop } from 'sdp-func-tools';
 
-import { SLOT_SIZE, NODE_HEIGHT } from '../../nodeLayout';
+import { SLOT_SIZE, NODE_HEIGHT } from '../../nodeLayout.js';
 
 // Add 0.5 to compensate blurring of pattern
 const COMPENSATE_BLUR = 0.5;

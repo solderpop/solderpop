@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 import {
   isAmong,
@@ -9,10 +9,10 @@ import {
   explodeMaybe,
 } from 'sdp-func-tools';
 
-import * as PAT from '../project/actionTypes';
-import { RECOVER_STATE } from '../core/actionTypes';
+import * as PAT from '../project/actionTypes.js';
+import { RECOVER_STATE } from '../core/actionTypes.js';
 
-import { getActingPatchPath } from './actionUtils';
+import { getActingPatchPath } from './actionUtils.js';
 
 // =============================================================================
 //

@@ -1,9 +1,11 @@
 import { test } from '@oclif/test';
-import { assert } from 'chai';
+import chai from 'chai';
+
+const { assert } = chai;
 import path from 'path';
 import process from 'process';
 import fs from 'fs-extra';
-import { bundledWorkspacePath, createWorkingDirectory } from './helpers';
+import { bundledWorkspacePath, createWorkingDirectory } from './helpers.js';
 
 // save process.exit for unmocking
 const exit = process.exit;
@@ -112,7 +114,7 @@ const its = wd => {
     );
 };
 
-describe('xodc resave', () => {
+describe('sdpc resave', () => {
   // working directory, workspace, src project path
   const wd = createWorkingDirectory('resave');
 

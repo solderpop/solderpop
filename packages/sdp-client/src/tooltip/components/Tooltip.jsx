@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 
-import { SHOW_GLOBAL_TOOLTIP, HIDE_GLOBAL_TOOLTIP } from '../events';
+import { SHOW_GLOBAL_TOOLTIP, HIDE_GLOBAL_TOOLTIP } from '../events.js';
 
 class Tooltip extends React.Component {
   constructor(props) {

@@ -1,7 +1,9 @@
 /* eslint-disable no-param-reassign */
 import path from 'path';
 import { stdout, exit } from 'process';
-import { pick } from 'ramda';
+import R from 'ramda';
+
+const { pick } = R;
 import { flags } from '@oclif/command';
 import {
   loadProject,
@@ -10,11 +12,11 @@ import {
   saveProjectEntirely,
 } from 'sdp-fs';
 import { toXodball } from 'sdp-project';
-import BaseCommand from '../baseCommand';
-import * as commonArgs from '../args';
-import * as myFlags from '../flags';
-import { resolveBundledWorkspacePath } from '../paths';
-import { getListr } from '../listr';
+import BaseCommand from '../baseCommand.js';
+import * as commonArgs from '../args.js';
+import * as myFlags from '../flags.js';
+import { resolveBundledWorkspacePath } from '../paths.js';
+import { getListr } from '../listr.js';
 
 class ResaveCommand extends BaseCommand {
   async run() {
@@ -90,13 +92,13 @@ ResaveCommand.args = [commonArgs.project];
 
 ResaveCommand.examples = [
   `Exports the current multifile project to a xodball\n` +
-    `$ xodc resave . -o ~/foo.xodball\n`,
+    `$ sdpc resave . -o ~/foo.xodball\n`,
   `Outputs the current multifile project as a xodball to stdout\n` +
-    `$ xodc resave\n`,
+    `$ sdpc resave\n`,
   `Resaves one xodball into another (useful for applying migrations)\n` +
-    `$ xodc resave foo.xodball -o bar.xodball\n`,
+    `$ sdpc resave foo.xodball -o bar.xodball\n`,
   `Converts a xodball to a multifile project\n` +
-    `$ xodc resave foo.xodball -o /some/new/dir`,
+    `$ sdpc resave foo.xodball -o /some/new/dir`,
 ];
 
 ResaveCommand.strict = false;

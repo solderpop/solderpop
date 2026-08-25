@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
 /**
  * Universal function, that normilizes fetch result to

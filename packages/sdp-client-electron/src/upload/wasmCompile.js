@@ -1,7 +1,7 @@
 import { noop } from 'sdp-func-tools';
 
-import promisifyIpc from '../view/promisifyIpc';
-import { COMPILE_SIMULATION } from '../shared/events';
+import promisifyIpc from '../view/promisifyIpc.js';
+import { COMPILE_SIMULATION } from '../shared/events.js';
 
 const compileSimulationIpc = promisifyIpc(COMPILE_SIMULATION);
 

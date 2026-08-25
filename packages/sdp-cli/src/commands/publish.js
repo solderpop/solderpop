@@ -1,6 +1,8 @@
 /* eslint-disable no-param-reassign */
 import { exit } from 'process';
-import { pick } from 'ramda';
+import R from 'ramda';
+
+const { pick } = R;
 import * as xodFs from 'sdp-fs';
 import {
   getProjectName,
@@ -8,17 +10,17 @@ import {
   getProjectVersion,
 } from 'sdp-project';
 import { createError } from 'sdp-func-tools';
-import BaseCommand from '../baseCommand';
-import * as commonArgs from '../args';
-import * as myFlags from '../flags';
-import { getListr } from '../listr';
+import BaseCommand from '../baseCommand.js';
+import * as commonArgs from '../args.js';
+import * as myFlags from '../flags.js';
+import { getListr } from '../listr.js';
 import {
   getAccessToken,
   getLib,
   getUser,
   postUserLib,
   putUserLib,
-} from '../apis';
+} from '../apis.js';
 
 const packLibVersion = async projectDir => {
   const projectWithoutLibs = await xodFs.loadProjectWithoutLibs(
@@ -209,8 +211,8 @@ PublishCommand.args = [commonArgs.project];
 
 PublishCommand.examples = [
   'Publish the current project with the version defined in `project.xod`\n' +
-    '$ xodc publish\n',
-  'Publish a project saved as xodball\n$ xodc publish foo.xodball',
+    '$ sdpc publish\n',
+  'Publish a project saved as xodball\n$ sdpc publish foo.xodball',
 ];
 
 PublishCommand.strict = false;

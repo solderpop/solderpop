@@ -1,11 +1,13 @@
 /* eslint-disable no-param-reassign */
-import { compose, filter, identity, last, map, startsWith } from 'ramda';
+import R from 'ramda';
+
+const { compose, filter, identity, last, map, startsWith } = R;
 import { transformProject, transpile, LIVENESS } from 'sdp-arduino';
 import { loadProject } from 'sdp-fs';
 import { createError, foldEither } from 'sdp-func-tools';
 import * as xdb from 'sdp-deploy-bin';
 
-import { resolveBundledWorkspacePath } from './paths';
+import { resolveBundledWorkspacePath } from './paths.js';
 
 export const loadProjectTask = (workspaces, projectPath) => ({
   title: 'Project loading',

@@ -1,7 +1,7 @@
 import client from 'sdp-client';
 import { ipcRenderer } from 'electron';
 
-import { INSTALL_LIBRARIES } from '../shared/events';
+import { INSTALL_LIBRARIES } from '../shared/events.js';
 
 export default () => next => action => {
   if (action.type === client.INSTALL_LIBRARIES_COMPLETE) {

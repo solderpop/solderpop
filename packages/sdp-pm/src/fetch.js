@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import {
   retryOrFail,
   rejectFetchResult,
@@ -8,15 +8,15 @@ import {
 } from 'sdp-func-tools';
 import { fromXodballData, listMissingLibraryNames } from 'sdp-project';
 
-import * as ERR_CODES from './errorCodes';
-import * as MSG from './messages';
+import * as ERR_CODES from './errorCodes.js';
+import * as MSG from './messages.js';
 import {
   parseLibQuery,
   unfoldMaybeLibQuery,
   rejectUnexistingVersion,
   getLibName,
   getSwaggerClient,
-} from './utils';
+} from './utils.js';
 
 // =============================================================================
 //

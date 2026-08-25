@@ -1,10 +1,10 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { MESSAGE_TYPE } from '../constants';
-import Button from '../../core/components/Button';
-import CloseButton from '../../core/components/CloseButton';
+import { MESSAGE_TYPE } from '../constants.js';
+import Button from '../../core/components/Button.jsx';
+import CloseButton from '../../core/components/CloseButton.jsx';
 
 const ANIMATION_TIMEOUT = 100;
 

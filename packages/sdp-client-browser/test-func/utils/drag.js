@@ -1,5 +1,5 @@
-import getBoundingClientRect from './getBoundingClientRect';
-import getCenterPositon from './getCenterPositon';
+import getBoundingClientRect from './getBoundingClientRect.js';
+import getCenterPositon from './getCenterPositon.js';
 
 export default async function drag(page, elementHandle, delta) {
   // can't use hover with SVGs, see https://github.com/GoogleChrome/puppeteer/issues/1247

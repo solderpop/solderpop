@@ -1,9 +1,11 @@
 import { test } from '@oclif/test';
-import { assert } from 'chai';
+import chai from 'chai';
+
+const { assert } = chai;
 import path from 'path';
 import process from 'process';
 import fs from 'fs-extra';
-import { createWorkingDirectory } from './helpers';
+import { createWorkingDirectory } from './helpers.js';
 
 // save process.exit for unmocking
 const exit = process.exit;
@@ -100,7 +102,7 @@ const its = wd => {
     );
 };
 
-describe('xodc boards', () => {
+describe('sdpc boards', () => {
   // working directory, workspace, src project path
   const wd = createWorkingDirectory('boards');
 

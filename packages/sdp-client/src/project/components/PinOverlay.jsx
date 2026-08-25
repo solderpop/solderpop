@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { PIN_HOTSPOT_RADIUS, PIN_HOVER_HIGHLIGHT_RADIUS } from '../nodeLayout';
+import { PIN_HOTSPOT_RADIUS, PIN_HOVER_HIGHLIGHT_RADIUS } from '../nodeLayout.js';
 
-import deepSCU from '../../utils/deepSCU';
+import deepSCU from '../../utils/deepSCU.js';
 
 export default class PinOverlay extends React.Component {
   constructor(props) {

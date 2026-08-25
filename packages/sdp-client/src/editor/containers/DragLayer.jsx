@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -6,10 +6,10 @@ import { DragLayer } from 'react-dnd';
 
 import * as XP from 'sdp-project';
 
-import * as ProjectSelectors from '../../project/selectors';
-import { patchToNodeProps } from '../../project/utils';
-import { addPoints, subtractPoints } from '../../project/nodeLayout';
-import Node from '../../project/components/Node';
+import * as ProjectSelectors from '../../project/selectors.js';
+import { patchToNodeProps } from '../../project/utils.js';
+import { addPoints, subtractPoints } from '../../project/nodeLayout.js';
+import Node from '../../project/components/Node.jsx';
 
 const layerStyles = {
   position: 'fixed',

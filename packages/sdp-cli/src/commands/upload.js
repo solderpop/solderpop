@@ -1,6 +1,8 @@
 /* eslint-disable no-param-reassign */
 import { exit } from 'process';
-import {
+import R from 'ramda';
+
+const {
   compose,
   dropLast,
   last,
@@ -9,22 +11,22 @@ import {
   pick,
   replace,
   when,
-} from 'ramda';
+} = R;
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import { flags } from '@oclif/command';
 import * as xdb from 'sdp-deploy-bin';
-import BaseCommand from '../baseCommand';
-import * as commonArgs from '../args';
-import * as myFlags from '../flags';
-import { getListr } from '../listr';
+import BaseCommand from '../baseCommand.js';
+import * as commonArgs from '../args.js';
+import * as myFlags from '../flags.js';
+import { getListr } from '../listr.js';
 import {
   checkBoardTask,
   loadProjectTask,
   transformTask,
   transpileTask,
-} from '../listrTasks';
-import { resolveBundledWorkspacePath } from '../paths';
+} from '../listrTasks.js';
+import { resolveBundledWorkspacePath } from '../paths.js';
 
 const stripMessage = compose(
   replace(/[^ -~\n]+/, ''),
@@ -131,7 +133,7 @@ UploadCommand.args = [commonArgs.entrypoint];
 
 UploadCommand.examples = [
   'Compile a program using the current patch as entry point, upload to ttyACM1\n' +
-    '$ xodc upload -b arduino:avr:uno -p /dev/ttyACM1\n',
+    '$ sdpc upload -b arduino:avr:uno -p /dev/ttyACM1\n',
 ];
 
 UploadCommand.strict = false;

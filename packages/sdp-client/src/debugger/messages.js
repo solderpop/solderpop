@@ -50,7 +50,7 @@ export const DO_NOT_USE_TETHERING_INTERNET_IN_BROWSER = {
   note:
     'The internet tethering requires OS features which are not available to the web-browser.',
   solution:
-    'Install the desktop version of SolderPop IDE to reveal all features of XOD',
+    'Install the desktop version of SolderPop IDE to reveal all features',
 };
 
 export const LOG_COPIED = {

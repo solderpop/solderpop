@@ -1,7 +1,8 @@
-import { assert } from 'chai';
+import chai from 'chai';
+const { assert } = chai;
 import R from 'ramda';
 
-import { def } from '../src/index';
+import { def } from '../src/index.js';
 
 describe('types', () => {
   describe('Map Type', () => {

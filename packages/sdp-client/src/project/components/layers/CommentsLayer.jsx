@@ -1,12 +1,12 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import pureDeepEqual from '../../../utils/pureDeepEqual';
+import pureDeepEqual from '../../../utils/pureDeepEqual.js';
 
-import { isCommentSelected } from '../../../editor/utils';
+import { isCommentSelected } from '../../../editor/utils.js';
 
-import Comment from '../Comment';
+import Comment from '../Comment.jsx';
 
 const CommentsLayer = ({
   comments,

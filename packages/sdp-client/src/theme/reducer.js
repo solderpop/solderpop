@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 
-import { INITIAL_STATE } from './state';
-import * as AT from './actionTypes';
+import { INITIAL_STATE } from './state.js';
+import * as AT from './actionTypes.js';
 
 const setCurrentTheme = (state, theme) => R.assoc('currentTheme', theme, state);
 

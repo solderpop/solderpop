@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
 /**
  * Function without any operation.

@@ -1,13 +1,13 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import SnackBarList from '../components/SnackBarList';
-import SnackBarMessage from '../components/SnackBarMessage';
-import * as ErrorSelectors from '../selectors';
-import { deleteMessage, messageButtonClick } from '../actions';
+import SnackBarList from '../components/SnackBarList.jsx';
+import SnackBarMessage from '../components/SnackBarMessage.jsx';
+import * as ErrorSelectors from '../selectors.js';
+import { deleteMessage, messageButtonClick } from '../actions.js';
 
 const ERROR_TIMEOUT = 3000;
 

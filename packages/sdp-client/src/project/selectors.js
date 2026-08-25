@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { createSelector } from 'reselect';
 
 import * as XP from 'sdp-project';
@@ -11,13 +11,13 @@ import {
   addPoints,
   slotPositionToPixels,
   slotSizeToPixels,
-} from './nodeLayout';
-import { SELECTION_ENTITY_TYPE } from '../editor/constants';
+} from './nodeLayout.js';
+import { SELECTION_ENTITY_TYPE } from '../editor/constants.js';
 import {
   getSelection,
   getCurrentPatchPath,
   getLinkingPin,
-} from '../editor/selectors';
+} from '../editor/selectors.js';
 import {
   getDeducedTypes,
   getErrors,
@@ -25,19 +25,19 @@ import {
   getNodeErrors,
   getPinErrors,
   getPatchSearchData,
-} from '../hinting/selectors';
+} from '../hinting/selectors.js';
 import {
   getRenderablePinType,
   getNormalizedLabelsForPatch,
-} from '../project/utils';
-import { setPxPosition, setPxSize } from './pxDimensions';
+} from '../project/utils.js';
+import { setPxPosition, setPxSize } from './pxDimensions.js';
 
 import {
   getInteractiveErroredNodePinsForCurrentChunk,
   getPinsAffectedByErrorRaisersForCurrentChunk,
-} from '../debugger/selectors';
+} from '../debugger/selectors.js';
 
-import { createMemoizedSelector } from '../utils/selectorTools';
+import { createMemoizedSelector } from '../utils/selectorTools.js';
 
 export const getProject = R.prop('project');
 export const projectLens = R.lensProp('project');

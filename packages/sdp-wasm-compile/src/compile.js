@@ -2,11 +2,11 @@ import os from 'os';
 import path from 'path';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
-import * as fse from 'fs-extra';
+import fse from 'fs-extra';
 import { createError } from 'sdp-func-tools';
 
-import { getEmxxEnv } from './emcc';
-import { ensureServer, artifactUrl } from './server';
+import { getEmxxEnv } from './emcc.js';
+import { ensureServer, artifactUrl } from './server.js';
 
 // Bundled alongside this package's dist output at build time (babel inlines
 // these as plain strings via babel-plugin-inline-import — see .babelrc —
@@ -55,7 +55,11 @@ const getRootDir = () => {
   return rootDirPromise;
 };
 
-const writeSources = async (buildDir, programCode) => {
+// Exported for testing: the only pieces of this module testable without a
+// real, installed Emscripten toolchain (see docs/branch-changelist.md for
+// why the actual compile step -- the execFileAsync(emxx, ...) call below --
+// isn't covered here).
+export const writeSources = async (buildDir, programCode) => {
   await Promise.all([
     fse.writeFile(path.join(buildDir, 'sketch.ino'), programCode),
     fse.writeFile(path.join(buildDir, 'Arduino.h'), arduinoH),
@@ -66,7 +70,7 @@ const writeSources = async (buildDir, programCode) => {
   ]);
 };
 
-const wrapCompileError = err =>
+export const wrapCompileError = err =>
   Promise.reject(
     createError('WASM_COMPILATION_ERROR', {
       message: err.message,

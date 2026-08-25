@@ -1,18 +1,16 @@
 {
   "name": "sdp-func-tools",
-  "version": "0.32.0",
   "sources": [
     "src"
   ],
   "package-specs": {
-    "module": "commonjs",
+    "module": "esmodule",
     "in-source": true
   },
   "suffix": ".bs.js",
-  "bs-dependencies": [],
+  "dependencies": [],
   "warnings": {
-    "error" : "+a"
+    "error": "+a"
   },
-  "namespace": true,
-  "refmt": 3
+  "namespace": true
 }

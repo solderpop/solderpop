@@ -1,15 +1,17 @@
 import { compose, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
+import thunkModule from 'redux-thunk';
 
-import resolveLibsMiddleware from '../project/resolveLibsMiddleware';
-import devtoolsMiddleware from '../utils/devtoolsMiddleware';
-import sidebarsMiddleware from '../editor/sidebarsMiddleware';
-import crashReporter from './crashReporterMiddleware';
-import hintingMiddleware from '../hinting/middleware';
-import domSideeffectsMiddleware from './domSideeffectsMiddleware';
-import outdaterMiddleware from '../debugger/outdaterMiddleware';
-import sendToSimulationSerialMiddleware from '../debugger/sendToSimulationSerialMiddleware';
-import stopSimulationMiddleware from '../editor/stopSimulationMiddleware';
+const thunk = typeof thunkModule === 'function' ? thunkModule : thunkModule.default;
+
+import resolveLibsMiddleware from '../project/resolveLibsMiddleware.js';
+import devtoolsMiddleware from '../utils/devtoolsMiddleware.js';
+import sidebarsMiddleware from '../editor/sidebarsMiddleware.js';
+import crashReporter from './crashReporterMiddleware.js';
+import hintingMiddleware from '../hinting/middleware.js';
+import domSideeffectsMiddleware from './domSideeffectsMiddleware.js';
+import outdaterMiddleware from '../debugger/outdaterMiddleware.js';
+import sendToSimulationSerialMiddleware from '../debugger/sendToSimulationSerialMiddleware.js';
+import stopSimulationMiddleware from '../editor/stopSimulationMiddleware.js';
 
 export default (extraMiddlewares = []) =>
   compose(

@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import Handlebars from 'handlebars';
 
 const isContentStatement = st => st.type === 'ContentStatement';

@@ -1,4 +1,4 @@
-import BasePageObject from './BasePageObject';
+import BasePageObject from './BasePageObject.js';
 
 class Link extends BasePageObject {}
 

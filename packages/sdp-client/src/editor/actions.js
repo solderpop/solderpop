@@ -1,5 +1,7 @@
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 
 import * as XP from 'sdp-project';
 import {
@@ -21,47 +23,47 @@ import {
   CLIPBOARD_DATA_TYPE,
   FOCUS_AREAS,
   PANEL_IDS,
-} from './constants';
-import { LINK_ERRORS } from '../project/messages';
+} from './constants.js';
+import { LINK_ERRORS } from '../project/messages.js';
 import {
   libInstalled,
   CLIPBOARD_RECURSION_PASTE_ERROR,
   clipboardMissingPatchPasteError,
-} from './messages';
+} from './messages.js';
 
-import * as ActionType from './actionTypes';
-import * as ProjectActionType from '../project/actionTypes';
+import * as ActionType from './actionTypes.js';
+import * as ProjectActionType from '../project/actionTypes.js';
 
 import {
   addNode,
   addLink,
   bulkMoveNodesAndComments,
   bulkDeleteNodesAndComments,
-} from '../project/actions';
+} from '../project/actions.js';
 import {
   addError,
   addConfirmation,
   addNotification,
-} from '../messages/actions';
-import composeMessage from '../messages/composeMessage';
+} from '../messages/actions.js';
+import composeMessage from '../messages/composeMessage.js';
 
-import * as Selectors from './selectors';
-import * as ProjectSelectors from '../project/selectors';
-import * as DebuggerSelectors from '../debugger/selectors';
+import * as Selectors from './selectors.js';
+import * as ProjectSelectors from '../project/selectors.js';
+import * as DebuggerSelectors from '../debugger/selectors.js';
 
-import { parseDebuggerMessage } from '../debugger/debugProtocol';
-import { addMessagesToDebuggerLog } from '../debugger/actions';
-import { removeLastNodeIdInChain } from '../debugger/utils';
-import runWasmWorker from '../workers/run';
-import { getAccessToken } from '../user/selectors';
-import { updateBalances } from '../user/actions';
+import { parseDebuggerMessage } from '../debugger/debugProtocol.js';
+import { addMessagesToDebuggerLog } from '../debugger/actions.js';
+import { removeLastNodeIdInChain } from '../debugger/utils.js';
+import runWasmWorker from '../workers/run.js';
+import { getAccessToken } from '../user/selectors.js';
+import { updateBalances } from '../user/actions.js';
 
 import {
   getRenderablePin,
   getLinkingError,
   getInitialPatchOffset,
   patchToNodeProps,
-} from '../project/utils';
+} from '../project/utils.js';
 
 import {
   getBBoxTopLeftPosition,
@@ -72,16 +74,16 @@ import {
   getSelectedEntityIdsOfType,
   regenerateIds,
   resetClipboardEntitiesPosition,
-} from './utils';
-import { isInput, isEdge } from '../utils/browser';
-import { getPmSwaggerUrl, HOSTNAME } from '../utils/urls';
+} from './utils.js';
+import { isInput, isEdge } from '../utils/browser.js';
+import { getPmSwaggerUrl, HOSTNAME } from '../utils/urls.js';
 import {
   addPoints,
   subtractPoints,
   DEFAULT_PANNING_OFFSET,
-} from '../project/nodeLayout';
+} from '../project/nodeLayout.js';
 
-import { ClipboardEntities } from '../types';
+import { ClipboardEntities } from '../types.js';
 
 export const setPinSelection = (nodeId, pinKey) => ({
   type: ActionType.EDITOR_SELECT_PIN,

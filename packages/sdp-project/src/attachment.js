@@ -1,7 +1,7 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { maybeProp, explodeMaybe } from 'sdp-func-tools';
-import { def } from './types';
-import { MANAGED_ATTACHMENT_FILENAMES } from './constants';
+import { def } from './types.js';
+import { MANAGED_ATTACHMENT_FILENAMES } from './constants.js';
 
 export const createAttachment = def(
   'createAttachment :: String -> String -> String -> Attachment',

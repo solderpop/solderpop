@@ -1,7 +1,9 @@
 import R from 'ramda';
-import { assert } from 'chai';
+import chai from 'chai';
 
-import { createMemoizedSelector } from '../src/utils/selectorTools';
+const { assert } = chai;
+
+import { createMemoizedSelector } from '../src/utils/selectorTools.js';
 
 describe('createMemoizedSelector', () => {
   it('should pass results of dependency selectors as arguments to a main selector function', () => {

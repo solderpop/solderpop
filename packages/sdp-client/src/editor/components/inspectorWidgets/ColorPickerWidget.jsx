@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import PointingPopup from '../PointingPopup';
-import ColorPicker from '../ColorPicker';
-import colorPropType from '../ColorPicker/colorPropType';
+import PointingPopup from '../PointingPopup.jsx';
+import ColorPicker from '../ColorPicker/index.jsx';
+import colorPropType from '../ColorPicker/colorPropType.js';
 
 class ColorPickerWidget extends React.Component {
   constructor(props) {

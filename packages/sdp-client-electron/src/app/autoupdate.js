@@ -1,5 +1,5 @@
-import * as R from 'ramda';
-import { errorToPlainObject } from './utils';
+import R from 'ramda';
+import { errorToPlainObject } from './utils.js';
 import {
   APP_UPDATE_AVAILABLE,
   APP_UPDATE_PROGRESS,
@@ -7,7 +7,7 @@ import {
   APP_UPDATE_ERROR,
   APP_UPDATE_DOWNLOAD_REQUEST,
   APP_UPDATE_DOWNLOAD_STARTED,
-} from '../shared/events';
+} from '../shared/events.js';
 
 // =============================================================================
 //

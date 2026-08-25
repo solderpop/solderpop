@@ -1,5 +1,5 @@
-import * as R from 'ramda';
-import { PROJECT_LOADED_WITH_INVALID_PATCH_PATHS } from './errorCodes';
+import R from 'ramda';
+import { PROJECT_LOADED_WITH_INVALID_PATCH_PATHS } from './errorCodes.js';
 
 const formatPatchPaths = R.compose(
   R.join(', '),

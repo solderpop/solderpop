@@ -8,7 +8,7 @@
  * and the main process and returns `Promise`s.
  */
 
-import * as R from 'ramda';
+import R from 'ramda';
 import { noop } from 'sdp-func-tools';
 import {
   CHECK_ARDUINO_DEPENDENCIES_INSTALLED,
@@ -16,8 +16,8 @@ import {
   CHECK_ARDUINO_DEPENDENCY_UPDATES,
   UPGRADE_ARDUINO_DEPENDECIES,
   UPDATE_INDEXES,
-} from '../shared/events';
-import promisifyIpc from '../view/promisifyIpc';
+} from '../shared/events.js';
+import promisifyIpc from '../view/promisifyIpc.js';
 
 // =============================================================================
 //

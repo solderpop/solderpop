@@ -1,6 +1,8 @@
-import { assert } from 'chai';
-import * as H from './helpers';
-import * as XP from '../src';
+import chai from 'chai';
+
+const { assert } = chai;
+import * as H from './helpers.js';
+import * as XP from '../src/index.js';
 
 // assume that nodes have an unique combination of
 // type, label and position

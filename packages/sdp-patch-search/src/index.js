@@ -1,8 +1,10 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import Fuse from 'fuse.js';
-import { Maybe } from 'ramda-fantasy';
+import RamdaFantasy from 'ramda-fantasy';
 import { getBaseName } from 'sdp-project';
 import { foldMaybe } from 'sdp-func-tools';
+
+const { Maybe } = RamdaFantasy;
 
 const options = {
   shouldSort: true,
@@ -199,4 +201,4 @@ export const createPatchSearcher = () => {
 };
 
 // :: [Patch] -> [IndexData]
-export { default as createIndexData } from './mapper';
+export { default as createIndexData } from './mapper.js';

@@ -1,6 +1,6 @@
-import * as R from 'ramda';
-import { HOTKEY, ELECTRON_ACCELERATOR, COMMAND } from './constants';
-import { isMacOS } from './browser';
+import R from 'ramda';
+import { HOTKEY, ELECTRON_ACCELERATOR, COMMAND } from './constants.js';
+import { isMacOS } from './browser.js';
 
 const rawItems = {
   file: {
@@ -166,6 +166,9 @@ const rawItems = {
   },
   forum: {
     label: 'Forum',
+  },
+  about: {
+    label: 'About SolderPop IDE...',
   },
 };
 

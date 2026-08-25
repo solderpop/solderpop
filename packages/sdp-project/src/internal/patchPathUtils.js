@@ -1,5 +1,5 @@
-import * as R from 'ramda';
-import * as CONST from '../constants';
+import R from 'ramda';
+import * as CONST from '../constants.js';
 
 const EXPANDED_PATCH_NAME_SUFFIX = '-$';
 

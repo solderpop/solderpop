@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { isValidNumberDataValue } from 'sdp-project';
 
 export default R.compose(

@@ -1,5 +1,5 @@
 import os from 'os';
-import * as R from 'ramda';
+import R from 'ramda';
 
 const addExtensionsIntoFilters = fileFilter => {
   const extForName = R.compose(R.join(';'), R.map(R.concat('*.')))(

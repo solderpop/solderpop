@@ -1,21 +1,21 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import path from 'path';
 
 import * as XP from 'sdp-project';
 import { uniqLists } from 'sdp-func-tools';
 
-import { readDir, readJSON } from './read';
+import { readDir, readJSON } from './read.js';
 import {
   getPatchName,
   hasExt,
   rejectOnInvalidPatchFileContents,
   resolveLibPath,
-} from './utils';
-import { loadAttachments } from './attachments';
+} from './utils.js';
+import { loadAttachments } from './attachments.js';
 import {
   convertPatchFileContentsToPatch,
   addMissingOptionsToPatchFileContents,
-} from './convertTypes';
+} from './convertTypes.js';
 
 const scanLibsFolder = (libs, libsDir) =>
   Promise.all(

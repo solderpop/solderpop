@@ -2,8 +2,8 @@ import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { NODE_CORNER_RADIUS } from '../../nodeLayout';
-import { getRenderablePinType } from '../../utils';
+import { NODE_CORNER_RADIUS } from '../../nodeLayout.js';
+import { getRenderablePinType } from '../../utils.js';
 
 const INPUT_PINKEY = '__in__';
 const OUTPUT_PINKEY = '__out__';

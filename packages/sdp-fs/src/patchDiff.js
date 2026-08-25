@@ -1,9 +1,9 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { getPatchPath } from 'sdp-project';
 import { isAmong } from 'sdp-func-tools';
 
-import { def } from './types';
-import { CHANGE_TYPES } from './constants';
+import { def } from './types.js';
+import { CHANGE_TYPES } from './constants.js';
 
 const isEqualPatchPaths = def(
   'isEqualPatchPaths :: Patch -> Patch -> Boolean',

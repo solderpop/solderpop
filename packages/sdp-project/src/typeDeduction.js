@@ -1,5 +1,7 @@
-import * as R from 'ramda';
-import { Maybe, Either } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe, Either } = RamdaFantasy;
 import {
   foldEither,
   foldMaybe,
@@ -9,15 +11,15 @@ import {
   inSet,
 } from 'sdp-func-tools';
 
-import * as Link from './link';
-import * as Node from './node';
-import * as Patch from './patch';
-import * as Project from './project';
-import * as Pin from './pin';
-import * as Utils from './utils';
-import * as PPU from './patchPathUtils';
-import { def } from './types';
-import { sortGraph } from './gmath';
+import * as Link from './link.js';
+import * as Node from './node.js';
+import * as Patch from './patch.js';
+import * as Project from './project.js';
+import * as Pin from './pin.js';
+import * as Utils from './utils.js';
+import * as PPU from './patchPathUtils.js';
+import { def } from './types.js';
+import { sortGraph } from './gmath.js';
 
 //
 // Pin types deduction

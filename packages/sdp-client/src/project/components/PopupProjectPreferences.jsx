@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from 'react-fa';
 import * as XP from 'sdp-project';
-import sanctuaryPropType from '../../utils/sanctuaryPropType';
-import PopupForm from '../../utils/components/PopupForm';
-import deepSCU from '../../utils/deepSCU';
-import { lowercaseKebabMask } from '../../utils/inputFormatting';
+import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
+import PopupForm from '../../utils/components/PopupForm.jsx';
+import deepSCU from '../../utils/deepSCU.js';
+import { lowercaseKebabMask } from '../../utils/inputFormatting.js';
 
 const getInitialState = project => {
   const version = XP.getProjectVersion(project);
@@ -136,7 +136,7 @@ class PopupProjectPreferences extends React.Component {
           />
         </div>
         <div className="ModalContent">
-          <label htmlFor="cloudApiKey">XOD Cloud API Key: </label>
+          <label htmlFor="cloudApiKey">SolderPop Cloud API Key: </label>
           <div
             style={{
               display: 'flex',

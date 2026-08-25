@@ -17,7 +17,7 @@ export const api = flags.string({
 
 export const board = flags.string({
   char: 'b',
-  description: 'target board identifier (see `xodc boards` output)',
+  description: 'target board identifier (see `sdpc boards` output)',
   env: 'XOD_BOARD',
   required: true,
   helpValue: 'fqbn',

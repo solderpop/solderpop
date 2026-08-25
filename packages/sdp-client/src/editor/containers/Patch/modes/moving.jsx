@@ -1,26 +1,26 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import { HotKeys } from 'react-hotkeys';
 
 import * as XP from 'sdp-project';
 
-import { SELECTION_ENTITY_TYPE } from '../../../constants';
+import { SELECTION_ENTITY_TYPE } from '../../../constants.js';
 
-import PatchSVG from '../../../../project/components/PatchSVG';
-import * as Layers from '../../../../project/components/layers';
+import PatchSVG from '../../../../project/components/PatchSVG.jsx';
+import * as Layers from '../../../../project/components/layers/index.js';
 
 import {
   addPoints,
   subtractPoints,
   snapNodePositionToSlots,
   PIN_RADIUS_WITH_OUTER_STROKE,
-} from '../../../../project/nodeLayout';
+} from '../../../../project/nodeLayout.js';
 
-import { isLinkConnectedToNodeIds } from '../../../../project/utils';
-import { getSelectedEntityIdsOfType } from '../../../utils';
-import { changeLineLength } from '../../../../utils/vectors';
+import { isLinkConnectedToNodeIds } from '../../../../project/utils.js';
+import { getSelectedEntityIdsOfType } from '../../../utils.js';
+import { changeLineLength } from '../../../../utils/vectors.js';
 
-import { getOffsetMatrix, bindApi, getMousePosition } from '../modeUtils';
+import { getOffsetMatrix, bindApi, getMousePosition } from '../modeUtils.js';
 
 let patchSvgRef = null;
 

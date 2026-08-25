@@ -1,12 +1,23 @@
 import R from 'ramda';
-import { assert } from 'chai';
+import chai from 'chai';
 
-import * as XP from '../src';
+const { assert } = chai;
 
-import * as Helper from './helpers';
+import * as XP from '../src/index.js';
+
+import * as Helper from './helpers.js';
 
 // TODO: automatically load from workspace?
-import constantPatches from './fixtures/constant-patches.json';
+// See src/project.js for why this isn't a plain `import ... from '*.json'`.
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+
+const constantPatches = JSON.parse(
+  readFileSync(
+    fileURLToPath(new URL('./fixtures/constant-patches.json', import.meta.url)),
+    'utf8'
+  )
+);
 
 // :: Patch -> Map NodeType Node
 const getNodesByNodeTypes = R.compose(R.indexBy(XP.getNodeType), XP.listNodes);

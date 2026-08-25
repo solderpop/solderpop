@@ -1,14 +1,14 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import shortid from 'shortid';
 import * as XP from 'sdp-project';
 
-import * as EAT from './actionTypes';
-import * as PAT from '../project/actionTypes';
-import * as DAT from '../debugger/actionTypes';
-import { REMOVE_SELECTION } from '../projectBrowser/actionTypes';
+import * as EAT from './actionTypes.js';
+import * as PAT from '../project/actionTypes.js';
+import * as DAT from '../debugger/actionTypes.js';
+import { REMOVE_SELECTION } from '../projectBrowser/actionTypes.js';
 
-import { DEFAULT_PANNING_OFFSET } from '../project/nodeLayout';
-import { MAIN_PATCH_PATH } from '../project/constants';
+import { DEFAULT_PANNING_OFFSET } from '../project/nodeLayout.js';
+import { MAIN_PATCH_PATH } from '../project/constants.js';
 import {
   DEBUGGER_TAB_ID,
   TABLE_LOG_TAB_ID,
@@ -17,19 +17,19 @@ import {
   SELECTION_ENTITY_TYPE,
   TAB_TYPES,
   PANEL_IDS,
-} from './constants';
-import { STATUS } from '../utils/constants';
+} from './constants.js';
+import { STATUS } from '../utils/constants.js';
 import {
   createSelectionEntity,
   getNewSelection,
   getTabByPatchPath,
-} from './utils';
-import { setCurrentPatchOffset, switchPatchUnsafe } from './actions';
+} from './utils.js';
+import { setCurrentPatchOffset, switchPatchUnsafe } from './actions.js';
 
-import { getInitialPatchOffset } from '../project/utils';
-import { isErrorMessage } from '../debugger/utils';
+import { getInitialPatchOffset } from '../project/utils.js';
+import { isErrorMessage } from '../debugger/utils.js';
 
-import { default as initialState } from './state';
+import { default as initialState } from './state.js';
 
 // =============================================================================
 //

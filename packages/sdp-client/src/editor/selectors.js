@@ -1,5 +1,7 @@
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 import { createSelector } from 'reselect';
 import { mapIndexed, foldMaybe, maybeProp } from 'sdp-func-tools';
 import * as XP from 'sdp-project';
@@ -9,8 +11,8 @@ import {
   subtractPoints,
   slotSizeToPixels,
   DEFAULT_PANNING_OFFSET,
-} from '../project/nodeLayout';
-import { SIDEBAR_IDS, TAB_TYPES, DEFAULT_ZOOM } from './constants';
+} from '../project/nodeLayout.js';
+import { SIDEBAR_IDS, TAB_TYPES, DEFAULT_ZOOM } from './constants.js';
 
 const getProject = R.prop('project'); // Problem of cycle imports...
 

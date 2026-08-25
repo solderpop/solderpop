@@ -1,16 +1,20 @@
 import R from 'ramda';
-import { Maybe, Either } from 'ramda-fantasy';
-import { assert } from 'chai';
+import RamdaFantasy from 'ramda-fantasy';
 
-import { addMissingOptionalProjectFields } from '../src/optionalFieldsUtils';
-import * as Node from '../src/node';
-import * as Pin from '../src/pin';
-import * as Patch from '../src/patch';
-import * as Project from '../src/project';
-import { OUTPUT_SELF_PATH } from '../src/constants';
-import BUILT_IN_PATCHES from '../dist/built-in-patches.json';
+const { Maybe, Either } = RamdaFantasy;
+import chai from 'chai';
 
-import * as Helper from './helpers';
+const { assert } = chai;
+
+import { addMissingOptionalProjectFields } from '../src/optionalFieldsUtils.js';
+import * as Node from '../src/node.js';
+import * as Pin from '../src/pin.js';
+import * as Patch from '../src/patch.js';
+import * as Project from '../src/project.js';
+import { OUTPUT_SELF_PATH } from '../src/constants.js';
+import BUILT_IN_PATCHES from '../src/internal/builtInPatches.js';
+
+import * as Helper from './helpers.js';
 
 const BUILT_IN_PATCH_PATHS = R.keys(BUILT_IN_PATCHES);
 

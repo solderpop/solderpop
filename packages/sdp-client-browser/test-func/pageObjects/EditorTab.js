@@ -1,4 +1,4 @@
-import BasePageObject from './BasePageObject';
+import BasePageObject from './BasePageObject.js';
 
 class EditorTab extends BasePageObject {
   async close() {

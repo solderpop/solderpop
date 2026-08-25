@@ -3,7 +3,7 @@ import {
   SWITCH_WORKSPACE_REQUESTED,
   CREATE_WORKSPACE,
   SWITCH_WORKSPACE,
-} from './actionTypes';
+} from './actionTypes.js';
 
 export const requestCreateWorkspace = (path, force) => ({
   type: CREATE_WORKSPACE_REQUESTED,

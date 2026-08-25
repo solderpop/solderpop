@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import {
   renameKeys,
   invertMap,
@@ -30,19 +30,19 @@ import {
   TETHERING_INET_CHUNKS_ADDED,
   TETHERING_INET_CHUNK_SENT,
   TETHERING_INET_CLEAR_CHUNKS,
-} from './actionTypes';
+} from './actionTypes.js';
 
-import * as EAT from '../editor/actionTypes';
+import * as EAT from '../editor/actionTypes.js';
 
 import {
   UPLOAD_MSG_TYPE,
   LOG_TAB_TYPE,
   SESSION_TYPE,
   NEW_SHEET,
-} from './constants';
-import * as MSG from './messages';
-import { STATUS } from '../utils/constants';
-import { isXodErrorMessage } from './debugProtocol';
+} from './constants.js';
+import * as MSG from './messages.js';
+import { STATUS } from '../utils/constants.js';
+import { isXodErrorMessage } from './debugProtocol.js';
 
 import {
   createSystemMessage,
@@ -50,9 +50,9 @@ import {
   createErrorMessage,
   createOutgoingLogMessage,
   isErrorMessage,
-} from './utils';
+} from './utils.js';
 
-import { default as initialState, DEFAULT_TETHERING_INET_STATE } from './state';
+import { default as initialState, DEFAULT_TETHERING_INET_STATE } from './state.js';
 
 const MAX_LOG_CHARACTERS = 10000;
 

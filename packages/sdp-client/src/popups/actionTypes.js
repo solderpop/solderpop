@@ -1,5 +1,7 @@
 export const HIDE_ALL_POPUPS = 'HIDE_ALL_POPUPS';
 export const SHOW_PROJECT_PREFERENCES = 'SHOW_PROJECT_PREFERENCES';
 export const HIDE_PROJECT_PREFERENCES = 'HIDE_PROJECT_PREFERENCES';
+export const SHOW_ABOUT = 'SHOW_ABOUT';
+export const HIDE_ABOUT = 'HIDE_ABOUT';
 
 export default {};

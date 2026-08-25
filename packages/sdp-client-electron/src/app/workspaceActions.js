@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import EventEmitter from 'events';
 import path from 'path';
 
@@ -23,10 +23,10 @@ import {
   foldMaybeWith,
 } from 'sdp-func-tools';
 
-import * as settings from './settings';
-import * as ERROR_CODES from '../shared/errorCodes';
-import { errorToPlainObject, getPathToBundledWorkspace } from './utils';
-import * as EVENTS from '../shared/events';
+import * as settings from './settings.js';
+import * as ERROR_CODES from '../shared/errorCodes.js';
+import { errorToPlainObject, getPathToBundledWorkspace } from './utils.js';
+import * as EVENTS from '../shared/events.js';
 
 // =============================================================================
 //

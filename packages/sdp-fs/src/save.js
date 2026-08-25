@@ -1,6 +1,6 @@
 import os from 'os';
 import path from 'path';
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 import fse from 'fs-extra';
 import { rejectWithCode, allPromises } from 'sdp-func-tools';
@@ -11,20 +11,20 @@ import {
   isProjectFile,
   resolveLibPath,
   doesDirectoryExist,
-} from './utils';
-import { writeFile, writeJSON } from './write';
-import { Backup } from './backup';
-import { arrangeByFiles, arrangePatchByFiles, fsSafeName } from './unpack';
+} from './utils.js';
+import { writeFile, writeJSON } from './write.js';
+import { Backup } from './backup.js';
+import { arrangeByFiles, arrangePatchByFiles, fsSafeName } from './unpack.js';
 import {
   convertProjectToProjectFileContents,
   omitDefaultOptionsFromPatchFileContents,
   omitDefaultOptionsFromProjectFileContents,
-} from './convertTypes';
-import * as ERROR_CODES from './errorCodes';
-import { CHANGE_TYPES } from './constants';
-import { calculateDiff } from './patchDiff';
+} from './convertTypes.js';
+import * as ERROR_CODES from './errorCodes.js';
+import { CHANGE_TYPES } from './constants.js';
+import { calculateDiff } from './patchDiff.js';
 
-import { def } from './types';
+import { def } from './types.js';
 
 // :: Path -> AnyXodFile -> Promise AnyXodFile Error
 const saveVirtualFile = R.curry((rootDir, virtualFile) => {

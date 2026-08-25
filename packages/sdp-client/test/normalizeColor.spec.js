@@ -1,5 +1,7 @@
-import { assert } from 'chai';
-import normalizeColor from '../src/utils/normalizeColor';
+import chai from 'chai';
+
+const { assert } = chai;
+import normalizeColor from '../src/utils/normalizeColor.js';
 
 describe('normalizeColorLiteral', () => {
   it('normalizes short and lower-cased notation to valid color literals', () => {

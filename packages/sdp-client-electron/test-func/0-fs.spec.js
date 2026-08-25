@@ -1,16 +1,21 @@
 import R from 'ramda';
 import fse from 'fs-extra';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import dircompare from 'dir-compare';
-import { assert } from 'chai';
+import chai from 'chai';
 
-import prepareSuite from './prepare';
+import prepareSuite from './prepare.js';
 
 import {
   TRIGGER_MAIN_MENU_ITEM,
   TRIGGER_SAVE_AS,
   TRIGGER_LOAD_PROJECT,
-} from '../src/testUtils/events';
+} from '../src/testUtils/events.js';
+
+const { assert } = chai;
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const bundledWsPath = p => path.resolve(__dirname, '../../../workspace', p);
 

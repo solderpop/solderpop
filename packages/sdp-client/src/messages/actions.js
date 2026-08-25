@@ -1,6 +1,6 @@
-import * as R from 'ramda';
-import * as ActionType from './actionTypes';
-import { MESSAGE_TYPE } from './constants';
+import R from 'ramda';
+import * as ActionType from './actionTypes.js';
+import { MESSAGE_TYPE } from './constants.js';
 
 const getTimestamp = () => new Date().getTime();
 

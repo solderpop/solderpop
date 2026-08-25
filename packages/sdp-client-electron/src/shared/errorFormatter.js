@@ -1,12 +1,12 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { ERROR_CODES as XFS_EC } from 'sdp-fs';
 
 // import COMPILATION_ERRORS using path to file to prevent importing the whole package,
 // that contains async/await functions and non-isomorphic dependencies
-import { COMPILATION_ERRORS as XD_EC } from 'sdp-deploy/dist/constants';
+import { COMPILATION_ERRORS as XD_EC } from 'sdp-deploy/dist/constants.js';
 
-import composeMessage from './composeMessage';
-import * as EC from './errorCodes';
+import composeMessage from './composeMessage.js';
+import * as EC from './errorCodes.js';
 
 const UNKNOWN_ERROR = err =>
   composeMessage('You have found a bug', err.message || JSON.stringify(err));

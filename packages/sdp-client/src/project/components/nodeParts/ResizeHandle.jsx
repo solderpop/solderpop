@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { noop } from 'sdp-func-tools';
 
-import { NODE_CORNER_RADIUS, RESIZE_HANDLE_SIZE } from '../../nodeLayout';
+import { NODE_CORNER_RADIUS, RESIZE_HANDLE_SIZE } from '../../nodeLayout.js';
 
 const ResizeHandle = ({ id, pxSize, onResizeHandleMouseDown }) => (
   <path

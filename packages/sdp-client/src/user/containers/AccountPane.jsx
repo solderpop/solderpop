@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -6,14 +6,14 @@ import { bindActionCreators } from 'redux';
 
 import { foldMaybe } from 'sdp-func-tools';
 
-import { PANEL_IDS, SIDEBAR_IDS } from '../../editor/constants';
+import { PANEL_IDS, SIDEBAR_IDS } from '../../editor/constants.js';
 
-import SidebarPanel from '../../editor/components/SidebarPanel';
-import Button from '../../core/components/Button';
-import * as Actions from '../actions';
-import * as Selectors from '../selectors';
+import SidebarPanel from '../../editor/components/SidebarPanel.jsx';
+import Button from '../../core/components/Button.jsx';
+import * as Actions from '../actions.js';
+import * as Selectors from '../selectors.js';
 
-import AuthForm from '../components/AuthForm';
+import AuthForm from '../components/AuthForm.jsx';
 
 const AccountPane = ({
   sidebarId,

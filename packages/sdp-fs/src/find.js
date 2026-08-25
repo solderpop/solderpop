@@ -1,10 +1,10 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { statSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { rejectWithCode } from 'sdp-func-tools';
 
-import { isBasename, isExtname, isDirectory } from './utils';
-import * as ERROR_CODES from './errorCodes';
+import { isBasename, isExtname, isDirectory } from './utils.js';
+import * as ERROR_CODES from './errorCodes.js';
 
 function getParentDirectories(path) {
   function loop(currentPath, parentDirectories) {

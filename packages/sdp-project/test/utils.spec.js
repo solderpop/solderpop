@@ -1,12 +1,14 @@
 import R from 'ramda';
-import { assert } from 'chai';
+import chai from 'chai';
+
+const { assert } = chai;
 import shortid from 'shortid';
 
-import * as Utils from '../src/utils';
-import * as Node from '../src/node';
-import { PIN_TYPE } from '../src/constants';
-import { BINDABLE_CUSTOM_TYPES } from '../src/custom-types';
-import * as Helpers from './helpers';
+import * as Utils from '../src/utils.js';
+import * as Node from '../src/node.js';
+import { PIN_TYPE } from '../src/constants.js';
+import { BINDABLE_CUSTOM_TYPES } from '../src/custom-types.js';
+import * as Helpers from './helpers.js';
 
 describe('Utils', () => {
   // transforming node ids

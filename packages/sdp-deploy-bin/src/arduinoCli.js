@@ -1,8 +1,8 @@
 import os from 'os';
 import path from 'path';
 import which from 'which';
-import * as R from 'ramda';
-import * as fse from 'fs-extra';
+import R from 'ramda';
+import fse from 'fs-extra';
 import arduinoCli from 'arduino-cli';
 import { createError } from 'sdp-func-tools';
 import { isWorkspaceValid, spawnWorkspaceFile } from 'sdp-fs';
@@ -14,7 +14,7 @@ import {
   BUNDLED_ADDITIONAL_URLS,
   MIGRATE_BUNDLED_ADDITIONAL_URLS,
   ARDUINO_EXTRA_URLS_FILENAME,
-} from './constants';
+} from './constants.js';
 
 // =============================================================================
 //

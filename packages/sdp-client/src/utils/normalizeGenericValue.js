@@ -1,12 +1,12 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { notNil } from 'sdp-func-tools';
 import {
   numberDataTypeRegExp,
   INPUT_PULSE_PIN_BINDING_OPTIONS,
 } from 'sdp-project';
 
-import normalizeByte from './normalizeByte';
-import normalizeNumber from './normalizeNumber';
+import normalizeByte from './normalizeByte.js';
+import normalizeNumber from './normalizeNumber.js';
 
 // RegExps to test "Is it almost valid type X?"
 const almostNumber = new RegExp(numberDataTypeRegExp.source, 'i');

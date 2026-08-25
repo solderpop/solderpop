@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
 const COMPLETE = 'complete';
 const ERROR = 'error';

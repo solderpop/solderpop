@@ -1,12 +1,13 @@
 {
   "name": "sdp-tethering-inet",
+  "type": "module",
   "version": "0.34.0",
   "scripts": {
-    "refmt": "find src/ test/ -name '*.re*' -exec refmt --in-place {} +",
-    "build:re": "bsb -make-world",
+    "refmt": "rescript format -all",
+    "build:re": "rescript build",
     "build": "yarn build:re",
     "clean:dist": "rimraf ./lib ./src/**/*.bs.js",
-    "dev": "bsb -w",
+    "dev": "rescript build -w",
     "test": "jest"
   },
   "keywords": [
@@ -22,13 +23,32 @@
     "tcp-ping": "^0.1.1"
   },
   "devDependencies": {
-    "@glennsl/bs-jest": "^0.4.9",
-    "bs-platform": "7.1.1",
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
+    "@rescript/runtime": "^12.3.0",
+    "babel-jest": "^24.9.0",
+    "rescript": "^12.3.0",
     "ramda": "^0.24.1"
   },
   "jest": {
     "testMatch": [
-      "**/test/**/*_jest.bs.js"
-    ]
+      "**/test/**/*.test.js"
+    ],
+    "transformIgnorePatterns": [
+      "/node_modules/(?!belt-holes/)"
+    ],
+    "transform": {
+      "^.+\\.js$": [
+        "babel-jest",
+        {
+          "presets": [
+            ["@babel/preset-env", { "modules": "commonjs", "targets": { "node": "current" } }]
+          ]
+        }
+      ]
+    },
+    "moduleNameMapper": {
+      "^@rescript/runtime/lib/es6/(.*)$": "@rescript/runtime/lib/js/$1"
+    }
   }
 }

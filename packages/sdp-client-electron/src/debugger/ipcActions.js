@@ -1,4 +1,4 @@
-import * as EVENTS from '../shared/events';
+import * as EVENTS from '../shared/events.js';
 
 export const subscribeOnDebuggerEvents = (ipcRenderer, app) => {
   ipcRenderer.on(EVENTS.SERIAL_SESSION_MESSAGE_RECEIVE, (event, data) =>

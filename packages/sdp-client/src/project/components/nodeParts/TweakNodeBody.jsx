@@ -1,11 +1,11 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as XP from 'sdp-project';
 import { noop } from 'sdp-func-tools';
 
-import WatchNodeBody from './WatchNodeBody';
-import { getConstantValue } from './ConstantNodeBody';
+import WatchNodeBody from './WatchNodeBody.jsx';
+import { getConstantValue } from './ConstantNodeBody.jsx';
 
 const TweakNodeBody = props => (
   <WatchNodeBody

@@ -1,8 +1,8 @@
-export * from './serialport';
-export { COMPILATION_ERRORS } from './constants';
-export { default as messages } from './messages';
+export * from './serialport.js';
+export { COMPILATION_ERRORS } from './constants.js';
+export { default as messages } from './messages.js';
 export {
   getLibraryNameFromUrl,
   checkLibrariesInstalledByUrls,
   installLibrariesByUrls,
-} from './libraryManager';
+} from './libraryManager.js';

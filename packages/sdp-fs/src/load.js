@@ -1,15 +1,15 @@
 import fs from 'fs-extra';
 import path from 'path';
-import * as R from 'ramda';
+import R from 'ramda';
 
 import * as XF from 'sdp-func-tools';
 import * as XP from 'sdp-project';
 
-import pack from './pack';
-import { getPathToXodProject } from './find';
-import { loadLibs } from './loadLibs';
-import { readDir, readJSON } from './read';
-import * as ERROR_CODES from './errorCodes';
+import pack from './pack.js';
+import { getPathToXodProject } from './find.js';
+import { loadLibs } from './loadLibs.js';
+import { readDir, readJSON } from './read.js';
+import * as ERROR_CODES from './errorCodes.js';
 import {
   isExtname,
   resolvePath,
@@ -20,14 +20,14 @@ import {
   basenameAmong,
   getPatchName,
   rejectOnInvalidPatchFileContents,
-} from './utils';
-import { ProjectFileContents } from './types';
-import { loadAttachments } from './attachments';
+} from './utils.js';
+import { ProjectFileContents } from './types.js';
+import { loadAttachments } from './attachments.js';
 import {
   convertPatchFileContentsToPatch,
   addMissingOptionsToPatchFileContents,
   addMissingOptionsToProjectFileContents,
-} from './convertTypes';
+} from './convertTypes.js';
 
 // =============================================================================
 //

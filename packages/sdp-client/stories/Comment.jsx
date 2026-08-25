@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 import '../src/core/styles/main.scss';
-import Comment from '../src/project/components/Comment';
+import Comment from '../src/project/components/Comment.jsx';
 
 const baseProps = {
   id: 'my_comment_1',

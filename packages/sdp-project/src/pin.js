@@ -1,7 +1,7 @@
-import * as R from 'ramda';
-import * as CONST from './constants';
-import { def } from './types';
-import { isGenericType } from './utils';
+import R from 'ramda';
+import * as CONST from './constants.js';
+import { def } from './types.js';
+import { isGenericType } from './utils.js';
 
 /**
  * An object representing patch pin

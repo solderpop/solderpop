@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import $ from 'sanctuary-def';
@@ -9,29 +9,29 @@ import { FocusTrap } from 'react-hotkeys';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import * as XP from 'sdp-project';
 import { $Maybe, mapIndexed, notEquals } from 'sdp-func-tools';
-import debounce from 'throttle-debounce/debounce';
+import debounce from 'throttle-debounce/debounce.js';
 
-import HelpPanel from './HelpPanel';
-import Inspector from '../components/Inspector';
-import AccountPane from '../../user/containers/AccountPane';
-import ProjectBrowser from '../../projectBrowser/containers/ProjectBrowser';
-import SidebarSwitches from '../components/SidebarSwitches';
+import HelpPanel from './HelpPanel.jsx';
+import Inspector from '../components/Inspector.jsx';
+import AccountPane from '../../user/containers/AccountPane.jsx';
+import ProjectBrowser from '../../projectBrowser/containers/ProjectBrowser.jsx';
+import SidebarSwitches from '../components/SidebarSwitches.jsx';
 
-import * as EditorActions from '../actions';
-import * as EditorSelectors from '../selectors';
-import * as ProjectActions from '../../project/actions';
-import * as ProjectSelectors from '../../project/selectors';
-import * as UserSelectors from '../../user/selectors';
-import * as DebuggerSelectors from '../../debugger/selectors';
-import { RenderableSelection } from '../../types';
-import sanctuaryPropType from '../../utils/sanctuaryPropType';
-import { SIDEBAR_IDS, PANEL_IDS, FOCUS_AREAS } from '../constants';
+import * as EditorActions from '../actions.js';
+import * as EditorSelectors from '../selectors.js';
+import * as ProjectActions from '../../project/actions.js';
+import * as ProjectSelectors from '../../project/selectors.js';
+import * as UserSelectors from '../../user/selectors.js';
+import * as DebuggerSelectors from '../../debugger/selectors.js';
+import { RenderableSelection } from '../../types.js';
+import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
+import { SIDEBAR_IDS, PANEL_IDS, FOCUS_AREAS } from '../constants.js';
 import {
   sidebarPanelRenderer,
   getPanelsBySidebarId,
   getMaximizedPanelsBySidebarId,
   filterMaximized,
-} from '../utils';
+} from '../utils.js';
 
 const MIN_SIZE = 200;
 

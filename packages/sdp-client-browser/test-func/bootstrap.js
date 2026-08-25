@@ -6,11 +6,13 @@ import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 /* eslint-enable import/no-extraneous-dependencies */
 
-import { assert } from 'chai';
-import R from 'ramda';
-import config from '../webpack.config.test';
+import chai from 'chai';
 
-import { PORT } from './server.config';
+const { assert } = chai;
+import R from 'ramda';
+import config from '../webpack.config.test.cjs';
+
+import { PORT } from './server.config.js';
 
 const globalVariables = R.pick(['browser', 'assert'], global);
 

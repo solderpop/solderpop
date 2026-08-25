@@ -1,5 +1,6 @@
 {
   "name": "sdp-func-tools",
+  "type": "module",
   "version": "0.34.0",
   "description": "",
   "keywords": [],
@@ -9,11 +10,11 @@
   "scripts": {
     "doc": "documentation build --format html --output doc --sort-order alpha src/",
     "build:js": "babel src/ -d dist/ --source-maps",
-    "build:re": "bsb -make-world",
+    "build:re": "rescript build",
     "build": "yarn build:re && yarn build:js",
     "clean:dist": "rimraf ./dist ./lib ./src/**/*.bs.js",
     "dev": "yarn run build --watch",
-    "test": "mocha test/**/*.spec.js"
+    "test": "mocha --require ../../tools/babel-register.js --color test/**/*.spec.js"
   },
   "dependencies": {
     "hm-def": "^0.3.2",
@@ -23,7 +24,11 @@
     "sanctuary-type-identifiers": "^2.0.1"
   },
   "devDependencies": {
-    "bs-platform": "7.1.1",
+    "@babel/cli": "^8.0.4",
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
+    "@babel/register": "^8.0.1",
+    "rescript": "^12.3.0",
     "chai": "^4.1.2"
   },
   "files": [

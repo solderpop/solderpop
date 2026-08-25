@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
-import DraggedNodeShadowFilter from './filters/DraggedNodeShadowFilter';
+import DraggedNodeShadowFilter from './filters/DraggedNodeShadowFilter.jsx';
 
 const PatchSVG = ({
   children,

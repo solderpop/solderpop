@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
 // :: Filename -> ProjectName
 export default R.compose(

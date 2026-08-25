@@ -1,21 +1,23 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
-import { Maybe } from 'ramda-fantasy';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Patch as PatchType } from 'sdp-project';
 import { $Maybe } from 'sdp-func-tools';
 
-import * as Actions from '../actions';
-import { isHelpboxVisible, getFocusedArea } from '../selectors';
-import { getPatchForHelpbox } from '../../core/selectors';
-import PatchDocs from '../components/PatchDocs';
-import sanctuaryPropType from '../../utils/sanctuaryPropType';
+import * as Actions from '../actions.js';
+import { isHelpboxVisible, getFocusedArea } from '../selectors.js';
+import { getPatchForHelpbox } from '../../core/selectors.js';
+import PatchDocs from '../components/PatchDocs.jsx';
+import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
 
-import PointingPopup from '../components/PointingPopup';
+import PointingPopup from '../components/PointingPopup.jsx';
 
-import { FOCUS_AREAS } from '../constants';
+import { FOCUS_AREAS } from '../constants.js';
 
 const getSelectorByFocusedArea = focusedArea => {
   switch (focusedArea) {

@@ -2,9 +2,9 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 
 import '../src/core/styles/main.scss';
-import PinLabel from '../src/project/components/PinLabel';
+import PinLabel from '../src/project/components/PinLabel.jsx';
 // because filters are defined there
-import PatchSVG from '../src/project/components/PatchSVG';
+import PatchSVG from '../src/project/components/PatchSVG.jsx';
 
 const pinCenter = { x: 70, y: 70 };
 

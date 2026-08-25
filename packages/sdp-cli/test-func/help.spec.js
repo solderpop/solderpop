@@ -1,7 +1,9 @@
 import { test } from '@oclif/test';
-import { assert } from 'chai';
+import chai from 'chai';
 
-describe('xodc help', () => {
+const { assert } = chai;
+
+describe('sdpc help', () => {
   const stdMock = test.stdout().stderr();
 
   stdMock.command(['help']).it('prints help to stdout', ctx => {

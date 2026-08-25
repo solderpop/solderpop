@@ -1,9 +1,11 @@
 import { test } from '@oclif/test';
-import { assert } from 'chai';
+import chai from 'chai';
+
+const { assert } = chai;
 import path from 'path';
 import process from 'process';
 import fs from 'fs-extra';
-import { createWorkingDirectory, getFilesFromPath } from './helpers';
+import { createWorkingDirectory, getFilesFromPath } from './helpers.js';
 
 // save process.exit for unmocking
 const exit = process.exit;
@@ -316,7 +318,7 @@ const upload = (wd, myWSPath) => {
     );
 };
 
-describe('xodc', () => {
+describe('sdpc', () => {
   const wd = createWorkingDirectory('compile');
   const myWSPath = path.resolve(wd, 'workspace');
   const outputPath = path.resolve(wd, 'out');

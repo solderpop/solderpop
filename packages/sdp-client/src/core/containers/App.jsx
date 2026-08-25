@@ -1,8 +1,10 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import $ from 'sanctuary-def';
-import { Either } from 'ramda-fantasy';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Either } = RamdaFantasy;
 import {
   foldMaybe,
   foldEither,
@@ -38,32 +40,32 @@ import {
   LIVENESS,
 } from 'sdp-arduino';
 
-import { isInputTarget, elementHasFocusFunction } from '../../utils/browser';
+import { isInputTarget, elementHasFocusFunction } from '../../utils/browser.js';
 import {
   lowercaseKebabMask,
   patchBasenameMask,
-} from '../../utils/inputFormatting';
-import sanctuaryPropType from '../../utils/sanctuaryPropType';
+} from '../../utils/inputFormatting.js';
+import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
 
-import PopupPrompt from '../../utils/components/PopupPrompt';
-import PopupShowCode from '../../utils/components/PopupShowCode';
-import PopupProjectPreferences from '../../project/components/PopupProjectPreferences';
-import PopupPublishProject from '../../project/components/PopupPublishProject';
+import PopupPrompt from '../../utils/components/PopupPrompt.jsx';
+import PopupShowCode from '../../utils/components/PopupShowCode.jsx';
+import PopupProjectPreferences from '../../project/components/PopupProjectPreferences.jsx';
+import PopupPublishProject from '../../project/components/PopupPublishProject.jsx';
 
-import * as actions from '../actions';
-import { selectAll } from '../../editor/actions';
+import * as actions from '../actions.js';
+import { selectAll } from '../../editor/actions.js';
 import {
   NO_PATCH_TO_TRANSPILE,
   SIMULATION_ALREADY_RUNNING,
-} from '../../editor/messages';
-import { USERNAME_NEEDED_FOR_LITERAL } from '../../user/messages';
-import { PROJECT_NAME_NEEDED_FOR_LITERAL } from '../../project/messages';
-import { DO_NOT_USE_TETHERING_INTERNET_IN_BROWSER } from '../../debugger/messages';
-import { COMMAND } from '../../utils/constants';
-import { PANEL_IDS } from '../../editor/constants';
+} from '../../editor/messages.js';
+import { USERNAME_NEEDED_FOR_LITERAL } from '../../user/messages.js';
+import { PROJECT_NAME_NEEDED_FOR_LITERAL } from '../../project/messages.js';
+import { DO_NOT_USE_TETHERING_INTERNET_IN_BROWSER } from '../../debugger/messages.js';
+import { COMMAND } from '../../utils/constants.js';
+import { PANEL_IDS } from '../../editor/constants.js';
 
-import formatErrorMessage from '../formatErrorMessage';
-import initialProjectState from '../../project/state';
+import formatErrorMessage from '../formatErrorMessage.js';
+import initialProjectState from '../../project/state.js';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -433,6 +435,8 @@ App.propTypes = {
     deleteProcess: PropTypes.func.isRequired,
     showCode: PropTypes.func.isRequired,
     showProjectPreferences: PropTypes.func.isRequired,
+    showAbout: PropTypes.func.isRequired,
+    hideAbout: PropTypes.func.isRequired,
     toggleHelp: PropTypes.func.isRequired,
     startDebuggerSession: PropTypes.func.isRequired,
     stopDebuggerSession: PropTypes.func.isRequired,
@@ -477,6 +481,8 @@ App.actions = {
   showCode: actions.showCode,
   showProjectPreferences: actions.showProjectPreferences,
   hideProjectPreferences: actions.hideProjectPreferences,
+  showAbout: actions.showAbout,
+  hideAbout: actions.hideAbout,
   updateProjectMeta: actions.updateProjectMeta,
   hideAllPopups: actions.hideAllPopups,
   toggleHelp: actions.toggleHelp,

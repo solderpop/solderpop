@@ -1,15 +1,17 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import shortid from 'shortid';
 
-import { Either } from 'ramda-fantasy';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Either } = RamdaFantasy;
 import { isAmong, fail, explodeEither, notNil } from 'sdp-func-tools';
 
 import {
   BINDABLE_CUSTOM_TYPE_VALIDATORS,
   BINDABLE_CUSTOM_TYPES_LIST,
-} from './custom-types';
-import * as CONST from './constants';
-import { def } from './types';
+} from './custom-types.js';
+import * as CONST from './constants.js';
+import { def } from './types.js';
 
 /**
  * Contains resulting value or error

@@ -14,10 +14,10 @@
 import os from 'os';
 import path from 'path';
 import { spawn } from 'child_process';
-import * as fse from 'fs-extra';
-import download from 'sdp-deploy/dist/download';
-import unpackZip from 'sdp-deploy/dist/unzip';
-import createProgress from 'sdp-deploy/dist/progress';
+import fse from 'fs-extra';
+import download from 'sdp-deploy/dist/download.js';
+import unpackZip from 'sdp-deploy/dist/unzip.js';
+import createProgress from 'sdp-deploy/dist/progress.js';
 import { isEmsdkInstalled } from 'sdp-wasm-compile';
 import { createError } from 'sdp-func-tools';
 
@@ -25,9 +25,9 @@ import {
   CHECK_EMSDK_INSTALLED,
   INSTALL_EMSDK,
   UNINSTALL_EMSDK,
-} from '../shared/events';
-import subscribeIpc from './subscribeIpc';
-import { getUserDataDir } from './utils';
+} from '../shared/events.js';
+import subscribeIpc from './subscribeIpc.js';
+import { getUserDataDir } from './utils.js';
 
 const EMSDK_SCRIPTS_URL =
   'https://github.com/emscripten-core/emsdk/archive/refs/heads/main.zip';

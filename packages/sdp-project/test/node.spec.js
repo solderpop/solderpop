@@ -1,9 +1,11 @@
-import { assert } from 'chai';
+import chai from 'chai';
 
-import * as Node from '../src/node';
-import * as CONST from '../src/constants';
+const { assert } = chai;
 
-import * as Helper from './helpers';
+import * as Node from '../src/node.js';
+import * as CONST from '../src/constants.js';
+
+import * as Helper from './helpers.js';
 
 const emptyNode = Helper.defaultizeNode({});
 

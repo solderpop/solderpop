@@ -1,13 +1,13 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { SkyLightStateless } from 'react-skylight';
 import EventListener from 'react-event-listener';
 
-import { noop } from '../../utils/ramda';
-import { KEYCODE } from '../../utils/constants';
-import deepSCU from '../deepSCU';
+import { noop } from '../../utils/ramda.js';
+import { KEYCODE } from '../../utils/constants.js';
+import deepSCU from '../deepSCU.js';
 
 const selectOnFocus = event => event.target.select();
 

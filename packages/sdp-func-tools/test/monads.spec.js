@@ -1,6 +1,10 @@
-import { assert } from 'chai';
-import { identity, F } from 'ramda';
-import { Maybe, Either } from 'ramda-fantasy';
+import chai from 'chai';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { assert } = chai;
+const { identity, F } = R;
+const { Maybe, Either } = RamdaFantasy;
 
 import {
   explode,
@@ -15,7 +19,7 @@ import {
   reduceEither,
   reduceMaybe,
   leftIf,
-} from '../src/monads';
+} from '../src/monads.js';
 
 describe('moands', () => {
   describe('explode()', () => {

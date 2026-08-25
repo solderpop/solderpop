@@ -1,11 +1,11 @@
 /* global browser:false, assert:false */
 
-import getPage from './utils/getPage';
+import getPage from './utils/getPage.js';
 
-import ProjectBrowser from './pageObjects/ProjectBrowser';
-import PromptPopup from './pageObjects/PromptPopup';
-import IdeCrashReport from './pageObjects/IdeCrashReport';
-import { getAllNodeIds, getSelectedNodes } from './pageObjects/Node';
+import ProjectBrowser from './pageObjects/ProjectBrowser.js';
+import PromptPopup from './pageObjects/PromptPopup.js';
+import IdeCrashReport from './pageObjects/IdeCrashReport.js';
+import { getAllNodeIds, getSelectedNodes } from './pageObjects/Node.js';
 
 it('Recovers on IDE crash', async () => {
   const page = await getPage(browser);

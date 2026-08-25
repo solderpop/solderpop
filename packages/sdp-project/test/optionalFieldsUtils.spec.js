@@ -1,14 +1,16 @@
 import R from 'ramda';
-import { assert } from 'chai';
+import chai from 'chai';
+
+const { assert } = chai;
 
 import { validateSanctuaryType } from 'sdp-func-tools';
 
-import { loadJSON } from './helpers';
+import { loadJSON } from './helpers.js';
 import {
   Project,
   addMissingOptionalProjectFields,
   omitEmptyOptionalProjectFields,
-} from '../src/index';
+} from '../src/index.js';
 
 describe('Optional fields utils', () => {
   const omittedOptionals = loadJSON(

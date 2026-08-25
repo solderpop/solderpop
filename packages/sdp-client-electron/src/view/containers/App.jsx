@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -36,65 +36,69 @@ import { messages as xdbMessages } from 'sdp-deploy-bin';
 
 import packageJson from '../../../package.json';
 
-import * as actions from '../actions';
-import * as uploadActions from '../../upload/actions';
-import { listBoards, upload } from '../../upload/arduinoCli';
-import { compileSimulation } from '../../upload/wasmCompile';
-import * as debuggerIPC from '../../debugger/ipcActions';
+import * as actions from '../actions.js';
+import * as uploadActions from '../../upload/actions.js';
+import { listBoards, upload } from '../../upload/arduinoCli.js';
+import { compileSimulation } from '../../upload/wasmCompile.js';
+import * as debuggerIPC from '../../debugger/ipcActions.js';
 import {
   getUploadProcess,
   isDeploymentInProgress,
   getSelectedSerialPort,
-} from '../../upload/selectors';
-import * as settingsActions from '../../settings/actions';
-import PopupSetWorkspace from '../../settings/components/PopupSetWorkspace';
-import PopupCreateWorkspace from '../../settings/components/PopupCreateWorkspace';
-import PopupUploadConfig from '../../upload/components/PopupUploadConfig';
-import PopupConnectSerial from '../../upload/components/PopupConnectSerial';
-import { SaveProgressBar } from '../components/SaveProgressBar';
-import TitleBar from '../components/TitleBar';
+} from '../../upload/selectors.js';
+import * as settingsActions from '../../settings/actions.js';
+import PopupSetWorkspace from '../../settings/components/PopupSetWorkspace.jsx';
+import PopupCreateWorkspace from '../../settings/components/PopupCreateWorkspace.jsx';
+import PopupUploadConfig from '../../upload/components/PopupUploadConfig.jsx';
+import PopupConnectSerial from '../../upload/components/PopupConnectSerial.jsx';
+import { SaveProgressBar } from '../components/SaveProgressBar.jsx';
+import TitleBar from '../components/TitleBar.jsx';
 
-import formatError from '../../shared/errorFormatter';
-import * as EVENTS from '../../shared/events';
-import { INSTALL_ARDUINO_DEPENDENCIES_MSG } from '../../arduinoDependencies/constants';
+import formatError from '../../shared/errorFormatter.js';
+import * as EVENTS from '../../shared/events.js';
+import { INSTALL_ARDUINO_DEPENDENCIES_MSG } from '../../arduinoDependencies/constants.js';
 import {
   checkDeps,
   updateArdupackages,
   closePackageUpdatePopup,
   proceedPackageUpgrade,
-} from '../../arduinoDependencies/actions';
+} from '../../arduinoDependencies/actions.js';
 import {
   requestManageLocalSimulation,
   closeManageLocalSimulation,
   closeWelcomeDialog,
   firstLaunchDetected,
   clickInstallEmsdk,
-} from '../../emsdkInstaller/actions';
-import WelcomeDialog from '../../emsdkInstaller/components/WelcomeDialog';
-import ManageLocalSimulationPopup from '../../emsdkInstaller/components/ManageLocalSimulationPopup';
-import { loadWorkspacePath } from '../../app/workspaceActions';
-import { getPathToBundledWorkspace, IS_DEV } from '../../app/utils';
+} from '../../emsdkInstaller/actions.js';
+import WelcomeDialog from '../../emsdkInstaller/components/WelcomeDialog.jsx';
+import PopupAbout from '../components/PopupAbout.jsx';
+import ManageLocalSimulationPopup from '../../emsdkInstaller/components/ManageLocalSimulationPopup.jsx';
+import { loadWorkspacePath } from '../../app/workspaceActions.js';
+import { getPathToBundledWorkspace, IS_DEV } from '../../app/utils.js';
 
-import getLibraryNames from '../../arduinoDependencies/getLibraryNames';
+import getLibraryNames from '../../arduinoDependencies/getLibraryNames.js';
 
-import { subscribeAutoUpdaterEvents } from '../autoupdate';
-import subscribeToTriggerMainMenuRequests from '../../testUtils/triggerMainMenu';
-import { TRIGGER_SAVE_AS, TRIGGER_LOAD_PROJECT } from '../../testUtils/events';
+import { subscribeAutoUpdaterEvents } from '../autoupdate.js';
+import subscribeToTriggerMainMenuRequests from '../../testUtils/triggerMainMenu.js';
+import { TRIGGER_SAVE_AS, TRIGGER_LOAD_PROJECT } from '../../testUtils/events.js';
 
 import {
   getOpenDialogFileFilters,
   createSaveDialogOptions,
-} from '../nativeDialogs';
-import { STATES, getEventNameWithState } from '../../shared/eventStates';
+} from '../nativeDialogs.js';
+import { STATES, getEventNameWithState } from '../../shared/eventStates.js';
 
-import UpdateArduinoPackagesPopup from '../../arduinoDependencies/components/UpdateArduinoPackagesPopup';
-import { checkArduinoDependencies } from '../../arduinoDependencies/runners';
+import UpdateArduinoPackagesPopup from '../../arduinoDependencies/components/UpdateArduinoPackagesPopup.jsx';
+import { checkArduinoDependencies } from '../../arduinoDependencies/runners.js';
 
-import { formatErrorMessage, formatLogError } from '../formatError';
+import { formatErrorMessage, formatLogError } from '../formatError.js';
 
 const { app, dialog, Menu } = remoteElectron;
 const DEFAULT_CANVAS_WIDTH = 800;
 const DEFAULT_CANVAS_HEIGHT = 600;
+// Only autosaves projects that already have a known file path — never pops
+// a Save As dialog on the user's behalf.
+const AUTOSAVE_INTERVAL_MS = 2 * 60 * 1000;
 
 const ThemeSettingsPopup = client.theme.components.ThemeSettingsPopup;
 
@@ -149,6 +153,7 @@ class App extends client.App {
     this.onSave = this.onSave.bind(this);
     this.onSaveAs = this.onSaveAs.bind(this);
     this.onSaveCopyAs = this.onSaveCopyAs.bind(this);
+    this.onAutosaveTick = this.onAutosaveTick.bind(this);
     this.onOpenProjectClicked = this.onOpenProjectClicked.bind(this);
     this.onOpenTutorialProject = this.onOpenTutorialProject.bind(this);
 
@@ -290,6 +295,11 @@ class App extends client.App {
     // autoUpdater
     subscribeAutoUpdaterEvents(ipcRenderer, this);
 
+    this.autosaveIntervalId = setInterval(
+      this.onAutosaveTick,
+      AUTOSAVE_INTERVAL_MS
+    );
+
     if (IS_DEV) {
       // Besause we can't control file dialogs in autotests
       ipcRenderer.on(TRIGGER_SAVE_AS, projectPath => {
@@ -316,6 +326,7 @@ class App extends client.App {
 
   componentWillUnmount() {
     super.componentWillUnmount();
+    clearInterval(this.autosaveIntervalId);
     // Unsubscribe from all ipc events
     R.map(
       eventName => ipcRenderer.removeAllListeners(eventName),
@@ -605,6 +616,23 @@ class App extends client.App {
       });
   }
 
+  // Silent by design: never prompts Save As, never shows a "saved" toast on
+  // every tick. Skips the tick entirely (rather than queueing) if a save —
+  // manual or autosave — is already in flight, so ticks can't pile up.
+  onAutosaveTick() {
+    if (
+      !this.props.hasUnsavedChanges ||
+      !this.state.projectPath ||
+      this.props.saveProcess
+    ) {
+      return;
+    }
+
+    this.saveAs(this.state.projectPath, false, true).catch(error =>
+      this.showError(error)
+    );
+  }
+
   showError(error) {
     this.props.actions.addError(formatErrorMessage(error));
   }
@@ -792,6 +820,8 @@ class App extends client.App {
         onClick(items.forum, () => {
           shell.openExternal(client.getUtmForumUrl('menu'));
         }),
+        items.separator,
+        onClick(items.about, this.props.actions.showAbout),
       ]),
     ];
   }
@@ -1071,6 +1101,16 @@ class App extends client.App {
     ) : null;
   }
 
+  renderPopupAbout() {
+    return this.props.popups.about ? (
+      <PopupAbout
+        isVisible={this.props.popups.about}
+        version={packageJson.version}
+        onClose={this.props.actions.hideAbout}
+      />
+    ) : null;
+  }
+
   render() {
     return (
       <HotKeys
@@ -1100,6 +1140,7 @@ class App extends client.App {
         {this.renderPopupCheckArduinoPackageUpdates()}
         {this.renderWelcomeDialog()}
         {this.renderManageLocalSimulationPopup()}
+        {this.renderPopupAbout()}
         {this.renderPatchCreatingPopup()}
         <ThemeSettingsPopup
           isVisible={this.state.themeSettingsPopup}
@@ -1224,6 +1265,7 @@ const mapStateToProps = R.applySpec({
     manageLocalSimulation: client.getPopupVisibility(
       client.POPUP_ID.MANAGE_LOCAL_SIMULATION
     ),
+    about: client.getPopupVisibility(client.POPUP_ID.ABOUT),
   },
   popupsData: {
     projectSelection: client.getPopupData(client.POPUP_ID.OPENING_PROJECT),

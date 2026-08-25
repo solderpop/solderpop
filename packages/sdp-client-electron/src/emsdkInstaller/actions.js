@@ -1,6 +1,6 @@
 import * as client from 'sdp-client';
-import { INSTALL_EMSDK } from '../shared/events';
-import * as AT from './actionTypes';
+import { INSTALL_EMSDK } from '../shared/events.js';
+import * as AT from './actionTypes.js';
 
 // Reuses the plain string value 'INSTALL_EMSDK' as the process type —
 // same trick ../arduinoDependencies/actions.js's `updatePackages` already

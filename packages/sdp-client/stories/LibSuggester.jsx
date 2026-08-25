@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import LibSuggester from '../src/editor/components/LibSuggester';
+import LibSuggester from '../src/editor/components/LibSuggester.jsx';
 import '../src/core/styles/main.scss';
 
 storiesOf('LibSuggester', module)

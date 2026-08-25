@@ -1,19 +1,21 @@
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
+
+const { Maybe } = RamdaFantasy;
 import { explodeEither, isAmong } from 'sdp-func-tools';
 
-import { def } from './types';
+import { def } from './types.js';
 
-import * as Pin from './pin';
-import * as Node from './node';
-import * as Link from './link';
-import * as Patch from './patch';
-import * as Project from './project';
+import * as Pin from './pin.js';
+import * as Node from './node.js';
+import * as Link from './link.js';
+import * as Patch from './patch.js';
+import * as Project from './project.js';
 import {
   getExpandedVariadicPatchPath,
   isVariadicPassPath,
-} from './patchPathUtils';
-import { createAdditionalValueTerminalGroups } from './expandVariadicNodes';
+} from './patchPathUtils.js';
+import { createAdditionalValueTerminalGroups } from './expandVariadicNodes.js';
 
 const expandPassPatch = R.curry((desiredArityLevel, patch) => {
   const expandedPatchPath = R.compose(

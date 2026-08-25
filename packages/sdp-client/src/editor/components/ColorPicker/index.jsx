@@ -1,12 +1,12 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import convert from 'color-convert';
 import { debounce } from 'throttle-debounce';
 
-import colorPropType from './colorPropType';
-import HueCircle from './HueCircle';
-import SatLightBox from './SatLightBox';
+import colorPropType from './colorPropType.js';
+import HueCircle from './HueCircle.jsx';
+import SatLightBox from './SatLightBox.jsx';
 
 const getNewColor = newHsl => ({
   hsl: newHsl,

@@ -1,12 +1,14 @@
-import { assert } from 'chai';
-import { defaultizePatch } from 'sdp-project/test/helpers';
+import chai from 'chai';
+import { defaultizePatch } from 'sdp-project/test/helpers.js';
 
 import {
   calculateAdded,
   calculateDeleted,
   calculateModified,
   calculateDiff,
-} from '../src/patchDiff';
+} from '../src/patchDiff.js';
+
+const { assert } = chai;
 
 describe('Patch diffs', () => {
   const patchA = defaultizePatch({

@@ -1,6 +1,7 @@
-import { assert } from 'chai';
+import chai from 'chai';
+const { assert } = chai;
 
-import { enquote, unquote, cppEscape } from '../src/strings';
+import { enquote, unquote, cppEscape } from '../src/strings.js';
 
 describe('String', () => {
   describe('quote', () => {

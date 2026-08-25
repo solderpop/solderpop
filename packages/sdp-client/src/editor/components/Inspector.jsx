@@ -1,20 +1,20 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import PropTypes from 'prop-types';
 import $ from 'sanctuary-def';
 import React from 'react';
 import { Patch } from 'sdp-project';
 import { $Maybe } from 'sdp-func-tools';
 
-import { SELECTION_ENTITY_TYPE, PANEL_IDS, SIDEBAR_IDS } from '../constants';
+import { SELECTION_ENTITY_TYPE, PANEL_IDS, SIDEBAR_IDS } from '../constants.js';
 
-import SidebarPanel from '../components/SidebarPanel';
-import NodeInspector from './NodeInspector';
-import PatchInspector from './PatchInspector';
-import { HintWidget } from './inspectorWidgets';
-import { noop, isMany, isOne } from '../../utils/ramda';
+import SidebarPanel from '../components/SidebarPanel.jsx';
+import NodeInspector from './NodeInspector.jsx';
+import PatchInspector from './PatchInspector.jsx';
+import { HintWidget } from './inspectorWidgets/index.js';
+import { noop, isMany, isOne } from '../../utils/ramda.js';
 
-import { RenderableSelection } from '../../types';
-import sanctuaryPropType from '../../utils/sanctuaryPropType';
+import { RenderableSelection } from '../../types.js';
+import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
 
 // =============================================================================
 //

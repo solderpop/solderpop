@@ -1,5 +1,5 @@
-import * as R from 'ramda';
-import { def } from './types';
+import R from 'ramda';
+import { def } from './types.js';
 
 /**
  * Checks if an element is among elements of a list
