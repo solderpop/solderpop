@@ -124,7 +124,7 @@ UploadCommand.args = [commonArgs.entrypoint];
 
 UploadCommand.examples = [
   'Compile a program using the current patch as entry point, upload to ttyACM1\n' +
-    '$ xodc upload -b arduino:avr:uno -p /dev/ttyACM1\n',
+    '$ sdpc upload -b arduino:avr:uno -p /dev/ttyACM1\n',
 ];
 
 UploadCommand.strict = false;

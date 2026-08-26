@@ -318,7 +318,7 @@ const upload = (wd, myWSPath) => {
     );
 };
 
-describe('xodc', () => {
+describe('sdpc', () => {
   const wd = createWorkingDirectory('compile');
   const myWSPath = path.resolve(wd, 'workspace');
   const outputPath = path.resolve(wd, 'out');

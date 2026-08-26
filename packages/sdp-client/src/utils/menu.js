@@ -167,6 +167,9 @@ const rawItems = {
   forum: {
     label: 'Forum',
   },
+  about: {
+    label: 'About SolderPop IDE...',
+  },
 };
 
 const containsCmd = R.contains('command');

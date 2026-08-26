@@ -214,6 +214,9 @@ jobs:
       - save_cache: *cache-node_modules
       - run: *step-build
       - run: *step-verify-git-clean
+      - run: *step-lint
+      - run: *step-test
+      - run: *step-verify-git-clean
 
   test-cpp:
     docker: *docker-custom-nodejs
@@ -240,7 +243,7 @@ jobs:
           name: Generate tabtests
           command: |
             ls -d workspace/__lib__/xod/* workspace/test/* | xargs -n 1 \
-              yarn xodc tabtest --no-build | cat
+              yarn sdpc tabtest --no-build | cat
       - run:
           name: Build tabtests
           command: make -C $XOD_OUTPUT

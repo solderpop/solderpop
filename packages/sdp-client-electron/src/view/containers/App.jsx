@@ -71,6 +71,7 @@ import {
   clickInstallEmsdk,
 } from '../../emsdkInstaller/actions.js';
 import WelcomeDialog from '../../emsdkInstaller/components/WelcomeDialog.jsx';
+import PopupAbout from '../components/PopupAbout.jsx';
 import ManageLocalSimulationPopup from '../../emsdkInstaller/components/ManageLocalSimulationPopup.jsx';
 import { loadWorkspacePath } from '../../app/workspaceActions.js';
 import { getPathToBundledWorkspace, IS_DEV } from '../../app/utils.js';
@@ -98,6 +99,9 @@ import { formatErrorMessage, formatLogError } from '../formatError.js';
 const { app, dialog, Menu } = remoteElectron;
 const DEFAULT_CANVAS_WIDTH = 800;
 const DEFAULT_CANVAS_HEIGHT = 600;
+// Only autosaves projects that already have a known file path — never pops
+// a Save As dialog on the user's behalf.
+const AUTOSAVE_INTERVAL_MS = 2 * 60 * 1000;
 
 const { ThemeSettingsPopup } = client.theme.components;
 
@@ -151,6 +155,7 @@ class App extends client.App {
     this.onSave = this.onSave.bind(this);
     this.onSaveAs = this.onSaveAs.bind(this);
     this.onSaveCopyAs = this.onSaveCopyAs.bind(this);
+    this.onAutosaveTick = this.onAutosaveTick.bind(this);
     this.onOpenProjectClicked = this.onOpenProjectClicked.bind(this);
     this.onOpenTutorialProject = this.onOpenTutorialProject.bind(this);
 
@@ -285,6 +290,11 @@ class App extends client.App {
     // autoUpdater
     subscribeAutoUpdaterEvents(ipcRenderer, this);
 
+    this.autosaveIntervalId = setInterval(
+      this.onAutosaveTick,
+      AUTOSAVE_INTERVAL_MS
+    );
+
     if (IS_DEV) {
       // Besause we can't control file dialogs in autotests
       ipcRenderer.on(TRIGGER_SAVE_AS, (projectPath) => {
@@ -311,6 +321,7 @@ class App extends client.App {
 
   componentWillUnmount() {
     super.componentWillUnmount();
+    clearInterval(this.autosaveIntervalId);
     // Unsubscribe from all ipc events
     R.map(
       (eventName) => ipcRenderer.removeAllListeners(eventName),
@@ -601,6 +612,23 @@ class App extends client.App {
       });
   }
 
+  // Silent by design: never prompts Save As, never shows a "saved" toast on
+  // every tick. Skips the tick entirely (rather than queueing) if a save —
+  // manual or autosave — is already in flight, so ticks can't pile up.
+  onAutosaveTick() {
+    if (
+      !this.props.hasUnsavedChanges ||
+      !this.state.projectPath ||
+      this.props.saveProcess
+    ) {
+      return;
+    }
+
+    this.saveAs(this.state.projectPath, false, true).catch(error =>
+      this.showError(error)
+    );
+  }
+
   showError(error) {
     this.props.actions.addError(formatErrorMessage(error));
   }
@@ -788,6 +816,8 @@ class App extends client.App {
         onClick(items.forum, () => {
           shell.openExternal(client.getUtmForumUrl('menu'));
         }),
+        items.separator,
+        onClick(items.about, this.props.actions.showAbout),
       ]),
     ];
   }
@@ -1067,6 +1097,16 @@ class App extends client.App {
     ) : null;
   }
 
+  renderPopupAbout() {
+    return this.props.popups.about ? (
+      <PopupAbout
+        isVisible={this.props.popups.about}
+        version={packageJson.version}
+        onClose={this.props.actions.hideAbout}
+      />
+    ) : null;
+  }
+
   render() {
     return (
       <HotKeys
@@ -1096,6 +1136,7 @@ class App extends client.App {
         {this.renderPopupCheckArduinoPackageUpdates()}
         {this.renderWelcomeDialog()}
         {this.renderManageLocalSimulationPopup()}
+        {this.renderPopupAbout()}
         {this.renderPatchCreatingPopup()}
         <ThemeSettingsPopup
           isVisible={this.state.themeSettingsPopup}
@@ -1228,6 +1269,7 @@ const mapStateToProps = R.applySpec({
     manageLocalSimulation: client.getPopupVisibility(
       client.POPUP_ID.MANAGE_LOCAL_SIMULATION
     ),
+    about: client.getPopupVisibility(client.POPUP_ID.ABOUT),
   },
   popupsData: {
     projectSelection: client.getPopupData(client.POPUP_ID.OPENING_PROJECT),

@@ -120,7 +120,7 @@ const its = (wd) => {
     );
 };
 
-describe('xodc install:arch', () => {
+describe('sdpc install:arch', () => {
   // working directory, workspace, src project path
   const wd = createWorkingDirectory('installArch');
 

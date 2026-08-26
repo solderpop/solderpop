@@ -403,7 +403,7 @@ const its = (wd) => {
     );
 };
 
-describe('xodc publish', () => {
+describe('sdpc publish', () => {
   // working directory
   const wd = createWorkingDirectory('publish');
 

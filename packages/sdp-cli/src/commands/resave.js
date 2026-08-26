@@ -92,13 +92,13 @@ ResaveCommand.args = [commonArgs.project];
 
 ResaveCommand.examples = [
   `Exports the current multifile project to a xodball\n` +
-    `$ xodc resave . -o ~/foo.xodball\n`,
+    `$ sdpc resave . -o ~/foo.xodball\n`,
   `Outputs the current multifile project as a xodball to stdout\n` +
-    `$ xodc resave\n`,
+    `$ sdpc resave\n`,
   `Resaves one xodball into another (useful for applying migrations)\n` +
-    `$ xodc resave foo.xodball -o bar.xodball\n`,
+    `$ sdpc resave foo.xodball -o bar.xodball\n`,
   `Converts a xodball to a multifile project\n` +
-    `$ xodc resave foo.xodball -o /some/new/dir`,
+    `$ sdpc resave foo.xodball -o /some/new/dir`,
 ];
 
 ResaveCommand.strict = false;

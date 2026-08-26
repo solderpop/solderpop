@@ -11,6 +11,8 @@ import {
   HIDE_ALL_POPUPS,
   SHOW_PROJECT_PREFERENCES,
   HIDE_PROJECT_PREFERENCES,
+  SHOW_ABOUT,
+  HIDE_ABOUT,
 } from './actionTypes.js';
 
 import {
@@ -114,6 +116,11 @@ const popupsReducer = (state = initialState, action) => {
     case HIDE_PROJECT_PREFERENCES:
     case PROJECT_UPDATE_META:
       return hideOnePopup(POPUP_ID.EDITING_PROJECT_PREFERENCES, state);
+
+    case SHOW_ABOUT:
+      return showOnlyPopup(POPUP_ID.ABOUT, {}, state);
+    case HIDE_ABOUT:
+      return hideOnePopup(POPUP_ID.ABOUT, state);
 
     case PATCH_ADD:
       return hideOnePopup(POPUP_ID.CREATING_PATCH, state);

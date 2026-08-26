@@ -146,7 +146,7 @@ const its = (wd, outCppPath) => {
     );
 };
 
-describe('xodc transpile', () => {
+describe('sdpc transpile', () => {
   // working directory and output file
   const wd = createWorkingDirectory('transpile');
   const outCppPath = path.resolve(wd, 'out.cpp');

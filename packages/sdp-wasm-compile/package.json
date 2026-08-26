@@ -7,7 +7,8 @@
   "scripts": {
     "build": "babel src/ -d dist/ --source-maps",
     "clean:dist": "rimraf ./dist",
-    "dev": "yarn run build --watch"
+    "dev": "yarn run build --watch",
+    "test": "mocha --require ../../tools/babel-register.js --color --timeout 30000 test/**/*.spec.js"
   },
   "keywords": [
     "xod",

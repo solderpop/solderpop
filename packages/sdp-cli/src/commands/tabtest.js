@@ -165,9 +165,9 @@ TabtestCommand.args = [commonArgs.entrypoint];
 
 TabtestCommand.examples = [
   `Build tabtests for project in current working directory\n` +
-    `$ xodc tabtest\n`,
+    `$ sdpc tabtest\n`,
   `Specify target directory and project, only generate tests\n` +
-    `$ xodc tabtest --no-build --output-dir=/tmp/sdp-tabtest ./workspace/__lib__/xod/net`,
+    `$ sdpc tabtest --no-build --output-dir=/tmp/sdp-tabtest ./workspace/__lib__/xod/net`,
 ];
 
 TabtestCommand.strict = false;

@@ -5,7 +5,7 @@
   "description": "SolderPop IDE: Command Line Interface",
   "author": "SolderPop <dev@solderpop.io>",
   "bin": {
-    "xodc": "./bin/run"
+    "sdpc": "./bin/run"
   },
   "bugs": "https://github.com/solderpop/solderpop/issues",
   "dependencies": {
@@ -64,13 +64,13 @@
   "main": "bin/run",
   "oclif": {
     "commands": "./lib/commands",
-    "bin": "xodc",
+    "bin": "sdpc",
     "plugins": [
       "@oclif/plugin-autocomplete",
       "@oclif/plugin-help",
       "@oclif/plugin-not-found"
     ],
-    "repositoryPrefix": "<%- repo %>/blob/master/packages/sdp-cli/<%- commandPath %>",
+    "repositoryPrefix": "<%- repo %>/blob/main/packages/sdp-cli/<%- commandPath %>",
     "topics": {
       "install": {
         "description": "install toolchains and libraries"

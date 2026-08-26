@@ -3,7 +3,7 @@ import chai from 'chai';
 
 const { assert } = chai;
 
-describe('xodc help', () => {
+describe('sdpc help', () => {
   const stdMock = test.stdout().stderr();
 
   stdMock.command(['help']).it('prints help to stdout', (ctx) => {
