@@ -1,18 +1,19 @@
-const TabData = require('../src/TabData.bs.js');
 const BeltList = require('@rescript/runtime/lib/js/Belt_List.js');
 const BeltMapString = require('@rescript/runtime/lib/js/Belt_MapString.js');
+const TabData = require('../src/TabData.bs.js');
 
 // TabData.t is a Belt.List<Belt.Map.String<Value.t>>; flatten it to plain
 // arrays of [key, value] pairs (sorted by key, per Belt_MapString.toArray)
 // so it can be compared with toEqual.
-const toPlain = records => BeltList.toArray(records).map(record => BeltMapString.toArray(record));
+const toPlain = (records) =>
+  BeltList.toArray(records).map((record) => BeltMapString.toArray(record));
 
-const Number_ = x => ({TAG: 'Number', _0: x});
-const Boolean_ = x => ({TAG: 'Boolean', _0: x});
-const Byte_ = x => ({TAG: 'Byte', _0: x});
-const String_ = x => ({TAG: 'String', _0: x});
-const Pulse_ = x => ({TAG: 'Pulse', _0: x});
-const ApproxNumber_ = (x, exp) => ({TAG: 'ApproxNumber', _0: x, _1: exp});
+const Number_ = (x) => ({ TAG: 'Number', _0: x });
+const Boolean_ = (x) => ({ TAG: 'Boolean', _0: x });
+const Byte_ = (x) => ({ TAG: 'Byte', _0: x });
+const String_ = (x) => ({ TAG: 'String', _0: x });
+const Pulse_ = (x) => ({ TAG: 'Pulse', _0: x });
+const ApproxNumber_ = (x, exp) => ({ TAG: 'ApproxNumber', _0: x, _1: exp });
 
 describe('TSV parser', () => {
   test('parses empty tsv into empty data', () => {

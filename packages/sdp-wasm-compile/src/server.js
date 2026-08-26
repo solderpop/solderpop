@@ -18,7 +18,7 @@ const MIME_TYPES = {
 let serverPromise = null;
 
 // :: Path -> Promise { server :: http.Server, port :: Number } Error
-const startServer = root =>
+const startServer = (root) =>
   new Promise((resolve, reject) => {
     const server = http.createServer((req, res) => {
       const filePath = path.join(root, decodeURIComponent(req.url));
@@ -46,7 +46,7 @@ const startServer = root =>
   });
 
 // :: Path -> Promise Number Error
-export const ensureServer = root => {
+export const ensureServer = (root) => {
   if (serverPromise === null) {
     serverPromise = startServer(root);
   }

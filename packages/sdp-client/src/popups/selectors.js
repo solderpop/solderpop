@@ -38,8 +38,8 @@ export const getProjectBrowserPopups = createSelector(
   ])
 );
 
-export const getPopupVisibility = popupId =>
+export const getPopupVisibility = (popupId) =>
   createSelector(getPopups, isPopupVisible(popupId));
 
-export const getPopupData = popupId =>
+export const getPopupData = (popupId) =>
   createSelector(getPopups, extractPopupData(popupId));

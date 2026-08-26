@@ -1,26 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const IconGuide = ({
+export function IconGuide({
   width = '600px',
   height = '600px',
   className = '',
   fill = '#CCCCCC',
-}) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    x="0px"
-    y="0px"
-    width={width}
-    height={height}
-    className={className}
-    viewBox="0 0 600 600"
-  >
-    <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      fill={fill}
-      d="M106.825,181.75h51.766c14.294,0,25.882-11.587,25.882-25.883c
+}) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      x="0px"
+      y="0px"
+      width={width}
+      height={height}
+      className={className}
+      viewBox="0 0 600 600"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        fill={fill}
+        d="M106.825,181.75h51.766c14.294,0,25.882-11.587,25.882-25.883c
          0-14.294-11.587-25.882-25.882-25.882h-51.766c-14.295,0-25.882,
          11.587-25.882,25.882C80.943,170.163,92.53,181.75,106.825,181.75z
          M184.472,444.27c0-14.294-11.587-25.881-25.882-25.881h-51.766c-14.295,
@@ -43,9 +44,10 @@ export const IconGuide = ({
          M413.715,255.699H258.422c-12.251,0-22.185-9.934-22.185-22.185c0-12.252,
          9.933-22.185,22.185-22.185h155.293c12.252,0,22.185,9.933,22.185,
          22.185C435.9,245.766,425.967,255.699,413.715,255.699z"
-    />
-  </svg>
-);
+      />
+    </svg>
+  );
+}
 
 IconGuide.propTypes = {
   width: PropTypes.string,

@@ -1,8 +1,6 @@
 import R from 'ramda';
 import swaggerClient from 'swagger-client';
 import RamdaFantasy from 'ramda-fantasy';
-
-const { Maybe } = RamdaFantasy;
 import {
   notEmpty,
   notNil,
@@ -13,6 +11,8 @@ import {
 
 import * as ERR_CODES from './errorCodes.js';
 import * as MSG from './messages.js';
+
+const { Maybe } = RamdaFantasy;
 
 const LATEST = 'latest';
 
@@ -51,9 +51,9 @@ export const parseLibQuery = R.compose(
 // :: String -> LibName
 // It parses libQuery ("xod/core" or "xod/core@0.11.0")
 // and returns lib name without version ("xod/core").
-export const getLibName = libQuery =>
+export const getLibName = (libQuery) =>
   R.compose(
-    qp => `${qp.owner}/${qp.libname}`,
+    (qp) => `${qp.owner}/${qp.libname}`,
     explodeMaybe(
       `Expected correct library name format, like "xod/core@0.11.0", but got "${libQuery}"`
     ),
@@ -103,7 +103,7 @@ export const rejectUnexistingVersion = R.curry((params, libdata) =>
 export const getSwaggerClient = (() => {
   const memo = {};
 
-  return url => {
+  return (url) => {
     const index = JSON.stringify(url);
 
     if (index in memo) {
@@ -123,7 +123,7 @@ export const getSwaggerClient = (() => {
 })();
 
 // TODO: duplicate in sdp-cli
-export const swaggerError = err => {
+export const swaggerError = (err) => {
   if (err instanceof Error) {
     return Object.assign(new Error(MSG.SERVICE_UNAVAILABLE), {
       errorCode: ERR_CODES.SERVICE_UNAVAILABLE,

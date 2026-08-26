@@ -1,19 +1,19 @@
-const librariesMissing = libraryNames =>
+const librariesMissing = (libraryNames) =>
   libraryNames.length
     ? `You have to install these libraries first: ${libraryNames}`
     : null;
 
-const librariesInstalled = libraryNames =>
+const librariesInstalled = (libraryNames) =>
   libraryNames.length
     ? `Libraries ${libraryNames} installed successfully`
     : null;
 
-const packagesMissing = packageNames =>
+const packagesMissing = (packageNames) =>
   packageNames.length
     ? `You have to install these packages first: ${packageNames}`
     : null;
 
-const packagesInstalled = packageNames =>
+const packagesInstalled = (packageNames) =>
   packageNames.length
     ? `Package "${packageNames}" installed successfully`
     : null;
@@ -27,7 +27,7 @@ export default {
   }) => ({
     title: 'Arduino dependencies missing',
     solution: [librariesMissing(libraryNames), packagesMissing(packageNames)]
-      .filter(a => !!a)
+      .filter((a) => !!a)
       .join('\r\n'),
     button: 'Download & Install',
     data: { libraries, packages, packageNames },
@@ -37,7 +37,7 @@ export default {
   ARDUINO_DEPENDENCIES_INSTALLED: ({ libraryNames, packageNames }) => ({
     title: 'Arduino dependencies installed',
     note: [librariesInstalled(libraryNames), packagesInstalled(packageNames)]
-      .filter(a => !!a)
+      .filter((a) => !!a)
       .join('\r\n'),
     solution: 'Now you are able to upload the program',
     persistent: true,
@@ -55,7 +55,7 @@ export default {
 
   ARDUINO_CLI_EXITED_WITH_CODE: ({ path, message, stdout, stderr }) => ({
     title: 'arduino-cli exited with error',
-    note: [message, stderr, stdout].filter(s => s !== '').join(' '),
+    note: [message, stderr, stdout].filter((s) => s !== '').join(' '),
     solution: `Check your arduino-cli: ${path}`,
   }),
 

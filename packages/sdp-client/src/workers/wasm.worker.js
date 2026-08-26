@@ -26,20 +26,20 @@ const Serial = {
       return Serial.txBuffer.slice(0, 1);
     },
     // Read Bytes from JS into WASM (called by WASM)
-    readBytes: bytes => {
+    readBytes: (bytes) => {
       const result = Serial.txBuffer.slice(0, bytes);
       Serial.txBuffer = Serial.txBuffer.slice(bytes);
       return result;
     },
     // Receive Smth from WASM into JS
-    writeString: str => Serial.onReceive(str),
-    writeByte: byte =>
+    writeString: (str) => Serial.onReceive(str),
+    writeByte: (byte) =>
       Serial.onReceive(Serial.decoder.decode(new Uint8Array([byte]))),
   },
   // Methods to be called from JS
   js: {
     // Write String to send to WASM
-    writeString: str => {
+    writeString: (str) => {
       const newStr = Serial.encoder.encode(str);
       const newBuf = new Uint8Array(Serial.txBuffer.length + newStr.length);
       newBuf.set(Serial.txBuffer, 0);
@@ -49,7 +49,7 @@ const Serial = {
     },
   },
   // JS Handlers
-  onReceive: data =>
+  onReceive: (data) =>
     _self.postMessage({
       type: 'serial:receive',
       payload: data,
@@ -62,13 +62,13 @@ const Serial = {
 const Time = {
   value: 0,
   get: () => Time.value,
-  set: newT => {
+  set: (newT) => {
     Time.value = newT;
   },
 };
 
 let wasmInstance;
-_self.onmessage = e => {
+_self.onmessage = (e) => {
   switch (e.data.type) {
     case 'init': {
       const { suite, runtimeUrl, wasmUrl } = e.data.payload;
@@ -87,22 +87,22 @@ _self.onmessage = e => {
         Time,
         // Make possible downloading of wasmFile from dedicated webserver:
         locateFile: () => wasmUrl,
-        onAbort: x =>
+        onAbort: (x) =>
           _self.postMessage({
             type: 'abort',
             payload: x,
           }),
-        print: x =>
+        print: (x) =>
           _self.postMessage({
             type: 'data',
             payload: x,
           }),
-        printErr: x =>
+        printErr: (x) =>
           _self.postMessage({
             type: 'error',
             payload: x,
           }),
-        quit: exitCode =>
+        quit: (exitCode) =>
           _self.postMessage({
             type: 'quit',
             payload: exitCode,
@@ -118,9 +118,10 @@ _self.onmessage = e => {
         // matching the browser Worker API, not this callback.
       });
 
-      // Module is defined in `importScripts(...)`
-      // eslint-disable-next-line no-undef
-      Promise.resolve(Module(opts)).then(instance => {
+      // Module is defined in `importScripts(...)`, and Emscripten's own
+      // convention is to call it as a plain factory function, not `new`.
+      // eslint-disable-next-line no-undef, new-cap
+      Promise.resolve(Module(opts)).then((instance) => {
         wasmInstance = instance;
         // Make Time updating each millisecond
         setInterval(() => {
@@ -135,9 +136,8 @@ _self.onmessage = e => {
         type: 'serial:sendOk',
         payload: newLen,
       });
-      return;
+      break;
     }
     default:
-      return;
   }
 };

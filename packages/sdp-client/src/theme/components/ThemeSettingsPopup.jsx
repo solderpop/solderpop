@@ -287,7 +287,7 @@ class ThemeSettingsPopup extends React.PureComponent {
           <select
             id="theme-select"
             value={currentTheme}
-            onChange={e => this.handleThemeChange(e.target.value)}
+            onChange={(e) => this.handleThemeChange(e.target.value)}
           >
             {R.toPairs(themes).map(([themeKey, theme]) => (
               <option key={themeKey} value={themeKey}>
@@ -302,15 +302,15 @@ class ThemeSettingsPopup extends React.PureComponent {
 
   renderColorGroups() {
     const { currentTheme, themes } = this.props;
-    const colors = themes[currentTheme].colors;
+    const { colors } = themes[currentTheme];
 
     return (
       <div className="color-groups">
-        {COLOR_GROUPS.map(group => (
+        {COLOR_GROUPS.map((group) => (
           <div key={group.key} className="color-group">
             <h4>{group.label}</h4>
             <div className="color-list">
-              {group.keys.map(colorKey => {
+              {group.keys.map((colorKey) => {
                 const label = COLOR_LABELS[colorKey] || colorKey;
                 const colorValue = colors[colorKey];
                 const hexValue = this.state.hexDrafts[colorKey] || colorValue;
@@ -331,7 +331,7 @@ class ThemeSettingsPopup extends React.PureComponent {
                       className="color-hex"
                       value={hexValue}
                       aria-label={`${label} hex value`}
-                      onChange={e =>
+                      onChange={(e) =>
                         this.handleHexChange(colorKey, e.target.value)
                       }
                     />
@@ -340,10 +340,10 @@ class ThemeSettingsPopup extends React.PureComponent {
                       className="color-input-hidden"
                       value={colorValue}
                       aria-label={`${label} color picker`}
-                      ref={el => {
+                      ref={(el) => {
                         this.colorInputs[colorKey] = el;
                       }}
-                      onChange={e =>
+                      onChange={(e) =>
                         this.handleColorChange(colorKey, e.target.value)
                       }
                     />
@@ -359,7 +359,7 @@ class ThemeSettingsPopup extends React.PureComponent {
 
   renderPreview() {
     const { currentTheme, themes } = this.props;
-    const colors = themes[currentTheme].colors;
+    const { colors } = themes[currentTheme];
 
     return (
       <div className="theme-preview">
@@ -417,7 +417,7 @@ class ThemeSettingsPopup extends React.PureComponent {
           style={windowStyle}
           role="dialog"
           aria-label="Theme Settings"
-          onClick={e => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
         >
           <div className="theme-window-header" onMouseDown={this.startDrag}>
             <span className="theme-window-title">Theme Settings</span>
@@ -481,7 +481,7 @@ const mapStateToProps = R.applySpec({
   themes: selectors.getThemeList,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(actions, dispatch),
 });
 

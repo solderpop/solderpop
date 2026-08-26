@@ -1,12 +1,12 @@
 import chai from 'chai';
-
-const { assert } = chai;
 import * as H from './helpers.js';
 import * as XP from '../src/index.js';
 
+const { assert } = chai;
+
 // assume that nodes have an unique combination of
 // type, label and position
-const calculateNodeIdForStructuralComparison = node => {
+const calculateNodeIdForStructuralComparison = (node) => {
   const type = XP.getNodeType(node);
   const label = XP.getNodeLabel(node);
   const position = XP.getNodePosition(node);

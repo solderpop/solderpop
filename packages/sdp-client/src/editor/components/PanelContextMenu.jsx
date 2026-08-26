@@ -6,10 +6,10 @@ import { ContextMenu, MenuItem, connectMenu } from 'react-contextmenu';
 
 import { PANEL_CONTEXT_MENU_ID, PANEL_IDS, SIDEBAR_IDS } from '../constants.js';
 
-const callCallbackWithPanelId = onClick => (event, data) =>
+const callCallbackWithPanelId = (onClick) => (event, data) =>
   onClick(data.panelId);
 
-const PanelContextMenu = props => {
+function PanelContextMenu(props) {
   const trigger = props.trigger ? props.trigger : {};
   const cls = cn('ContextMenu ContextMenu--Sidebar', {
     // It's a hack to prevent rendering contextmenu
@@ -60,7 +60,7 @@ const PanelContextMenu = props => {
       </MenuItem> */}
     </ContextMenu>
   );
-};
+}
 
 PanelContextMenu.propTypes = {
   trigger: PropTypes.shape({

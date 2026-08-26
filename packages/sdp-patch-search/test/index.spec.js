@@ -10,8 +10,8 @@ import { createPatchSearcher, createIndexData } from '../src/index.js';
 const { assert } = chai;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const workspace = path.resolve(__dirname, '../../../workspace');
-const getProjectPath = projectName => path.resolve(workspace, projectName);
-const fixture = p => path.resolve(__dirname, './fixtures/', p);
+const getProjectPath = (projectName) => path.resolve(workspace, projectName);
+const fixture = (p) => path.resolve(__dirname, './fixtures/', p);
 
 describe('sdp-patch-search/index', () => {
   describe('general search', () => {
@@ -21,7 +21,7 @@ describe('sdp-patch-search/index', () => {
       loadProject([workspace], getProjectPath('welcome-to-xod'))
         .then(listPatches)
         .then(createIndexData)
-        .then(iData => {
+        .then((iData) => {
           indexData = iData;
           search = createPatchSearcher();
         })
@@ -108,7 +108,7 @@ describe('sdp-patch-search/index', () => {
       loadProject([workspace], fixture('abstract-and-specializations.xodball'))
         .then(listPatches)
         .then(createIndexData)
-        .then(iData => {
+        .then((iData) => {
           indexData = iData;
           search = createPatchSearcher();
         })

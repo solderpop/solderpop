@@ -280,7 +280,7 @@ export const normalizeEmptyPinLabels = def(
           )
         ),
         R.groupBy(getPinLabel),
-        R.map(pin => setPinLabel(getPinLabelByDirection(pin), pin))
+        R.map((pin) => setPinLabel(getPinLabelByDirection(pin), pin))
       )
     ),
     R.partition(isPinLabelEmpty)
@@ -312,7 +312,7 @@ export const normalizeEmptyPinLabelsOppositeDirection = def(
           )
         ),
         R.groupBy(getPinLabel),
-        R.map(pin => setPinLabel(getPinLabelByOppositeDirection(pin), pin))
+        R.map((pin) => setPinLabel(getPinLabelByOppositeDirection(pin), pin))
       )
     ),
     R.partition(isPinLabelEmpty)
@@ -324,7 +324,7 @@ export const addVariadicPinKeySuffix = def(
   (index, key) => `${key}-$${index}`
 );
 
-const parseVariadicPinKey = pinKey => {
+const parseVariadicPinKey = (pinKey) => {
   const [, base, , indexStr = '0'] = R.match(
     /([A-Za-z0-9_-]*)(-\$(\d+))?$/,
     pinKey
@@ -376,7 +376,7 @@ export const induceVariadicPinLabel = def(
             R.toString,
             R.add(index + 1),
             R.defaultTo(1),
-            x => parseInt(x, 10),
+            (x) => parseInt(x, 10),
             R.nth(2)
           ),
         ]),

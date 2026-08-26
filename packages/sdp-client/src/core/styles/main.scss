@@ -1,77 +1,69 @@
-@import
-  'abstracts/colors',
-  'abstracts/variables',
-  'abstracts/icons',
-  'abstracts/functions',
-  'abstracts/mixins';
+// Every partial below carries its own `@use '../abstracts' as *;` (or, for
+// fonts/, needs nothing from abstracts at all), so this file no longer
+// needs to `@use` abstracts itself just to propagate it to them the way
+// the old `@import`-based global namespace required.
+@use 'fonts/noto-emoji';
+@use 'fonts/roboto';
+@use 'fonts/roboto-condensed';
+@use 'fonts/roboto-mono';
+@use 'fonts/roboto-slab';
 
-@import
-  'fonts/noto-emoji',
-  'fonts/roboto',
-  'fonts/roboto-condensed',
-  'fonts/roboto-mono',
-  'fonts/roboto-slab';
+@use 'base/base';
 
-@import
-  'base/base';
-
-@import
-  'components/AccountPane',
-  'components/App',
-  'components/AttachmentEditor',
-  'components/BackgroundLayer',
-  'components/Breadcrumbs',
-  'components/Button',
-  'components/CloseButton',
-  'components/Comment',
-  'components/ColorPicker',
-  'components/ContextMenu',
-  'components/CodeMirror',
-  'components/CppPatchDocs',
-  'components/Debugger',
-  'components/Editor',
-  'components/Helpbox',
-  'components/HelpPanel',
-  'components/IdeCrashReport',
-  'components/Inspector',
-  'components/Layers',
-  'components/Link',
-  'components/MarqueeSelection',
-  'components/Modals',
-  'components/Node',
-  'components/NoPatch',
-  'components/PatchDocs',
-  'components/PatchGroup',
-  'components/PatchGroupItem',
-  'components/PatchSVG',
-  'components/PatchWrapper',
-  'components/Pin',
-  'components/PinLabel',
-  'components/PinValue',
-  'components/PointingPopup',
-  'components/PopupPublishProject',
-  'components/ProjectBrowser',
-  'components/Sidebar',
-  'components/SidebarPanel',
-  'components/ThemeSettingsPopup',
-  'components/SnackBarList',
-  'components/SnackBarMessage',
-  'components/SnappingPreviewLayer',
-  'components/SplitPane',
-  'components/Suggester',
-  'components/TableLog',
-  'components/Tabs',
-  'components/TabsContainer',
-  'components/TabsItem',
-  'components/Toolbar',
-  'components/Tooltip',
-  'components/UploadPopup',
-  'components/Workarea';
+@use 'components/AccountPane';
+@use 'components/App';
+@use 'components/AttachmentEditor';
+@use 'components/BackgroundLayer';
+@use 'components/Breadcrumbs';
+@use 'components/Button';
+@use 'components/CloseButton';
+@use 'components/Comment';
+@use 'components/ColorPicker';
+@use 'components/ContextMenu';
+@use 'components/CodeMirror';
+@use 'components/CppPatchDocs';
+@use 'components/Debugger';
+@use 'components/Editor';
+@use 'components/Helpbox';
+@use 'components/HelpPanel';
+@use 'components/IdeCrashReport';
+@use 'components/Inspector';
+@use 'components/Layers';
+@use 'components/Link';
+@use 'components/MarqueeSelection';
+@use 'components/Modals';
+@use 'components/Node';
+@use 'components/NoPatch';
+@use 'components/PatchDocs';
+@use 'components/PatchGroup';
+@use 'components/PatchGroupItem';
+@use 'components/PatchSVG';
+@use 'components/PatchWrapper';
+@use 'components/Pin';
+@use 'components/PinLabel';
+@use 'components/PinValue';
+@use 'components/PointingPopup';
+@use 'components/PopupPublishProject';
+@use 'components/ProjectBrowser';
+@use 'components/Sidebar';
+@use 'components/SidebarPanel';
+@use 'components/ThemeSettingsPopup';
+@use 'components/SnackBarList';
+@use 'components/SnackBarMessage';
+@use 'components/SnappingPreviewLayer';
+@use 'components/SplitPane';
+@use 'components/Suggester';
+@use 'components/TableLog';
+@use 'components/Tabs';
+@use 'components/TabsContainer';
+@use 'components/TabsItem';
+@use 'components/Toolbar';
+@use 'components/Tooltip';
+@use 'components/UploadPopup';
+@use 'components/Workarea';
 
 // overridden styles for 3rd party components
-@import
-  'components/CodeMirror',
-  'components/CustomScroll',
-  'components/Menubar',
-  'components/ReactDatasheet',
-  'components/SkyLight';
+@use 'components/CustomScroll';
+@use 'components/Menubar';
+@use 'components/ReactDatasheet';
+@use 'components/SkyLight';

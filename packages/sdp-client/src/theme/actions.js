@@ -1,6 +1,6 @@
 import * as AT from './actionTypes.js';
 
-export const setTheme = theme => ({
+export const setTheme = (theme) => ({
   type: AT.SET_THEME,
   payload: { theme },
 });

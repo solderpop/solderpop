@@ -10,8 +10,7 @@ const errMsg = {
   id: 0,
   payload: {
     title: 'Error',
-    note:
-      'Something bad just happened. And we just want to notify you. Without any actions required.',
+    note: 'Something bad just happened. And we just want to notify you. Without any actions required.',
   },
   timestamp: 1234567890,
   type: MESSAGE_TYPE.ERROR,
@@ -32,8 +31,7 @@ const confirmationMsg = {
   id: 1,
   payload: {
     title: 'Confirmation',
-    note:
-      'Message that confirms something. For example, it tells User that Project was successfully saved.',
+    note: 'Message that confirms something. For example, it tells User that Project was successfully saved.',
   },
   timestamp: 1234567890,
   type: MESSAGE_TYPE.CONFIRMATION,
@@ -74,7 +72,7 @@ const notificationWithButton = {
 };
 
 storiesOf('SnackBarMessage', module)
-  .addDecorator(story => <div>{story()}</div>)
+  .addDecorator((story) => <div>{story()}</div>)
   .add('error', () => <SnackBarMessage message={errMsg} />)
   .add('confirmation', () => <SnackBarMessage message={confirmationMsg} />)
   .add('notification', () => <SnackBarMessage message={notificationMsg} />)

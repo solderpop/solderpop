@@ -30,7 +30,7 @@ import {
   subscribeCheckUpdates,
   subscribeUpgradeArduinoPackages,
 } from './arduinoCli.js';
-import { subscribeCompileSimulation } from './wasmCompile.js';
+import subscribeCompileSimulation from './wasmCompile.js';
 import {
   subscribeOnCheckEmsdkInstalled,
   subscribeOnInstallEmsdk,
@@ -186,7 +186,7 @@ function createWindow() {
   webContents.on('will-navigate', handleRedirect);
   webContents.on('new-window', handleRedirect);
 
-  win.on('close', e => {
+  win.on('close', (e) => {
     // a bit of magic, because of weird `onbeforeunload` behaviour.
     // see https://github.com/electron/electron/issues/7977
     if (!confirmedWindowClose) {
@@ -210,13 +210,13 @@ const subscribeToRemoteAction = (processName, remoteAction) => {
   ipcMain.on(processName, (event, data) => {
     event.sender.send(getEventNameWithState(processName, STATES.PROCESS));
     remoteAction(event, data)
-      .then(result => {
+      .then((result) => {
         event.sender.send(
           getEventNameWithState(processName, STATES.COMPLETE),
           result
         );
       })
-      .catch(err => {
+      .catch((err) => {
         event.sender.send(
           getEventNameWithState(processName, STATES.ERROR),
           errorToPlainObject(err)
@@ -235,7 +235,7 @@ const onReady = () => {
   let debugPort = null;
   let userAttemptedCloseSerialPort = false;
 
-  const stopDebugSession = event => {
+  const stopDebugSession = (event) => {
     if (debugPort) {
       userAttemptedCloseSerialPort = true;
       stopDebugSessionHandler(event, debugPort).then(() =>
@@ -254,11 +254,11 @@ const onReady = () => {
   ipcMain.on(
     EVENTS.START_DEBUG_SESSION,
     startDebugSessionHandler(
-      port => {
+      (port) => {
         userAttemptedCloseSerialPort = false;
         debugPort = port;
       },
-      sendErr => {
+      (sendErr) => {
         if (!userAttemptedCloseSerialPort) {
           sendErr();
         }
@@ -315,25 +315,25 @@ const onReady = () => {
       getFileToOpen
     )
       .then(() => WA.loadWorkspacePath())
-      .then(tapP(wsPath => migrateArduinoPackages(wsPath)))
-      .then(wsPath => Promise.all([wsPath, xdb.prepareSketchDir()]))
+      .then(tapP((wsPath) => migrateArduinoPackages(wsPath)))
+      .then((wsPath) => Promise.all([wsPath, xdb.prepareSketchDir()]))
       .then(([wsPath, sketchDir]) =>
         xdb.createCli(getPathToBundledWorkspace(), wsPath, sketchDir, IS_DEV)
       )
       .then(
         R.when(
           () => IS_DEV,
-          arduinoCli =>
+          (arduinoCli) =>
             arduinoCli
               .version()
-              .then(v => {
+              .then((v) => {
                 // eslint-disable-next-line no-console
                 console.log('Arduino-cli bin: ', arduinoCli.getPathToBin());
                 // eslint-disable-next-line no-console
                 console.log('Arduino-cli version: ', v);
                 return arduinoCli.dumpConfig();
               })
-              .then(cfg => {
+              .then((cfg) => {
                 // eslint-disable-next-line no-console
                 console.log(
                   'Arduino-cli sketchbook directory:',
@@ -341,7 +341,7 @@ const onReady = () => {
                 );
                 return arduinoCli;
               })
-              .catch(err =>
+              .catch((err) =>
                 Promise.reject(
                   createError('ARDUINO_CLI_EXITED_WITH_CODE', {
                     message: err.message,
@@ -353,7 +353,7 @@ const onReady = () => {
               )
         )
       )
-      .then(arduinoCli => {
+      .then((arduinoCli) => {
         arduinoCliInstance = arduinoCli;
 
         const subscribeSwitchWorkspace = () => {
@@ -383,7 +383,7 @@ const onReady = () => {
           subscribeOnInstallArduinoDependencies(arduinoCli),
         ];
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err); // eslint-disable-line no-console
         win.webContents.send(
           EVENTS.ERROR_IN_MAIN_PROCESS,

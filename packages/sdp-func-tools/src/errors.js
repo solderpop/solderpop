@@ -1,9 +1,9 @@
 import R from 'ramda';
 import RamdaFantasy from 'ramda-fantasy';
-
-const { Either } = RamdaFantasy;
 import { def } from './types.js';
 import { foldMaybe, foldEither } from './monads.js';
+
+const { Either } = RamdaFantasy;
 
 export const createError = def(
   'createError :: String -> Object -> Error',
@@ -38,14 +38,14 @@ export const prependTraceToError = def(
   'prependTraceToError :: String -> Either Error a -> Either Error a',
   (patchPath, either) =>
     foldEither(
-      R.when(R.is(Error), err => {
+      R.when(R.is(Error), (err) => {
         const newPayload = R.over(
           R.lensProp('trace'),
           R.pipe(R.defaultTo([]), R.concat([patchPath])),
           R.propOr({}, 'payload', err)
         );
         const newErr = R.compose(
-          foldEither(e => {
+          foldEither((e) => {
             // We have to reassign stack to the new Error object
             // to keep the stack trace to place where error really occured
             // eslint-disable-next-line no-param-reassign
@@ -64,7 +64,7 @@ export const prependTraceToError = def(
 export const composeErrorFormatters = def(
   'composeErrorFormatters :: [StrMap Error -> Stanza] -> (Error -> Stanza)',
   R.compose(
-    errorFormatters => err => {
+    (errorFormatters) => (err) => {
       const formatter = errorFormatters[err.type];
       if (!formatter) {
         // Fallback to ugly/default error message

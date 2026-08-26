@@ -7,11 +7,10 @@ export const libInstalled = (libName, version) => ({
 
 export const CLIPBOARD_RECURSION_PASTE_ERROR = {
   title: 'Cannot paste recursively',
-  note:
-    'You’re trying to add a node into its own implementation. That’s forbidden.',
+  note: 'You’re trying to add a node into its own implementation. That’s forbidden.',
   persistent: false,
 };
-export const clipboardMissingPatchPasteError = missingPatches => ({
+export const clipboardMissingPatchPasteError = (missingPatches) => ({
   title: 'Invalid paste',
   note: `The clipboard contains references to missing patches: ${missingPatches}.`,
   solution:

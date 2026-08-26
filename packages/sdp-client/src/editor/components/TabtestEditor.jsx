@@ -13,7 +13,7 @@ const trimGrid = R.compose(
 const EXTRA_ROWS = 2;
 const EXTRA_COLS = 2;
 
-const padGrid = grid => {
+const padGrid = (grid) => {
   const trimmedGrid = trimGrid(grid);
 
   const maxTrimmedCols = R.reduce(
@@ -25,7 +25,7 @@ const padGrid = grid => {
   const desiredColsNumber = maxTrimmedCols + EXTRA_COLS;
 
   return R.compose(
-    R.map(row =>
+    R.map((row) =>
       R.concat(row, R.repeat('', desiredColsNumber - R.length(row)))
     ),
     R.concat(R.__, R.repeat([], EXTRA_ROWS))
@@ -34,7 +34,7 @@ const padGrid = grid => {
 
 const gridToTsv = R.compose(R.join('\n'), R.map(R.join('\t')), trimGrid);
 
-const TabtestEditor = ({
+function TabtestEditor({
   patchPath,
   isActive,
   source,
@@ -43,7 +43,7 @@ const TabtestEditor = ({
   onClose,
   isRunning,
   onRunClick,
-}) => {
+}) {
   const cells = R.compose(
     R.map(R.map(R.objOf('value'))),
     padGrid,
@@ -102,13 +102,13 @@ const TabtestEditor = ({
           className="with-header"
           data={cells}
           valueRenderer={R.prop('value')}
-          overflow={'nowrap'}
+          overflow="nowrap"
           onCellsChanged={onCellsChanged}
         />
       </div>
     </div>
   );
-};
+}
 
 TabtestEditor.propTypes = {
   patchPath: PropTypes.string.isRequired,

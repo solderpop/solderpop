@@ -5,7 +5,7 @@ import LibSuggester from '../src/editor/components/LibSuggester.jsx';
 import '../src/core/styles/main.scss';
 
 storiesOf('LibSuggester', module)
-  .addDecorator(story => (
+  .addDecorator((story) => (
     <div
       style={{
         position: 'absolute',
@@ -21,7 +21,7 @@ storiesOf('LibSuggester', module)
   ))
   .add('basic', () => (
     <LibSuggester
-      onInstallLibrary={lib => {
+      onInstallLibrary={(lib) => {
         // eslint-disable-next-line
         alert(`Library "${lib.owner}/${lib.libname}@${lib.version}" will be installed!`);
       }}

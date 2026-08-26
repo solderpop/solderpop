@@ -1,7 +1,5 @@
 import chai from 'chai';
 
-const { assert } = chai;
-
 import {
   isDirtienessEnabled,
   doesCatchErrors,
@@ -11,6 +9,8 @@ import {
   findXodPragmas,
   findRequireUrls,
 } from '../src/directives.js';
+
+const { assert } = chai;
 
 describe('Stripping C++ comments', () => {
   function assertStrippedEqual(code, expected) {
@@ -131,7 +131,10 @@ describe('Search for #pragma XOD', () => {
       #pragma XOD digun liteta
       `;
 
-    assertPragmasFound(code, [['foo', 'bar', 'baz'], ['digun', 'liteta']]);
+    assertPragmasFound(code, [
+      ['foo', 'bar', 'baz'],
+      ['digun', 'liteta'],
+    ]);
   });
 
   it('finds tricky pragmas', () => {
@@ -141,7 +144,10 @@ describe('Search for #pragma XOD', () => {
       //#pragma XOD commented out
       `;
 
-    assertPragmasFound(code, [['foo', 'bar', 'baz'], ['digun', 'liteta']]);
+    assertPragmasFound(code, [
+      ['foo', 'bar', 'baz'],
+      ['digun', 'liteta'],
+    ]);
   });
 
   it('finds XOD require pragmas', () => {

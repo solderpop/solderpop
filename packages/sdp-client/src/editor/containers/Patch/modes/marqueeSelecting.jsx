@@ -26,19 +26,19 @@ import {
 //
 // =============================================================================
 
-const isSelectionModifierPressed = event => event.metaKey || event.ctrlKey;
+const isSelectionModifierPressed = (event) => event.metaKey || event.ctrlKey;
 
 // New, dependent on arguments
 const findSelectedItems = (api, startPos, endPos) => {
   const inclusive = isInclusiveSelection(startPos, endPos);
   const selectionBox = getSelectionBox(startPos, endPos);
 
-  const filterLinksFn = (inclusive
-    ? filterLinksByInclusiveBox
-    : filterLinksByBox)(selectionBox);
-  const filterNodesFn = (inclusive
-    ? filterNodesByInclusiveBox
-    : filterNodesByBox)(selectionBox);
+  const filterLinksFn = (
+    inclusive ? filterLinksByInclusiveBox : filterLinksByBox
+  )(selectionBox);
+  const filterNodesFn = (
+    inclusive ? filterNodesByInclusiveBox : filterNodesByBox
+  )(selectionBox);
 
   return R.compose(
     R.evolve({
@@ -176,7 +176,7 @@ const marqueeSelectingMode = {
         <PatchSVG
           onMouseMove={bindApi(api, this.onMouseMove)}
           onMouseUp={bindApi(api, this.onMouseUp)}
-          svgRef={svg => {
+          svgRef={(svg) => {
             patchSvgRef = svg;
           }}
         >

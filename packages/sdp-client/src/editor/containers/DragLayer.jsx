@@ -23,11 +23,8 @@ const layerStyles = {
 
 class CustomDragLayer extends React.PureComponent {
   getItemStyles() {
-    const {
-      initialClientOffset,
-      initialSourceClientOffset,
-      currentOffset,
-    } = this.props;
+    const { initialClientOffset, initialSourceClientOffset, currentOffset } =
+      this.props;
 
     if (!initialClientOffset || !initialSourceClientOffset || !currentOffset) {
       return {
@@ -48,10 +45,10 @@ class CustomDragLayer extends React.PureComponent {
 
   renderPatchAsNode() {
     return R.compose(
-      maybeRenderedPatch => maybeRenderedPatch.getOrElse(null),
+      (maybeRenderedPatch) => maybeRenderedPatch.getOrElse(null),
       R.map(
         R.compose(
-          props => (
+          (props) => (
             <Node
               {...props}
               position={props.pxPosition}
@@ -101,7 +98,7 @@ const mapStateToProps = R.applySpec({
 export default R.compose(
   connect(mapStateToProps),
   // eslint-disable-next-line new-cap
-  DragLayer(monitor => ({
+  DragLayer((monitor) => ({
     item: monitor.getItem(),
     // TODO: add monitor.getItemType() when there are more types
     initialClientOffset: monitor.getInitialClientOffset(),

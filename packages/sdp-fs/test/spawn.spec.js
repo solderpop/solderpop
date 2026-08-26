@@ -12,7 +12,7 @@ const { assert } = chai;
 describe('Spawn', () => {
   it('spawnWorkspaceFile resolves to workspace path on success', () => {
     after(() => fs.remove(fixture('./new-workspace')));
-    return spawnWorkspaceFile(fixture('./new-workspace')).then(p => {
+    return spawnWorkspaceFile(fixture('./new-workspace')).then((p) => {
       assert.equal(p, fixture('./new-workspace'));
       assert.ok(doesFileExist(fixture('./new-workspace/.xodworkspace')));
     });

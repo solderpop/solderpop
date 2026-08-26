@@ -1,7 +1,5 @@
 import R from 'ramda';
 import RamdaFantasy from 'ramda-fantasy';
-
-const { Maybe } = RamdaFantasy;
 import { createSelector } from 'reselect';
 
 import { maybeProp } from 'sdp-func-tools';
@@ -16,6 +14,8 @@ import * as Processes from '../processes/selectors.js';
 import * as Debugger from '../debugger/selectors.js';
 
 import { SELECTION_ENTITY_TYPE } from '../editor/constants.js';
+
+const { Maybe } = RamdaFantasy;
 
 //
 // Unsaved changes
@@ -43,9 +43,10 @@ export const getPatchForHelpbox = createSelector(
     if (suggesterVisible && suggesterPatchPath) {
       return XP.getPatchByPath(suggesterPatchPath, project);
     }
-    return R.compose(R.chain(XP.getPatchByPath(R.__, project)), Maybe)(
-      selectedPatchPath
-    );
+    return R.compose(
+      R.chain(XP.getPatchByPath(R.__, project)),
+      Maybe
+    )(selectedPatchPath);
   }
 );
 export const getPatchOfSelectedNodeForQuickHelp = createSelector(

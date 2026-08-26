@@ -2,8 +2,6 @@ import R from 'ramda';
 import shortid from 'shortid';
 
 import RamdaFantasy from 'ramda-fantasy';
-
-const { Either } = RamdaFantasy;
 import { isAmong, fail, explodeEither, notNil } from 'sdp-func-tools';
 
 import {
@@ -12,6 +10,8 @@ import {
 } from './custom-types.js';
 import * as CONST from './constants.js';
 import { def } from './types.js';
+
+const { Either } = RamdaFantasy;
 
 /**
  * Contains resulting value or error
@@ -224,9 +224,9 @@ export const isValidByteLiteral = def(
 
 export const getTypeFromLiteral = def(
   'getTypeFromLiteral :: DataValue -> Either Error DataType',
-  literal => {
+  (literal) => {
     const invalidLiteral = () => fail('BAD_LITERAL_VALUE', { value: literal });
-    const t = typeName => () => Either.of(typeName);
+    const t = (typeName) => () => Either.of(typeName);
 
     return R.cond([
       // Literals always are Strings

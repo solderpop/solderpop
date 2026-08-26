@@ -9,7 +9,7 @@ import {
   getCurrentPatchComments,
 } from '../project/selectors.js';
 
-const removeInvalidSelections = state => {
+const removeInvalidSelections = (state) => {
   const nodes = getCurrentPatchNodes(state);
   const links = getCurrentPatchLinks(state);
   const comments = getCurrentPatchComments(state);

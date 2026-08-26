@@ -33,9 +33,10 @@ export const swap = def(
     const oldItem = R.nth(oldIndex, array);
     const newItem = R.nth(newIndex, array);
 
-    return R.pipe(R.update(oldIndex, newItem), R.update(newIndex, oldItem))(
-      array
-    );
+    return R.pipe(
+      R.update(oldIndex, newItem),
+      R.update(newIndex, oldItem)
+    )(array);
   }
 );
 

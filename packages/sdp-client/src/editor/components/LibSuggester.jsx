@@ -3,8 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import RamdaFantasy from 'ramda-fantasy';
 
-const { Maybe } = RamdaFantasy;
-
 import classNames from 'classnames';
 import Autosuggest from 'react-autosuggest';
 import Highlighter from 'react-highlight-words';
@@ -19,6 +17,8 @@ import { KEYCODE } from '../../utils/constants.js';
 import { restoreFocusOnApp } from '../../utils/browser.js';
 import SuggesterContainer from './SuggesterContainer.jsx';
 import * as MSG from '../messages.js';
+
+const { Maybe } = RamdaFantasy;
 
 const composeValue = R.curry((suggestion, version) => ({
   owner: suggestion.owner,
@@ -66,12 +66,10 @@ class LibSuggester extends React.Component {
 
     this.renderItem = this.renderItem.bind(this);
     this.onChange = this.onChange.bind(this);
-    this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(
-      this
-    );
-    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(
-      this
-    );
+    this.onSuggestionsFetchRequested =
+      this.onSuggestionsFetchRequested.bind(this);
+    this.onSuggestionsClearRequested =
+      this.onSuggestionsClearRequested.bind(this);
     this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
     this.storeInputReference = this.storeInputReference.bind(this);
     this.renderContent = this.renderContent.bind(this);
@@ -138,7 +136,7 @@ class LibSuggester extends React.Component {
       .then(R.of) // TODO: Once it will become an array
       .catch(R.always([]))
       .then(
-        R.tap(data =>
+        R.tap((data) =>
           this.setState(
             R.evolve({
               suggestions: R.concat(R.__, data),
@@ -151,7 +149,7 @@ class LibSuggester extends React.Component {
     const otherLibs = searchLibraries(swaggerUrl, query)
       .catch(R.always([]))
       .then(
-        R.tap(data =>
+        R.tap((data) =>
           this.setState(
             R.evolve({
               suggestions: R.concat(R.__, data),
@@ -187,6 +185,7 @@ class LibSuggester extends React.Component {
       !this.state.loading
     );
   }
+
   isNothingSearched() {
     return (
       !this.state.notFound &&
@@ -247,7 +246,7 @@ class LibSuggester extends React.Component {
       placeholder: 'Search libraries',
       value,
       onChange: this.onChange,
-      onKeyDown: event => {
+      onKeyDown: (event) => {
         const code = event.keyCode || event.which;
         if (code === KEYCODE.ESCAPE && event.target.value === '') {
           this.props.onBlur();

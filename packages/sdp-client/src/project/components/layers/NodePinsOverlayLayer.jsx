@@ -10,19 +10,19 @@ import pureDeepEqual from '../../../utils/pureDeepEqual.js';
 import NodePinsOverlay from '../NodePinsOverlay.jsx';
 import { getPinLinkabilityValidator } from '../../utils.js';
 
-const NodePinsOverlayLayer = ({
+function NodePinsOverlayLayer({
   nodes,
   linkingPin,
   hidden,
   onPinMouseUp,
   onPinMouseDown,
-}) => {
+}) {
   const pinLinkabilityValidator = getPinLinkabilityValidator(linkingPin, nodes);
 
   return (
     <g className={cn('PinsOverlayLayer', { hidden })}>
       {R.compose(
-        R.map(node => (
+        R.map((node) => (
           <NodePinsOverlay
             key={node.id}
             id={node.id}
@@ -40,7 +40,7 @@ const NodePinsOverlayLayer = ({
       )(nodes)}
     </g>
   );
-};
+}
 
 NodePinsOverlayLayer.propTypes = {
   nodes: PropTypes.objectOf(PropTypes.object),

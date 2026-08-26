@@ -47,8 +47,7 @@ export const SIMULATION_ABORTED = 'The simulation was interrupted by the user';
 
 export const DO_NOT_USE_TETHERING_INTERNET_IN_BROWSER = {
   title: 'Tethering unavailable in browser',
-  note:
-    'The internet tethering requires OS features which are not available to the web-browser.',
+  note: 'The internet tethering requires OS features which are not available to the web-browser.',
   solution:
     'Install the desktop version of SolderPop IDE to reveal all features',
 };
@@ -61,13 +60,13 @@ export const LOG_COPY_NOT_SUPPORTED = {
   solution:
     'Install the desktop IDE or use the latest version of Google Chrome / Firefox.',
 };
-export const logCopyError = error => ({
+export const logCopyError = (error) => ({
   title: `Cannot copy log`,
   note: error.message,
   solution: 'Please, report the issue to the SolderPop developers ',
 });
 
-export const logSaveError = error => ({
+export const logSaveError = (error) => ({
   title: `Cannot save log`,
   note: error.message,
   solution: 'Please, report the issue to the SolderPop developers ',

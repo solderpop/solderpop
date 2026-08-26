@@ -4,10 +4,10 @@ import { storiesOf } from '@storybook/react';
 import * as XP from 'sdp-project';
 
 import '../src/core/styles/main.scss';
+import tutorialProject from 'sdp-client-browser/tutorialProject.json';
 import PatchDocs from '../src/editor/components/PatchDocs.jsx';
 
 // TODO: fragile import
-import tutorialProject from '../../sdp-client-browser/tutorialProject.json';
 
 const emptyProject = XP.createProject();
 

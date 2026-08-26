@@ -19,13 +19,13 @@ export const requestCreatePatch = () => ({
   type: PATCH_CREATE_REQUESTED,
 });
 
-export const requestRenamePatch = patchPath => ({
+export const requestRenamePatch = (patchPath) => ({
   type: PATCH_RENAME_REQUESTED,
   payload: { patchPath },
 });
 
 // TODO: split into 'requestDeletePatch' and 'requestDeleteSelectedPatch'?
-export const requestDeletePatch = patchPath => (dispatch, getState) => {
+export const requestDeletePatch = (patchPath) => (dispatch, getState) => {
   const state = getState();
   const selectedPatchPath = patchPath || getSelectedPatchPath(state);
   if (R.isNil(selectedPatchPath)) {
@@ -43,7 +43,7 @@ export const requestDeletePatch = patchPath => (dispatch, getState) => {
   });
 };
 
-export const setSelection = selectedPatchPath => ({
+export const setSelection = (selectedPatchPath) => ({
   type: SET_SELECTION,
   payload: { patchPath: selectedPatchPath },
 });

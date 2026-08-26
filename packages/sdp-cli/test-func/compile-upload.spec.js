@@ -1,17 +1,17 @@
 import { test } from '@oclif/test';
 import chai from 'chai';
-
-const { assert } = chai;
 import path from 'path';
 import process from 'process';
 import fs from 'fs-extra';
 import { createWorkingDirectory, getFilesFromPath } from './helpers.js';
 
+const { assert } = chai;
+
 // save process.exit for unmocking
-const exit = process.exit;
+const { exit } = process;
 
 // save tty status
-const isTTY = process.stdout.isTTY;
+const { isTTY } = process.stdout;
 
 // Since 0.12.0 arduino-cli stores compiled binaries in
 // `outputPath/build/arduino.avr.uno` directory.
@@ -32,7 +32,7 @@ const compile = (wd, myWSPath, outputPath) => {
     ])
     .it(
       `fails with nonexistent board, stdout is empty, stderr with error, non-zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.include(
           ctx.stderr,
@@ -55,7 +55,7 @@ const compile = (wd, myWSPath, outputPath) => {
     ])
     .it(
       `fails with nonexistent board, stdout is empty, stderr is empty (quiet), non-zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.equal(ctx.stderr, '', 'stderr must be empty');
         assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
@@ -72,7 +72,7 @@ const compile = (wd, myWSPath, outputPath) => {
     ])
     .it(
       `fails with nonexistent project/patch, stdout is empty, stderr with error, non-zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.include(
           ctx.stderr,
@@ -94,7 +94,7 @@ const compile = (wd, myWSPath, outputPath) => {
     ])
     .it(
       `fails with nonexistent project/patch, stdout is empty, stderr is empty (quiet), non-zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.equal(ctx.stderr, '', 'stderr must be empty');
         assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
@@ -113,7 +113,7 @@ const compile = (wd, myWSPath, outputPath) => {
     ])
     .it(
       `compile patch, stdout is empty, stderr with messages, zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.include(
           ctx.stderr,
@@ -146,7 +146,7 @@ const compile = (wd, myWSPath, outputPath) => {
     ])
     .it(
       `compile patch with fqbn as argument, stdout is empty, stderr with messages, zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.include(
           ctx.stderr,
@@ -173,7 +173,7 @@ const compile = (wd, myWSPath, outputPath) => {
     .command(['compile', '--debug', 'bundle/workspace/blink', '@/main'])
     .it(
       `compile patch, stdout is empty, stderr is empty (quiet), zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.include(
           ctx.stderr,
@@ -211,7 +211,7 @@ const upload = (wd, myWSPath) => {
     ])
     .it(
       `fails with nonexistent board, stdout is empty, stderr with error, non-zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.include(
           ctx.stderr,
@@ -235,7 +235,7 @@ const upload = (wd, myWSPath) => {
     ])
     .it(
       `fails with nonexistent board, stdout is empty, stderr is empty (quiet), non-zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.equal(ctx.stderr, '', 'stderr must be empty');
         assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
@@ -253,7 +253,7 @@ const upload = (wd, myWSPath) => {
     ])
     .it(
       `fails with nonexistent project/patch, stdout is empty, stderr with error, non-zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.include(
           ctx.stderr,
@@ -276,7 +276,7 @@ const upload = (wd, myWSPath) => {
     ])
     .it(
       `fails with nonexistent project/patch, stdout is empty, stderr is empty (quiet), non-zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.equal(ctx.stderr, '', 'stderr must be empty');
         assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
@@ -290,7 +290,7 @@ const upload = (wd, myWSPath) => {
     .command(['upload', '--debug', 'bundle/workspace/blink', '@/main'])
     .it(
       `try to compile and upload patch, fail on nonexistent port, stdout is empty, stderr with messages, non-zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.include(ctx.stderr, 'Upload failed', 'stderr with messages');
         assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
@@ -310,7 +310,7 @@ const upload = (wd, myWSPath) => {
     ])
     .it(
       `try to compile and upload patch, fail on nonexistent port, stdout is empty, stderr is empty (quiet), non-zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.equal(ctx.stderr, '', 'stderr must be empty');
         assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
@@ -337,7 +337,7 @@ describe('sdpc', () => {
   describe('install dependencies', () => {
     // mock process.exit
     beforeEach(() => {
-      process.exit = code => {
+      process.exit = (code) => {
         process.exitCode = code;
       };
     });
@@ -365,7 +365,7 @@ describe('sdpc', () => {
     describe('common', () => {
       // mock process.exit
       beforeEach(() => {
-        process.exit = code => {
+        process.exit = (code) => {
           process.exitCode = code;
         };
       });
@@ -382,7 +382,7 @@ describe('sdpc', () => {
         .catch(/EEXIT: 0/)
         .it(
           `shows help in stdout, doesn't print to stderr, exits with 0`,
-          ctx => {
+          (ctx) => {
             assert.include(ctx.stdout, '--version', '--version flag not found');
             assert.include(ctx.stdout, '--help', '--help flag not found');
             assert.include(ctx.stdout, '--quiet', '--quiet flag not found');
@@ -404,7 +404,7 @@ describe('sdpc', () => {
         .catch(/EEXIT: 0/)
         .it(
           `shows version in stdout, doesn't print to stderr and exits with 0`,
-          ctx => {
+          (ctx) => {
             assert.include(ctx.stdout, 'sdp-cli', 'version string not found');
             assert.equal(ctx.stderr, '', 'stderr should be emply');
           }
@@ -419,7 +419,7 @@ describe('sdpc', () => {
 
       // mock process.exit
       beforeEach(() => {
-        process.exit = code => {
+        process.exit = (code) => {
           process.exitCode = code;
         };
       });
@@ -441,7 +441,7 @@ describe('sdpc', () => {
 
       // mock process.exit
       beforeEach(() => {
-        process.exit = code => {
+        process.exit = (code) => {
           process.exitCode = code;
         };
       });
@@ -460,7 +460,7 @@ describe('sdpc', () => {
     describe('common', () => {
       // mock process.exit
       beforeEach(() => {
-        process.exit = code => {
+        process.exit = (code) => {
           process.exitCode = code;
         };
       });
@@ -477,7 +477,7 @@ describe('sdpc', () => {
         .catch(/EEXIT: 0/)
         .it(
           `shows help in stdout, doesn't print to stderr, exits with 0`,
-          ctx => {
+          (ctx) => {
             assert.include(ctx.stdout, '--version', '--version flag not found');
             assert.include(ctx.stdout, '--help', '--help flag not found');
             assert.include(ctx.stdout, '--quiet', '--quiet flag not found');
@@ -499,7 +499,7 @@ describe('sdpc', () => {
         .catch(/EEXIT: 0/)
         .it(
           `shows version in stdout, doesn't print to stderr and exits with 0`,
-          ctx => {
+          (ctx) => {
             assert.include(ctx.stdout, 'sdp-cli', 'version string not found');
             assert.equal(ctx.stderr, '', 'stderr should be emply');
           }
@@ -514,7 +514,7 @@ describe('sdpc', () => {
 
       // mock process.exit
       beforeEach(() => {
-        process.exit = code => {
+        process.exit = (code) => {
           process.exitCode = code;
         };
       });
@@ -536,7 +536,7 @@ describe('sdpc', () => {
 
       // mock process.exit
       beforeEach(() => {
-        process.exit = code => {
+        process.exit = (code) => {
           process.exitCode = code;
         };
       });

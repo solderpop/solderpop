@@ -1,19 +1,19 @@
 import { test } from '@oclif/test';
 import chai from 'chai';
-
-const { assert } = chai;
 import path from 'path';
 import process from 'process';
 import fs from 'fs-extra';
 import { bundledWorkspacePath, createWorkingDirectory } from './helpers.js';
 
+const { assert } = chai;
+
 // save process.exit for unmocking
-const exit = process.exit;
+const { exit } = process;
 
 // save tty status
-const isTTY = process.stdout.isTTY;
+const { isTTY } = process.stdout;
 
-const its = wd => {
+const its = (wd) => {
   const myWSPath = path.resolve(wd, 'workspace');
   const resaveSrcPath = path.resolve(bundledWorkspacePath, 'blink');
 
@@ -23,7 +23,7 @@ const its = wd => {
     .command(['resave', `--workspace=${myWSPath}`])
     .it(
       `cannot find project without argument, but creates workspace, prints error to stderr, non-zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.isOk(
           await fs.pathExists(path.resolve(myWSPath, '.xodworkspace')),
           'workspace should be created'
@@ -44,7 +44,7 @@ const its = wd => {
       `--workspace=${myWSPath}`,
       path.resolve(myWSPath, 'kajsdhflkjsdhflkjashldkfjlkjasdfkjl'),
     ])
-    .it('fails when wrong path to project, exits with non-zero code', ctx => {
+    .it('fails when wrong path to project, exits with non-zero code', (ctx) => {
       assert.equal(ctx.stdout, '', 'stdout must be empty');
       assert.include(
         ctx.stderr,
@@ -56,12 +56,15 @@ const its = wd => {
 
   stdMock
     .command(['resave', `--workspace=${myWSPath}`, resaveSrcPath])
-    .it('prints xodball to stdout, messages to stderr and exit with 0', ctx => {
-      const xodball = JSON.parse(ctx.stdout);
-      assert.equal(xodball.name, 'blink', 'stdout must be json');
-      assert.notEqual(ctx.stderr, '', 'stderr must be with messages');
-      assert.equal(process.exitCode, 0, 'exit code must be zero');
-    });
+    .it(
+      'prints xodball to stdout, messages to stderr and exit with 0',
+      (ctx) => {
+        const xodball = JSON.parse(ctx.stdout);
+        assert.equal(xodball.name, 'blink', 'stdout must be json');
+        assert.notEqual(ctx.stderr, '', 'stderr must be with messages');
+        assert.equal(process.exitCode, 0, 'exit code must be zero');
+      }
+    );
 
   stdMock
     .command([
@@ -72,7 +75,7 @@ const its = wd => {
     ])
     .it(
       'save xodball to xodball, prints status messages to stderr, stdout is empty, exit with 0',
-      async ctx => {
+      async (ctx) => {
         assert.isOk(
           await fs.pathExists(path.resolve(wd, 'blink.xodball')),
           'xodball should be created'
@@ -89,7 +92,7 @@ const its = wd => {
     .command(['resave', '-q', resaveSrcPath])
     .it(
       'save xodball to directory, quiet flag (stderr is empty, stdout is empty), workspace and output flags from ENV, exit with 0',
-      async ctx => {
+      async (ctx) => {
         assert.isOk(
           await fs.pathExists(path.resolve(wd, 'blink')),
           'project directory should be created'
@@ -106,7 +109,7 @@ const its = wd => {
     .command(['resave', '-q', resaveSrcPath])
     .it(
       'fails on saving xodball to directory without write access, quiet flag (stderr is empty, stdout is empty), workspace and output flags from ENV, exit with non-zero',
-      ctx => {
+      (ctx) => {
         assert.equal(ctx.stderr, '', 'stderr must be empty');
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
@@ -132,7 +135,7 @@ describe('sdpc resave', () => {
   describe('common', () => {
     // mock process.exit
     beforeEach(() => {
-      process.exit = code => {
+      process.exit = (code) => {
         process.exitCode = code;
       };
     });
@@ -149,7 +152,7 @@ describe('sdpc resave', () => {
       .catch(/EEXIT: 0/)
       .it(
         `shows help in stdout, doesn't print to stderr, exits with 0`,
-        ctx => {
+        (ctx) => {
           assert.include(ctx.stdout, 'PROJECT', 'PROJECT argument not found');
           assert.include(ctx.stdout, '--help', '--help flag not found');
           assert.include(ctx.stdout, '--output', '--output flag not found');
@@ -171,7 +174,7 @@ describe('sdpc resave', () => {
       .catch(/EEXIT: 0/)
       .it(
         `shows version in stdout, doesn't print to stderr and exits with 0`,
-        ctx => {
+        (ctx) => {
           assert.include(ctx.stdout, 'sdp-cli', 'version string not found');
           assert.equal(ctx.stderr, '', 'stderr should be emply');
         }
@@ -186,7 +189,7 @@ describe('sdpc resave', () => {
 
     // mock process.exit
     beforeEach(() => {
-      process.exit = code => {
+      process.exit = (code) => {
         process.exitCode = code;
       };
     });
@@ -207,7 +210,7 @@ describe('sdpc resave', () => {
 
     // mock process.exit
     beforeEach(() => {
-      process.exit = code => {
+      process.exit = (code) => {
         process.exitCode = code;
       };
     });

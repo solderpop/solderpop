@@ -17,14 +17,14 @@ import extractZip from 'extract-zip';
  *
  * :: Path -> Promise Path Error
  */
-export default filePath =>
+export default (filePath) =>
   new Promise((resolve, reject) => {
     let originalRootDirName = null;
     extractZip(
       filePath,
       {
         dir: path.dirname(filePath),
-        onEntry: entry => {
+        onEntry: (entry) => {
           // It reads zip from the beggining, so first entry will be
           // the root directory (if archive contains root directory).
           // But our archives have root directory now.
@@ -34,7 +34,7 @@ export default filePath =>
           originalRootDirName = path.basename(entry.fileName);
         },
       },
-      err => {
+      (err) => {
         if (err) return reject(err);
         return resolve(originalRootDirName);
       }

@@ -1,10 +1,10 @@
 import R from 'ramda';
 
-const { curry } = R;
-
 // because functions exported from Reason are uncurried
 import { linkifyPatchRecursivelyU, splitLinksToBusesU } from './Buses_Js.bs.js';
 import { listUpstreamPinsToNiixU } from './Traversing_Js.bs.js';
+
+const { curry } = R;
 
 export * from './project.js';
 export {
@@ -120,9 +120,7 @@ export * from './optionalFieldsUtils.js';
 export * from './utils.js';
 export * from './types.js';
 export { default as flatten } from './flatten.js';
-export {
-  default as extractBoundInputsToConstNodes,
-} from './extractBoundInputsToConstNodes.js';
+export { default as extractBoundInputsToConstNodes } from './extractBoundInputsToConstNodes.js';
 export { default as expandVariadicNodes } from './expandVariadicNodes.js';
 export { default as expandVariadicPassNodes } from './expandVariadicPassNodes.js';
 export * from './patchPathUtils.js';
@@ -145,9 +143,7 @@ export {
 export { sortGraph } from './gmath.js';
 export { BUILT_IN_TERMINAL_PATCH_PATHS } from './builtinTerminalPatches.js';
 export { BINDABLE_CUSTOM_TYPES, isBindableCustomType } from './custom-types.js';
-export {
-  default as squashTetheringNodes,
-} from './optimizers/squashTetheringNodes.js';
+export { default as squashTetheringNodes } from './optimizers/squashTetheringNodes.js';
 
 export const linkifyPatchRecursively = curry(linkifyPatchRecursivelyU);
 export const splitLinksToBuses = curry(splitLinksToBusesU);

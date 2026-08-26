@@ -1,10 +1,6 @@
 import R from 'ramda';
 import chai from 'chai';
-
-const { assert } = chai;
 import RamdaFantasy from 'ramda-fantasy';
-
-const { Maybe } = RamdaFantasy;
 import { explode } from 'sdp-func-tools';
 
 import { PIN_TYPE } from '../src/constants.js';
@@ -15,6 +11,10 @@ import {
 import { listLocalPatches } from '../src/project.js';
 import { listNodes } from '../src/patch.js';
 import * as Helper from './helpers.js';
+
+const { assert } = chai;
+
+const { Maybe } = RamdaFantasy;
 
 assert.strictEqualJustValue = (actual, expected) => {
   if (Maybe.isNothing(actual)) {

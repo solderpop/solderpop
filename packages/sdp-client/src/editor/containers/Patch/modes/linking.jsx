@@ -14,7 +14,7 @@ import {
 
 import { getOffsetMatrix, bindApi, getMousePosition } from '../modeUtils.js';
 
-const abort = api => {
+const abort = (api) => {
   api.props.actions.deselectAll();
   api.goToDefaultMode();
 };
@@ -146,7 +146,7 @@ const linkingMode = {
       <HotKeys handlers={this.getHotkeyHandlers(api)} className="PatchWrapper">
         <PatchSVG
           onMouseMove={bindApi(api, this.onMouseMove)}
-          svgRef={svg => {
+          svgRef={(svg) => {
             patchSvgRef = svg;
           }}
         >

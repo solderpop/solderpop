@@ -9,7 +9,7 @@ import { getUtmSiteUrl } from '../../utils/urls.js';
 
 const getPinLabel = R.compose(cppEscape, XP.getPinLabel);
 
-const formatPinLabel = pin =>
+const formatPinLabel = (pin) =>
   [
     XP.isConstantType(pin.type) ? 'constant_' : '',
     XP.getPinDirection(pin),
@@ -17,20 +17,19 @@ const formatPinLabel = pin =>
     getPinLabel(pin),
   ].join('');
 
-const formatConstantOutputNotice = pin =>
+const formatConstantOutputNotice = (pin) =>
   XP.isConstantType(pin.type) ? (
     <span className="constant-notice">
       <Icon name="warning" /> Must be defined as
       <code>
         <span className="keyword">static constexpr </span>
         <span className="type">typeof_{getPinLabel(pin)} </span>
-        <span className="variable">{formatPinLabel(pin)} </span>
-        =
+        <span className="variable">{formatPinLabel(pin)} </span>=
       </code>
     </span>
   ) : null;
 
-const CppPatchDocs = ({ patch }) => {
+function CppPatchDocs({ patch }) {
   const [inputPins, outputPins] = R.compose(
     R.map(R.sort(R.ascend(XP.getPinOrder))),
     R.partition(XP.isInputPin),
@@ -45,7 +44,7 @@ const CppPatchDocs = ({ patch }) => {
         <div>
           <span className="pin-direction">Inputs:</span>
           <ul>
-            {inputPins.map(pin => (
+            {inputPins.map((pin) => (
               <li key={XP.getPinKey(pin)}>
                 <span className="pin-label">{formatPinLabel(pin)}</span>
                 <span className={`pin-type ${XP.getPinType(pin)}`}>
@@ -60,7 +59,7 @@ const CppPatchDocs = ({ patch }) => {
         <div className="outputs">
           <span className="pin-direction">Outputs:</span>
           <ul>
-            {outputPins.map(pin => (
+            {outputPins.map((pin) => (
               <li key={XP.getPinKey(pin)}>
                 <span className="pin-label">{formatPinLabel(pin)}</span>
                 <span className={`pin-type ${XP.getPinType(pin)}`}>
@@ -87,7 +86,7 @@ const CppPatchDocs = ({ patch }) => {
       </a>
     </div>
   );
-};
+}
 
 CppPatchDocs.propTypes = {
   patch: PT.object.isRequired,

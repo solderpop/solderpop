@@ -8,7 +8,7 @@ import PopupForm from '../../utils/components/PopupForm.jsx';
 import { HOSTNAME } from '../../utils/urls.js';
 import Button from '../../core/components/Button.jsx';
 
-const PopupPublishProject = ({
+function PopupPublishProject({
   isVisible,
   isPublishing,
   project,
@@ -16,7 +16,7 @@ const PopupPublishProject = ({
   onPublish,
   onRequestToEditPreferences,
   onClose,
-}) => {
+}) {
   const projectName = XP.getProjectName(project);
   const version = XP.getProjectVersion(project);
   const description = XP.getProjectDescription(project);
@@ -30,7 +30,8 @@ const PopupPublishProject = ({
 
   const invalidNameMessage = isValidName ? null : (
     <span className="error">
-      Project has no public name set.<br />
+      Project has no public name set.
+      <br />
       Edit
       <a tabIndex="0" role="button" onClick={onRequestToEditPreferences}>
         project preferences
@@ -81,7 +82,7 @@ const PopupPublishProject = ({
       )}
     </PopupForm>
   );
-};
+}
 
 PopupPublishProject.propTypes = {
   isVisible: PropTypes.bool,

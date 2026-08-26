@@ -5,7 +5,7 @@ import colorPropType from './colorPropType.js';
 
 const THICKNESS = 20;
 
-const preventDefaultOnly = event => event.preventDefault();
+const preventDefaultOnly = (event) => event.preventDefault();
 
 class HueCircle extends React.Component {
   constructor(props) {
@@ -31,6 +31,7 @@ class HueCircle extends React.Component {
     document.addEventListener('mouseup', this.handleEnd);
     document.addEventListener('dragstart', preventDefaultOnly);
   }
+
   componentWillUnmount() {
     document.removeEventListener('mousemove', this.handleMove);
     document.removeEventListener('mouseup', this.handleEnd);
@@ -39,8 +40,8 @@ class HueCircle extends React.Component {
 
   handleStart(event, degree = this.props.color.hsl[0]) {
     const { radius } = this.props;
-    const xMouseShouldBe = Math.sin(degree / 180 * Math.PI) * radius;
-    const yMouseShouldBe = -Math.cos(degree / 180 * Math.PI) * radius;
+    const xMouseShouldBe = Math.sin((degree / 180) * Math.PI) * radius;
+    const yMouseShouldBe = -Math.cos((degree / 180) * Math.PI) * radius;
 
     this.setState({
       dragging: true,
@@ -48,6 +49,7 @@ class HueCircle extends React.Component {
       yMouseDelta: event.clientY - yMouseShouldBe,
     });
   }
+
   handleClick(event) {
     if (!this.circleRef) return;
 
@@ -57,7 +59,7 @@ class HueCircle extends React.Component {
     const xRelativeToCenter = event.clientX - xCenter;
     const yRelativeToCenter = event.clientY - yCenter;
     const degree =
-      Math.atan(yRelativeToCenter / xRelativeToCenter) * 180 / Math.PI +
+      (Math.atan(yRelativeToCenter / xRelativeToCenter) * 180) / Math.PI +
       90 +
       (xRelativeToCenter >= 0 ? 0 : 180);
     const hue = parseInt(degree, 10);
@@ -66,13 +68,14 @@ class HueCircle extends React.Component {
     }
     this.handleStart(event, degree);
   }
+
   handleMove(event, clicked = false) {
     if (this.state.dragging || clicked) {
       event.preventDefault();
       const xRelativeToCenter = event.clientX - this.state.xMouseDelta;
       const yRelativeToCenter = event.clientY - this.state.yMouseDelta;
       const degree =
-        Math.atan(yRelativeToCenter / xRelativeToCenter) * 180 / Math.PI +
+        (Math.atan(yRelativeToCenter / xRelativeToCenter) * 180) / Math.PI +
         90 +
         (xRelativeToCenter >= 0 ? 0 : 180);
       const hue = parseInt(degree, 10);
@@ -81,9 +84,11 @@ class HueCircle extends React.Component {
       }
     }
   }
+
   handleEnd() {
     this.setState({ dragging: false });
   }
+
   handleReset() {
     this.props.onChange(this.props.default);
   }
@@ -103,9 +108,9 @@ class HueCircle extends React.Component {
       marginTop: `-${innerCircleRadius / 2}px`,
     };
     const pointerX =
-      Math.sin(degree / 180 * Math.PI) * (radius - THICKNESS / 2);
+      Math.sin((degree / 180) * Math.PI) * (radius - THICKNESS / 2);
     const pointerY =
-      -Math.cos(degree / 180 * Math.PI) * (radius - THICKNESS / 2);
+      -Math.cos((degree / 180) * Math.PI) * (radius - THICKNESS / 2);
     const pointerRadius = THICKNESS / 2 - THICKNESS / 4;
     const pointerStyle = {
       width: `${pointerRadius * 2}px`,
@@ -118,7 +123,7 @@ class HueCircle extends React.Component {
       <div className="HueCircle" style={circleStyle}>
         <div
           className="HueCircle_area"
-          ref={el => {
+          ref={(el) => {
             this.circleRef = el;
           }}
           style={circleStyle}

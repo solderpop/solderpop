@@ -34,7 +34,7 @@ export const convertPatchToPatchFileContents = def(
 
 export const convertPatchFileContentsToPatch = def(
   'convertPatchFileContentsToPatch :: PatchFileContents -> Patch',
-  fsPatch =>
+  (fsPatch) =>
     R.compose(
       XP.upsertLinks(
         R.map(R.assoc('@@type', 'sdp-project/Link'), R.values(fsPatch.links))

@@ -89,69 +89,69 @@ const isDescturctiveAction = R.compose(
   R.prop('type')
 );
 
-export default (reducer, afterHistoryNavigation = R.identity) => (
-  state,
-  action
-) => {
-  switch (action.type) {
-    case PATCH_HISTORY_UNDO:
-      return R.compose(
-        afterHistoryNavigation,
-        moveThroughHistory(
-          action.payload.patchPath,
-          HISTORY_DIRECTION.PAST,
-          HISTORY_DIRECTION.FUTURE
-        )
-      )(state);
+export default (reducer, afterHistoryNavigation = R.identity) =>
+  (state, action) => {
+    switch (action.type) {
+      case PATCH_HISTORY_UNDO:
+        return R.compose(
+          afterHistoryNavigation,
+          moveThroughHistory(
+            action.payload.patchPath,
+            HISTORY_DIRECTION.PAST,
+            HISTORY_DIRECTION.FUTURE
+          )
+        )(state);
 
-    case PATCH_HISTORY_REDO:
-      return R.compose(
-        afterHistoryNavigation,
-        moveThroughHistory(
-          action.payload.patchPath,
-          HISTORY_DIRECTION.FUTURE,
-          HISTORY_DIRECTION.PAST
-        )
-      )(state);
+      case PATCH_HISTORY_REDO:
+        return R.compose(
+          afterHistoryNavigation,
+          moveThroughHistory(
+            action.payload.patchPath,
+            HISTORY_DIRECTION.FUTURE,
+            HISTORY_DIRECTION.PAST
+          )
+        )(state);
 
-    default: {
-      const nextState = reducer(state, action);
+      default: {
+        const nextState = reducer(state, action);
 
-      const previousPatchesList = R.compose(listLocalPatches, getProject)(
-        state
-      );
+        const previousPatchesList = R.compose(
+          listLocalPatches,
+          getProject
+        )(state);
 
-      const currentPatches = R.compose(
-        R.indexBy(getPatchPath),
-        listLocalPatches,
-        getProject
-      )(nextState);
+        const currentPatches = R.compose(
+          R.indexBy(getPatchPath),
+          listLocalPatches,
+          getProject
+        )(nextState);
 
-      // does not include added patches, but that's ok
-      const changedPreviousPatchesList = R.filter(
-        prev => !R.equals(prev, currentPatches[getPatchPath(prev)]),
-        previousPatchesList
-      );
+        // does not include added patches, but that's ok
+        const changedPreviousPatchesList = R.filter(
+          (prev) => !R.equals(prev, currentPatches[getPatchPath(prev)]),
+          previousPatchesList
+        );
 
-      if (changedPreviousPatchesList.length === 1) {
-        const previousPatchState = R.head(changedPreviousPatchesList);
+        if (changedPreviousPatchesList.length === 1) {
+          const previousPatchState = R.head(changedPreviousPatchesList);
 
-        const changedPatchPath = getPatchPath(previousPatchState);
-        if (!currentPatches[changedPatchPath]) {
-          // patch was deleted, but nothing else was affected
-          return clearPatchHistory(changedPatchPath, nextState);
+          const changedPatchPath = getPatchPath(previousPatchState);
+          if (!currentPatches[changedPatchPath]) {
+            // patch was deleted, but nothing else was affected
+            return clearPatchHistory(changedPatchPath, nextState);
+          }
+
+          return savePatchHistoty(previousPatchState, nextState);
+        }
+        if (
+          changedPreviousPatchesList.length > 1 ||
+          isDescturctiveAction(action)
+        ) {
+          // some destructive stuff happened
+          return clearAllHistory(nextState);
         }
 
-        return savePatchHistoty(previousPatchState, nextState);
-      } else if (
-        changedPreviousPatchesList.length > 1 ||
-        isDescturctiveAction(action)
-      ) {
-        // some destructive stuff happened
-        return clearAllHistory(nextState);
+        return nextState;
       }
-
-      return nextState;
     }
-  }
-};
+  };

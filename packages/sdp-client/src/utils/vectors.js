@@ -15,9 +15,12 @@ const vectorToPosition = ([x, y]) => ({ x, y });
  */
 // :: Number -> Vector -> Vector
 const changeVectorLength = R.curry((amount, vector) =>
-  R.compose(sc => vec.scale(sc, vector), R.add(1), R.divide(amount), vec.mag)(
-    vector
-  )
+  R.compose(
+    (sc) => vec.scale(sc, vector),
+    R.add(1),
+    R.divide(amount),
+    vec.mag
+  )(vector)
 );
 
 // :: Number -> Position -> Position -> Position
@@ -26,8 +29,9 @@ export const changeLineLength = R.curry((amount, pos1, pos2) => {
   const v1 = positionToVector(pos1);
   const v2 = positionToVector(pos2);
   const d = vec.sub(v2, v1);
-  return R.compose(vectorToPosition, vec.add(v1), changeVectorLength)(
-    amount,
-    d
-  );
+  return R.compose(
+    vectorToPosition,
+    vec.add(v1),
+    changeVectorLength
+  )(amount, d);
 });

@@ -3,7 +3,10 @@ import * as client from 'sdp-client';
 import { foldMaybe } from 'sdp-func-tools';
 import { messages as xdbMessages } from 'sdp-deploy-bin';
 import { INSTALL_ARDUINO_DEPENDENCIES_MSG } from './constants.js';
-import { installArduinoDependencies, updateArduinoPackages } from './runners.js';
+import {
+  installArduinoDependencies,
+  updateArduinoPackages,
+} from './runners.js';
 import { installDeps, updatePackages } from './actions.js';
 import { ARDUPACKAGES_UPGRADE_PROCEED } from './actionTypes.js';
 import getLibraryNames from './getLibraryNames.js';
@@ -14,7 +17,7 @@ const progressToProcess = R.curry((processFn, progressData) => {
   processFn(progressData.message, progressData.percentage);
 });
 
-export default store => next => action => {
+export default (store) => (next) => (action) => {
   if (
     action.type === client.MESSAGE_BUTTON_CLICKED &&
     action.payload === INSTALL_ARDUINO_DEPENDENCIES_MSG
@@ -45,7 +48,7 @@ export default store => next => action => {
             );
             proc.success();
           })
-          .catch(err => {
+          .catch((err) => {
             const snackbarError = formatErrorMessage(err);
             const logErr = formatLogError(err);
             store.dispatch(client.addError(snackbarError));
@@ -68,7 +71,7 @@ export default store => next => action => {
         );
         proc.success();
       })
-      .catch(err => {
+      .catch((err) => {
         const snackbarError = formatErrorMessage(err);
         const logErr = formatLogError(err);
         store.dispatch(client.addError(snackbarError));

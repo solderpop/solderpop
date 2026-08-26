@@ -17,6 +17,7 @@ class PopupSetWorkspace extends React.Component {
       this.props.onChange(filePaths[0]);
     }
   }
+
   onClose() {
     if (this.props.isClosable) {
       this.props.onClose();
@@ -28,7 +29,8 @@ class PopupSetWorkspace extends React.Component {
       return {
         currentWorkspace: (
           <p>
-            To save your project you should choose a workspace directory.<br />
+            To save your project you should choose a workspace directory.
+            <br />
             We&apos;ll put all your projects into this directory, but you can
             easily switch it in the future.
           </p>
@@ -40,7 +42,8 @@ class PopupSetWorkspace extends React.Component {
     return {
       currentWorkspace: (
         <p>
-          Current workspace directory:<br />
+          Current workspace directory:
+          <br />
           <code>{this.props.workspace}</code>
         </p>
       ),

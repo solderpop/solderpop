@@ -59,7 +59,7 @@ const indexData = [
 ];
 
 storiesOf('Suggester', module)
-  .addDecorator(story => (
+  .addDecorator((story) => (
     <div
       style={{
         position: 'absolute',
@@ -76,7 +76,7 @@ storiesOf('Suggester', module)
   .add('basic', () => (
     <Suggester
       searchPatches={createPatchSearcher()(indexData)}
-      onAddNode={val => {
+      onAddNode={(val) => {
         // eslint-disable-next-line
         alert(`Node "${val}" will be placed!`);
       }}

@@ -33,7 +33,8 @@ storiesOf('Tooltip', module).add('basic', () => (
     <HOC
       content={
         <div>
-          We can show any content here:<br />
+          We can show any content here:
+          <br />
           <img src="http://placehold.it/100x30" alt="" />
           <br />
           <p style={{ color: 'red' }}>Even colorful paragraphs!</p>

@@ -1,7 +1,5 @@
 import R from 'ramda';
 import chai from 'chai';
-
-const { assert } = chai;
 import * as XF from 'sdp-func-tools';
 
 import * as Pin from '../src/pin.js';
@@ -17,6 +15,8 @@ import * as PPU from '../src/patchPathUtils.js';
 import { TERMINALS_LIB_NAME } from '../src/internal/patchPathUtils.js';
 
 import * as Helper from './helpers.js';
+
+const { assert } = chai;
 
 const emptyPatch = Helper.defaultizePatch({});
 
@@ -619,9 +619,10 @@ describe('Patch', () => {
           },
         });
 
-        const pinTypes = R.compose(R.map(Pin.getPinType), Patch.listOutputPins)(
-          testPatch
-        );
+        const pinTypes = R.compose(
+          R.map(Pin.getPinType),
+          Patch.listOutputPins
+        )(testPatch);
 
         assert.deepEqual(pinTypes, [
           '@/my-custom-type',
@@ -1129,7 +1130,7 @@ describe('Patch', () => {
       const link = { id: linkId, input: validInput, output: validOutput };
       const valid = Patch.validateLink(link, patch);
       Helper.expectEitherRight(
-        validLink => assert.equal(validLink, link),
+        (validLink) => assert.equal(validLink, link),
         valid
       );
     });
@@ -1231,11 +1232,11 @@ describe('Patch', () => {
         assert.deepEqual(sortedPatch, expectedPatch);
       });
       it('getTopology: should return correct topology', () => {
-        Helper.expectEitherRight(topology => {
+        Helper.expectEitherRight((topology) => {
           assert.deepEqual(topology, ['a', 'b', 'c']);
         }, Patch.getTopology(patch));
 
-        Helper.expectEitherRight(topology => {
+        Helper.expectEitherRight((topology) => {
           assert.deepEqual(topology, ['0', '1', '2']);
         }, Patch.getTopology(expectedPatch));
       });
@@ -1606,7 +1607,7 @@ describe('Patch', () => {
         assert.equal(Patch.getArityStepFromPatch(patch).isNothing, true);
       });
 
-      const createTestForJust = n => {
+      const createTestForJust = (n) => {
         it(`returns Maybe ${n} for patch with variadic Node`, () => {
           const patch = Helper.defaultizePatch({
             nodes: {

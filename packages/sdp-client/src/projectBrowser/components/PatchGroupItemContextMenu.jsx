@@ -5,7 +5,7 @@ import { ContextMenu, MenuItem, connectMenu } from 'react-contextmenu';
 
 import { PATCH_GROUP_CONTEXT_MENU_ID } from '../constants.js';
 
-const onContextMenuItemClick = onClick => (event, data) => {
+const onContextMenuItemClick = (onClick) => (event, data) => {
   onClick(data.patchPath);
 
   // Need to force focus on Editor to provide use of its hotkeys
@@ -14,7 +14,7 @@ const onContextMenuItemClick = onClick => (event, data) => {
   document.getElementById('Editor').focus();
 };
 
-const PatchGroupItemContextMenu = props => {
+function PatchGroupItemContextMenu(props) {
   const trigger = props.trigger ? props.trigger : {};
 
   const renamePatch = trigger.isLocalPatch ? (
@@ -82,7 +82,7 @@ const PatchGroupItemContextMenu = props => {
       </MenuItem>
     </ContextMenu>
   );
-};
+}
 
 PatchGroupItemContextMenu.propTypes = {
   trigger: PropTypes.shape({

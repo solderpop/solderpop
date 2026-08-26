@@ -6,7 +6,7 @@ import { createError, notNil } from 'sdp-func-tools';
 
 import arduinoH from 'sdp-tabtest/cpp/Arduino.h';
 import arduinoCpp from 'sdp-tabtest/cpp/Arduino.cpp';
-import xStringFormatInl from '../../../cpplib/catch2utils/XStringFormat.inl';
+import xStringFormatInl from "sdp-cli/bundle/catch2utils/XStringFormat.inl";
 
 import * as EC from './errorCodes.js';
 

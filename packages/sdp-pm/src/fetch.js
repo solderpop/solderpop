@@ -27,7 +27,7 @@ import {
 // :: (b -> c) -> (() => Promise a b) -> Promise a c
 const retryExceptAny400 = retryOrFail(
   [500, 1000, 2000, 3000],
-  res => res.status && res.status >= 400 && res.status < 500
+  (res) => res.status && res.status >= 400 && res.status < 500
 );
 
 // =============================================================================
@@ -63,9 +63,9 @@ export const fetchLibData = R.curry((swaggerUrl, libQuery) => {
       .then(rejectUnexistingVersion(params));
   };
 
-  return getSwaggerClient(swaggerUrl).then(swagger =>
+  return getSwaggerClient(swaggerUrl).then((swagger) =>
     R.compose(
-      unfoldMaybeLibQuery(params => fetchFn(swagger, params)),
+      unfoldMaybeLibQuery((params) => fetchFn(swagger, params)),
       parseLibQuery
     )(libQuery)
   );
@@ -94,7 +94,7 @@ export const searchLibraries = R.curry((swaggerUrl, libQuery) => {
       .then(R.prop('records'));
   };
 
-  return getSwaggerClient(swaggerUrl).then(swagger =>
+  return getSwaggerClient(swaggerUrl).then((swagger) =>
     fetchFn(swagger, libQuery)
   );
 });
@@ -122,16 +122,17 @@ export const fetchLibrary = R.curry((swaggerUrl, libQuery) => {
         )
       )
       .then(R.prop('obj'))
-      .then(xodball =>
-        R.compose(eitherToPromise, fromXodballData)(xodball).catch(
-          rejectWithCode(ERR_CODES.INVALID_XODBALL)
-        )
+      .then((xodball) =>
+        R.compose(
+          eitherToPromise,
+          fromXodballData
+        )(xodball).catch(rejectWithCode(ERR_CODES.INVALID_XODBALL))
       );
   };
 
-  return getSwaggerClient(swaggerUrl).then(swagger =>
+  return getSwaggerClient(swaggerUrl).then((swagger) =>
     R.compose(
-      unfoldMaybeLibQuery(params => fetchFn(swagger, params)),
+      unfoldMaybeLibQuery((params) => fetchFn(swagger, params)),
       parseLibQuery
     )(libQuery)
   );
@@ -143,11 +144,12 @@ export const fetchLibsReqursively = R.curry(
     if (libNamesToFetch.length === 0) return Promise.resolve(fetchedLibs);
 
     const nextLibName = R.head(libNamesToFetch);
-    return fetchLibrary(swaggerUrl, nextLibName).then(lib => {
+    return fetchLibrary(swaggerUrl, nextLibName).then((lib) => {
       const nextFetchedLibs = R.assoc(nextLibName, lib, fetchedLibs);
-      const fetchedLibNames = R.compose(R.map(getLibName), R.keys)(
-        nextFetchedLibs
-      );
+      const fetchedLibNames = R.compose(
+        R.map(getLibName),
+        R.keys
+      )(nextFetchedLibs);
       const nextLibNamesToFetch = R.compose(
         R.concat(R.__, R.tail(libNamesToFetch)),
         R.reject(R.either(isAmong(fetchedLibNames), isAmong(existingLibNames))),

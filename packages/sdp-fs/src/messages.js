@@ -4,7 +4,7 @@ import { PROJECT_LOADED_WITH_INVALID_PATCH_PATHS } from './errorCodes.js';
 const formatPatchPaths = R.compose(
   R.join(', '),
   R.when(
-    patchPaths => patchPaths.length > 3,
+    (patchPaths) => patchPaths.length > 3,
     R.compose(R.append('…'), R.take(3))
   )
 );

@@ -39,7 +39,7 @@ import packageJson from '../../../package.json';
 import * as actions from '../actions.js';
 import * as uploadActions from '../../upload/actions.js';
 import { listBoards, upload } from '../../upload/arduinoCli.js';
-import { compileSimulation } from '../../upload/wasmCompile.js';
+import compileSimulation from '../../upload/wasmCompile.js';
 import * as debuggerIPC from '../../debugger/ipcActions.js';
 import {
   getUploadProcess,
@@ -80,7 +80,10 @@ import getLibraryNames from '../../arduinoDependencies/getLibraryNames.js';
 
 import { subscribeAutoUpdaterEvents } from '../autoupdate.js';
 import subscribeToTriggerMainMenuRequests from '../../testUtils/triggerMainMenu.js';
-import { TRIGGER_SAVE_AS, TRIGGER_LOAD_PROJECT } from '../../testUtils/events.js';
+import {
+  TRIGGER_SAVE_AS,
+  TRIGGER_LOAD_PROJECT,
+} from '../../testUtils/events.js';
 
 import {
   getOpenDialogFileFilters,
@@ -100,9 +103,9 @@ const DEFAULT_CANVAS_HEIGHT = 600;
 // a Save As dialog on the user's behalf.
 const AUTOSAVE_INTERVAL_MS = 2 * 60 * 1000;
 
-const ThemeSettingsPopup = client.theme.components.ThemeSettingsPopup;
+const { ThemeSettingsPopup } = client.theme.components;
 
-const applyTheme = colors => {
+const applyTheme = (colors) => {
   if (!colors || typeof document === 'undefined') return;
   R.forEachObjIndexed((value, key) => {
     const cssKey = `--theme-${key
@@ -142,9 +145,8 @@ class App extends client.App {
     this.selectAll = this.selectAll.bind(this);
 
     this.onUploadToArduinoClicked = this.onUploadToArduinoClicked.bind(this);
-    this.onUploadToArduinoAndDebugClicked = this.onUploadToArduinoAndDebugClicked.bind(
-      this
-    );
+    this.onUploadToArduinoAndDebugClicked =
+      this.onUploadToArduinoAndDebugClicked.bind(this);
     this.onUploadToArduino = this.onUploadToArduino.bind(this);
     this.onConnectSerial = this.onConnectSerial.bind(this);
     this.onSerialPortChange = this.onSerialPortChange.bind(this);
@@ -165,9 +167,8 @@ class App extends client.App {
     this.onLoadProject = this.onLoadProject.bind(this);
     this.onArduinoPathChange = this.onArduinoPathChange.bind(this);
 
-    this.onStopDebuggerSessionClicked = this.onStopDebuggerSessionClicked.bind(
-      this
-    );
+    this.onStopDebuggerSessionClicked =
+      this.onStopDebuggerSessionClicked.bind(this);
 
     this.showError = this.showError.bind(this);
 
@@ -175,26 +176,23 @@ class App extends client.App {
     this.showThemeSettingsPopup = this.showThemeSettingsPopup.bind(this);
     this.hideThemeSettingsPopup = this.hideThemeSettingsPopup.bind(this);
     this.showPopupSetWorkspace = this.showPopupSetWorkspace.bind(this);
-    this.showPopupSetWorkspaceNotCancellable = this.showPopupSetWorkspaceNotCancellable.bind(
-      this
-    );
+    this.showPopupSetWorkspaceNotCancellable =
+      this.showPopupSetWorkspaceNotCancellable.bind(this);
     this.showCreateWorkspacePopup = this.showCreateWorkspacePopup.bind(this);
 
-    this.requestInstallArduinoDependencies = this.requestInstallArduinoDependencies.bind(
-      this
-    );
+    this.requestInstallArduinoDependencies =
+      this.requestInstallArduinoDependencies.bind(this);
 
     this.onUpdatePackagesClicked = this.onUpdatePackagesClicked.bind(this);
-    this.onManageLocalSimulationClicked = this.onManageLocalSimulationClicked.bind(
-      this
-    );
+    this.onManageLocalSimulationClicked =
+      this.onManageLocalSimulationClicked.bind(this);
 
     this.initNativeMenu();
 
     this.hotkeyHandlers = R.merge(
       {
-        [client.COMMAND.UPLOAD_WITH_DEBUG]: this
-          .onUploadToArduinoAndDebugClicked,
+        [client.COMMAND.UPLOAD_WITH_DEBUG]:
+          this.onUploadToArduinoAndDebugClicked,
       },
       this.defaultHotkeyHandlers
     );
@@ -206,7 +204,7 @@ class App extends client.App {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const props = this.props;
+    const { props } = this;
     // Custom checks for some props
     // All other props will be checked for ===
     const propChecks = {
@@ -217,7 +215,7 @@ class App extends client.App {
     const propEquality = R.mapObjIndexed((val, key) =>
       R.ifElse(
         R.has(key),
-        R.pipe(R.prop(key), check => check(val, nextProps[key])),
+        R.pipe(R.prop(key), (check) => check(val, nextProps[key])),
         () => val === nextProps[key]
       )(propChecks)
     )(props);
@@ -266,10 +264,7 @@ class App extends client.App {
       EVENTS.PAN_TO_CENTER,
       this.props.actions.setCurrentPatchOffsetToCenter
     );
-    ipcRenderer.on(
-      EVENTS.FIRST_LAUNCH,
-      this.props.actions.firstLaunchDetected
-    );
+    ipcRenderer.on(EVENTS.FIRST_LAUNCH, this.props.actions.firstLaunchDetected);
 
     // Notify about errors in the Main Process
     ipcRenderer.on(EVENTS.ERROR_IN_MAIN_PROCESS, (event, error) => {
@@ -302,14 +297,14 @@ class App extends client.App {
 
     if (IS_DEV) {
       // Besause we can't control file dialogs in autotests
-      ipcRenderer.on(TRIGGER_SAVE_AS, projectPath => {
+      ipcRenderer.on(TRIGGER_SAVE_AS, (projectPath) => {
         if (!projectPath) {
           throw new Error('Expected projectPath to be present');
         }
 
         this.saveAs(projectPath, true, false).catch(noop);
       });
-      ipcRenderer.on(TRIGGER_LOAD_PROJECT, projectPath => {
+      ipcRenderer.on(TRIGGER_LOAD_PROJECT, (projectPath) => {
         if (!projectPath) {
           throw new Error('Expected projectPath to be present');
         }
@@ -329,7 +324,7 @@ class App extends client.App {
     clearInterval(this.autosaveIntervalId);
     // Unsubscribe from all ipc events
     R.map(
-      eventName => ipcRenderer.removeAllListeners(eventName),
+      (eventName) => ipcRenderer.removeAllListeners(eventName),
       ipcRenderer.eventNames()
     );
   }
@@ -367,9 +362,9 @@ class App extends client.App {
     let sessionGlobals = []; // TODO: Refactor
 
     eitherToPromise(eitherTProject)
-      .then(tProject => {
+      .then((tProject) => {
         const globalsInProject = listGlobals(tProject);
-        return this.getGlobals(globalsInProject).then(globals => {
+        return this.getGlobals(globalsInProject).then((globals) => {
           sessionGlobals = globals; // TODO: Refactor
           return R.compose(eitherToPromise, extendTProjectWithGlobals)(
             globals,
@@ -378,7 +373,7 @@ class App extends client.App {
         });
       })
       .then(
-        tapP(tProj => {
+        tapP((tProj) => {
           const libraries = getRequireUrls(tProj);
           const checkProcess = this.props.actions.checkDeps();
           const deps = R.compose(
@@ -394,7 +389,7 @@ class App extends client.App {
             )
           )(board);
           return checkArduinoDependencies(
-            progressData =>
+            (progressData) =>
               checkProcess.progress(
                 progressData.note,
                 progressData.percentage * 10
@@ -403,16 +398,18 @@ class App extends client.App {
           )
             .then(this.requestInstallArduinoDependencies)
             .then(() => checkProcess.success())
-            .catch(err => {
+            .catch((err) => {
               checkProcess.delete();
               return Promise.reject(err);
             });
         })
       )
-      .then(tProject => Promise.all([transpile(tProject), loadWorkspacePath()]))
+      .then((tProject) =>
+        Promise.all([transpile(tProject), loadWorkspacePath()])
+      )
       .then(([code, ws]) =>
         upload(
-          progressData => {
+          (progressData) => {
             proc.progress(
               progressData.message,
               progressData.percentage,
@@ -439,12 +436,12 @@ class App extends client.App {
       .then(() => {
         if (debug) {
           foldEither(
-            error => {
+            (error) => {
               const err = client.composeMessage(error.message);
               this.props.actions.addError(err);
               return Promise.reject(err);
             },
-            tProject => {
+            (tProject) => {
               const nodeIdsMap = getNodeIdsMap(tProject);
               const nodePinKeysMap = getNodePinKeysMap(tProject);
               const tableLogNodeIds = getTableLogNodeIds(tProject);
@@ -489,7 +486,7 @@ class App extends client.App {
           );
         }
       })
-      .catch(err => {
+      .catch((err) => {
         if (err.type === 'ARDUINO_DEPENDENCIES_MISSING') {
           proc.progress(formatLogError(err), 0, client.LOG_TAB_TYPE.INSTALLER);
           proc.delete();
@@ -595,11 +592,10 @@ class App extends client.App {
       .then(({ canceled, filePath }) => {
         if (canceled) return;
 
-        this.saveAs(filePath, true, true)
-          .then(onAfterSave)
-          .catch(noop);
+        this.saveAs(filePath, true, true).then(onAfterSave).catch(noop);
       });
   }
+
   onSaveCopyAs() {
     dialog
       .showSaveDialog(
@@ -918,7 +914,7 @@ class App extends client.App {
     const helpItem = R.last(template);
 
     R.compose(
-      finalTemplate => {
+      (finalTemplate) => {
         const menu = Menu.buildFromTemplate(finalTemplate);
         Menu.setApplicationMenu(menu);
         // for testing purposes
@@ -1177,20 +1173,28 @@ class App extends client.App {
             {this.state.downloadProgressPopupError ? (
               <div>
                 <p>
-                  Error occured during downloading or installing the update.<br />
+                  Error occured during downloading or installing the update.
+                  <br />
                   Please report the bug on our{' '}
-                  <a href="https://forum.solderpop.io/" rel="noopener noreferrer">
+                  <a
+                    href="https://forum.solderpop.io/"
+                    rel="noopener noreferrer"
+                  >
                     forum
-                  </a>.
+                  </a>
+                  .
                 </p>
                 <pre>{this.state.downloadProgressPopupError}</pre>
               </div>
             ) : (
               <div>
-                <p>Downloading of the update for SolderPop IDE is in progress.</p>
+                <p>
+                  Downloading of the update for SolderPop IDE is in progress.
+                </p>
                 <p>
                   After download, we will automatically install it and restart
-                  the application.<br />
+                  the application.
+                  <br />
                   It could take up to a few minutes.
                 </p>
                 <p>Keep calm and brew a tea.</p>
@@ -1279,7 +1283,7 @@ const mapStateToProps = R.applySpec({
   },
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(
     R.merge(client.App.actions, {
       requestOpenProject: client.requestOpenProject,
@@ -1289,7 +1293,6 @@ const mapDispatchToProps = dispatch => ({
       switchWorkspace: settingsActions.switchWorkspace,
       openProject: client.openProject,
       saveAll: actions.saveAll,
-      openTutorial: actions.openTutorial,
       uploadToArduino: uploadActions.uploadToArduino,
       uploadToArduinoConfig: uploadActions.uploadToArduinoConfig,
       hideUploadConfigPopup: uploadActions.hideUploadConfigPopup,

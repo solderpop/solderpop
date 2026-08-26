@@ -3,10 +3,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import chai from 'chai';
 
+import parseImplementation from '../src/parseImplementation.js';
+
 const { assert } = chai;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-import parseImplementation from '../src/parseImplementation.js';
 
 describe('parseImplementation', () => {
   it('extracts code before, inside, and after node definition', () => {

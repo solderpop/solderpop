@@ -22,6 +22,6 @@ export const sendStartDebuggerSession = (
   });
 };
 
-export const sendStopDebuggerSession = ipcRenderer => {
+export const sendStopDebuggerSession = (ipcRenderer) => {
   ipcRenderer.send(EVENTS.STOP_DEBUG_SESSION);
 };

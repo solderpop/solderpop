@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 @mixin link-parts-coloring($type-color) {
   .line {
     stroke: $type-color;

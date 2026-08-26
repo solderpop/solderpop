@@ -71,10 +71,12 @@ class PointingPopup extends React.Component {
 
     this.onUpdatePosition = this.onUpdatePosition.bind(this);
   }
+
   componentDidMount() {
     this.onUpdatePosition();
     this.timer = setInterval(() => this.onUpdatePosition(), 5);
   }
+
   componentDidUpdate(prevProps, prevState) {
     if (prevState.isVisible && !this.state.isVisible) {
       this.props.hidePopup();
@@ -88,11 +90,13 @@ class PointingPopup extends React.Component {
       this.onUpdatePosition();
     }
   }
+
   componentWillUnmount() {
     clearInterval(this.timer);
     this.timer = null;
     this.props.hidePopup();
   }
+
   onUpdatePosition() {
     if (!this.ref || !this.props.isVisible) return;
     const item = document.querySelector(
@@ -122,7 +126,7 @@ class PointingPopup extends React.Component {
     const jut = rightSided ? underflow : -overflow;
     const left = jut + (rightSided ? position.left - elWidth : position.right);
 
-    const top = position.top;
+    const { top } = position;
     const windowHeight = window.innerHeight;
     const elHeight = this.ref.clientHeight;
     const isFitWindow = top + elHeight < windowHeight;
@@ -140,17 +144,21 @@ class PointingPopup extends React.Component {
       rightSided,
     });
   }
+
   getOffset() {
     return {
       transform: `translate(${this.state.left}px, ${this.state.top}px)`,
     };
   }
+
   getPointerOffset() {
     return { transform: `translateY(${this.state.pointerTop}px)` };
   }
+
   updateRef(el) {
     this.ref = el;
   }
+
   render() {
     const { isVisible } = this.props;
     if (!isVisible) return null;

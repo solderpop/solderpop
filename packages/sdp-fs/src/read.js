@@ -6,7 +6,7 @@ import { expandHomeDir } from './utils.js';
 import { IGNORE_FILENAMES } from './constants.js';
 
 // :: rootPath -> Promise
-export const readDir = rootPath =>
+export const readDir = (rootPath) =>
   new Promise((resolve, reject) => {
     const resolvedPath = path.resolve(expandHomeDir(rootPath));
     recReadDir(resolvedPath, IGNORE_FILENAMES, (err, files) => {
@@ -19,7 +19,7 @@ export const readDir = rootPath =>
   });
 
 // :: inputPath -> Promise
-export const readFile = inputPath =>
+export const readFile = (inputPath) =>
   new Promise((resolve, reject) => {
     const resolvedPath = path.resolve(expandHomeDir(inputPath));
     fs.readFile(resolvedPath, 'utf8', (err, data) => {
@@ -33,10 +33,10 @@ export const readFile = inputPath =>
   });
 
 // :: inputPath -> Promise
-export const readJSON = inputPath =>
+export const readJSON = (inputPath) =>
   readFile(inputPath)
     .then(JSON.parse)
-    .catch(err => {
+    .catch((err) => {
       throw Object.assign(err, { path: inputPath });
     });
 

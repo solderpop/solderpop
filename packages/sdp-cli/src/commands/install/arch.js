@@ -22,7 +22,7 @@ class InstallArchCommand extends BaseCommand {
         workspace,
         sketchDir
       );
-      await aCli.core.install(progress => {
+      await aCli.core.install((progress) => {
         if (progress.message !== null) messages.push(progress.message);
         this.printArduinoCliProgress(progress);
       }, fqbn);

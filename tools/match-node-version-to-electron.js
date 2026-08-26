@@ -34,8 +34,8 @@ function updateNvmrc(nodeVersion) {
 }
 
 fetch('https://unpkg.com/electron-releases/lite.json')
-  .then(response => response.json())
-  .then(electronReleases => {
+  .then((response) => response.json())
+  .then((electronReleases) => {
     const release = electronReleases.find(
       ({ version }) => version === electronVersion
     );
@@ -49,7 +49,7 @@ fetch('https://unpkg.com/electron-releases/lite.json')
 
     process.exit(0);
   })
-  .catch(err => {
+  .catch((err) => {
     console.error(err);
     process.exit(1);
   });

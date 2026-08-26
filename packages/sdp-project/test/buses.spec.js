@@ -5,7 +5,7 @@ import * as XP from '../src/index.js';
 
 // assume that nodes have an unique combination of
 // type, label and position
-const calculateNodeIdForStructuralComparison = node => {
+const calculateNodeIdForStructuralComparison = (node) => {
   const type = XP.getNodeType(node);
   const label = XP.getNodeLabel(node);
   const position = XP.getNodePosition(node);

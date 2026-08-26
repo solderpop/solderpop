@@ -73,11 +73,11 @@ export const getSelectionBox = (startPos, endPos) => ({
 });
 
 // Filters
-export const filterLinksByBox = R.uncurryN(2, box =>
+export const filterLinksByBox = R.uncurryN(2, (box) =>
   R.filter(isLineBetween(box))
 );
-export const filterLinksByInclusiveBox = R.uncurryN(2, box =>
-  R.filter(link =>
+export const filterLinksByInclusiveBox = R.uncurryN(2, (box) =>
+  R.filter((link) =>
     R.anyPass([
       isLineBetween,
       isLineIntersectsTop,
@@ -88,9 +88,9 @@ export const filterLinksByInclusiveBox = R.uncurryN(2, box =>
   )
 );
 
-export const filterNodesByInclusiveBox = R.uncurryN(2, box =>
+export const filterNodesByInclusiveBox = R.uncurryN(2, (box) =>
   R.filter(isNodeIntersectedByBox(box))
 );
-export const filterNodesByBox = R.uncurryN(2, box =>
+export const filterNodesByBox = R.uncurryN(2, (box) =>
   R.filter(isNodeBetween(box))
 );

@@ -25,8 +25,8 @@ export const createMemoizedSelector = (
   let lastDeps = null;
   let lastResult = null;
 
-  return state => {
-    const deps = R.map(f => f(state), dependencySelectors);
+  return (state) => {
+    const deps = R.map((f) => f(state), dependencySelectors);
     if (depsChanged(lastDeps, deps, dependencyComparators)) {
       lastResult = selector(...deps);
     }

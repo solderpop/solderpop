@@ -15,7 +15,7 @@ import SuggesterContainer from './SuggesterContainer.jsx';
 
 const getSuggestionValue = ({ item }) => item.path;
 
-const getSuggestionIndex = R.uncurryN(2, suggestion =>
+const getSuggestionIndex = R.uncurryN(2, (suggestion) =>
   R.findIndex(R.equals(suggestion))
 );
 
@@ -42,12 +42,10 @@ class Suggester extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.onItemMouseOver = this.onItemMouseOver.bind(this);
     this.onContainerMouseMove = this.onContainerMouseMove.bind(this);
-    this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(
-      this
-    );
-    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(
-      this
-    );
+    this.onSuggestionsFetchRequested =
+      this.onSuggestionsFetchRequested.bind(this);
+    this.onSuggestionsClearRequested =
+      this.onSuggestionsClearRequested.bind(this);
     this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
     this.onSuggestionHighlighted = this.onSuggestionHighlighted.bind(this);
     this.storeRef = this.storeRef.bind(this);
@@ -123,6 +121,7 @@ class Suggester extends React.Component {
       }
     };
   }
+
   onContainerMouseMove() {
     this.setState({
       mouseInteraction: true,
@@ -200,7 +199,7 @@ class Suggester extends React.Component {
       placeholder: 'Search nodes',
       value,
       onChange: this.onChange,
-      onKeyDown: event => {
+      onKeyDown: (event) => {
         const code = event.keyCode || event.which;
         if (code === KEYCODE.ESCAPE && event.target.value === '') {
           this.props.onBlur();

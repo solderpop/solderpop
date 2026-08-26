@@ -41,6 +41,6 @@ export default () => {
     // through to R.map's array-like branch instead of its object-map
     // branch. Spreading into a plain object first restores the
     // `[object Object]` tag Ramda expects.
-    select: R.map(fn => () => fn(store.getState()), { ...Selectors }),
+    select: R.map((fn) => () => fn(store.getState()), { ...Selectors }),
   };
 };

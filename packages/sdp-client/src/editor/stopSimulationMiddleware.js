@@ -14,7 +14,7 @@ import { DEBUGGER_TAB_ID } from './constants.js';
 import { SIMULATION_STOPPED_BY_CLOSING_TAB } from './messages.js';
 import { addError } from '../messages/actions.js';
 
-export default store => next => action => {
+export default (store) => (next) => (action) => {
   const result = next(action);
 
   if (!isSimulationAbortable(store.getState())) return result;

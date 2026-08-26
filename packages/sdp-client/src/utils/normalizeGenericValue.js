@@ -20,7 +20,7 @@ const capitalize = R.compose(
   R.toLower
 );
 
-const isNthNotNil = x => R.pipe(R.nth(x), notNil);
+const isNthNotNil = (x) => R.pipe(R.nth(x), notNil);
 
 const normalizePulse = R.compose(
   R.cond([

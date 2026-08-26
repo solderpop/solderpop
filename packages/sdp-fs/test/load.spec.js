@@ -24,7 +24,7 @@ describe('Loader', () => {
   const projectPath = 'awesome-project';
 
   it('getLocalProjects: return an array of local projects in workspace', () =>
-    Loader.getLocalProjects(workspace).then(projects => {
+    Loader.getLocalProjects(workspace).then((projects) => {
       assert.deepEqual(projects, [
         {
           path: path.resolve(workspace, projectPath),
@@ -42,7 +42,7 @@ describe('Loader', () => {
     }));
 
   it('getProjects: return an array of projects in workspace, including libs', () =>
-    Loader.getProjects(workspace).then(projects => {
+    Loader.getProjects(workspace).then((projects) => {
       assert.lengthOf(projects, 5);
     }));
   it('getProjects: reject CANT_ENUMERATE_PROJECTS for non-existent workspace', () =>
@@ -52,7 +52,7 @@ describe('Loader', () => {
     ));
 
   it('getLocalProjects: return an array of local projects in workspace', () =>
-    Loader.getLocalProjects(workspace).then(projects => {
+    Loader.getLocalProjects(workspace).then((projects) => {
       assert.lengthOf(projects, 1);
     }));
   it('getLocalProjects: reject CANT_ENUMERATE_PROJECTS for non-existent workspace', () =>
@@ -93,7 +93,7 @@ describe('Loader', () => {
   });
 
   describe('loadProject', () => {
-    const assertPatchPaths = project =>
+    const assertPatchPaths = (project) =>
       assert.includeMembers(XP.listPatchPaths(project), [
         '@/main',
         '@/qux',

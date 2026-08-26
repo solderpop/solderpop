@@ -10,7 +10,7 @@ import {
   SAVE_ALL,
 } from '../project/actionTypes.js';
 
-const updateLastSavedProject = state =>
+const updateLastSavedProject = (state) =>
   R.assoc('lastSavedProject', getProject(state), state);
 
 export default function trackLastSavedChanges(state, action) {

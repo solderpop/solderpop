@@ -24,6 +24,7 @@ class TooltipHOC extends React.Component {
       this.hideTooltip();
     }
   }
+
   componentWillUnmount() {
     this.hideTooltip();
   }

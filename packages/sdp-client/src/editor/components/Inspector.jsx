@@ -7,7 +7,7 @@ import { $Maybe } from 'sdp-func-tools';
 
 import { SELECTION_ENTITY_TYPE, PANEL_IDS, SIDEBAR_IDS } from '../constants.js';
 
-import SidebarPanel from '../components/SidebarPanel.jsx';
+import SidebarPanel from './SidebarPanel.jsx';
 import NodeInspector from './NodeInspector.jsx';
 import PatchInspector from './PatchInspector.jsx';
 import { HintWidget } from './inspectorWidgets/index.js';
@@ -22,11 +22,13 @@ import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
 //
 // =============================================================================
 
-const InspectorMessage = ({ text }) => (
-  <div className="Inspector-content">
-    <HintWidget text={text} />
-  </div>
-);
+function InspectorMessage({ text }) {
+  return (
+    <div className="Inspector-content">
+      <HintWidget text={text} />
+    </div>
+  );
+}
 
 InspectorMessage.propTypes = {
   text: PropTypes.string.isRequired,
@@ -37,7 +39,7 @@ InspectorMessage.propTypes = {
 // Rendering functions
 //
 // =============================================================================
-const renderSelectedManyElements = selection => (
+const renderSelectedManyElements = (selection) => (
   <InspectorMessage text={`You have selected: ${selection.length} elements.`} />
 );
 
@@ -84,7 +86,7 @@ const renderDefault = () => (
 // =============================================================================
 
 // :: [ RenderableSelection ] -> Boolean
-const isEntity = entity =>
+const isEntity = (entity) =>
   R.compose(R.equals(entity), R.prop('entityType'), R.head);
 const isSingleNode = R.both(isOne, isEntity(SELECTION_ENTITY_TYPE.NODE));
 const isSingleLink = R.both(isOne, isEntity(SELECTION_ENTITY_TYPE.LINK));
@@ -100,7 +102,7 @@ const isPatchSelected = R.curry(
 //
 // =============================================================================
 
-const Inspector = ({
+function Inspector({
   sidebarId,
   autohide,
   selection,
@@ -110,7 +112,7 @@ const Inspector = ({
   onNodeSpecializationChanged,
   onPatchDescriptionUpdate,
   onSendTweakPulse,
-}) => {
+}) {
   const inspectorContent = R.cond([
     [isMany, renderSelectedManyElements],
     [isSingleLink, renderSelectedLink],
@@ -142,7 +144,7 @@ const Inspector = ({
       {inspectorContent}
     </SidebarPanel>
   );
-};
+}
 
 Inspector.propTypes = {
   sidebarId: PropTypes.oneOf(R.values(SIDEBAR_IDS)).isRequired,

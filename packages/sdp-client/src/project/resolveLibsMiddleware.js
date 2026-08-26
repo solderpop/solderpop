@@ -7,7 +7,7 @@ import { installLibraries } from '../editor/actions.js';
 import { PROJECT_OPEN, PROJECT_IMPORT } from './actionTypes.js';
 import { getProject } from './selectors.js';
 
-export default store => next => action => {
+export default (store) => (next) => (action) => {
   const res = next(action);
 
   if (R.contains(action.type, [PROJECT_OPEN, PROJECT_IMPORT])) {

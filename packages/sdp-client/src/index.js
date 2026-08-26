@@ -46,7 +46,10 @@ import * as EditorConstants from './editor/constants.js';
 import * as UtilsConstants from './utils/constants.js';
 import * as PopupConstants from './popups/constants.js';
 
-import popupsReducer, { showOnlyPopup, hideOnePopup } from './popups/reducer.js';
+import popupsReducer, {
+  showOnlyPopup,
+  hideOnePopup,
+} from './popups/reducer.js';
 
 import * as siteLinkUtils from './utils/urls.js';
 import * as BrowserUtils from './utils/browser.js';
@@ -118,10 +121,7 @@ export {
   SIMULATION_LAUNCHED,
 } from './editor/actionTypes.js';
 export { TWEAK_PULSE_SENT };
-export {
-  SAVE_ALL,
-  NODE_PROPERTY_UPDATED,
-} from './project/actionTypes.js';
+export { SAVE_ALL, NODE_PROPERTY_UPDATED } from './project/actionTypes.js';
 
 export * from './editor/selectors.js';
 export * from './project/selectors.js';
@@ -146,9 +146,7 @@ export { default as PopupForm } from './utils/components/PopupForm.jsx';
 export { default as Toolbar } from './utils/components/Toolbar.jsx';
 export { default as SolderpopLogo } from './utils/components/SolderpopLogo.jsx';
 export { default as SolderpopLockup } from './utils/components/SolderpopLockup.jsx';
-export {
-  default as PopupProjectPreferences,
-} from './project/components/PopupProjectPreferences.jsx';
+export { default as PopupProjectPreferences } from './project/components/PopupProjectPreferences.jsx';
 
 export { default as App } from './core/containers/App.jsx';
 export { default as Root } from './core/containers/Root.jsx';
@@ -176,90 +174,88 @@ export {
   hideOnePopup,
 } from './popups/reducer.js';
 
-export default Object.assign(
-  {
-    App,
-    Root,
-    Editor,
-    PopupShowCode,
-    PopupAlert,
-    PopupConfirm,
-    PopupPrompt,
-    PopupForm,
-    SnackBar,
-    Toolbar,
-    menu: MenuUtils,
-    sanctuaryPropType,
-    initialState,
-    popupsReducer,
-    showOnlyPopup,
-    hideOnePopup,
-    PopupProjectPreferences,
-    hasUnsavedChanges,
-    getLastSavedProject,
-    composeMessage,
-    createLogMessage,
-    createSystemMessage,
-    isXodMessage,
-    createXodMessage,
-    createErrorMessage,
-    parseDebuggerMessage,
-    deriveProjectName,
-    getTetheringInetNodeId,
-    TAB_CLOSE,
-    SAVE_ALL,
-    NODE_PROPERTY_UPDATED,
-    NODE_PROPERTY_UPDATING,
-    TWEAK_PULSE_SENT,
-    INSTALL_LIBRARIES_COMPLETE,
-    MESSAGE_BUTTON_CLICKED,
-    Messages: coreMessages,
-    INSTALL_ARDUINO_DEPENDENCIES,
-    CHECK_ARDUINO_DEPENDENCIES,
-    SERIAL_SESSION_STARTED,
-    LINE_SENT_TO_SERIAL,
-    LOG_TAB_TYPE,
-    SIMULATION_LAUNCHED,
-    DEBUGGER_LOG_ADD_MESSAGES,
-    DEBUG_SESSION_STARTED,
-    TETHERING_INET_CREATED,
-    theme: {
-      actions: ThemeActions,
-      actionTypes: ThemeActionTypes,
-      selectors: ThemeSelectors,
-      reducer: themeReducer,
-      state: themeInitialState,
-      components: { ThemeSettingsPopup },
-    },
-    ThemeSettingsPopup,
-    SolderpopLogo,
-    SolderpopLockup,
+export default {
+  App,
+  Root,
+  Editor,
+  PopupShowCode,
+  PopupAlert,
+  PopupConfirm,
+  PopupPrompt,
+  PopupForm,
+  SnackBar,
+  Toolbar,
+  menu: MenuUtils,
+  sanctuaryPropType,
+  initialState,
+  popupsReducer,
+  showOnlyPopup,
+  hideOnePopup,
+  PopupProjectPreferences,
+  hasUnsavedChanges,
+  getLastSavedProject,
+  composeMessage,
+  createLogMessage,
+  createSystemMessage,
+  isXodMessage,
+  createXodMessage,
+  createErrorMessage,
+  parseDebuggerMessage,
+  deriveProjectName,
+  getTetheringInetNodeId,
+  TAB_CLOSE,
+  SAVE_ALL,
+  NODE_PROPERTY_UPDATED,
+  NODE_PROPERTY_UPDATING,
+  TWEAK_PULSE_SENT,
+  INSTALL_LIBRARIES_COMPLETE,
+  MESSAGE_BUTTON_CLICKED,
+  Messages: coreMessages,
+  INSTALL_ARDUINO_DEPENDENCIES,
+  CHECK_ARDUINO_DEPENDENCIES,
+  SERIAL_SESSION_STARTED,
+  LINE_SENT_TO_SERIAL,
+  LOG_TAB_TYPE,
+  SIMULATION_LAUNCHED,
+  DEBUGGER_LOG_ADD_MESSAGES,
+  DEBUG_SESSION_STARTED,
+  TETHERING_INET_CREATED,
+  theme: {
+    actions: ThemeActions,
+    actionTypes: ThemeActionTypes,
+    selectors: ThemeSelectors,
+    reducer: themeReducer,
+    state: themeInitialState,
+    components: { ThemeSettingsPopup },
   },
-  UserSelectors,
-  EditorSelectors,
-  ProcessSelectors,
-  ProjectSelectors,
-  PopupSelectors,
-  DebuggerSelectors,
-  MessageSelectors,
+  ThemeSettingsPopup,
+  SolderpopLogo,
+  SolderpopLockup,
+  ...UserSelectors,
+  ...EditorSelectors,
+  ...ProcessSelectors,
+  ...ProjectSelectors,
+  ...PopupSelectors,
+  ...DebuggerSelectors,
+  ...MessageSelectors,
 
-  CoreActions,
-  EditorActions,
-  ProjectActions,
-  MessageActions,
-  ProcessActions,
-  ProjectBrowserActions,
-  PopupActions,
-  DebuggerActions,
-  ThemeActions,
-  ThemeSelectors,
+  ...CoreActions,
+  ...EditorActions,
+  ...ProjectActions,
+  ...MessageActions,
+  ...ProcessActions,
+  ...ProjectBrowserActions,
+  ...PopupActions,
+  ...DebuggerActions,
+  ...ThemeActions,
+  ...ThemeSelectors,
 
-  EditorConstants,
-  MessageConstants,
-  UtilsConstants,
-  BrowserUtils,
-  PopupConstants,
+  ...EditorConstants,
+  ...MessageConstants,
+  ...UtilsConstants,
+  ...BrowserUtils,
+  ...PopupConstants,
 
-  siteLinkUtils,
-  urlActions
-);
+  ...siteLinkUtils,
+  ...urlActions,
+};

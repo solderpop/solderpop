@@ -11,29 +11,31 @@ import {
   getBreadcrumbActiveIndex,
 } from '../../editor/selectors.js';
 
-const Breadcrumbs = ({ chunks, activeIndex, actions, children }) => (
-  <div className="Breadcrumbs Breadcrumbs--debugger">
-    <ul>
-      {chunks.map((chunk, i) => {
-        const cls = classNames('Breadcrumbs-chunk-button', {
-          'is-active': i === activeIndex,
-          'is-tail': i > activeIndex,
-        });
-        return (
-          <li key={chunk.nodeId}>
-            <button
-              className={cls}
-              onClick={() => actions.drillDown(chunk.patchPath, chunk.nodeId)}
-            >
-              {chunk.label}
-            </button>
-          </li>
-        );
-      })}
-    </ul>
-    {children}
-  </div>
-);
+function Breadcrumbs({ chunks, activeIndex, actions, children }) {
+  return (
+    <div className="Breadcrumbs Breadcrumbs--debugger">
+      <ul>
+        {chunks.map((chunk, i) => {
+          const cls = classNames('Breadcrumbs-chunk-button', {
+            'is-active': i === activeIndex,
+            'is-tail': i > activeIndex,
+          });
+          return (
+            <li key={chunk.nodeId}>
+              <button
+                className={cls}
+                onClick={() => actions.drillDown(chunk.patchPath, chunk.nodeId)}
+              >
+                {chunk.label}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      {children}
+    </div>
+  );
+}
 
 Breadcrumbs.propTypes = {
   chunks: PropTypes.arrayOf(PropTypes.object),
@@ -47,7 +49,7 @@ const mapStateToProps = R.applySpec({
   activeIndex: getBreadcrumbActiveIndex,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(
     {
       drillDown,

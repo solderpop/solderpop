@@ -1,22 +1,23 @@
 import R from 'ramda';
 
-const progressBarRegExp = /^\s?(?:[a-zA-Z0-9:@.\-_+]+\s)?[0-9.]+(?:\s(?:Ki|Mi)?B)? \/ [0-9.]+(?:\s(?:Ki|Mi)?B)? (?:\[[=>-]+\])?\s+([0-9.]+)%\s?([0-9smh]+)?/;
+const progressBarRegExp =
+  /^\s?(?:[a-zA-Z0-9:@.\-_+]+\s)?[0-9.]+(?:\s(?:Ki|Mi)?B)? \/ [0-9.]+(?:\s(?:Ki|Mi)?B)? (?:\[[=>-]+\])?\s+([0-9.]+)%\s?([0-9smh]+)?/;
 
-export const parseProgressMessage = str =>
+export const parseProgressMessage = (str) =>
   R.compose(
     R.ifElse(
       R.test(progressBarRegExp),
       R.compose(
-        res => ({
+        (res) => ({
           percentage: res[1] ? parseInt(res[1], 10) : 0,
           estimated: res[2] || 'unknown',
           message: null,
         }),
         R.match(progressBarRegExp)
       ),
-      message =>
+      (message) =>
         R.compose(
-          percentage => ({
+          (percentage) => ({
             percentage,
             estimated: 0,
             message,
@@ -32,7 +33,7 @@ export const parseProgressMessage = str =>
     R.replace(/\r/g, '')
   )(str);
 
-export default onProgress =>
+export default (onProgress) =>
   R.pipe(
     R.split('\n'),
     R.reject(R.isEmpty),

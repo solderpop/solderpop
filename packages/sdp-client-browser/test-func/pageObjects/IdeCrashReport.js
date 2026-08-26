@@ -4,12 +4,11 @@ const SELECTOR = '.IdeCrashReport';
 
 class IdeCrashReport extends BasePageObject {
   async getErrorReport() {
-    const textAreaElementHandle = await this.elementHandle.$(
-      '.Message textarea'
-    );
+    const textAreaElementHandle =
+      await this.elementHandle.$('.Message textarea');
 
     const errorReport = await this.page.evaluate(
-      el => el.value,
+      (el) => el.value,
       textAreaElementHandle
     );
 
@@ -22,13 +21,13 @@ class IdeCrashReport extends BasePageObject {
   }
 }
 
-IdeCrashReport.findOnPage = async page => {
+IdeCrashReport.findOnPage = async (page) => {
   const elementHandle = await page.$(SELECTOR);
   if (!elementHandle) return null;
   return new IdeCrashReport(page, elementHandle);
 };
 
-IdeCrashReport.waitOnPage = async page => {
+IdeCrashReport.waitOnPage = async (page) => {
   await page.waitFor(SELECTOR, { timeout: 20000 });
   return IdeCrashReport.findOnPage(page);
 };

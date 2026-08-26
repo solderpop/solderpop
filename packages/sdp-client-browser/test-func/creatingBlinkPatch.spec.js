@@ -6,8 +6,6 @@ import { fileURLToPath } from 'url';
 
 import getPage from './utils/getPage.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 import ProjectBrowser from './pageObjects/ProjectBrowser.js';
 import PromptPopup from './pageObjects/PromptPopup.js';
 import EditorTab from './pageObjects/EditorTab.js';
@@ -17,7 +15,9 @@ import Inspector from './pageObjects/Inspector.js';
 import Menubar from './pageObjects/Menubar.js';
 import TranspiledCodePopup from './pageObjects/TranspiledCodePopup.js';
 
-const workspacePath = subPath =>
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const workspacePath = (subPath) =>
   path.resolve(__dirname, '../../../workspace/', subPath);
 
 const assertApproximateEqual = (actual, expected, tolerance, message) =>

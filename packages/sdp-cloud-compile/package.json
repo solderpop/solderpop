@@ -22,6 +22,7 @@
     "node-fetch": "^2.3.0",
     "ramda": "^0.24.1",
     "string-to-arraybuffer": "^1.0.2",
+    "sdp-cli": "^0.38.0",
     "sdp-func-tools": "^0.34.0",
     "sdp-tabtest": "^0.38.0"
   },

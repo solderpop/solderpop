@@ -3,7 +3,7 @@ import { ipcRenderer } from 'electron';
 import { sendStopDebuggerSession } from './ipcActions.js';
 import { DEBUG_SESSION_STOPPED_ON_TAB_CLOSE } from '../shared/messages.js';
 
-export default store => next => action => {
+export default (store) => (next) => (action) => {
   const state = store.getState();
   const isSerialDebugRunning = client.isSerialDebugRunning(state);
   const result = next(action);

@@ -52,96 +52,98 @@ const processProgressed = (
     )
   );
 
-const finishProcess = action => (
-  { processId, actionType, payload },
-  dispatch
-) => {
-  dispatch(action(processId, actionType, { data: payload }));
-  setTimeout(() => {
-    dispatch(deleteProcess(processId, actionType));
-  }, 1000);
-};
+const finishProcess =
+  (action) =>
+  ({ processId, actionType, payload }, dispatch) => {
+    dispatch(action(processId, actionType, { data: payload }));
+    setTimeout(() => {
+      dispatch(deleteProcess(processId, actionType));
+    }, 1000);
+  };
 
 const processCompleted = finishProcess(successProcess);
 
 const processFailed = finishProcess(failProcess);
 
-const createAsyncAction = ({
-  eventName,
-  actionType,
-  messages: {
-    process: processMsg,
-    complete: completeMsg,
-    error: errorMsg,
-  } = {},
-  notify = true,
-  silent = false,
-  onComplete = R.always(undefined),
-  onError = R.always(undefined),
-}) => data => (dispatch, getState) => {
-  let processId = null;
+const createAsyncAction =
+  ({
+    eventName,
+    actionType,
+    messages: {
+      process: processMsg,
+      complete: completeMsg,
+      error: errorMsg,
+    } = {},
+    notify = true,
+    silent = false,
+    onComplete = R.always(undefined),
+    onError = R.always(undefined),
+  }) =>
+  (data) =>
+  (dispatch, getState) => {
+    let processId = null;
 
-  if (!silent) {
-    processId = dispatch(addProcess(actionType));
+    if (!silent) {
+      processId = dispatch(addProcess(actionType));
 
-    if (processMsg) {
-      ipcRenderer.once(
-        getEventNameWithState(eventName, STATES.PROCESS),
-        (sender, payload) =>
-          processProgressed(
-            { processId, actionType, message: processMsg, notify, payload },
-            dispatch
-          )
-      );
-    }
-  }
-
-  ipcRenderer.once(
-    getEventNameWithState(eventName, STATES.COMPLETE),
-    (sender, payload) => {
-      if (!silent) {
-        processCompleted({ processId, actionType, payload }, dispatch);
-      }
-      if (notify) {
-        dispatch(addConfirmation(completeMsg));
-      }
-
-      onComplete(payload, dispatch, getState);
-    }
-  );
-
-  ipcRenderer.once(
-    getEventNameWithState(eventName, STATES.ERROR),
-    (sender, err) => {
-      // eslint-disable-next-line no-console
-      console.error(
-        `Unhandled error returned in event '${eventName}' (started by action '${actionType}'). See details:`,
-        {
-          eventName,
-          actionType,
-          data,
-          error: err,
-        }
-      );
-
-      if (!silent) {
-        processFailed({ processId, actionType, payload: err }, dispatch);
-      }
-      if (notify) {
-        const extendedErrorMessage = R.mergeWith(
-          (a, b) => `${a}. ${b}`,
-          errorMsg,
-          { note: err.message }
+      if (processMsg) {
+        ipcRenderer.once(
+          getEventNameWithState(eventName, STATES.PROCESS),
+          (sender, payload) =>
+            processProgressed(
+              { processId, actionType, message: processMsg, notify, payload },
+              dispatch
+            )
         );
-        dispatch(addError(extendedErrorMessage));
       }
-
-      onError(err, dispatch, getState);
     }
-  );
 
-  ipcRenderer.send(eventName, data);
-};
+    ipcRenderer.once(
+      getEventNameWithState(eventName, STATES.COMPLETE),
+      (sender, payload) => {
+        if (!silent) {
+          processCompleted({ processId, actionType, payload }, dispatch);
+        }
+        if (notify) {
+          dispatch(addConfirmation(completeMsg));
+        }
+
+        onComplete(payload, dispatch, getState);
+      }
+    );
+
+    ipcRenderer.once(
+      getEventNameWithState(eventName, STATES.ERROR),
+      (sender, err) => {
+        // eslint-disable-next-line no-console
+        console.error(
+          `Unhandled error returned in event '${eventName}' (started by action '${actionType}'). See details:`,
+          {
+            eventName,
+            actionType,
+            data,
+            error: err,
+          }
+        );
+
+        if (!silent) {
+          processFailed({ processId, actionType, payload: err }, dispatch);
+        }
+        if (notify) {
+          const extendedErrorMessage = R.mergeWith(
+            (a, b) => `${a}. ${b}`,
+            errorMsg,
+            { note: err.message }
+          );
+          dispatch(addError(extendedErrorMessage));
+        }
+
+        onError(err, dispatch, getState);
+      }
+    );
+
+    ipcRenderer.send(eventName, data);
+  };
 
 // =============================================================================
 //
@@ -185,7 +187,7 @@ const saveAllOnFs = createAsyncAction({
   },
 });
 
-export const saveAll = payload => (dispatch, getState) => {
+export const saveAll = (payload) => (dispatch, getState) => {
   // Before save: update project name if needed
   const projectName = R.compose(getProjectName, getProject, getState)();
   if (payload.updateProjectPath && R.isEmpty(projectName)) {

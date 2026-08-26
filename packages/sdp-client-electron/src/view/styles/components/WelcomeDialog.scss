@@ -1,50 +1,44 @@
-.theme-window-footer {
+// `.theme-window` is shared with ThemeSettingsPopup, which stays a fixed
+// neutral-light card on purpose (it's the UI for editing theme colors, so
+// it can't itself be reskinned by the theme being edited). The welcome
+// dialog is different: it's the first thing a user sees and lets them pick
+// a theme right there, so it should preview that choice live. Scoping the
+// override to `.welcome-dialog` keeps ThemeSettingsPopup untouched.
+.welcome-dialog.theme-window {
+  background-color: var(--theme-chrome-bg, #fff);
+  color: var(--theme-text, #1f2933);
+}
+
+.welcome-dialog .theme-window-footer {
   display: flex;
   justify-content: flex-end;
   padding: 14px 24px;
-  border-top: 1px solid #eef1f3;
-}
-
-.welcome-lockup {
-  display: flex;
-  justify-content: center;
-  margin: 8px 0 20px;
-
-  .SolderpopLockup {
-    width: 220px;
-
-    .SolderpopLockup-main {
-      fill: #ff6b6b;
-    }
-
-    .SolderpopLockup-ring {
-      fill: none;
-      stroke: #ff6b6b;
-    }
-
-    .SolderpopLockup-wordmark {
-      fill: #2c3e50;
-    }
-
-    .SolderpopLockup-accent {
-      fill: #ff6b6b;
-    }
-  }
+  border-top: 1px solid var(--theme-chrome-outlines, #eef1f3);
 }
 
 .welcome-title {
-  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 8px 0 20px;
   font-size: 18px;
   font-weight: 600;
   text-align: center;
-  color: #1e2a38;
+  color: var(--theme-text, #1e2a38);
+
+  .welcome-title-lockup {
+    height: 48px;
+    width: auto;
+  }
 }
 
 .welcome-intro {
   margin: 0 0 20px;
   font-size: 13px;
   line-height: 1.5;
-  color: #5c6b7a;
+  color: var(--theme-text, #5c6b7a);
+  opacity: 0.75;
 }
 
 .welcome-theme-select {
@@ -54,7 +48,7 @@
 .welcome-option {
   margin-top: 20px;
   padding-top: 20px;
-  border-top: 1px solid #eef1f3;
+  border-top: 1px solid var(--theme-chrome-outlines, #eef1f3);
 }
 
 .welcome-checkbox {
@@ -63,12 +57,12 @@
   gap: 8px;
   font-size: 13px;
   line-height: 1.5;
-  color: #334155;
+  color: var(--theme-text, #334155);
   cursor: pointer;
 
   input {
     margin: 3px 0 0;
-    accent-color: #ff6b6b;
+    accent-color: var(--theme-selected, #ff6b6b);
     cursor: pointer;
   }
 }

@@ -1,19 +1,19 @@
 import { test } from '@oclif/test';
 import chai from 'chai';
-
-const { assert } = chai;
 import path from 'path';
 import process from 'process';
 import fs from 'fs-extra';
 import { createWorkingDirectory } from './helpers.js';
 
+const { assert } = chai;
+
 // save process.exit for unmocking
-const exit = process.exit;
+const { exit } = process;
 
 // save tty status
-const isTTY = process.stdout.isTTY;
+const { isTTY } = process.stdout;
 
-const its = wd => {
+const its = (wd) => {
   const myWSPath = path.resolve(wd, 'workspace');
 
   const stdMock = test.stdout().stderr();
@@ -22,7 +22,7 @@ const its = wd => {
     .command(['install:arch', `--workspace=${myWSPath}`, 'adfkjasdfkjasdf'])
     .it(
       `print error on nonexistent board, creates workspace, stdout is empty, stderr with error, non-zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.isOk(
           await fs.pathExists(path.resolve(myWSPath, '.xodworkspace')),
           'workspace should be created'
@@ -42,7 +42,7 @@ const its = wd => {
     .command(['install:arch', '--quiet', 'adfkjasdfkjasdf'])
     .it(
       `quiet fails on nonexistent board, creates workspace, stdout is empty, stderr with error, non-zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.isOk(
           await fs.pathExists(path.resolve(myWSPath, '.xodworkspace')),
           'workspace should be created'
@@ -58,7 +58,7 @@ const its = wd => {
     .command(['install:arch', 'emoro:avr'])
     .it(
       `installs board, creates workspace, stdout is empty, stderr with messages, zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.isOk(
           await fs.pathExists(path.resolve(myWSPath, '.xodworkspace')),
           'workspace should be created'
@@ -78,7 +78,7 @@ const its = wd => {
     .command(['install:arch', '--quiet', 'emoro:avr'])
     .it(
       `silently installs board, creates workspace, stdout is empty, stderr is empty, zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.isOk(
           await fs.pathExists(path.resolve(myWSPath, '.xodworkspace')),
           'workspace should be created'
@@ -95,7 +95,7 @@ const its = wd => {
     .command(['install:arch', 'emoro:avr'])
     .it(
       `arduino-cli not found, stdout is empty, stderr with error, non-zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.include(
           ctx.stderr,
@@ -112,7 +112,7 @@ const its = wd => {
     .command(['install:arch', '-q', 'emoro:avr'])
     .it(
       `arduino-cli not found, quiet flag, stdout is empty, stderr is empty, non-zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.equal(ctx.stderr, '', 'stderr must be empty');
         assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
@@ -138,7 +138,7 @@ describe('sdpc install:arch', () => {
   describe('common', () => {
     // mock process.exit
     beforeEach(() => {
-      process.exit = code => {
+      process.exit = (code) => {
         process.exitCode = code;
       };
     });
@@ -155,7 +155,7 @@ describe('sdpc install:arch', () => {
       .catch(/EEXIT: 0/)
       .it(
         `shows help in stdout, doesn't print to stderr, exits with 0`,
-        ctx => {
+        (ctx) => {
           assert.include(ctx.stdout, '--version', '--version flag not found');
           assert.include(ctx.stdout, '--help', '--help flag not found');
           assert.include(ctx.stdout, '--quiet', '--quiet flag not found');
@@ -175,7 +175,7 @@ describe('sdpc install:arch', () => {
       .catch(/EEXIT: 0/)
       .it(
         `shows version in stdout, doesn't print to stderr and exits with 0`,
-        ctx => {
+        (ctx) => {
           assert.include(ctx.stdout, 'sdp-cli', 'version string not found');
           assert.equal(ctx.stderr, '', 'stderr should be emply');
         }
@@ -190,7 +190,7 @@ describe('sdpc install:arch', () => {
 
     // mock process.exit
     beforeEach(() => {
-      process.exit = code => {
+      process.exit = (code) => {
         process.exitCode = code;
       };
     });
@@ -215,7 +215,7 @@ describe('sdpc install:arch', () => {
 
     // mock process.exit
     beforeEach(() => {
-      process.exit = code => {
+      process.exit = (code) => {
         process.exitCode = code;
       };
     });

@@ -1,10 +1,10 @@
 import R from 'ramda';
 import chai from 'chai';
-
-const { assert } = chai;
 import { defaultizeProject } from 'sdp-project/test/helpers.js';
 
 import { getTableLogSourceLabels } from '../src/debugger/utils.js';
+
+const { assert } = chai;
 
 const TABLE_LOG_NODES = {
   'xod/debug/tsv-log': {},

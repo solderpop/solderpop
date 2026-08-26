@@ -24,7 +24,7 @@ import { getOffsetMatrix, bindApi, getMousePosition } from '../modeUtils.js';
 
 let patchSvgRef = null;
 
-const getDeltaPosition = api =>
+const getDeltaPosition = (api) =>
   subtractPoints(api.state.mousePosition, api.state.dragStartPosition);
 
 const getSnappedPreviews = (draggedNodes, draggedComments, deltaPosition) =>
@@ -42,7 +42,7 @@ const getSnappedPreviews = (draggedNodes, draggedComments, deltaPosition) =>
   )(R.values(draggedNodes), R.values(draggedComments));
 
 const updateLinksPositions = R.uncurryN(3)((draggedNodeIds, deltaPosition) =>
-  R.map(link =>
+  R.map((link) =>
     R.compose(
       R.over(
         R.lensProp('to'),
@@ -66,7 +66,7 @@ const updateLinksPositions = R.uncurryN(3)((draggedNodeIds, deltaPosition) =>
 // Pins with ending of the Link, cause it became ugly
 // when User drags Link connected to the variadic Pin,
 // that contains "dots" symbol inside it.
-export const shortenDraggedLinks = R.map(link =>
+export const shortenDraggedLinks = R.map((link) =>
   R.compose(
     R.assoc('from', R.__, link),
     R.converge(changeLineLength(R.negate(PIN_RADIUS_WITH_OUTER_STROKE)), [
@@ -167,7 +167,7 @@ const movingMode = {
         <PatchSVG
           onMouseMove={bindApi(api, this.onMouseMove)}
           onMouseUp={bindApi(api, this.onMouseUp)}
-          svgRef={svg => {
+          svgRef={(svg) => {
             patchSvgRef = svg;
           }}
         >

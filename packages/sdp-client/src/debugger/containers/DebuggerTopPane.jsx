@@ -12,17 +12,18 @@ import TooltipHOC from '../../tooltip/components/TooltipHOC.jsx';
 
 import { DEBUGGER_TAB_ID } from '../../editor/constants.js';
 
-const DebuggerTopPane = props =>
-  foldMaybe(
+function DebuggerTopPane(props) {
+  return foldMaybe(
     null,
-    tab =>
+    (tab) =>
       tab.id === DEBUGGER_TAB_ID && props.isDebugSessionRunning ? (
         <Breadcrumbs>
           {props.isDebugSessionOutdated ? (
             <TooltipHOC
               content={
                 <div>
-                  The program on screen is newer than the program running.<br />
+                  The program on screen is newer than the program running.
+                  <br />
                   Watches and overall behavior can be incorrect. Stop debugging
                   and upload/simulate again to synchronize.
                 </div>
@@ -50,6 +51,7 @@ const DebuggerTopPane = props =>
       ) : null,
     props.currentTab
   );
+}
 
 DebuggerTopPane.propTypes = {
   currentTab: sanctuaryPropType($Maybe($.Object)),

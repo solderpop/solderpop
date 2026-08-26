@@ -8,7 +8,7 @@ import PopupForm from '../../utils/components/PopupForm.jsx';
 import deepSCU from '../../utils/deepSCU.js';
 import { lowercaseKebabMask } from '../../utils/inputFormatting.js';
 
-const getInitialState = project => {
+const getInitialState = (project) => {
   const version = XP.getProjectVersion(project);
 
   return {
@@ -46,19 +46,24 @@ class PopupProjectPreferences extends React.Component {
     const { name, license, version, description, apiKey } = this.state;
     this.props.onChange({ name, license, version, description, apiKey });
   }
+
   onNameChange(event) {
     const val = lowercaseKebabMask(event.target.value);
     this.setState({ name: val });
   }
+
   onLicenseChange(event) {
     this.setState({ license: event.target.value });
   }
+
   onVersionChange(event) {
     this.setState({ dirtyVersion: event.target.value });
   }
+
   onDescriptionChange(event) {
     this.setState({ description: event.target.value });
   }
+
   onApiKeyChange(event) {
     this.setState({ apiKey: event.target.value });
   }

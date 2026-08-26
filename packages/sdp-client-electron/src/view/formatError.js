@@ -16,7 +16,7 @@ export const formatErrorMessage = composeErrorFormatters([
   uploadMessages,
 ]);
 
-export const formatLogError = error => {
+export const formatLogError = (error) => {
   const stanza = formatErrorMessage(error);
   return [
     ...(stanza.title ? [stanza.title] : []),

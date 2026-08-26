@@ -1,7 +1,5 @@
 import R from 'ramda';
 import RamdaFantasy from 'ramda-fantasy';
-
-const { Maybe } = RamdaFantasy;
 import { foldMaybe, isAmong, memoizeOnlyLast } from 'sdp-func-tools';
 import { createSelector } from 'reselect';
 import {
@@ -15,6 +13,8 @@ import { SESSION_TYPE } from './constants.js';
 import { createMemoizedSelector } from '../utils/selectorTools.js';
 import { getTableLogSourceLabels, removeLastNodeIdInChain } from './utils.js';
 
+const { Maybe } = RamdaFantasy;
+
 export const getDebuggerState = R.prop('debugger');
 
 export const isDebugSession = R.compose(
@@ -26,7 +26,7 @@ export const isDebugSession = R.compose(
 );
 
 export const isSessionActive = R.compose(
-  ds => ds.activeSession !== SESSION_TYPE.NONE,
+  (ds) => ds.activeSession !== SESSION_TYPE.NONE,
   getDebuggerState
 );
 
@@ -130,7 +130,7 @@ const getChunksPath = R.curry((activeIndex, chunks) =>
 export const getCurrentChunksPath = createSelector(
   [getCurrentTabId, getBreadcrumbChunks, getBreadcrumbActiveIndex],
   (maybeTabId, chunks, activeIndex) =>
-    R.chain(tabId => {
+    R.chain((tabId) => {
       if (tabId !== DEBUGGER_TAB_ID) return Maybe.Nothing();
       return Maybe.Just(getChunksPath(activeIndex, chunks));
     }, maybeTabId)
@@ -170,7 +170,7 @@ export const getInteractiveNodeValuesForCurrentPatch = createSelector(
   (maybeTabId, nodeMap, tableLogs, chunks, activeIndex) =>
     foldMaybe(
       {},
-      tabId => {
+      (tabId) => {
         if (tabId !== DEBUGGER_TAB_ID) return {};
 
         const nodeIdPath = getChunksPath(activeIndex, chunks);
@@ -182,7 +182,7 @@ export const getInteractiveNodeValuesForCurrentPatch = createSelector(
         );
 
         const tableLogValues = R.compose(
-          R.map(sheets => {
+          R.map((sheets) => {
             const lastSheetIndex = sheets.length > 0 ? sheets.length - 1 : 0;
             return `Sheet #${sheets.length}, Row #${
               sheets[lastSheetIndex].length
@@ -214,76 +214,81 @@ export const getPinsAffectedByErrorRaisers = R.compose(
   getDebuggerState
 );
 
-export const getPinsAffectedByErrorRaisersForCurrentChunk = createMemoizedSelector(
-  [
-    getCurrentTabId,
-    getPinsAffectedByErrorRaisers,
-    getBreadcrumbChunks,
-    getBreadcrumbActiveIndex,
-  ],
-  [R.equals, R.equals, R.equals, R.equals],
-  (maybeTabId, pinPairs, chunks, activeIndex) =>
-    foldMaybe(
-      {},
-      tabId => {
-        if (tabId !== DEBUGGER_TAB_ID) return {};
-        const nodeIdPath = getChunksPath(activeIndex, chunks);
+export const getPinsAffectedByErrorRaisersForCurrentChunk =
+  createMemoizedSelector(
+    [
+      getCurrentTabId,
+      getPinsAffectedByErrorRaisers,
+      getBreadcrumbChunks,
+      getBreadcrumbActiveIndex,
+    ],
+    [R.equals, R.equals, R.equals, R.equals],
+    (maybeTabId, pinPairs, chunks, activeIndex) =>
+      foldMaybe(
+        {},
+        (tabId) => {
+          if (tabId !== DEBUGGER_TAB_ID) return {};
+          const nodeIdPath = getChunksPath(activeIndex, chunks);
 
-        return R.map(
-          R.map(
-            R.compose(
-              R.map(R.over(R.lensIndex(1), R.replace(nodeIdPath, ''))),
-              R.filter(R.compose(R.startsWith(nodeIdPath), R.nth(1)))
-            )
-          )
-        )(pinPairs);
-      },
-      maybeTabId
-    )
-);
-
-export const getInteractiveErroredNodePinsForCurrentChunk = createMemoizedSelector(
-  [
-    getCurrentTabId,
-    getInteractiveErroredNodePins,
-    getBreadcrumbChunks,
-    getBreadcrumbActiveIndex,
-  ],
-  [R.equals, R.equals, R.equals, R.equals],
-  (maybeTabId, nodeMap, chunks, activeIndex) =>
-    foldMaybe(
-      {},
-      tabId => {
-        if (tabId !== DEBUGGER_TAB_ID) return {};
-        const nodeIdPath = getChunksPath(activeIndex, chunks);
-
-        return R.compose(
-          // Merge with the original to make possible to easily mark affected nodes
-          R.merge(nodeMap),
-          R.fromPairs,
-          // Generate pairs for all chunks
-          // E.G.
-          // [['a~b~c', 10]] => [['a', 10], ['a~b', 10], ['a~b~c', 10]]
-          R.reduce((acc, [origPath, errCode]) => {
-            const nodePathChunks = R.split('~', origPath);
-            const allPaths = R.addIndex(R.map)((_, idx) =>
-              R.compose(R.append(errCode), R.of, R.join('~'), R.take(idx + 1))(
-                nodePathChunks
+          return R.map(
+            R.map(
+              R.compose(
+                R.map(R.over(R.lensIndex(1), R.replace(nodeIdPath, ''))),
+                R.filter(R.compose(R.startsWith(nodeIdPath), R.nth(1)))
               )
-            )(nodePathChunks);
-            return R.concat(allPaths, acc);
-          }, []),
-          R.when(
-            () => activeIndex !== 0,
-            R.map(R.over(R.lensIndex(0), R.replace(nodeIdPath, '')))
-          ),
-          R.filter(R.compose(R.startsWith(nodeIdPath), R.nth(0))),
-          R.toPairs
-        )(nodeMap);
-      },
-      maybeTabId
-    )
-);
+            )
+          )(pinPairs);
+        },
+        maybeTabId
+      )
+  );
+
+export const getInteractiveErroredNodePinsForCurrentChunk =
+  createMemoizedSelector(
+    [
+      getCurrentTabId,
+      getInteractiveErroredNodePins,
+      getBreadcrumbChunks,
+      getBreadcrumbActiveIndex,
+    ],
+    [R.equals, R.equals, R.equals, R.equals],
+    (maybeTabId, nodeMap, chunks, activeIndex) =>
+      foldMaybe(
+        {},
+        (tabId) => {
+          if (tabId !== DEBUGGER_TAB_ID) return {};
+          const nodeIdPath = getChunksPath(activeIndex, chunks);
+
+          return R.compose(
+            // Merge with the original to make possible to easily mark affected nodes
+            R.merge(nodeMap),
+            R.fromPairs,
+            // Generate pairs for all chunks
+            // E.G.
+            // [['a~b~c', 10]] => [['a', 10], ['a~b', 10], ['a~b~c', 10]]
+            R.reduce((acc, [origPath, errCode]) => {
+              const nodePathChunks = R.split('~', origPath);
+              const allPaths = R.addIndex(R.map)((_, idx) =>
+                R.compose(
+                  R.append(errCode),
+                  R.of,
+                  R.join('~'),
+                  R.take(idx + 1)
+                )(nodePathChunks)
+              )(nodePathChunks);
+              return R.concat(allPaths, acc);
+            }, []),
+            R.when(
+              () => activeIndex !== 0,
+              R.map(R.over(R.lensIndex(0), R.replace(nodeIdPath, '')))
+            ),
+            R.filter(R.compose(R.startsWith(nodeIdPath), R.nth(0))),
+            R.toPairs
+          )(nodeMap);
+        },
+        maybeTabId
+      )
+  );
 
 export const getStoredGlobals = R.compose(R.prop('globals'), getDebuggerState);
 
@@ -324,7 +329,7 @@ export const getTableLogSourcesRaw = R.compose(
 );
 
 // :: State -> [{ nodeId: NodeId, label: String }]
-export const getTableLogSources = state =>
+export const getTableLogSources = (state) =>
   R.compose(
     R.unnest,
     R.values,

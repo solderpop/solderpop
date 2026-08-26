@@ -4,7 +4,10 @@ import R from 'ramda';
 import * as XP from 'sdp-project';
 
 import { WIDGET_TYPE } from '../constants.js';
-import { NODE_PROPERTY_KIND, NODE_PROPERTY_KEY } from '../../project/constants.js';
+import {
+  NODE_PROPERTY_KIND,
+  NODE_PROPERTY_KEY,
+} from '../../project/constants.js';
 
 import PinWidgetsGroup from './PinWidgetsGroup.jsx';
 import {
@@ -22,18 +25,18 @@ import { getUtmSiteUrl } from '../../utils/urls.js';
 import * as MESSAGES from '../messages.js';
 
 const isTweakPulseNode = R.compose(
-  nodeType =>
+  (nodeType) =>
     XP.isTweakPath(nodeType) && XP.getTweakType(nodeType) === XP.PIN_TYPE.PULSE,
   XP.getNodeType
 );
 
-const NodeInspector = ({
+function NodeInspector({
   node,
   isDebugSession,
   onPropUpdate,
   onNodeSpecializationChanged,
   onSendTweakPulse,
-}) => {
+}) {
   const type = XP.getNodeType(node);
   const baseName = XP.getBaseName(type);
   const nodeId = XP.getNodeId(node);
@@ -107,7 +110,7 @@ const NodeInspector = ({
       />
     </div>
   );
-};
+}
 
 NodeInspector.propTypes = {
   node: sanctuaryPropType(RenderableNode),

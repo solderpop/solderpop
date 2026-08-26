@@ -34,7 +34,7 @@ class SnackBar extends React.Component {
   onMouseOver() {
     R.pipe(
       R.values,
-      R.forEach(message => {
+      R.forEach((message) => {
         clearTimeout(message.timeout);
       })
     )(this.messages);
@@ -43,7 +43,7 @@ class SnackBar extends React.Component {
   onMouseOut() {
     R.pipe(
       R.values,
-      R.forEach(msg => {
+      R.forEach((msg) => {
         this.messages[msg.data.id].timeout = this.setHideTimeout(msg.data);
       })
     )(this.messages);
@@ -80,12 +80,12 @@ class SnackBar extends React.Component {
   addMessages(messages) {
     R.pipe(
       R.values,
-      R.forEach(messageData => {
+      R.forEach((messageData) => {
         if (R.has(messageData.id, this.messages)) {
           return;
         }
 
-        const assignRef = el => {
+        const assignRef = (el) => {
           if (R.has(messageData.id, this.messages)) {
             this.messages[messageData.id].ref = el;
           }
@@ -100,7 +100,7 @@ class SnackBar extends React.Component {
               key={messageData.id}
               message={messageData}
               onClickMessageButton={this.onButtonClicked}
-              onCloseMessage={id => this.onCloseMessage(id)}
+              onCloseMessage={(id) => this.onCloseMessage(id)}
             />
           ),
         };
@@ -109,9 +109,10 @@ class SnackBar extends React.Component {
   }
 
   render() {
-    const messages = R.compose(R.map(R.prop('element')), R.values)(
-      this.messages
-    );
+    const messages = R.compose(
+      R.map(R.prop('element')),
+      R.values
+    )(this.messages);
 
     return (
       <SnackBarList onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
@@ -127,11 +128,11 @@ SnackBar.propTypes = {
   onMessageButtonClick: PropTypes.func,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   errors: ErrorSelectors.getErrors(state),
 });
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       onDeleteMessage: deleteMessage,

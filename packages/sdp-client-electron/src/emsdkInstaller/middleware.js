@@ -15,7 +15,7 @@ const progressToProcess = R.curry((processFn, progressData) => {
   processFn(progressData.note, progressData.percentage);
 });
 
-export default store => next => action => {
+export default (store) => (next) => (action) => {
   if (
     action.type === client.MESSAGE_BUTTON_CLICKED &&
     action.payload === client.INSTALL_EMSDK_MSG
@@ -41,7 +41,7 @@ export default store => next => action => {
         // internal ResizeObserver logic.
         setTimeout(() => window.dispatchEvent(new Event('resize')), 0);
       })
-      .catch(err => {
+      .catch((err) => {
         const snackbarError = formatErrorMessage(err);
         const logErr = formatLogError(err);
         store.dispatch(client.addError(snackbarError));

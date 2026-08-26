@@ -8,7 +8,7 @@ import { foldEither, mergeAllWithConcat, failOnNothing } from 'sdp-func-tools';
 //
 // =============================================================================
 
-const getMarkerNodesErrorMap = (predicate, validator, errorType) => patch => {
+const getMarkerNodesErrorMap = (predicate, validator, errorType) => (patch) => {
   const markerNodeIds = R.compose(
     R.map(XP.getNodeId),
     R.filter(predicate),
@@ -18,7 +18,7 @@ const getMarkerNodesErrorMap = (predicate, validator, errorType) => patch => {
   if (R.isEmpty(markerNodeIds)) return {};
 
   return foldEither(
-    err =>
+    (err) =>
       R.compose(
         mergeAllWithConcat,
         R.map(R.objOf(R.__, { [errorType]: [err] }))
@@ -39,10 +39,10 @@ const getMarkerNodesErrorMap = (predicate, validator, errorType) => patch => {
 export const getVariadicMarkersErrorMap = (patch, project) =>
   R.compose(
     foldEither(
-      err =>
+      (err) =>
         R.compose(
           R.fromPairs,
-          R.map(markerNodeId => [
+          R.map((markerNodeId) => [
             markerNodeId,
             { validatePatchForVariadics: [err] },
           ]),
@@ -86,7 +86,7 @@ export const getBusesErrorMap = (patch, _project) =>
   R.compose(
     R.map(R.objOf('validateBuses')),
     foldEither(
-      err =>
+      (err) =>
         R.compose(
           R.map(R.of),
           R.fromPairs,
@@ -103,7 +103,7 @@ export const getTerminalsErrorMap = (patch, _project) =>
   R.compose(
     R.map(R.objOf('validatePinLabels')),
     foldEither(
-      err =>
+      (err) =>
         R.compose(
           R.map(R.of),
           R.fromPairs,
@@ -123,7 +123,7 @@ export const getDeadRefErrorMap = (patch, project) =>
       R.compose(
         R.objOf('checkPatchExists'),
         foldEither(R.of, R.always([])),
-        nodeType => {
+        (nodeType) => {
           const patchPath = XP.getPatchPath(patch);
           return failOnNothing('DEAD_REFERENCE__PATCH_FOR_NODE_NOT_FOUND', {
             nodeType,

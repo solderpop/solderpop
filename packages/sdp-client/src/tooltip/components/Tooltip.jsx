@@ -23,6 +23,7 @@ class Tooltip extends React.Component {
     window.addEventListener(SHOW_GLOBAL_TOOLTIP, this.showTooltip);
     window.addEventListener(HIDE_GLOBAL_TOOLTIP, this.hideTooltip);
   }
+
   componentWillUnmount() {
     window.removeEventListener(SHOW_GLOBAL_TOOLTIP, this.showTooltip);
     window.removeEventListener(HIDE_GLOBAL_TOOLTIP, this.hideTooltip);

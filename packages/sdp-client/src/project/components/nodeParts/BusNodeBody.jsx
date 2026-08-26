@@ -43,7 +43,7 @@ const getLabelOffsets = ({ height }) => ({
   [XP.FROM_BUS_PATH]: 0,
 });
 
-const BusNodeBody = ({ type, pxSize, pins, label }) => {
+function BusNodeBody({ type, pxSize, pins, label }) {
   const polygonProps = {
     points: polygonPointsGetters[type](pxSize),
     strokeLinejoin: 'round',
@@ -77,7 +77,7 @@ const BusNodeBody = ({ type, pxSize, pins, label }) => {
       <polygon {...polygonProps} className={classNames('outline', dataType)} />
     </g>
   );
-};
+}
 
 BusNodeBody.propTypes = {
   pins: PropTypes.any.isRequired,

@@ -33,13 +33,13 @@ export const DEFAULT_SETTINGS = {
  * we have to call this function before electron app onReady called.
  * It accepts a path to directory (could contain a homedir alias `~`)
  */
-export const rewriteElectronSettingsFilePath = dir => {
+export const rewriteElectronSettingsFilePath = (dir) => {
   electronSettings.configure({
     dir,
   });
 };
 
-export const rewriteElectronSettingsFileName = fileName => {
+export const rewriteElectronSettingsFileName = (fileName) => {
   electronSettings.configure({
     fileName,
   });
@@ -65,7 +65,7 @@ export const load = () => {
 };
 
 // TODO: Add schema and validating on save to prevent errors
-export const save = settings => {
+export const save = (settings) => {
   ensureSettingsFileConfiguration();
   return electronSettings.setSync(settings);
 };

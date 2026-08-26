@@ -4,10 +4,10 @@ import classNames from 'classnames';
 import { SkyLightStateless } from 'react-skylight';
 import EventListener from 'react-event-listener';
 
-import { noop } from '../../utils/ramda.js';
-import { KEYCODE } from '../../utils/constants.js';
+import { noop } from '../ramda.js';
+import { KEYCODE } from '../constants.js';
 
-const PopupAlert = ({
+function PopupAlert({
   title,
   children,
   closeText,
@@ -15,11 +15,11 @@ const PopupAlert = ({
   onClose,
   isClosable,
   isVisible,
-}) => {
+}) {
   const wrapperClassNames = classNames('PopupAlert', className);
   const onCloseClicked = isClosable ? onClose : noop;
 
-  const onKeyDown = event => {
+  const onKeyDown = (event) => {
     if (!isVisible) return;
 
     const keycode = event.keycode || event.which;
@@ -55,7 +55,7 @@ const PopupAlert = ({
       </SkyLightStateless>
     </div>
   );
-};
+}
 
 PopupAlert.propTypes = {
   title: PropTypes.string,

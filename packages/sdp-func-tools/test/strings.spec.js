@@ -1,7 +1,8 @@
 import chai from 'chai';
-const { assert } = chai;
 
 import { enquote, unquote, cppEscape } from '../src/strings.js';
+
+const { assert } = chai;
 
 describe('String', () => {
   describe('quote', () => {

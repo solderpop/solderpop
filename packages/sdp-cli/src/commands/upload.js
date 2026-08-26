@@ -1,17 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { exit } from 'process';
 import R from 'ramda';
-
-const {
-  compose,
-  dropLast,
-  last,
-  lensProp,
-  over,
-  pick,
-  replace,
-  when,
-} = R;
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import { flags } from '@oclif/command';
@@ -28,9 +17,11 @@ import {
 } from '../listrTasks.js';
 import { resolveBundledWorkspacePath } from '../paths.js';
 
+const { compose, dropLast, last, lensProp, over, pick, replace, when } = R;
+
 const stripMessage = compose(
   replace(/[^ -~\n]+/, ''),
-  when(m => last(m) === '\n', dropLast(1))
+  when((m) => last(m) === '\n', dropLast(1))
 );
 
 class UploadCommand extends BaseCommand {
@@ -47,7 +38,7 @@ class UploadCommand extends BaseCommand {
 
     const initTask = {
       title: 'Initialize',
-      task: async ctx => {
+      task: async (ctx) => {
         ctx.sketchDir = await xdb.prepareSketchDir();
         ctx.arduinoCli = await xdb.createCli(
           resolveBundledWorkspacePath(),
@@ -73,7 +64,7 @@ class UploadCommand extends BaseCommand {
       { collapse: false }
     )
       .run()
-      .then(async ctx => {
+      .then(async (ctx) => {
         const payloadWithUpdatedFqbn = over(
           lensProp('board'),
           xdb.patchFqbnWithOptions,
@@ -105,7 +96,7 @@ class UploadCommand extends BaseCommand {
         this.info('Done!');
       })
       .then(() => exit(0))
-      .catch(err => {
+      .catch((err) => {
         if (messages) this.info(messages.join('\n'));
         this.printError(this.patchArduinoCliError(err));
         return exit((err.payload || err).code || 100);

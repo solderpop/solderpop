@@ -22,7 +22,7 @@ const { Maybe } = RamdaFantasy;
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const fixture = subPath => resolve(__dirname, './fixtures', subPath);
+const fixture = (subPath) => resolve(__dirname, './fixtures', subPath);
 
 const expectRejectedWithCode = (promise, errorCode) =>
   expect(promise).to.eventually.be.rejected.and.have.property(
@@ -40,8 +40,8 @@ describe('IDE', () => {
     ]);
   afterEach(deleteTestFiles);
 
-  const loadMock = path => () => Promise.resolve(path);
-  const saveMock = expectedPath => actualPath => {
+  const loadMock = (path) => () => Promise.resolve(path);
+  const saveMock = (expectedPath) => (actualPath) => {
     assert.equal(expectedPath, actualPath);
     return WA.saveWorkspacePath(actualPath);
   };
@@ -52,7 +52,7 @@ describe('IDE', () => {
         .then(WA.spawnWorkspace)
         .then(spawnDefaultProject(WA.getDefaultProjectPath()))
         .then(getLocalProjects)
-        .then(projects => {
+        .then((projects) => {
           assert.lengthOf(projects, 1);
         }));
   });
@@ -66,9 +66,10 @@ describe('IDE', () => {
 
     // !!! assumes that event with project is always second
     const assertOpenedProjectName = (eventsSequence, expectedName) => {
-      const openedProjectName = R.compose(getProjectName, R.path([1, 'data']))(
-        eventsSequence
-      );
+      const openedProjectName = R.compose(
+        getProjectName,
+        R.path([1, 'data'])
+      )(eventsSequence);
       assert.equal(openedProjectName, expectedName);
     };
 
@@ -93,7 +94,7 @@ describe('IDE', () => {
           (eventName, data) => {
             eventsSequence.push({ eventName, data });
           },
-          newPath => {
+          (newPath) => {
             // because we are opening a built-in project
             assert.equal(newPath, null);
           },
@@ -115,7 +116,7 @@ describe('IDE', () => {
           (eventName, data) => {
             eventsSequence.push({ eventName, data });
           },
-          newPath => {
+          (newPath) => {
             // notice that 'project.xod' at the end is gone
             assert.equal(newPath, fixture('./multifileProject'));
           },
@@ -137,7 +138,7 @@ describe('IDE', () => {
           (eventName, data) => {
             eventsSequence.push({ eventName, data });
           },
-          newPath => {
+          (newPath) => {
             assert.equal(newPath, fixture('./singleFile.xodball'));
           },
           () => Maybe.Just(fixture('./singleFile.xodball')),
@@ -160,7 +161,7 @@ describe('IDE', () => {
           (eventName, data) => {
             eventsSequence.push({ eventName, data });
           },
-          newPath => {
+          (newPath) => {
             // because we are opening a built-in project
             assert.equal(newPath, null);
           },
@@ -182,7 +183,7 @@ describe('IDE', () => {
           (eventName, data) => {
             eventsSequence.push({ eventName, data });
           },
-          newPath => {
+          (newPath) => {
             // notice that 'project.xod' at the end is gone
             assert.equal(newPath, fixture('./multifileProject'));
           },
@@ -204,7 +205,7 @@ describe('IDE', () => {
           (eventName, data) => {
             eventsSequence.push({ eventName, data });
           },
-          newPath => {
+          (newPath) => {
             assert.equal(newPath, fixture('./singleFile.xodball'));
           },
           () => Maybe.Just(fixture('./singleFile.xodball')),
@@ -309,7 +310,7 @@ describe('IDE', () => {
 
       return expectRejectedWithCode(
         WA.onSelectProject(
-          newProjectPath => {
+          (newProjectPath) => {
             assert.fail(
               newProjectPath,
               undefined,
@@ -329,8 +330,8 @@ describe('IDE', () => {
     const deleteTestProject = () => rmrf(fixture('./emptyWorkspace/test'));
     afterEach(deleteTestProject);
 
-    it('creates new project and resets project path to null', done => {
-      WA.onCreateProject(newProjectPath => {
+    it('creates new project and resets project path to null', (done) => {
+      WA.onCreateProject((newProjectPath) => {
         assert.isNull(newProjectPath);
         done();
       });

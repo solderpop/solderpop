@@ -17,7 +17,7 @@ const baseProps = {
 };
 
 storiesOf('Link', module)
-  .addDecorator(story => (
+  .addDecorator((story) => (
     <svg>
       <rect
         width={pFrom.x * 2 + pTo.x}

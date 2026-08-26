@@ -53,9 +53,10 @@ class TableLog extends React.Component {
   }
 
   onNextSheetClick() {
-    const nextSheetIndex = R.unless(R.equals(this.getSheetsAmount()), R.add(1))(
-      this.props.sheetIndex
-    );
+    const nextSheetIndex = R.unless(
+      R.equals(this.getSheetsAmount()),
+      R.add(1)
+    )(this.props.sheetIndex);
     this.props.actions.changeActiveSheet(
       this.props.tabId,
       this.props.nodeId,
@@ -75,7 +76,7 @@ class TableLog extends React.Component {
       () => {
         this.props.actions.addConfirmation(LOG_COPIED);
       },
-      err => {
+      (err) => {
         this.props.actions.addError(logCopyError(err));
       }
     );
@@ -195,8 +196,8 @@ class TableLog extends React.Component {
             <ReactDataSheet
               className="tablelog-grid"
               data={tableLogToDataSheet(this.getSheet())}
-              valueRenderer={cell => cell.value}
-              overflow={'nowrap'}
+              valueRenderer={(cell) => cell.value}
+              overflow="nowrap"
             />
           )}
         </div>
@@ -222,7 +223,7 @@ const mapStateToProps = (state, { nodeId }) =>
     document: DebuggerSelectors.getTableLogsByNodeId(nodeId),
   })(state);
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(
     {
       changeActiveSheet: Actions.changeActiveSheet,

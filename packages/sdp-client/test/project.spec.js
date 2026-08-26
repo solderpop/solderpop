@@ -1,14 +1,8 @@
 import R from 'ramda';
 import thunkModule from 'redux-thunk';
-
-const thunk = typeof thunkModule === 'function' ? thunkModule : thunkModule.default;
 import { createStore, applyMiddleware } from 'redux';
 import chai from 'chai';
-
-const { assert } = chai;
 import RamdaFantasy from 'ramda-fantasy';
-
-const { Maybe } = RamdaFantasy;
 
 import * as XP from 'sdp-project';
 
@@ -31,6 +25,13 @@ import {
   editComment,
   bulkDeleteNodesAndComments,
 } from '../src/project/actions.js';
+
+const thunk =
+  typeof thunkModule === 'function' ? thunkModule : thunkModule.default;
+
+const { assert } = chai;
+
+const { Maybe } = RamdaFantasy;
 
 describe('project reducer', () => {
   describe('Project management', () => {
@@ -145,7 +146,7 @@ describe('project reducer', () => {
 
     it('should delete a patch', () => {
       const addPatchAction = store.dispatch(addPatch('label'));
-      const patchPath = addPatchAction.payload.patchPath;
+      const { patchPath } = addPatchAction.payload;
       store.dispatch(deletePatch(patchPath));
 
       const project = getProject(store.getState());
@@ -355,15 +356,15 @@ describe('project reducer', () => {
     let store = null;
     let testPatchPath = '';
 
-    const getCommentsList = R.uncurryN(2)(patchPath =>
+    const getCommentsList = R.uncurryN(2)((patchPath) =>
       R.compose(XP.listComments, XP.getPatchByPathUnsafe(patchPath), getProject)
     );
 
-    const getAddedComment = R.uncurryN(2)(patchPath =>
+    const getAddedComment = R.uncurryN(2)((patchPath) =>
       R.compose(R.head, getCommentsList(patchPath))
     );
 
-    const getAddedCommentId = R.uncurryN(2)(patchPath =>
+    const getAddedCommentId = R.uncurryN(2)((patchPath) =>
       R.compose(XP.getCommentId, getAddedComment(patchPath))
     );
 

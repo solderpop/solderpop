@@ -16,7 +16,7 @@ const baseProps = {
 };
 
 storiesOf('PinLabel', module)
-  .addDecorator(story => (
+  .addDecorator((story) => (
     <PatchSVG>
       <g>
         <rect width={pinCenter.x * 2} height={pinCenter.y * 2} fill="#676767" />

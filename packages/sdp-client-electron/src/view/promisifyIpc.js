@@ -9,7 +9,7 @@ const removeListenersForAllEventStates = R.compose(
 );
 
 // :: EVENT_NAME -> ((a -> _) -> Object -> Promise a Error)
-export default eventName => {
+export default (eventName) => {
   const EVENT_STATES = getAllStatesForEvent(eventName);
 
   return (onProgress, payload) =>

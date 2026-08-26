@@ -1,24 +1,25 @@
 import R from 'ramda';
 import chai from 'chai';
-const { assert } = chai;
 
 import { tapP, retryOrFail } from '../src/promises.js';
+
+const { assert } = chai;
 
 describe('promises', () => {
   describe('tapP()', () => {
     it('should return the same value', () => {
       const promiseFn = () =>
-        new Promise(resolve => {
+        new Promise((resolve) => {
           setTimeout(() => resolve(true), 5);
         });
 
       Promise.resolve(1)
         .then(tapP(promiseFn))
-        .then(value => assert.equal(value, 1));
+        .then((value) => assert.equal(value, 1));
     });
     it('should pass argument into promiseFn', () => {
-      const promiseFn = arg =>
-        new Promise(resolve => {
+      const promiseFn = (arg) =>
+        new Promise((resolve) => {
           const newValue = arg + 5;
           assert.equal(newValue, 6);
           setTimeout(() => resolve(newValue), 5);
@@ -27,11 +28,11 @@ describe('promises', () => {
       Promise.resolve(1).then(tapP(promiseFn));
     });
     it('should return Promise.reject if inner function return Promise.reject', () => {
-      const promiseFn = () => Promise.reject('reject');
+      const promiseFn = () => Promise.reject(new Error('reject'));
 
       Promise.resolve(1)
         .then(tapP(promiseFn))
-        .catch(out => assert.equal(out, 'reject'));
+        .catch((out) => assert.equal(out.message, 'reject'));
     });
   });
 

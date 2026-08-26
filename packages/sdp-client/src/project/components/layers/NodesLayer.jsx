@@ -9,7 +9,7 @@ import { getPinLinkabilityValidator } from '../../utils.js';
 
 import Node from '../Node.jsx';
 
-const NodesLayer = ({
+function NodesLayer({
   nodes,
   selection,
   linkingPin,
@@ -22,13 +22,13 @@ const NodesLayer = ({
   onVariadicHandleDown,
   onResizeHandleMouseDown,
   noNodeHovering,
-}) => {
+}) {
   const pinLinkabilityValidator = getPinLinkabilityValidator(linkingPin, nodes);
 
   return (
     <g className="NodesLayer">
       {R.compose(
-        R.map(node => (
+        R.map((node) => (
           <Node
             key={node.id}
             id={node.id}
@@ -67,7 +67,7 @@ const NodesLayer = ({
       )(nodes)}
     </g>
   );
-};
+}
 
 NodesLayer.defaultProps = {
   areDragged: false,

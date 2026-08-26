@@ -38,10 +38,12 @@ class Workarea extends React.Component {
 
     this.resizePanelAction = debounce(300, this.props.actions.resizePanel);
   }
+
   shouldComponentUpdate(nextProps) {
     // Optimize rendering
     return notEquals(pickPropsToCheck(nextProps), pickPropsToCheck(this.props));
   }
+
   onResizePanel(event) {
     const { name, flex } = event.component.props;
     this.setState(R.assocPath(['sizes', name], flex));
@@ -50,16 +52,20 @@ class Workarea extends React.Component {
       this.state.sizes[PANEL_IDS.DEPLOYMENT]
     );
   }
+
   onStartResizePanel() {
     this.setState({ resizing: true });
   }
+
   onStopResizePanel() {
     this.setState({ resizing: false });
   }
+
   getDeploymentPanelSize() {
     const size = R.propOr(0.2, 'size', this.props.panelSettings);
     return this.props.isDebugPanelExpanded ? size : 0;
   }
+
   render() {
     return (
       <ReflexContainer
@@ -126,7 +132,7 @@ const mapStateToProps = R.applySpec({
   panelSettings: EditorSelectors.getPanelSettings(PANEL_IDS.DEPLOYMENT),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(
     {
       resizePanel: Actions.resizePanel,

@@ -76,7 +76,7 @@ class Log extends React.PureComponent {
     return (
       <Autoscroll
         className={cn('log', { compact })}
-        ref={el => (this.autoscrollRef = el)}
+        ref={(el) => (this.autoscrollRef = el)}
         onScrolledFromBottom={
           isSkipOnScrollEnabled && !doNotSkipLines
             ? startSkippingNewLogLines
@@ -127,7 +127,7 @@ const mapStateToProps = R.applySpec({
   numberOfSkippedSerialLogLines: selectors.getNumberOfSkippedSerialLogLines,
 });
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       startSkippingNewLogLines: actions.startSkippingNewLogLines,

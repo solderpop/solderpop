@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { PIN_HOTSPOT_RADIUS, PIN_HOVER_HIGHLIGHT_RADIUS } from '../nodeLayout.js';
+import {
+  PIN_HOTSPOT_RADIUS,
+  PIN_HOVER_HIGHLIGHT_RADIUS,
+} from '../nodeLayout.js';
 
 import deepSCU from '../../utils/deepSCU.js';
 

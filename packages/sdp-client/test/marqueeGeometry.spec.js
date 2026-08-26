@@ -1,7 +1,5 @@
 import chai from 'chai';
 
-const { assert } = chai;
-
 import {
   isInclusiveSelection,
   getSelectionBox,
@@ -10,6 +8,8 @@ import {
   filterNodesByBox,
   filterNodesByInclusiveBox,
 } from '../src/editor/marqueeGeometry.js';
+
+const { assert } = chai;
 
 describe('Maquee selecting geometry', () => {
   const box = {

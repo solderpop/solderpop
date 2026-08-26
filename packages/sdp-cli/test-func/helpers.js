@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export const createWorkingDirectory = prefix =>
+export const createWorkingDirectory = (prefix) =>
   fs.mkdtempSync(path.resolve(os.tmpdir(), `sdp-cli-test-${prefix}-`));
 
 export const bundledWorkspacePath = path.resolve(
@@ -17,5 +17,5 @@ export const bundledWorkspacePath = path.resolve(
 
 export const getFilesFromPath = (p, extension) => {
   const dir = fs.readdirSync(p);
-  return dir.filter(el => el.match(new RegExp(`.*.(${extension})$`, 'ig')));
+  return dir.filter((el) => el.match(new RegExp(`.*.(${extension})$`, 'ig')));
 };

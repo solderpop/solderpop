@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 .HelpPanel {
   background: $sidebar-color-bg;
   width: 100%;

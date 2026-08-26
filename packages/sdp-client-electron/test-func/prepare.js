@@ -41,7 +41,7 @@ export default function prepareSuite() {
     // with Mocha
     return fse
       .mkdtemp(tmpDir)
-      .then(home => {
+      .then((home) => {
         state.app = new Application({
           path: appPath,
           args: ['.'],
@@ -71,7 +71,7 @@ export default function prepareSuite() {
 
   after(() => {
     if (!state.passed || DEBUG) {
-      state.app.client.getMainProcessLogs().then(logs => {
+      state.app.client.getMainProcessLogs().then((logs) => {
         logs.forEach(console.log); // eslint-disable-line no-console
       });
     }

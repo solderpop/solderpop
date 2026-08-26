@@ -24,7 +24,8 @@ import subscribeIpc from './subscribeIpc.js';
 import { getPathToBundledWorkspace } from './utils.js';
 import { loadWorkspacePath } from './workspaceActions.js';
 
-export const getArdulibsPath = p => path.resolve(p, ARDUINO_LIBRARIES_DIRNAME);
+export const getArdulibsPath = (p) =>
+  path.resolve(p, ARDUINO_LIBRARIES_DIRNAME);
 export const getBundledArdulibsPath = () =>
   getArdulibsPath(getPathToBundledWorkspace());
 
@@ -43,15 +44,15 @@ const checkArduinoPackageInstalled = async (cli, packages) => {
 // :: (ProgressData -> _) -> ArduinoCli -> [{ package, packageName }] -> Promise [{ package, packageName, installed }] Error
 const installArduinoPackages = (onProgress, cli, packages) =>
   Promise.all(
-    R.map(pkg => cli.core.install(onProgress, pkg.package))(packages)
+    R.map((pkg) => cli.core.install(onProgress, pkg.package))(packages)
   ).then(() => R.map(R.assoc('installed', true))(packages));
 
-export const subscribeOnCheckArduinoDependencies = arduinoCli =>
+export const subscribeOnCheckArduinoDependencies = (arduinoCli) =>
   subscribeIpc(
     (_, deps, onProgress) =>
       loadWorkspacePath()
-        .then(wsPath => path.resolve(wsPath, ARDUINO_LIBRARIES_DIRNAME))
-        .then(libsPath =>
+        .then((wsPath) => path.resolve(wsPath, ARDUINO_LIBRARIES_DIRNAME))
+        .then((libsPath) =>
           Promise.all([
             checkLibrariesInstalledByUrls(onProgress, libsPath, deps.libraries),
             checkArduinoPackageInstalled(arduinoCli, deps.packages),
@@ -61,12 +62,12 @@ export const subscribeOnCheckArduinoDependencies = arduinoCli =>
     CHECK_ARDUINO_DEPENDENCIES_INSTALLED
   );
 
-export const subscribeOnInstallArduinoDependencies = arduinoCli =>
+export const subscribeOnInstallArduinoDependencies = (arduinoCli) =>
   subscribeIpc(
     (_, deps, onProgress) =>
       loadWorkspacePath()
-        .then(wsPath => path.resolve(wsPath, ARDUINO_LIBRARIES_DIRNAME))
-        .then(libsPath =>
+        .then((wsPath) => path.resolve(wsPath, ARDUINO_LIBRARIES_DIRNAME))
+        .then((libsPath) =>
           Promise.all([
             installLibrariesByUrls(onProgress, libsPath, deps.libraries),
             installArduinoPackages(onProgress, arduinoCli, deps.packages),

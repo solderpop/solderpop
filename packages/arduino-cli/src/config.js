@@ -6,14 +6,14 @@ import YAML from 'yamljs';
 
 export const ADDITIONAL_URLS_PATH = ['board_manager', 'additional_urls'];
 
-const getDefaultConfig = configDir => ({
+const getDefaultConfig = (configDir) => ({
   directories: {
     user: resolve(configDir, 'sketchbook'),
     data: resolve(configDir, 'data'),
   },
 });
 
-const stringifyConfig = cfg => YAML.stringify(cfg, 10, 2);
+const stringifyConfig = (cfg) => YAML.stringify(cfg, 10, 2);
 
 // :: Path -> Object -> { config: Object, path: Path }
 export const saveConfig = (configPath, config) => {
@@ -33,7 +33,7 @@ export const saveConfig = (configPath, config) => {
 };
 
 // :: Object -> { config: Object, path: Path }
-export const configure = inputConfig => {
+export const configure = (inputConfig) => {
   const configDir = fse.mkdtempSync(resolve(tmpdir(), 'arduino-cli'));
   const configPath = resolve(configDir, 'arduino-cli.yaml');
   const config = inputConfig || getDefaultConfig(configDir);
@@ -48,5 +48,5 @@ export const setPackageIndexUrls = (configPath, urls) =>
     .then(YAML.parse)
     .then(R.assocPath(ADDITIONAL_URLS_PATH, urls))
     .then(stringifyConfig)
-    .then(data => fse.writeFile(configPath, data))
+    .then((data) => fse.writeFile(configPath, data))
     .then(R.always(urls));

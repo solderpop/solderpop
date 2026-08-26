@@ -16,9 +16,9 @@ import { saveAll, saveProjectAsXodball } from '../src/save.js';
 
 const { assert } = chai;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const fixture = subpath => path.resolve(__dirname, 'fixtures', subpath);
+const fixture = (subpath) => path.resolve(__dirname, 'fixtures', subpath);
 
-const formatDiffs = comparison =>
+const formatDiffs = (comparison) =>
   JSON.stringify(
     R.reject(R.propEq('state', 'equal'), comparison.diffSet),
     null,
@@ -133,7 +133,7 @@ describe('Load/Save roundtrip', () => {
   const moveNode = R.curry((position, nodeId, patchPath, project) =>
     R.compose(
       explodeEither,
-      XP.updatePatch(patchPath, patch =>
+      XP.updatePatch(patchPath, (patch) =>
         R.compose(
           XP.assocNode(R.__, patch),
           XP.setNodePosition(position),

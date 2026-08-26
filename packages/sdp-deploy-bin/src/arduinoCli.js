@@ -23,7 +23,7 @@ import {
 // =============================================================================
 
 // :: Path -> Path
-const getArduinoPackagesPath = dir =>
+const getArduinoPackagesPath = (dir) =>
   path.resolve(dir, ARDUINO_PACKAGES_DIRNAME);
 
 // :: Boolean -> Promise Path Error
@@ -56,14 +56,14 @@ const getArduinoCliPath = (isDev = false) =>
     });
   });
 
-const getLibsDir = p => path.join(p, ARDUINO_LIBRARIES_DIRNAME);
+const getLibsDir = (p) => path.join(p, ARDUINO_LIBRARIES_DIRNAME);
 
 // :: String -> [String]
 const parseExtraTxtContent = R.compose(R.reject(R.isEmpty), R.split(/\r\n|\n/));
 
 // :: Path -> Path -> Promise Path -> Error
 const copy = (from, to) =>
-  fse.pathExists(from).then(exist => {
+  fse.pathExists(from).then((exist) => {
     if (exist) return fse.copy(from, to).then(() => to);
     return fse.ensureDir(to).then(() => to);
   });
@@ -76,11 +76,11 @@ const copyLibraries = async (bundledLibDir, userLibDir, sketchbookLibDir) => {
 };
 
 // :: Path -> Path
-const getExtraTxtPath = wsPath =>
+const getExtraTxtPath = (wsPath) =>
   path.join(wsPath, ARDUINO_PACKAGES_DIRNAME, ARDUINO_EXTRA_URLS_FILENAME);
 
 // :: [String] -> [String]
-const migrateBundledAdditionalUrls = R.map(oldUrl => {
+const migrateBundledAdditionalUrls = R.map((oldUrl) => {
   const idx = R.findIndex(
     R.compose(R.equals(oldUrl), R.nth(0)),
     MIGRATE_BUNDLED_ADDITIONAL_URLS
@@ -90,11 +90,11 @@ const migrateBundledAdditionalUrls = R.map(oldUrl => {
 });
 
 // :: [String] -> [String]
-const ensureBundledAdditionalUrls = urls =>
+const ensureBundledAdditionalUrls = (urls) =>
   R.compose(R.concat(R.__, urls), R.difference(BUNDLED_ADDITIONAL_URLS))(urls);
 
 // :: Path -> Promise Path Error
-const ensureExtraTxt = async wsPath => {
+const ensureExtraTxt = async (wsPath) => {
   const extraTxtFilePath = getExtraTxtPath(wsPath);
   const doesExist = await fse.pathExists(extraTxtFilePath);
   if (!doesExist) {
@@ -126,7 +126,7 @@ const copyPackageIndexes = async (wsBundledPath, wsPackageDir) => {
 
   return Promise.all(
     R.map(
-      fname =>
+      (fname) =>
         fse.copy(
           path.join(bundledPackagesDir, fname),
           path.join(wsPackageDir, fname),
@@ -147,7 +147,7 @@ const copyPackageIndexes = async (wsBundledPath, wsPackageDir) => {
  */
 const copyLibrariesToSketchbook = async (cli, wsBundledPath, ws) => {
   const sketchbookLibDir = await R.composeP(
-    p => path.join(p, ARDUINO_CLI_LIBRARIES_DIRNAME),
+    (p) => path.join(p, ARDUINO_CLI_LIBRARIES_DIRNAME),
     R.path(['directories', 'user']),
     cli.dumpConfig
   )();
@@ -158,14 +158,14 @@ const copyLibrariesToSketchbook = async (cli, wsBundledPath, ws) => {
 };
 
 // :: Board -> Board
-export const patchFqbnWithOptions = board => {
+export const patchFqbnWithOptions = (board) => {
   const selectedOptions = board.selectedOptions || {};
   const options = board.options || [];
 
   const defaultBoardOptions = R.compose(
     R.reject(R.isNil),
     R.mergeAll,
-    R.map(opt => ({
+    R.map((opt) => ({
       [opt.optionId]: R.pathOr(null, ['values', 0, 'value'], opt),
     }))
   )(options);
@@ -250,7 +250,7 @@ export const patchFqbnWithOptions = board => {
 // =============================================================================
 
 // :: Error -> RejectedPromise Error
-const wrapCompileError = err =>
+const wrapCompileError = (err) =>
   Promise.reject(
     createError('COMPILE_TOOL_ERROR', {
       message: err.message,
@@ -259,7 +259,7 @@ const wrapCompileError = err =>
   );
 
 // :: Error -> RejectedPromise Error
-export const wrapUploadError = err =>
+export const wrapUploadError = (err) =>
   Promise.reject(
     createError('UPLOAD_TOOL_ERROR', {
       message: err.message,
@@ -341,7 +341,7 @@ export const createCli = async (
     wsPath
   );
 
-  if (!await fse.pathExists(arduinoCliPath)) {
+  if (!(await fse.pathExists(arduinoCliPath))) {
     throw createError('ARDUINO_CLI_NOT_FOUND', {
       path: arduinoCliPath,
       isDev,
@@ -399,7 +399,7 @@ export const switchWorkspace = async (cli, wsBundledPath, newWsPath) => {
  * :: Path -> ArduinoCli -> Promise _ Error
  */
 const updateIndexesInternal = (wsPath, cli) =>
-  cli.core.updateIndex().catch(err => {
+  cli.core.updateIndex().catch((err) => {
     throw createError('UPDATE_INDEXES_ERROR_NO_CONNECTION', {
       pkgPath: getArduinoPackagesPath(wsPath),
       // `arduino-cli` outputs everything in stdout
@@ -414,7 +414,7 @@ const updateIndexesInternal = (wsPath, cli) =>
  * :: Path -> Path -> Promise Path Error
  */
 const ensureWorkspace = (wsBundledPath, wsPath) =>
-  isWorkspaceValid(wsPath).catch(async e => {
+  isWorkspaceValid(wsPath).catch(async (e) => {
     if (e.errorCode === 'WORKSPACE_DIR_NOT_EXIST_OR_EMPTY') {
       await prepareWorkspacePackagesDir(wsBundledPath, wsPath);
       await spawnWorkspaceFile(wsPath);
@@ -437,7 +437,7 @@ export const listBoards = async (wsBundledPath, wsPath, cli) => {
   await syncAdditionalPackages(wsPath, cli);
 
   return Promise.all([
-    cli.listInstalledBoards().catch(err => {
+    cli.listInstalledBoards().catch((err) => {
       const errContents = JSON.parse(err.stdout);
       const normalizedError = new Error(errContents.Cause);
       normalizedError.code = err.code;
@@ -445,11 +445,11 @@ export const listBoards = async (wsBundledPath, wsPath, cli) => {
     }),
     cli.listAvailableBoards(),
   ])
-    .then(res => ({
+    .then((res) => ({
       installed: res[0],
       available: res[1],
     }))
-    .catch(async err => {
+    .catch(async (err) => {
       if (R.propEq('code', 'ENOENT', err)) {
         // When User added a new URL into `extra.txt` file it causes that
         // arduino-cli tries to read new JSON but it's not existing yet
@@ -501,7 +501,7 @@ export const saveSketch = async (cli, code) => {
   return { sketchName, sketchPath };
 };
 
-const compilationBegun = boardName =>
+const compilationBegun = (boardName) =>
   `Begin compiling code for the board ${boardName}`;
 
 const UPLOAD_PROCESS_BEGINS = 'Uploading compiled code to the board...';
@@ -546,7 +546,7 @@ export const compile = async (onProgress, cli, payload) => {
 
   const compileLog = await cli
     .compile(
-      stdout =>
+      (stdout) =>
         onProgress({
           percentage: 40,
           message: stdout,
@@ -597,7 +597,7 @@ export const uploadThroughUSB = async (onProgress, cli, payload) => {
 
   const uploadLog = await cli
     .upload(
-      stdout =>
+      (stdout) =>
         onProgress({
           percentage: 60,
           message: stdout,
@@ -627,8 +627,11 @@ export const uploadThroughUSB = async (onProgress, cli, payload) => {
  *
  * :: ArduinoCli -> Promise String Error
  */
-export const checkUpdates = cli =>
-  R.composeP(R.reject(arch => arch.Installed === arch.Latest), cli.core.list)();
+export const checkUpdates = (cli) =>
+  R.composeP(
+    R.reject((arch) => arch.Installed === arch.Latest),
+    cli.core.list
+  )();
 
 /**
  * Updates arduino packages.

@@ -2,8 +2,6 @@
 import { cwd, exit } from 'process';
 import path from 'path';
 import R from 'ramda';
-
-const { dropLast, last, lensProp, when, over, pick } = R;
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import { flags } from '@oclif/command';
@@ -21,6 +19,8 @@ import {
 } from '../listrTasks.js';
 import { resolveBundledWorkspacePath } from '../paths.js';
 
+const { dropLast, last, lensProp, when, over, pick } = R;
+
 class CompileCommand extends BaseCommand {
   async run() {
     this.parseArgv(CompileCommand);
@@ -36,7 +36,7 @@ class CompileCommand extends BaseCommand {
 
     const initTask = {
       title: 'Initialize',
-      task: async ctx => {
+      task: async (ctx) => {
         await fs.ensureDir(output);
         ctx.sketchDir = await xdb.prepareSketchDir();
         ctx.arduinoCli = await xdb.createCli(
@@ -63,7 +63,7 @@ class CompileCommand extends BaseCommand {
       { collapse: false }
     )
       .run()
-      .then(async ctx => {
+      .then(async (ctx) => {
         const payloadWithUpdatedFqbn = over(
           lensProp('board'),
           xdb.patchFqbnWithOptions,
@@ -81,7 +81,9 @@ class CompileCommand extends BaseCommand {
               message !== null &&
               message !== last(messages)
             ) {
-              messages.push(when(m => last(m) === '\n', dropLast(1))(message));
+              messages.push(
+                when((m) => last(m) === '\n', dropLast(1))(message)
+              );
               this.info(chalk.green(last(messages)));
             }
           },
@@ -100,7 +102,7 @@ class CompileCommand extends BaseCommand {
         );
       })
       .then(() => exit(0))
-      .catch(err => {
+      .catch((err) => {
         if (messages) this.info(messages.join('\n'));
         this.printError(this.patchArduinoCliError(err));
         return exit((err.payload || err).code || 100);

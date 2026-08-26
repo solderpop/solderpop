@@ -1,8 +1,6 @@
 import R from 'ramda';
 import chai from 'chai';
 
-const { assert } = chai;
-
 import { migrateProjectDimensionsToSlots } from '../src/migrations/unitlessToSlots.js';
 import * as Project from '../src/project.js';
 import * as Patch from '../src/patch.js';
@@ -11,6 +9,8 @@ import * as Comment from '../src/comment.js';
 import { addMissingOptionalProjectFields } from '../src/optionalFieldsUtils.js';
 
 import * as Helper from './helpers.js';
+
+const { assert } = chai;
 
 describe('Migration: old dimensions to slots', () => {
   const loadXodballWithoutMigrating = R.compose(

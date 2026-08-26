@@ -1,8 +1,8 @@
 import R from 'ramda';
 import RamdaFantasy from 'ramda-fantasy';
+import { fail } from 'sdp-func-tools';
 
 const { Either } = RamdaFantasy;
-import { fail } from 'sdp-func-tools';
 
 export function findVertexesWithNoIncomingEdges(vertexes, edges) {
   return R.difference(vertexes, R.map(R.nth(1), edges));
@@ -20,7 +20,7 @@ const makeEdgesSet = R.reduce(
 );
 
 // :: Int -> EdgesSet -> Int -> Boolean
-const hasEdgeFrom = (n, edgesSet) => m => R.pathOr(false, [m, n], edgesSet);
+const hasEdgeFrom = (n, edgesSet) => (m) => R.pathOr(false, [m, n], edgesSet);
 
 // :: Int -> EdgesSet -> Boolean
 const hasIncomingEdges = (vertex, edgesSet) => !!R.prop(vertex, edgesSet);
@@ -49,7 +49,7 @@ export function sortGraph(vertexes, edges) {
   let s = findVertexesWithNoIncomingEdges(vertexes, edges);
   let edgesLeft = makeEdgesSet(edges);
 
-  const excludeEdgesFrom = n => m => {
+  const excludeEdgesFrom = (n) => (m) => {
     edgesLeft = dissocEdge(n, m, edgesLeft);
     if (!hasIncomingEdges(m, edgesLeft)) {
       s.push(m);

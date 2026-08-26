@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 #App {
   display: flex;
   flex-direction: column;

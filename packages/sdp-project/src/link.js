@@ -129,7 +129,7 @@ export const getLinkPinKeys = R.juxt([getLinkInputPinKey, getLinkOutputPinKey]);
  */
 const isGetterEqualTo = def(
   'isGetterEqualTo :: (b -> a) -> (a -> b -> Boolean)',
-  getter => R.useWith(R.equals, [R.identity, getter])
+  (getter) => R.useWith(R.equals, [R.identity, getter])
 );
 
 /**

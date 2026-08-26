@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 @mixin symbol-coloring($type-color) {
   stroke: $type-color;
 

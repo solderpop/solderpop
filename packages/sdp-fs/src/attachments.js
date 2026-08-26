@@ -22,16 +22,17 @@ const getEncodingByExtname = def(
 const encodeBuffer = def(
   'encodeBuffer :: Path -> Buffer -> String',
   (filePath, buffer) =>
-    R.compose(encoding => buffer.toString(encoding), getEncodingByExtname)(
-      filePath
-    )
+    R.compose(
+      (encoding) => buffer.toString(encoding),
+      getEncodingByExtname
+    )(filePath)
 );
 
 // Loads and returns a single Attachment
 // :: Path -> Path -> Promise Attachment Error
 const loadAttachment = R.curry((patchDirPath, filePath) =>
   R.composeP(
-    content => ({
+    (content) => ({
       filename: path.relative(patchDirPath, filePath),
       encoding: getEncodingByExtname(filePath),
       content,

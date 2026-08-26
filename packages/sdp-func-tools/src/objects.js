@@ -59,7 +59,7 @@ export const optionalObjOf = def(
 //   ) // => { bar: "not 2", baz: 3}
 export const subtractObject = def(
   'subtractObject :: Object -> Object -> Object',
-  R.uncurryN(2, objToSubstract =>
+  R.uncurryN(2, (objToSubstract) =>
     R.converge(R.omit, [
       R.compose(
         R.keys,
@@ -105,9 +105,11 @@ export const renameKeys = def(
 export const reverseLookup = def(
   'reverseLookup :: a -> Map b a -> b',
   (val, obj) =>
-    R.compose(R.nth(0), R.find(R.compose(R.equals(val), R.nth(1))), R.toPairs)(
-      obj
-    )
+    R.compose(
+      R.nth(0),
+      R.find(R.compose(R.equals(val), R.nth(1))),
+      R.toPairs
+    )(obj)
 );
 
 /**

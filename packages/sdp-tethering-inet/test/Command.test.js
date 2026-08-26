@@ -1,5 +1,3 @@
-'use strict';
-
 // ReasonML variants compile to { TAG: "ConstructorName", _0: ..., _1: ... }
 // plain objects -- confirmed by reading Command.bs.js's/Connection.bs.js's
 // own compiled output. Constructing expected values that shape directly,
@@ -7,24 +5,40 @@
 // functions.
 const Command = require('../src/Command.bs.js');
 
-const Ok = a => ({TAG: 'Ok', _0: a});
-const Err = a => ({TAG: 'Error', _0: a});
-const ExpectedArgs = n => ({TAG: 'EXPECTED_ARGUMENTS', _0: n});
+const Ok = (a) => ({ TAG: 'Ok', _0: a });
+const Err = (a) => ({ TAG: 'Error', _0: a });
+const ExpectedArgs = (n) => ({ TAG: 'EXPECTED_ARGUMENTS', _0: n });
 const InvalidArgs = 'INVALID_ARGUMENTS';
-const InvalidPort = s => ({TAG: 'INVALID_PORT', _0: s});
-const InvalidKeepAlive = s => ({TAG: 'INVALID_KEEPALIVE', _0: s});
-const InvalidConnectionType = s => ({TAG: 'INVALID_CONNECTION_TYPE', _0: s});
-const InvalidLinkId = s => ({TAG: 'INVALID_LINKID', _0: s});
+const InvalidPort = (s) => ({ TAG: 'INVALID_PORT', _0: s });
+const InvalidKeepAlive = (s) => ({ TAG: 'INVALID_KEEPALIVE', _0: s });
+const InvalidConnectionType = (s) => ({
+  TAG: 'INVALID_CONNECTION_TYPE',
+  _0: s,
+});
+const InvalidLinkId = (s) => ({ TAG: 'INVALID_LINKID', _0: s });
 const UnknownCommand = 'UNKNOWN_COMMAND';
 
-const CIPMUX = a => ({TAG: 'CIPMUX', _0: a});
-const PING = a => ({TAG: 'PING', _0: a});
-const CIPDOMAIN = a => ({TAG: 'CIPDOMAIN', _0: a});
-const CIPSTART = (linkId, connection) => ({TAG: 'CIPSTART', _0: linkId, _1: connection});
-const CIPSEND = (linkId, length) => ({TAG: 'CIPSEND', _0: linkId, _1: length});
-const CIPCLOSE = linkId => ({TAG: 'CIPCLOSE', _0: linkId});
+const CIPMUX = (a) => ({ TAG: 'CIPMUX', _0: a });
+const PING = (a) => ({ TAG: 'PING', _0: a });
+const CIPDOMAIN = (a) => ({ TAG: 'CIPDOMAIN', _0: a });
+const CIPSTART = (linkId, connection) => ({
+  TAG: 'CIPSTART',
+  _0: linkId,
+  _1: connection,
+});
+const CIPSEND = (linkId, length) => ({
+  TAG: 'CIPSEND',
+  _0: linkId,
+  _1: length,
+});
+const CIPCLOSE = (linkId) => ({ TAG: 'CIPCLOSE', _0: linkId });
 
-const TCP = (host, port, keepAlive) => ({TAG: 'TCP', _0: host, _1: port, _2: keepAlive});
+const TCP = (host, port, keepAlive) => ({
+  TAG: 'TCP',
+  _0: host,
+  _1: port,
+  _2: keepAlive,
+});
 
 describe('Command', () => {
   test('returns UNKNOWN COMMAND error for empty string', () => {
@@ -79,17 +93,35 @@ describe('Command', () => {
   // With Link ID
   testCommand('AT+CIPSTART=4,"TCP","192.168.0.1",8000', CIPSTART(4, tcp));
   // With KeepAlive
-  testCommand('AT+CIPSTART="TCP","192.168.0.1",8000,7200', CIPSTART(0, tcpAlive));
+  testCommand(
+    'AT+CIPSTART="TCP","192.168.0.1",8000,7200',
+    CIPSTART(0, tcpAlive)
+  );
   argumentsError(ExpectedArgs(3), 'AT+CIPSTART');
   argumentsError(ExpectedArgs(3), 'AT+CIPSTART="TCP"');
   argumentsError(ExpectedArgs(3), 'AT+CIPSTART="TCP","192.168.0.1"');
-  argumentsError(ExpectedArgs(3), 'AT+CIPSTART=0, "TCP","192.168.0.1",8000,7200,5');
+  argumentsError(
+    ExpectedArgs(3),
+    'AT+CIPSTART=0, "TCP","192.168.0.1",8000,7200,5'
+  );
   argumentsError(InvalidArgs, 'AT+CIPSTART="TCP","192.168.0.1",8000,7200,5');
-  argumentsError(InvalidPort('"lala"'), 'AT+CIPSTART="TCP","192.168.0.1","lala"');
+  argumentsError(
+    InvalidPort('"lala"'),
+    'AT+CIPSTART="TCP","192.168.0.1","lala"'
+  );
   argumentsError(InvalidPort('0'), 'AT+CIPSTART="TCP","192.168.0.1",0');
-  argumentsError(InvalidKeepAlive('9600'), 'AT+CIPSTART="TCP","192.168.0.1",8000,9600');
-  argumentsError(InvalidConnectionType('TCP/IP'), 'AT+CIPSTART="TCP/IP","192.168.0.1",8000');
-  argumentsError(InvalidLinkId('-1'), 'AT+CIPSTART=-1,"TCP","192.168.0.1",8000');
+  argumentsError(
+    InvalidKeepAlive('9600'),
+    'AT+CIPSTART="TCP","192.168.0.1",8000,9600'
+  );
+  argumentsError(
+    InvalidConnectionType('TCP/IP'),
+    'AT+CIPSTART="TCP/IP","192.168.0.1",8000'
+  );
+  argumentsError(
+    InvalidLinkId('-1'),
+    'AT+CIPSTART=-1,"TCP","192.168.0.1",8000'
+  );
   argumentsError(InvalidLinkId('5'), 'AT+CIPSTART=5,"TCP","192.168.0.1",8000');
 
   testCommand('AT+CIPSEND=42', CIPSEND(0, 42));
@@ -128,6 +160,8 @@ describe('Parse arguments', () => {
     expect(Command.parseArguments('AT=1,"ABC",3')).toHaveLength(3);
   });
   test('returns a list of four arguments', () => {
-    expect(Command.parseArguments('AT=1,"ABC","192.168.0.1",8')).toHaveLength(4);
+    expect(Command.parseArguments('AT=1,"ABC","192.168.0.1",8')).toHaveLength(
+      4
+    );
   });
 });

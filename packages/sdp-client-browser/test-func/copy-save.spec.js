@@ -15,7 +15,7 @@ describe('copy & save log', () => {
     // pane will be in a default initial state
     await page.evaluate(() => localStorage.clear());
   });
-  const openIdeAndDeploymentPane = async browser => {
+  const openIdeAndDeploymentPane = async (browser) => {
     const page = await getPage(browser);
     // TODO: Replace with `const` and do not find the DOM elment on the page
     //       after opening it, when rerendering of the element will be fixed
