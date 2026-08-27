@@ -1,5 +1,5 @@
-import { INITIAL_STATE } from './state';
-import { applyTheme } from './utils';
+import { INITIAL_STATE } from './state.js';
+import { applyTheme } from './utils.js';
 
 // The theme system exports are:
 // 1. The main applyTheme function from utils

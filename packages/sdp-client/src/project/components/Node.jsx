@@ -1,28 +1,28 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as XP from 'sdp-project';
 
-import Pin from './Pin';
-import PinLabel from './PinLabel';
-import PinValue from './PinValue';
-import { noop } from '../../utils/ramda';
-import { isPinSelected } from '../../editor/utils';
+import Pin from './Pin.jsx';
+import PinLabel from './PinLabel.jsx';
+import PinValue from './PinValue.jsx';
+import { noop } from '../../utils/ramda.js';
+import { isPinSelected } from '../../editor/utils.js';
 
-import RegularNodeBody from './nodeParts/RegularNodeBody';
-import TableLogNodeBody from './nodeParts/TableLogNodeBody';
-import WatchNodeBody from './nodeParts/WatchNodeBody';
-import TweakNodeBody from './nodeParts/TweakNodeBody';
-import TerminalNodeBody from './nodeParts/TerminalNodeBody';
-import ConstantNodeBody from './nodeParts/ConstantNodeBody';
-import BusNodeBody from './nodeParts/BusNodeBody';
-import JumperNodeBody from './nodeParts/JumperNodeBody';
+import RegularNodeBody from './nodeParts/RegularNodeBody.jsx';
+import TableLogNodeBody from './nodeParts/TableLogNodeBody.jsx';
+import WatchNodeBody from './nodeParts/WatchNodeBody.jsx';
+import TweakNodeBody from './nodeParts/TweakNodeBody.jsx';
+import TerminalNodeBody from './nodeParts/TerminalNodeBody.jsx';
+import ConstantNodeBody from './nodeParts/ConstantNodeBody.jsx';
+import BusNodeBody from './nodeParts/BusNodeBody.jsx';
+import JumperNodeBody from './nodeParts/JumperNodeBody.jsx';
 
-import TooltipHOC from '../../tooltip/components/TooltipHOC';
+import TooltipHOC from '../../tooltip/components/TooltipHOC.jsx';
 
-import nodeHoverContextType from '../../editor/nodeHoverContextType';
-import formatErrorMessage from '../../core/formatErrorMessage';
+import nodeHoverContextType from '../../editor/nodeHoverContextType.js';
+import formatErrorMessage from '../../core/formatErrorMessage.js';
 
 const isBusNodeType = R.either(
   R.equals(XP.TO_BUS_PATH),
@@ -89,15 +89,19 @@ class Node extends React.Component {
   }
 
   onMouseOver(...args) {
-    return R.pathOr(noop, ['context', 'nodeHover', 'onMouseOver'], this)(
-      ...args
-    );
+    return R.pathOr(
+      noop,
+      ['context', 'nodeHover', 'onMouseOver'],
+      this
+    )(...args);
   }
 
   onMouseLeave(...args) {
-    return R.pathOr(noop, ['context', 'nodeHover', 'onMouseLeave'], this)(
-      ...args
-    );
+    return R.pathOr(
+      noop,
+      ['context', 'nodeHover', 'onMouseLeave'],
+      this
+    )(...args);
   }
 
   getHoveredNodeId() {
@@ -222,7 +226,7 @@ class Node extends React.Component {
               {this.renderBody()}
             </g>
             <g className={pinsCls} id={`nodePins_${id}`}>
-              {pinsArr.map(pin => (
+              {pinsArr.map((pin) => (
                 <g key={pin.key}>
                   {pin.isConnected || XP.isOutputPin(pin) ? null : (
                     <PinValue {...pin} key={`pinValue_${pin.key}`} />

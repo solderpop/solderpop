@@ -1,30 +1,30 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import { HotKeys } from 'react-hotkeys';
 
 import * as XP from 'sdp-project';
 
-import { EDITOR_MODE, SELECTION_ENTITY_TYPE } from '../../../constants';
-import { isEntitySelected } from '../../../utils';
-import { isInputTarget } from '../../../../utils/browser';
-import { COMMAND } from '../../../../utils/constants';
+import { EDITOR_MODE, SELECTION_ENTITY_TYPE } from '../../../constants.js';
+import { isEntitySelected } from '../../../utils.js';
+import { isInputTarget } from '../../../../utils/browser.js';
+import { COMMAND } from '../../../../utils/constants.js';
 
-import PatchSVG from '../../../../project/components/PatchSVG';
-import * as Layers from '../../../../project/components/layers';
+import PatchSVG from '../../../../project/components/PatchSVG.jsx';
+import * as Layers from '../../../../project/components/layers/index.js';
 
 import {
   snapPositionToSlots,
   pixelPositionToSlots,
-} from '../../../../project/nodeLayout';
+} from '../../../../project/nodeLayout.js';
 
 import {
   bindApi,
   getMousePosition,
   getOffsetMatrix,
   isMiddleButtonPressed,
-} from '../modeUtils';
+} from '../modeUtils.js';
 
-const isSelectionModifierPressed = event => event.metaKey || event.ctrlKey;
+const isSelectionModifierPressed = (event) => event.metaKey || event.ctrlKey;
 
 const selectingMode = {
   getInitialState() {
@@ -38,7 +38,7 @@ const selectingMode = {
 
   onEntityMouseDown(api, entityType, event, entityId) {
     if (isMiddleButtonPressed(event)) return;
-    const patchSvgRef = api.getStorage().patchSvgRef;
+    const { patchSvgRef } = api.getStorage();
     const mousePosition = getMousePosition(
       patchSvgRef,
       api.getOffset(),
@@ -285,7 +285,7 @@ const selectingMode = {
           onMouseDown={bindApi(api, this.onMouseDown)}
           onMouseMove={bindApi(api, this.onMouseMove)}
           onMouseUp={bindApi(api, this.onMouseUp)}
-          svgRef={svg => api.setStorage({ patchSvgRef: svg })}
+          svgRef={(svg) => api.setStorage({ patchSvgRef: svg })}
         >
           <Layers.Background
             width={api.props.size.width}

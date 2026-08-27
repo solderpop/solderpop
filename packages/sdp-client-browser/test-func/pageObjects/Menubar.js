@@ -1,4 +1,4 @@
-import BasePageObject from './BasePageObject';
+import BasePageObject from './BasePageObject.js';
 
 class Menubar extends BasePageObject {
   async clickTopLevelItem(title) {
@@ -16,7 +16,7 @@ class Menubar extends BasePageObject {
   }
 }
 
-Menubar.findOnPage = async page => {
+Menubar.findOnPage = async (page) => {
   const elementHandle = await page.$('.Menubar-root');
   return new Menubar(page, elementHandle);
 };

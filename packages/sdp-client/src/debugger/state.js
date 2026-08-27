@@ -1,5 +1,5 @@
-import { INTRODUCTION } from './messages';
-import { LOG_TAB_TYPE, SESSION_TYPE } from './constants';
+import { INTRODUCTION } from './messages.js';
+import { LOG_TAB_TYPE, SESSION_TYPE } from './constants.js';
 
 export const DEFAULT_TETHERING_INET_STATE = {
   nodeId: null,

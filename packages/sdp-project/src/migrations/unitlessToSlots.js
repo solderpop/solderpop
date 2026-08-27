@@ -1,9 +1,9 @@
 import R from 'ramda';
 
-import { def } from '../types';
-import { isTerminalPatchPath } from '../internal/patchPathUtils';
+import { def } from '../types.js';
+import { isTerminalPatchPath } from '../internal/patchPathUtils.js';
 
-import BUILT_IN_PATCHES from '../../dist/built-in-patches.json';
+import BUILT_IN_PATCHES from '../internal/builtInPatches.js';
 
 /* eslint-enable new-cap */
 //-----------------------------------------------------------------------------
@@ -39,7 +39,7 @@ const hasUnits = R.has('units');
 const isGenuinePatch = R.compose(
   R.not,
   R.anyPass([
-    patchPath => R.has(patchPath, BUILT_IN_PATCHES),
+    (patchPath) => R.has(patchPath, BUILT_IN_PATCHES),
     isTerminalPatchPath,
   ]),
   R.prop('path')
@@ -75,7 +75,7 @@ export const convertPositionValueToSlots = def(
   (slotSize, px) => {
     const ratio = px / slotSize;
     const roundFn = ratio % 1 > 0.5 ? Math.ceil : Math.floor;
-    return roundFn(px / slotSize * ROUNDING_ERROR) / ROUNDING_ERROR;
+    return roundFn((px / slotSize) * ROUNDING_ERROR) / ROUNDING_ERROR;
   }
 );
 
@@ -101,10 +101,10 @@ const migrateSize = def(
   R.unless(
     hasUnits,
     R.evolve({
-      width: w => Math.ceil(w / NEXT_SLOT_GRID.WIDTH),
+      width: (w) => Math.ceil(w / NEXT_SLOT_GRID.WIDTH),
       height: R.when(
-        h => h !== 0,
-        h => Math.ceil((h + LEGACY_SLOT_GRID.GAP) / NEXT_SLOT_GRID.HEIGHT)
+        (h) => h !== 0,
+        (h) => Math.ceil((h + LEGACY_SLOT_GRID.GAP) / NEXT_SLOT_GRID.HEIGHT)
       ),
     })
   )

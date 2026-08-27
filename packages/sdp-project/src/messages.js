@@ -35,7 +35,7 @@ export default {
   ORPHAN_GENERIC_OUTPUTS: ({ trace, types }) => ({
     title: 'Invalid abstract patch',
     note: `For each generic output there has to be at least one generic input of the same type. Create ${types
-      .map(x => `input-${x}`)
+      .map((x) => `input-${x}`)
       .join(', ')}`,
     trace,
   }),
@@ -145,8 +145,7 @@ export default {
   }),
   CONSTRUCTOR_PATCH_MUST_BE_NIIX: ({ trace }) => ({
     title: 'Invalid constructor patch',
-    note:
-      'Constructor patches must be implemented in C++ or have a record marker node',
+    note: 'Constructor patches must be implemented in C++ or have a record marker node',
     solution:
       'Add a not-implemented-in-xod node and provide an implementation or place record marker node',
     trace,

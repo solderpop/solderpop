@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import path from 'path';
 import { stdout, exit } from 'process';
-import { pick } from 'ramda';
+import R from 'ramda';
 import { flags } from '@oclif/command';
 import {
   loadProject,
@@ -10,11 +10,13 @@ import {
   saveProjectEntirely,
 } from 'sdp-fs';
 import { toXodball } from 'sdp-project';
-import BaseCommand from '../baseCommand';
-import * as commonArgs from '../args';
-import * as myFlags from '../flags';
-import { resolveBundledWorkspacePath } from '../paths';
-import { getListr } from '../listr';
+import BaseCommand from '../baseCommand.js';
+import * as commonArgs from '../args.js';
+import * as myFlags from '../flags.js';
+import { resolveBundledWorkspacePath } from '../paths.js';
+import { getListr } from '../listr.js';
+
+const { pick } = R;
 
 class ResaveCommand extends BaseCommand {
   async run() {
@@ -26,19 +28,19 @@ class ResaveCommand extends BaseCommand {
 
     const loadProjectTask = {
       title: 'Project loading',
-      task: ctx =>
+      task: (ctx) =>
         loadProject(
           [workspace, resolveBundledWorkspacePath()],
           projectPath
-        ).then(project => {
+        ).then((project) => {
           ctx.project = project;
         }),
     };
 
     const saveToFileTask = {
       title: 'Saving...',
-      skip: ctx => !(ctx.project && output),
-      task: ctx =>
+      skip: (ctx) => !(ctx.project && output),
+      task: (ctx) =>
         (path.extname(output) === '.xodball'
           ? saveProjectAsXodball(output, ctx.project)
           : saveProjectEntirely(output, ctx.project)
@@ -51,7 +53,7 @@ class ResaveCommand extends BaseCommand {
       collapse: false,
     })
       .run()
-      .then(async ctx => {
+      .then(async (ctx) => {
         if (output && ctx.status) {
           this.info(ctx.status);
         }
@@ -61,7 +63,7 @@ class ResaveCommand extends BaseCommand {
         }
       })
       .then(() => exit(0))
-      .catch(err => {
+      .catch((err) => {
         this.printError(err);
         return exit(100);
       });
@@ -82,7 +84,7 @@ ResaveCommand.flags = {
       'xodball or multifile directory output path, defaults to stdout',
     env: 'XOD_OUTPUT',
     helpValue: 'path',
-    parse: p => resolvePath(p),
+    parse: (p) => resolvePath(p),
   }),
 };
 
@@ -90,13 +92,13 @@ ResaveCommand.args = [commonArgs.project];
 
 ResaveCommand.examples = [
   `Exports the current multifile project to a xodball\n` +
-    `$ xodc resave . -o ~/foo.xodball\n`,
+    `$ sdpc resave . -o ~/foo.xodball\n`,
   `Outputs the current multifile project as a xodball to stdout\n` +
-    `$ xodc resave\n`,
+    `$ sdpc resave\n`,
   `Resaves one xodball into another (useful for applying migrations)\n` +
-    `$ xodc resave foo.xodball -o bar.xodball\n`,
+    `$ sdpc resave foo.xodball -o bar.xodball\n`,
   `Converts a xodball to a multifile project\n` +
-    `$ xodc resave foo.xodball -o /some/new/dir`,
+    `$ sdpc resave foo.xodball -o /some/new/dir`,
 ];
 
 ResaveCommand.strict = false;

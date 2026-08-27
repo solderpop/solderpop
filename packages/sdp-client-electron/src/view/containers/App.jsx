@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -36,69 +36,76 @@ import { messages as xdbMessages } from 'sdp-deploy-bin';
 
 import packageJson from '../../../package.json';
 
-import * as actions from '../actions';
-import * as uploadActions from '../../upload/actions';
-import { listBoards, upload } from '../../upload/arduinoCli';
-import { compileSimulation } from '../../upload/wasmCompile';
-import * as debuggerIPC from '../../debugger/ipcActions';
+import * as actions from '../actions.js';
+import * as uploadActions from '../../upload/actions.js';
+import { listBoards, upload } from '../../upload/arduinoCli.js';
+import compileSimulation from '../../upload/wasmCompile.js';
+import * as debuggerIPC from '../../debugger/ipcActions.js';
 import {
   getUploadProcess,
   isDeploymentInProgress,
   getSelectedSerialPort,
-} from '../../upload/selectors';
-import * as settingsActions from '../../settings/actions';
-import PopupSetWorkspace from '../../settings/components/PopupSetWorkspace';
-import PopupCreateWorkspace from '../../settings/components/PopupCreateWorkspace';
-import PopupUploadConfig from '../../upload/components/PopupUploadConfig';
-import PopupConnectSerial from '../../upload/components/PopupConnectSerial';
-import { SaveProgressBar } from '../components/SaveProgressBar';
-import TitleBar from '../components/TitleBar';
+} from '../../upload/selectors.js';
+import * as settingsActions from '../../settings/actions.js';
+import PopupSetWorkspace from '../../settings/components/PopupSetWorkspace.jsx';
+import PopupCreateWorkspace from '../../settings/components/PopupCreateWorkspace.jsx';
+import PopupUploadConfig from '../../upload/components/PopupUploadConfig.jsx';
+import PopupConnectSerial from '../../upload/components/PopupConnectSerial.jsx';
+import { SaveProgressBar } from '../components/SaveProgressBar.jsx';
+import TitleBar from '../components/TitleBar.jsx';
 
-import formatError from '../../shared/errorFormatter';
-import * as EVENTS from '../../shared/events';
-import { INSTALL_ARDUINO_DEPENDENCIES_MSG } from '../../arduinoDependencies/constants';
+import formatError from '../../shared/errorFormatter.js';
+import * as EVENTS from '../../shared/events.js';
+import { INSTALL_ARDUINO_DEPENDENCIES_MSG } from '../../arduinoDependencies/constants.js';
 import {
   checkDeps,
   updateArdupackages,
   closePackageUpdatePopup,
   proceedPackageUpgrade,
-} from '../../arduinoDependencies/actions';
+} from '../../arduinoDependencies/actions.js';
 import {
   requestManageLocalSimulation,
   closeManageLocalSimulation,
   closeWelcomeDialog,
   firstLaunchDetected,
   clickInstallEmsdk,
-} from '../../emsdkInstaller/actions';
-import WelcomeDialog from '../../emsdkInstaller/components/WelcomeDialog';
-import ManageLocalSimulationPopup from '../../emsdkInstaller/components/ManageLocalSimulationPopup';
-import { loadWorkspacePath } from '../../app/workspaceActions';
-import { getPathToBundledWorkspace, IS_DEV } from '../../app/utils';
+} from '../../emsdkInstaller/actions.js';
+import WelcomeDialog from '../../emsdkInstaller/components/WelcomeDialog.jsx';
+import PopupAbout from '../components/PopupAbout.jsx';
+import ManageLocalSimulationPopup from '../../emsdkInstaller/components/ManageLocalSimulationPopup.jsx';
+import { loadWorkspacePath } from '../../app/workspaceActions.js';
+import { getPathToBundledWorkspace, IS_DEV } from '../../app/utils.js';
 
-import getLibraryNames from '../../arduinoDependencies/getLibraryNames';
+import getLibraryNames from '../../arduinoDependencies/getLibraryNames.js';
 
-import { subscribeAutoUpdaterEvents } from '../autoupdate';
-import subscribeToTriggerMainMenuRequests from '../../testUtils/triggerMainMenu';
-import { TRIGGER_SAVE_AS, TRIGGER_LOAD_PROJECT } from '../../testUtils/events';
+import { subscribeAutoUpdaterEvents } from '../autoupdate.js';
+import subscribeToTriggerMainMenuRequests from '../../testUtils/triggerMainMenu.js';
+import {
+  TRIGGER_SAVE_AS,
+  TRIGGER_LOAD_PROJECT,
+} from '../../testUtils/events.js';
 
 import {
   getOpenDialogFileFilters,
   createSaveDialogOptions,
-} from '../nativeDialogs';
-import { STATES, getEventNameWithState } from '../../shared/eventStates';
+} from '../nativeDialogs.js';
+import { STATES, getEventNameWithState } from '../../shared/eventStates.js';
 
-import UpdateArduinoPackagesPopup from '../../arduinoDependencies/components/UpdateArduinoPackagesPopup';
-import { checkArduinoDependencies } from '../../arduinoDependencies/runners';
+import UpdateArduinoPackagesPopup from '../../arduinoDependencies/components/UpdateArduinoPackagesPopup.jsx';
+import { checkArduinoDependencies } from '../../arduinoDependencies/runners.js';
 
-import { formatErrorMessage, formatLogError } from '../formatError';
+import { formatErrorMessage, formatLogError } from '../formatError.js';
 
 const { app, dialog, Menu } = remoteElectron;
 const DEFAULT_CANVAS_WIDTH = 800;
 const DEFAULT_CANVAS_HEIGHT = 600;
+// Only autosaves projects that already have a known file path — never pops
+// a Save As dialog on the user's behalf.
+const AUTOSAVE_INTERVAL_MS = 2 * 60 * 1000;
 
-const ThemeSettingsPopup = client.theme.components.ThemeSettingsPopup;
+const { ThemeSettingsPopup } = client.theme.components;
 
-const applyTheme = colors => {
+const applyTheme = (colors) => {
   if (!colors || typeof document === 'undefined') return;
   R.forEachObjIndexed((value, key) => {
     const cssKey = `--theme-${key
@@ -138,9 +145,8 @@ class App extends client.App {
     this.selectAll = this.selectAll.bind(this);
 
     this.onUploadToArduinoClicked = this.onUploadToArduinoClicked.bind(this);
-    this.onUploadToArduinoAndDebugClicked = this.onUploadToArduinoAndDebugClicked.bind(
-      this
-    );
+    this.onUploadToArduinoAndDebugClicked =
+      this.onUploadToArduinoAndDebugClicked.bind(this);
     this.onUploadToArduino = this.onUploadToArduino.bind(this);
     this.onConnectSerial = this.onConnectSerial.bind(this);
     this.onSerialPortChange = this.onSerialPortChange.bind(this);
@@ -149,6 +155,7 @@ class App extends client.App {
     this.onSave = this.onSave.bind(this);
     this.onSaveAs = this.onSaveAs.bind(this);
     this.onSaveCopyAs = this.onSaveCopyAs.bind(this);
+    this.onAutosaveTick = this.onAutosaveTick.bind(this);
     this.onOpenProjectClicked = this.onOpenProjectClicked.bind(this);
     this.onOpenTutorialProject = this.onOpenTutorialProject.bind(this);
 
@@ -160,9 +167,8 @@ class App extends client.App {
     this.onLoadProject = this.onLoadProject.bind(this);
     this.onArduinoPathChange = this.onArduinoPathChange.bind(this);
 
-    this.onStopDebuggerSessionClicked = this.onStopDebuggerSessionClicked.bind(
-      this
-    );
+    this.onStopDebuggerSessionClicked =
+      this.onStopDebuggerSessionClicked.bind(this);
 
     this.showError = this.showError.bind(this);
 
@@ -170,26 +176,23 @@ class App extends client.App {
     this.showThemeSettingsPopup = this.showThemeSettingsPopup.bind(this);
     this.hideThemeSettingsPopup = this.hideThemeSettingsPopup.bind(this);
     this.showPopupSetWorkspace = this.showPopupSetWorkspace.bind(this);
-    this.showPopupSetWorkspaceNotCancellable = this.showPopupSetWorkspaceNotCancellable.bind(
-      this
-    );
+    this.showPopupSetWorkspaceNotCancellable =
+      this.showPopupSetWorkspaceNotCancellable.bind(this);
     this.showCreateWorkspacePopup = this.showCreateWorkspacePopup.bind(this);
 
-    this.requestInstallArduinoDependencies = this.requestInstallArduinoDependencies.bind(
-      this
-    );
+    this.requestInstallArduinoDependencies =
+      this.requestInstallArduinoDependencies.bind(this);
 
     this.onUpdatePackagesClicked = this.onUpdatePackagesClicked.bind(this);
-    this.onManageLocalSimulationClicked = this.onManageLocalSimulationClicked.bind(
-      this
-    );
+    this.onManageLocalSimulationClicked =
+      this.onManageLocalSimulationClicked.bind(this);
 
     this.initNativeMenu();
 
     this.hotkeyHandlers = R.merge(
       {
-        [client.COMMAND.UPLOAD_WITH_DEBUG]: this
-          .onUploadToArduinoAndDebugClicked,
+        [client.COMMAND.UPLOAD_WITH_DEBUG]:
+          this.onUploadToArduinoAndDebugClicked,
       },
       this.defaultHotkeyHandlers
     );
@@ -201,7 +204,7 @@ class App extends client.App {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const props = this.props;
+    const { props } = this;
     // Custom checks for some props
     // All other props will be checked for ===
     const propChecks = {
@@ -212,7 +215,7 @@ class App extends client.App {
     const propEquality = R.mapObjIndexed((val, key) =>
       R.ifElse(
         R.has(key),
-        R.pipe(R.prop(key), check => check(val, nextProps[key])),
+        R.pipe(R.prop(key), (check) => check(val, nextProps[key])),
         () => val === nextProps[key]
       )(propChecks)
     )(props);
@@ -261,10 +264,7 @@ class App extends client.App {
       EVENTS.PAN_TO_CENTER,
       this.props.actions.setCurrentPatchOffsetToCenter
     );
-    ipcRenderer.on(
-      EVENTS.FIRST_LAUNCH,
-      this.props.actions.firstLaunchDetected
-    );
+    ipcRenderer.on(EVENTS.FIRST_LAUNCH, this.props.actions.firstLaunchDetected);
 
     // Notify about errors in the Main Process
     ipcRenderer.on(EVENTS.ERROR_IN_MAIN_PROCESS, (event, error) => {
@@ -290,16 +290,21 @@ class App extends client.App {
     // autoUpdater
     subscribeAutoUpdaterEvents(ipcRenderer, this);
 
+    this.autosaveIntervalId = setInterval(
+      this.onAutosaveTick,
+      AUTOSAVE_INTERVAL_MS
+    );
+
     if (IS_DEV) {
       // Besause we can't control file dialogs in autotests
-      ipcRenderer.on(TRIGGER_SAVE_AS, projectPath => {
+      ipcRenderer.on(TRIGGER_SAVE_AS, (projectPath) => {
         if (!projectPath) {
           throw new Error('Expected projectPath to be present');
         }
 
         this.saveAs(projectPath, true, false).catch(noop);
       });
-      ipcRenderer.on(TRIGGER_LOAD_PROJECT, projectPath => {
+      ipcRenderer.on(TRIGGER_LOAD_PROJECT, (projectPath) => {
         if (!projectPath) {
           throw new Error('Expected projectPath to be present');
         }
@@ -316,9 +321,10 @@ class App extends client.App {
 
   componentWillUnmount() {
     super.componentWillUnmount();
+    clearInterval(this.autosaveIntervalId);
     // Unsubscribe from all ipc events
     R.map(
-      eventName => ipcRenderer.removeAllListeners(eventName),
+      (eventName) => ipcRenderer.removeAllListeners(eventName),
       ipcRenderer.eventNames()
     );
   }
@@ -356,9 +362,9 @@ class App extends client.App {
     let sessionGlobals = []; // TODO: Refactor
 
     eitherToPromise(eitherTProject)
-      .then(tProject => {
+      .then((tProject) => {
         const globalsInProject = listGlobals(tProject);
-        return this.getGlobals(globalsInProject).then(globals => {
+        return this.getGlobals(globalsInProject).then((globals) => {
           sessionGlobals = globals; // TODO: Refactor
           return R.compose(eitherToPromise, extendTProjectWithGlobals)(
             globals,
@@ -367,7 +373,7 @@ class App extends client.App {
         });
       })
       .then(
-        tapP(tProj => {
+        tapP((tProj) => {
           const libraries = getRequireUrls(tProj);
           const checkProcess = this.props.actions.checkDeps();
           const deps = R.compose(
@@ -383,7 +389,7 @@ class App extends client.App {
             )
           )(board);
           return checkArduinoDependencies(
-            progressData =>
+            (progressData) =>
               checkProcess.progress(
                 progressData.note,
                 progressData.percentage * 10
@@ -392,16 +398,18 @@ class App extends client.App {
           )
             .then(this.requestInstallArduinoDependencies)
             .then(() => checkProcess.success())
-            .catch(err => {
+            .catch((err) => {
               checkProcess.delete();
               return Promise.reject(err);
             });
         })
       )
-      .then(tProject => Promise.all([transpile(tProject), loadWorkspacePath()]))
+      .then((tProject) =>
+        Promise.all([transpile(tProject), loadWorkspacePath()])
+      )
       .then(([code, ws]) =>
         upload(
-          progressData => {
+          (progressData) => {
             proc.progress(
               progressData.message,
               progressData.percentage,
@@ -428,12 +436,12 @@ class App extends client.App {
       .then(() => {
         if (debug) {
           foldEither(
-            error => {
+            (error) => {
               const err = client.composeMessage(error.message);
               this.props.actions.addError(err);
               return Promise.reject(err);
             },
-            tProject => {
+            (tProject) => {
               const nodeIdsMap = getNodeIdsMap(tProject);
               const nodePinKeysMap = getNodePinKeysMap(tProject);
               const tableLogNodeIds = getTableLogNodeIds(tProject);
@@ -478,7 +486,7 @@ class App extends client.App {
           );
         }
       })
-      .catch(err => {
+      .catch((err) => {
         if (err.type === 'ARDUINO_DEPENDENCIES_MISSING') {
           proc.progress(formatLogError(err), 0, client.LOG_TAB_TYPE.INSTALLER);
           proc.delete();
@@ -584,11 +592,10 @@ class App extends client.App {
       .then(({ canceled, filePath }) => {
         if (canceled) return;
 
-        this.saveAs(filePath, true, true)
-          .then(onAfterSave)
-          .catch(noop);
+        this.saveAs(filePath, true, true).then(onAfterSave).catch(noop);
       });
   }
+
   onSaveCopyAs() {
     dialog
       .showSaveDialog(
@@ -603,6 +610,23 @@ class App extends client.App {
 
         this.saveAs(filePath, false, false).catch(noop);
       });
+  }
+
+  // Silent by design: never prompts Save As, never shows a "saved" toast on
+  // every tick. Skips the tick entirely (rather than queueing) if a save —
+  // manual or autosave — is already in flight, so ticks can't pile up.
+  onAutosaveTick() {
+    if (
+      !this.props.hasUnsavedChanges ||
+      !this.state.projectPath ||
+      this.props.saveProcess
+    ) {
+      return;
+    }
+
+    this.saveAs(this.state.projectPath, false, true).catch(error =>
+      this.showError(error)
+    );
   }
 
   showError(error) {
@@ -792,6 +816,8 @@ class App extends client.App {
         onClick(items.forum, () => {
           shell.openExternal(client.getUtmForumUrl('menu'));
         }),
+        items.separator,
+        onClick(items.about, this.props.actions.showAbout),
       ]),
     ];
   }
@@ -888,7 +914,7 @@ class App extends client.App {
     const helpItem = R.last(template);
 
     R.compose(
-      finalTemplate => {
+      (finalTemplate) => {
         const menu = Menu.buildFromTemplate(finalTemplate);
         Menu.setApplicationMenu(menu);
         // for testing purposes
@@ -1071,6 +1097,16 @@ class App extends client.App {
     ) : null;
   }
 
+  renderPopupAbout() {
+    return this.props.popups.about ? (
+      <PopupAbout
+        isVisible={this.props.popups.about}
+        version={packageJson.version}
+        onClose={this.props.actions.hideAbout}
+      />
+    ) : null;
+  }
+
   render() {
     return (
       <HotKeys
@@ -1100,6 +1136,7 @@ class App extends client.App {
         {this.renderPopupCheckArduinoPackageUpdates()}
         {this.renderWelcomeDialog()}
         {this.renderManageLocalSimulationPopup()}
+        {this.renderPopupAbout()}
         {this.renderPatchCreatingPopup()}
         <ThemeSettingsPopup
           isVisible={this.state.themeSettingsPopup}
@@ -1136,20 +1173,28 @@ class App extends client.App {
             {this.state.downloadProgressPopupError ? (
               <div>
                 <p>
-                  Error occured during downloading or installing the update.<br />
+                  Error occured during downloading or installing the update.
+                  <br />
                   Please report the bug on our{' '}
-                  <a href="https://forum.solderpop.io/" rel="noopener noreferrer">
+                  <a
+                    href="https://forum.solderpop.io/"
+                    rel="noopener noreferrer"
+                  >
                     forum
-                  </a>.
+                  </a>
+                  .
                 </p>
                 <pre>{this.state.downloadProgressPopupError}</pre>
               </div>
             ) : (
               <div>
-                <p>Downloading of the update for SolderPop IDE is in progress.</p>
+                <p>
+                  Downloading of the update for SolderPop IDE is in progress.
+                </p>
                 <p>
                   After download, we will automatically install it and restart
-                  the application.<br />
+                  the application.
+                  <br />
                   It could take up to a few minutes.
                 </p>
                 <p>Keep calm and brew a tea.</p>
@@ -1224,6 +1269,7 @@ const mapStateToProps = R.applySpec({
     manageLocalSimulation: client.getPopupVisibility(
       client.POPUP_ID.MANAGE_LOCAL_SIMULATION
     ),
+    about: client.getPopupVisibility(client.POPUP_ID.ABOUT),
   },
   popupsData: {
     projectSelection: client.getPopupData(client.POPUP_ID.OPENING_PROJECT),
@@ -1237,7 +1283,7 @@ const mapStateToProps = R.applySpec({
   },
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(
     R.merge(client.App.actions, {
       requestOpenProject: client.requestOpenProject,
@@ -1247,7 +1293,6 @@ const mapDispatchToProps = dispatch => ({
       switchWorkspace: settingsActions.switchWorkspace,
       openProject: client.openProject,
       saveAll: actions.saveAll,
-      openTutorial: actions.openTutorial,
       uploadToArduino: uploadActions.uploadToArduino,
       uploadToArduinoConfig: uploadActions.uploadToArduinoConfig,
       hideUploadConfigPopup: uploadActions.hideUploadConfigPopup,

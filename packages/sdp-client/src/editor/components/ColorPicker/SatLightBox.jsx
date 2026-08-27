@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import convert from 'color-convert';
 
-import colorPropType from './colorPropType';
+import colorPropType from './colorPropType.js';
 
 const inRange = (min, max, val) => Math.max(Math.min(max, val), min);
 
@@ -20,12 +20,12 @@ const calculateNewHSL = (event, hue, containerEl) => {
   const leftPos = x - (cLeft + window.pageXOffset);
   const topPos = y - (cTop + window.pageYOffset);
 
-  const saturation = inRange(0, cWidth, leftPos) / cWidth * 100;
+  const saturation = (inRange(0, cWidth, leftPos) / cWidth) * 100;
   const brightness = (1 - inRange(0, cHeight, topPos) / cHeight) * 100;
   return convert.hsv.hsl([hue, saturation, brightness]);
 };
 
-const preventDefaultOnly = event => event.preventDefault();
+const preventDefaultOnly = (event) => event.preventDefault();
 
 class SatLightBox extends React.Component {
   constructor(props) {
@@ -41,6 +41,7 @@ class SatLightBox extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.unbindHandlers = this.unbindHandlers.bind(this);
   }
+
   unbindHandlers() {
     document.removeEventListener('mousemove', this.handleMove);
     document.removeEventListener('mouseup', this.handleEnd);
@@ -65,6 +66,7 @@ class SatLightBox extends React.Component {
       this.props.onChange(newHsl[1], newHsl[2]);
     }
   }
+
   handleClick(event) {
     if (this.containerRef) {
       const newHsl = calculateNewHSL(
@@ -75,6 +77,7 @@ class SatLightBox extends React.Component {
       this.props.onChange(newHsl[1], newHsl[2]);
     }
   }
+
   handleEnd() {
     this.setState({ dragging: false });
     this.unbindHandlers();
@@ -97,7 +100,7 @@ class SatLightBox extends React.Component {
           width: this.props.width,
           height: this.props.height,
         }}
-        ref={el => {
+        ref={(el) => {
           this.containerRef = el;
         }}
       >

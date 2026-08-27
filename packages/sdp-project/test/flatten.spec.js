@@ -1,18 +1,22 @@
 import R from 'ramda';
-import { assert } from 'chai';
-import { Maybe } from 'ramda-fantasy';
+import chai from 'chai';
+import RamdaFantasy from 'ramda-fantasy';
 import { explodeEither } from 'sdp-func-tools';
 
-import * as Helper from './helpers';
-import * as Project from '../src/project';
-import * as Patch from '../src/patch';
-import * as Node from '../src/node';
-import * as Link from '../src/link';
-import * as Attachment from '../src/attachment';
-import * as CONST from '../src/constants';
-import flatten, { extractPatches, extractLeafPatches } from '../src/flatten';
-import { getCastPatchPath, getTerminalPath } from '../src/patchPathUtils';
-import autoresolveTypes from '../src/autoresolveTypes';
+import * as Helper from './helpers.js';
+import * as Project from '../src/project.js';
+import * as Patch from '../src/patch.js';
+import * as Node from '../src/node.js';
+import * as Link from '../src/link.js';
+import * as Attachment from '../src/attachment.js';
+import * as CONST from '../src/constants.js';
+import flatten, { extractPatches, extractLeafPatches } from '../src/flatten.js';
+import { getCastPatchPath, getTerminalPath } from '../src/patchPathUtils.js';
+import autoresolveTypes from '../src/autoresolveTypes.js';
+
+const { assert } = chai;
+
+const { Maybe } = RamdaFantasy;
 
 const createImplAttachment = Attachment.createAttachmentManagedByMarker(
   CONST.NOT_IMPLEMENTED_IN_XOD_PATH
@@ -541,7 +545,7 @@ describe('Flatten', () => {
     it('should return patch with links', () => {
       const eitherFlatProject = flatten(project, '@/main');
 
-      Helper.expectEitherRight(flatProject => {
+      Helper.expectEitherRight((flatProject) => {
         assert.sameMembers(R.keys(flatProject.patches), [
           '@/main',
           '@/foo',
@@ -693,7 +697,7 @@ describe('Flatten', () => {
     it('should modify only entry patch', () => {
       const eitherFlatProject = flatten(project, '@/main');
 
-      Helper.expectEitherRight(flatProject => {
+      Helper.expectEitherRight((flatProject) => {
         assert.deepEqual(
           Project.dissocPatch('@/main', flatProject),
           Project.dissocPatch('@/main', project)
@@ -704,7 +708,7 @@ describe('Flatten', () => {
     it('should return nodes with prefixed ids', () => {
       const flatProject = flatten(project, '@/main');
 
-      Helper.expectEitherRight(newProject => {
+      Helper.expectEitherRight((newProject) => {
         const maybeNode = R.compose(
           Patch.getNodeById('a~a'),
           Project.getPatchByPathUnsafe('@/main')
@@ -717,7 +721,7 @@ describe('Flatten', () => {
     it('should remove unused terminals', () => {
       const flatProject = flatten(project, '@/main');
 
-      Helper.expectEitherRight(newProject => {
+      Helper.expectEitherRight((newProject) => {
         const maybeNode = R.compose(
           Patch.getNodeById('b~d'),
           Project.getPatchByPathUnsafe('@/main')
@@ -730,7 +734,7 @@ describe('Flatten', () => {
     it('should return flattened links', () => {
       const flatProject = flatten(project, '@/main');
 
-      Helper.expectEitherRight(newProject => {
+      Helper.expectEitherRight((newProject) => {
         const links = R.compose(
           Patch.listLinks,
           Project.getPatchByPathUnsafe('@/main')
@@ -747,7 +751,7 @@ describe('Flatten', () => {
       const eitherFlatProject = flatten(blinking, '@/main');
 
       Helper.expectEitherRight(
-        flat => assert.deepEqual(flat, expected),
+        (flat) => assert.deepEqual(flat, expected),
         eitherFlatProject
       );
     });
@@ -762,14 +766,14 @@ describe('Flatten', () => {
       const eitherErrorOrFlat = flatten(deeplyNestedProject, '@/main');
 
       Helper.expectEitherRight(
-        flat => assert.deepEqual(flat, expected),
+        (flat) => assert.deepEqual(flat, expected),
         eitherErrorOrFlat
       );
     });
   });
 
   describe('casting nodes', () => {
-    const testDiffTypes = fn => {
+    const testDiffTypes = (fn) => {
       // number to *
       fn(CONST.PIN_TYPE.NUMBER, CONST.PIN_TYPE.BOOLEAN);
       fn(CONST.PIN_TYPE.NUMBER, CONST.PIN_TYPE.STRING);
@@ -840,12 +844,13 @@ describe('Flatten', () => {
       it('should return @/main without cast node and link to it', () => {
         const flatProject = flatten(project, '@/main');
 
-        Helper.expectEitherRight(newProject => {
+        Helper.expectEitherRight((newProject) => {
           const mainPatch = Project.getPatchByPathUnsafe('@/main', newProject);
 
-          const nodeIds = R.compose(R.map(Node.getNodeId), Patch.listNodes)(
-            mainPatch
-          );
+          const nodeIds = R.compose(
+            R.map(Node.getNodeId),
+            Patch.listNodes
+          )(mainPatch);
           assert.deepEqual(nodeIds, ['a']);
 
           const links = Patch.listLinks(mainPatch);
@@ -990,7 +995,7 @@ describe('Flatten', () => {
           const flatProject = flatten(project, '@/main');
           const expectedPath = `xod/core/cast-to-${typeOut}(${typeIn})`; // getCastPatchPath(typeIn, typeOut);
 
-          Helper.expectEitherRight(newProject => {
+          Helper.expectEitherRight((newProject) => {
             assert.deepEqual(
               Project.getPatchByPathUnsafe(expectedPath, newProject),
               Project.getPatchByPathUnsafe(expectedPath, project)
@@ -1137,7 +1142,7 @@ describe('Flatten', () => {
           const flatProject = flatten(project, '@/main');
           const expectedPath = `xod/core/cast-to-${typeOut}(${typeIn})`; // getCastPatchPath(typeIn, typeOut);
 
-          Helper.expectEitherRight(newProject => {
+          Helper.expectEitherRight((newProject) => {
             assert.deepEqual(
               Project.getPatchByPathUnsafe(expectedPath, newProject),
               Project.getPatchByPathUnsafe(expectedPath, project)
@@ -1239,7 +1244,7 @@ describe('Flatten', () => {
       it('should return two flattened nodes', () => {
         const flatProject = flatten(project, '@/main');
 
-        Helper.expectEitherRight(newProject => {
+        Helper.expectEitherRight((newProject) => {
           const nodeIds = R.compose(
             R.map(Node.getNodeId),
             Patch.listNodes,
@@ -1253,7 +1258,7 @@ describe('Flatten', () => {
       it('should return one flattened links', () => {
         const flatProject = flatten(project, '@/main');
 
-        Helper.expectEitherRight(newProject => {
+        Helper.expectEitherRight((newProject) => {
           const actualLinks = R.compose(
             Patch.listLinks,
             Project.getPatchByPathUnsafe('@/main')
@@ -1291,7 +1296,7 @@ describe('Flatten', () => {
       ) => {
         const flatProject = flatten(project, patchPath);
 
-        Helper.expectEitherRight(newProject => {
+        Helper.expectEitherRight((newProject) => {
           const nodeIds = R.compose(
             R.map(Node.getNodeId),
             Patch.listNodes,
@@ -1322,8 +1327,8 @@ describe('Flatten', () => {
           Project.getPatchByPathUnsafe(patchPath)
         );
 
-        Helper.expectEitherRight(fProject => {
-          Helper.expectEitherRight(aProject => {
+        Helper.expectEitherRight((fProject) => {
+          Helper.expectEitherRight((aProject) => {
             const fNodes = listPatchNodeTypes(fProject);
             const aNodes = listPatchNodeTypes(aProject);
             assert.sameMembers(fNodes, aNodes);
@@ -1362,7 +1367,7 @@ describe('Flatten', () => {
 
       it('should not create a cast node for a custom type if it not needed', () => {
         const flatProject = flatten(project, '@/test-wrapped-i2c');
-        Helper.expectEitherRight(newProject => {
+        Helper.expectEitherRight((newProject) => {
           const nodeIds = R.compose(
             R.map(Node.getNodeId),
             Patch.listNodes,
@@ -1384,7 +1389,7 @@ describe('Flatten', () => {
           project,
           '@/test-unlinked-lowermost-terminal'
         );
-        Helper.expectEitherRight(newProject => {
+        Helper.expectEitherRight((newProject) => {
           const nodeIds = R.compose(
             R.map(Node.getNodeId),
             Patch.listNodes,
@@ -1410,7 +1415,7 @@ describe('Flatten', () => {
 
       it('should pass bound values to nested castable custom type terminals', () => {
         const flatProject = flatten(project, '@/test-nested-input-color');
-        Helper.expectEitherRight(newProject => {
+        Helper.expectEitherRight((newProject) => {
           const nodeIds = R.compose(
             R.map(Node.getNodeId),
             Patch.listNodes,
@@ -1529,7 +1534,7 @@ describe('Flatten', () => {
         const eitherFlatProject = flatten(inputProject, '@/main');
 
         Helper.expectEitherRight(
-          actualProject => assert.deepEqual(actualProject, expectedProject),
+          (actualProject) => assert.deepEqual(actualProject, expectedProject),
           eitherFlatProject
         );
       });
@@ -1603,7 +1608,7 @@ describe('Flatten', () => {
 
       const flatProject = flatten(project, '@/main');
 
-      Helper.expectEitherRight(newProject => {
+      Helper.expectEitherRight((newProject) => {
         const maybeActualBoundValue = R.compose(
           Node.getBoundValue('in'),
           Patch.getNodeByIdUnsafe('f~a'),
@@ -1812,7 +1817,7 @@ describe('Flatten', () => {
       });
       const flatProject = flatten(project, '@/main');
 
-      Helper.expectEitherRight(newProject => {
+      Helper.expectEitherRight((newProject) => {
         const maybeActualBoundValue = R.compose(
           Node.getBoundValue('__in__'),
           Patch.getNodeByIdUnsafe('b~a2-to-b~b-pin-in2'),
@@ -1897,7 +1902,7 @@ describe('Flatten', () => {
         },
       });
       const flatProject = flatten(project, '@/main');
-      Helper.expectEitherRight(newProject => {
+      Helper.expectEitherRight((newProject) => {
         const actualBoundValues = R.compose(
           Node.getAllBoundValues,
           Patch.getNodeByIdUnsafe('m'),
@@ -1921,7 +1926,7 @@ describe('Flatten', () => {
       const flatProject = flatten(project, '@/main');
 
       Helper.expectEitherRight(
-        proj => assert.deepEqual(proj, expectedProject),
+        (proj) => assert.deepEqual(proj, expectedProject),
         flatProject
       );
     });
@@ -1936,7 +1941,7 @@ describe('Flatten', () => {
       const flatProject = flatten(inputProject, '@/main');
 
       Helper.expectEitherRight(
-        project => assert.deepEqual(project, expectedProject),
+        (project) => assert.deepEqual(project, expectedProject),
         flatProject
       );
     });
@@ -1950,7 +1955,7 @@ describe('Flatten', () => {
       const flatProject = flatten(inputProject, '@/main');
 
       Helper.expectEitherRight(
-        project => assert.deepEqual(project, expectedProject),
+        (project) => assert.deepEqual(project, expectedProject),
         flatProject
       );
     });
@@ -1963,7 +1968,7 @@ describe('Flatten', () => {
       );
       const flatProject = flatten(inputProject, '@/main');
 
-      Helper.expectEitherRight(project => {
+      Helper.expectEitherRight((project) => {
         assert.deepEqual(project, expectedProject);
       }, flatProject);
     });
@@ -2032,7 +2037,7 @@ describe('Flatten', () => {
       it('defined implementation exists', () => {
         const flatProject = flatten(project, '@/main');
 
-        Helper.expectEitherRight(newProject => {
+        Helper.expectEitherRight((newProject) => {
           assert.deepEqual(
             Project.getPatchByPathUnsafe('@/main', newProject),
             Project.getPatchByPathUnsafe('@/main', project)

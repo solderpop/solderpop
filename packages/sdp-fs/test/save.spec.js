@@ -1,25 +1,32 @@
 import R from 'ramda';
-import { assert } from 'chai';
-import { removeSync, readFile, readJson, pathExists } from 'fs-extra';
+import chai from 'chai';
+import fse from 'fs-extra';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import * as XP from 'sdp-project';
 
-import { defaultizeProject, defaultizePatch } from 'sdp-project/test/helpers';
+import {
+  defaultizeProject,
+  defaultizePatch,
+} from 'sdp-project/test/helpers.js';
 
-import { calculateDiff } from '../src/patchDiff';
+import { calculateDiff } from '../src/patchDiff.js';
 import {
   saveProjectEntirely,
   saveLibraryEntirely,
   saveAll,
   saveProject,
   saveLibraries,
-} from '../src/save';
-import * as ERROR_CODES from '../src/errorCodes';
+} from '../src/save.js';
+import * as ERROR_CODES from '../src/errorCodes.js';
 
-import { resolveLibPath } from '../src/utils';
+import { resolveLibPath } from '../src/utils.js';
 
-import { expectRejectedWithCode } from './utils';
+import { expectRejectedWithCode } from './utils.js';
 
+const { assert } = chai;
+const { removeSync, readFile, readJson, pathExists } = fse;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const tempDirName = './fs-temp';
 const tempDir = path.resolve(__dirname, tempDirName);
 const tempProjectDir = path.resolve(__dirname, tempDirName, 'project');
@@ -57,14 +64,14 @@ describe('saveProjectEntirely()', () => {
       .then(() =>
         readFile(path.resolve(tempDir, 'test', 'img/20x20.png'), 'base64')
       )
-      .then(content =>
+      .then((content) =>
         assert.strictEqual(
           content,
           testProject.patches['@/test'].attachments[0].content
         )
       )
       .then(() => readFile(path.resolve(tempDir, 'test', 'README.md'), 'utf8'))
-      .then(content =>
+      .then((content) =>
         assert.strictEqual(
           content,
           testProject.patches['@/test'].attachments[1].content
@@ -124,7 +131,7 @@ describe('Save project and libraries', () => {
   );
 
   const assertPathExists = (...pathParts) =>
-    pathExists(path.resolve(...pathParts)).then(isExist =>
+    pathExists(path.resolve(...pathParts)).then((isExist) =>
       assert.isTrue(isExist, `Path "${pathParts}" does not exists.`)
     );
   const libPath = (...extraPath) =>
@@ -179,7 +186,7 @@ describe('Save project and libraries', () => {
           Promise.all(R.map(assertPathExists, secondLibExpectedFiles))
         )
         .then(() => readJson(libPath('xod/core/edited/patch.xodp'), 'utf8'))
-        .then(content =>
+        .then((content) =>
           assert.deepEqual(content, {
             nodes: [
               {
@@ -204,7 +211,7 @@ describe('Save project and libraries', () => {
       ));
     it('should save only changes in project and library', () =>
       saveAll(tempDir, tempProjectDir, emptyProject, firstProject)
-        .then(savedProject =>
+        .then((savedProject) =>
           saveAll(tempDir, tempProjectDir, savedProject, secondProject)
         )
         .then(() =>

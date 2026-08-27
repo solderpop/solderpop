@@ -7,5 +7,5 @@ set -e
 
 for path_to_libs_group in ./workspace/__lib__/xod*; do
   username="$(basename -- $path_to_libs_group)"
-  ls -d $path_to_libs_group/* | xargs -I {} yarn xodc publish --on-behalf=$username {}
+  ls -d $path_to_libs_group/* | xargs -I {} yarn sdpc publish --on-behalf=$username {}
 done

@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 import {
   isAmong,
@@ -9,10 +9,10 @@ import {
   explodeMaybe,
 } from 'sdp-func-tools';
 
-import * as PAT from '../project/actionTypes';
-import { RECOVER_STATE } from '../core/actionTypes';
+import * as PAT from '../project/actionTypes.js';
+import { RECOVER_STATE } from '../core/actionTypes.js';
 
-import { getActingPatchPath } from './actionUtils';
+import { getActingPatchPath } from './actionUtils.js';
 
 // =============================================================================
 //
@@ -66,7 +66,7 @@ export const shallDeduceTypes = R.curry((project, action) =>
       R.complement(R.pathEq(['payload', 'key'], 'label')),
       R.compose(
         foldMaybe(false, XP.isGenericPin),
-        R.chain(patch =>
+        R.chain((patch) =>
           R.compose(
             R.chain(maybeProp(action.payload.key)),
             R.map(XP.getPinsForNode(R.__, patch, project)),
@@ -89,7 +89,7 @@ export const shallDeduceTypes = R.curry((project, action) =>
  */
 const deduceTypesForPatch = R.curry((project, action) =>
   R.compose(
-    R.map(patch => XP.deducePinTypes(patch, project)),
+    R.map((patch) => XP.deducePinTypes(patch, project)),
     R.chain(XP.getPatchByPath(R.__, project)),
     getActingPatchPath
   )(action)
@@ -100,10 +100,10 @@ const deduceTypesForPatch = R.curry((project, action) =>
  *
  * :: Project -> Map PatchPath DeducedPinTypes
  */
-const deduceTypesForProject = R.curry(project =>
+const deduceTypesForProject = R.curry((project) =>
   R.compose(
     R.reject(R.isEmpty),
-    R.map(patch => XP.deducePinTypes(patch, project)),
+    R.map((patch) => XP.deducePinTypes(patch, project)),
     R.indexBy(XP.getPatchPath),
     XP.listPatches
   )(project)
@@ -133,7 +133,7 @@ export const deduceTypes = R.curry((project, action, deducedTypes) => {
     R.reject(R.isEmpty),
     foldMaybeWith(
       () => deduceTypesForProject(project),
-      newDeducedTypesForPatch =>
+      (newDeducedTypesForPatch) =>
         R.compose(
           R.assoc(R.__, newDeducedTypesForPatch, deducedTypes),
           explodeMaybe(

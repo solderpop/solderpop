@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
 import {
   PATCH_CREATE_REQUESTED,
@@ -8,24 +8,24 @@ import {
   REMOVE_SELECTION,
   TOGGLE_DEPRECATED_FILTER,
   TOGGLE_UTILITY_FILTER,
-} from './actionTypes';
+} from './actionTypes.js';
 
-import { getSelectedPatchPath } from './selectors';
-import { isPatchEmpty } from './utils';
+import { getSelectedPatchPath } from './selectors.js';
+import { isPatchEmpty } from './utils.js';
 
-import { deletePatch } from '../project/actions';
+import { deletePatch } from '../project/actions.js';
 
 export const requestCreatePatch = () => ({
   type: PATCH_CREATE_REQUESTED,
 });
 
-export const requestRenamePatch = patchPath => ({
+export const requestRenamePatch = (patchPath) => ({
   type: PATCH_RENAME_REQUESTED,
   payload: { patchPath },
 });
 
 // TODO: split into 'requestDeletePatch' and 'requestDeleteSelectedPatch'?
-export const requestDeletePatch = patchPath => (dispatch, getState) => {
+export const requestDeletePatch = (patchPath) => (dispatch, getState) => {
   const state = getState();
   const selectedPatchPath = patchPath || getSelectedPatchPath(state);
   if (R.isNil(selectedPatchPath)) {
@@ -43,7 +43,7 @@ export const requestDeletePatch = patchPath => (dispatch, getState) => {
   });
 };
 
-export const setSelection = selectedPatchPath => ({
+export const setSelection = (selectedPatchPath) => ({
   type: SET_SELECTION,
   payload: { patchPath: selectedPatchPath },
 });

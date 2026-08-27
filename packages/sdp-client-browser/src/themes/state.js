@@ -3,7 +3,7 @@
 export const THEME_COLOR_KEYS = [
   // Primary colors
   'primary',
-  'secondary', 
+  'secondary',
   'accent',
   'success',
   'warning',
@@ -26,7 +26,7 @@ export const THEME_COLOR_KEYS = [
   'borderColor',
   'borderRadius',
   'shadow',
-  
+
   // Canvas
   'canvasBg',
   'canvasGridlines',
@@ -65,7 +65,7 @@ export const THEME_COLOR_KEYS = [
   'inputBg',
   'inputText',
   'inputBorder',
-  
+
   // Buttons
   'darkButtonBg',
   'darkButtonHoverBg',
@@ -88,12 +88,12 @@ export const THEME_COLOR_KEYS = [
   // Status indicators
   'statusSuccess',
   'statusWarning',
-  'statusDanger'
+  'statusDanger',
 ];
 
 export const DEFAULT_THEME = {
   primary: '#3b82f6',
-  secondary: '#64748b', 
+  secondary: '#64748b',
   accent: '#ff6b6b',
   success: '#10b981',
   warning: '#f59e00',
@@ -113,7 +113,7 @@ export const DEFAULT_THEME = {
   borderColor: '#d1d5db',
   borderRadius: '0.375rem',
   shadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-  
+
   canvasBg: '#ffffff',
   canvasGridlines: '#e5e7eb',
   canvasFace: '#f3f4f6',
@@ -146,7 +146,7 @@ export const DEFAULT_THEME = {
   inputBg: '#ffffff',
   inputText: '#1f2937',
   inputBorder: '#d1d5db',
-  
+
   darkButtonBg: '#374151',
   darkButtonHoverBg: '#4b5563',
   darkButtonText: '#ffffff',
@@ -165,20 +165,20 @@ export const DEFAULT_THEME = {
 
   statusSuccess: '#10b981',
   statusWarning: '#f59e00',
-  statusDanger: '#ef4444'
+  statusDanger: '#ef4444',
 };
 
 export const THEMES = {
   default: {
     name: 'Default',
     colors: DEFAULT_THEME,
-    description: 'Base theme for the Solderpop IDE'
+    description: 'Base theme for the Solderpop IDE',
   },
   dark: {
     name: 'Dark Theme',
     colors: {
       primary: '#3b82f6',
-      secondary: '#64748b', 
+      secondary: '#64748b',
       accent: '#ff6b6b',
       success: '#10b981',
       warning: '#f59e00',
@@ -198,7 +198,7 @@ export const THEMES = {
       borderColor: '#374151',
       borderRadius: '0.375rem',
       shadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-      
+
       canvasBg: '#111821',
       canvasGridlines: '#374151',
       canvasFace: '#374151',
@@ -231,7 +231,7 @@ export const THEMES = {
       inputBg: '#1f2937',
       inputText: '#f9fafb',
       inputBorder: '#374151',
-      
+
       darkButtonBg: '#374151',
       darkButtonHoverBg: '#4b5563',
       darkButtonText: '#ffffff',
@@ -250,15 +250,15 @@ export const THEMES = {
 
       statusSuccess: '#10b981',
       statusWarning: '#f59e00',
-      statusDanger: '#ef4444'
+      statusDanger: '#ef4444',
     },
-    description: 'Dark theme for comfortable night-time coding'
+    description: 'Dark theme for comfortable night-time coding',
   },
   light: {
     name: 'Light Theme',
     colors: {
       primary: '#3b82f6',
-      secondary: '#64748b', 
+      secondary: '#64748b',
       accent: '#ff6b6b',
       success: '#10b981',
       warning: '#f59e00',
@@ -278,7 +278,7 @@ export const THEMES = {
       borderColor: '#d1d5db',
       borderRadius: '0.375rem',
       shadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-      
+
       canvasBg: '#ffffff',
       canvasGridlines: '#e5e7eb',
       canvasFace: '#f3f4f6',
@@ -311,7 +311,7 @@ export const THEMES = {
       inputBg: '#ffffff',
       inputText: '#1f2937',
       inputBorder: '#d1d5db',
-      
+
       darkButtonBg: '#374151',
       darkButtonHoverBg: '#4b5563',
       darkButtonText: '#ffffff',
@@ -330,13 +330,13 @@ export const THEMES = {
 
       statusSuccess: '#10b981',
       statusWarning: '#f59e00',
-      statusDanger: '#ef4444'
+      statusDanger: '#ef4444',
     },
-    description: 'Bright theme for daytime coding comfort'
-  }
+    description: 'Bright theme for daytime coding comfort',
+  },
 };
 
 export const INITIAL_STATE = {
   currentTheme: 'default',
-  themes: THEMES
+  themes: THEMES,
 };

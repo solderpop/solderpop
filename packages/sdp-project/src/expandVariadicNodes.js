@@ -1,15 +1,15 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { explodeMaybe, explodeEither } from 'sdp-func-tools';
 
-import { def } from './types';
+import { def } from './types.js';
 
-import * as Pin from './pin';
-import * as Node from './node';
-import * as Link from './link';
-import * as Patch from './patch';
-import * as Project from './project';
-import { TERMINAL_PIN_KEYS, PIN_DIRECTION } from './constants';
-import { getExpandedVariadicPatchPath } from './patchPathUtils';
+import * as Pin from './pin.js';
+import * as Node from './node.js';
+import * as Link from './link.js';
+import * as Patch from './patch.js';
+import * as Project from './project.js';
+import { TERMINAL_PIN_KEYS, PIN_DIRECTION } from './constants.js';
+import { getExpandedVariadicPatchPath } from './patchPathUtils.js';
 
 //
 // expanding a single patch
@@ -35,7 +35,7 @@ export const createAdditionalValueTerminalGroups = (
 
   // for positioning new terminals
   const rightmostInputTerminalX = R.compose(
-    xs => Math.max(...xs),
+    (xs) => Math.max(...xs),
     R.map(getNodeX),
     R.filter(Node.isInputPinNode)
   )(originalTerminalNodes);
@@ -58,7 +58,7 @@ export const createAdditionalValueTerminalGroups = (
 
   // :: [ [Node] ]
   return R.compose(
-    R.map(terminalGroupIndex =>
+    R.map((terminalGroupIndex) =>
       R.addIndex(R.map)(
         (node, index) =>
           R.compose(
@@ -82,7 +82,7 @@ const createExpansionNodes = (patch, desiredArityLevel) => {
     Patch.getArityStepFromPatch
   )(patch);
   return R.compose(
-    R.map(idx =>
+    R.map((idx) =>
       Node.createNode(
         {
           x: arityStep * idx,
@@ -99,8 +99,8 @@ const createExpansionNodes = (patch, desiredArityLevel) => {
 
 const createLinksToSharedTerminals = (expansionNodes, variadicPinKeys) =>
   R.compose(
-    R.chain(sharedPinKey =>
-      R.map(instanceNodeId =>
+    R.chain((sharedPinKey) =>
+      R.map((instanceNodeId) =>
         Link.createLink(
           sharedPinKey,
           instanceNodeId,
@@ -119,7 +119,7 @@ const createLinksFromLastNodeToOutputs = (
 ) => {
   const lastNodeId = R.last(expansionNodeIds);
   return R.map(
-    outputPinKey =>
+    (outputPinKey) =>
       Link.createLink(
         // outputPinKey also acts as a terminal node id
         TERMINAL_PIN_KEYS[PIN_DIRECTION.INPUT],
@@ -137,7 +137,7 @@ const createLinksFromFirstNodeToInputTerminals = (
   const firstNodeId = R.head(expansionNodeIds);
 
   return R.map(
-    pinKey =>
+    (pinKey) =>
       Link.createLink(
         pinKey,
         firstNodeId,
@@ -265,13 +265,13 @@ export default def(
 
     // :: { patchPath, node }
     const nodesToExpand = R.compose(
-      R.chain(patchPath =>
+      R.chain((patchPath) =>
         R.compose(
-          R.map(node => ({
+          R.map((node) => ({
             patchPath,
             node,
           })),
-          R.filter(R.pipe(Node.getNodeArityLevel, al => al > 1)),
+          R.filter(R.pipe(Node.getNodeArityLevel, (al) => al > 1)),
           Patch.listNodes,
           Project.getPatchByPathUnsafe(patchPath)
         )(project)
@@ -304,8 +304,8 @@ export default def(
       R.mapObjIndexed((nodes, patchPath) =>
         R.compose(
           explodeEither,
-          Project.updatePatch(patchPath, patch => {
-            const updatedNodes = R.map(node => {
+          Project.updatePatch(patchPath, (patch) => {
+            const updatedNodes = R.map((node) => {
               const arityLevel = Node.getNodeArityLevel(node);
               const originalType = Node.getNodeType(node);
               const expandedNodeType = getExpandedVariadicPatchPath(

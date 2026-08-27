@@ -1,6 +1,6 @@
-import * as ERROR_CODES from './errorCodes';
+import * as ERROR_CODES from './errorCodes.js';
 
-export { compileSimulation } from './compile';
-export { isEmsdkInstalled } from './emcc';
+export { default as compileSimulation } from './compile.js';
+export { isEmsdkInstalled } from './emcc.js';
 
 export { ERROR_CODES };

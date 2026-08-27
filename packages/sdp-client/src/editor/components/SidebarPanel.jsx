@@ -1,43 +1,45 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ContextMenuTrigger } from 'react-contextmenu';
 import CustomScroll from 'react-custom-scroll';
 import { noop } from 'sdp-func-tools';
 
-import { PANEL_CONTEXT_MENU_ID, PANEL_IDS, SIDEBAR_IDS } from '../constants';
+import { PANEL_CONTEXT_MENU_ID, PANEL_IDS, SIDEBAR_IDS } from '../constants.js';
 
-const SidebarPanelToolbar = ({
+function SidebarPanelToolbar({
   panelId,
   title,
   sidebarId,
   autohide,
   additionalButtons = [],
-}) => (
-  <div className="SidebarPanel-toolbar">
-    <div className="SidebarPanel-toolbar-title">{title}</div>
-    <div className="SidebarPanel-toolbar-buttons">
-      {additionalButtons}
-      <ContextMenuTrigger
-        id={PANEL_CONTEXT_MENU_ID}
-        key="contextMenuTrigger"
-        renderTag="button"
-        attributes={{
-          className: 'contextmenu',
-        }}
-        collect={() => ({
-          panelId,
-          sidebarId,
-          autohide,
-        })}
-        holdToDisplay={0}
-      >
-        {/* Component needs at least one child :-( */}
-        <span />
-      </ContextMenuTrigger>
+}) {
+  return (
+    <div className="SidebarPanel-toolbar">
+      <div className="SidebarPanel-toolbar-title">{title}</div>
+      <div className="SidebarPanel-toolbar-buttons">
+        {additionalButtons}
+        <ContextMenuTrigger
+          id={PANEL_CONTEXT_MENU_ID}
+          key="contextMenuTrigger"
+          renderTag="button"
+          attributes={{
+            className: 'contextmenu',
+          }}
+          collect={() => ({
+            panelId,
+            sidebarId,
+            autohide,
+          })}
+          holdToDisplay={0}
+        >
+          {/* Component needs at least one child :-( */}
+          <span />
+        </ContextMenuTrigger>
+      </div>
     </div>
-  </div>
-);
+  );
+}
 
 SidebarPanelToolbar.propTypes = {
   panelId: PropTypes.oneOf(R.values(PANEL_IDS)).isRequired,
@@ -47,7 +49,7 @@ SidebarPanelToolbar.propTypes = {
   additionalButtons: PropTypes.arrayOf(PropTypes.element),
 };
 
-const SidebarPanel = ({
+function SidebarPanel({
   id,
   title,
   additionalButtons = [],
@@ -56,20 +58,22 @@ const SidebarPanel = ({
   autohide,
   children,
   onScroll = noop,
-}) => (
-  <div className={`SidebarPanel ${className}`}>
-    <SidebarPanelToolbar
-      panelId={id}
-      sidebarId={sidebarId}
-      autohide={autohide}
-      title={title}
-      additionalButtons={additionalButtons}
-    />
-    <CustomScroll flex="1" onScroll={onScroll}>
-      {children}
-    </CustomScroll>
-  </div>
-);
+}) {
+  return (
+    <div className={`SidebarPanel ${className}`}>
+      <SidebarPanelToolbar
+        panelId={id}
+        sidebarId={sidebarId}
+        autohide={autohide}
+        title={title}
+        additionalButtons={additionalButtons}
+      />
+      <CustomScroll flex="1" onScroll={onScroll}>
+        {children}
+      </CustomScroll>
+    </div>
+  );
+}
 
 SidebarPanel.propTypes = {
   id: PropTypes.string.isRequired,

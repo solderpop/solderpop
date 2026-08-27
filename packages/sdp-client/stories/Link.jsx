@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 
 import '../src/core/styles/main.scss';
-import XODLink from '../src/project/components/Link';
+import XODLink from '../src/project/components/Link.jsx';
 
 const pFrom = { x: 30, y: 30 };
 const pTo = { x: 120, y: 120 };
@@ -17,7 +17,7 @@ const baseProps = {
 };
 
 storiesOf('Link', module)
-  .addDecorator(story => (
+  .addDecorator((story) => (
     <svg>
       <rect
         width={pFrom.x * 2 + pTo.x}

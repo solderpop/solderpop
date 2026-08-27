@@ -1,4 +1,4 @@
-import * as EVENTS from '../shared/events';
+import * as EVENTS from '../shared/events.js';
 
 export const subscribeOnDebuggerEvents = (ipcRenderer, app) => {
   ipcRenderer.on(EVENTS.SERIAL_SESSION_MESSAGE_RECEIVE, (event, data) =>
@@ -22,6 +22,6 @@ export const sendStartDebuggerSession = (
   });
 };
 
-export const sendStopDebuggerSession = ipcRenderer => {
+export const sendStopDebuggerSession = (ipcRenderer) => {
   ipcRenderer.send(EVENTS.STOP_DEBUG_SESSION);
 };

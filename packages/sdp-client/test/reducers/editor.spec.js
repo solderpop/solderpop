@@ -1,23 +1,36 @@
 import R from 'ramda';
-import { assert } from 'chai';
-import thunk from 'redux-thunk';
+import chai from 'chai';
+import thunkModule from 'redux-thunk';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import configureStore from 'redux-mock-store';
+import configureStoreModule from 'redux-mock-store';
 
 import { isAmong } from 'sdp-func-tools';
-import { defaultizeProject } from 'sdp-project/test/helpers';
+import { defaultizeProject } from 'sdp-project/test/helpers.js';
 
-import * as Actions from '../../src/editor/actions';
-import * as Selectors from '../../src/editor/selectors';
-import editorReducer from '../../src/editor/reducer';
+import * as Actions from '../../src/editor/actions.js';
+import * as Selectors from '../../src/editor/selectors.js';
+import editorReducer from '../../src/editor/reducer.js';
 
-import { EDITOR_MODE, SELECTION_ENTITY_TYPE } from '../../src/editor/constants';
+import {
+  EDITOR_MODE,
+  SELECTION_ENTITY_TYPE,
+} from '../../src/editor/constants.js';
+
+const { assert } = chai;
+
+const thunk =
+  typeof thunkModule === 'function' ? thunkModule : thunkModule.default;
+
+const configureStore =
+  typeof configureStoreModule === 'function'
+    ? configureStoreModule
+    : configureStoreModule.default;
 
 const mockStore = configureStore([thunk]);
-const testStore = state =>
+const testStore = (state) =>
   createStore(
     combineReducers({
-      project: f => f || {},
+      project: (f) => f || {},
       editor: editorReducer,
     }),
     state,
@@ -185,7 +198,7 @@ describe('Editor reducer', () => {
         },
       }),
     };
-    const createTabsStore = state =>
+    const createTabsStore = (state) =>
       createStore(
         combineReducers({
           editor: editorReducer,

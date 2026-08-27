@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PT from 'prop-types';
 import cn from 'classnames';
@@ -6,9 +6,9 @@ import cn from 'classnames';
 import * as XP from 'sdp-project';
 import { foldEither, foldMaybe } from 'sdp-func-tools';
 
-import Node from '../../project/components/Node';
-import { patchToNodeProps } from '../../project/utils';
-import { SLOT_SIZE } from '../../project/nodeLayout';
+import Node from '../../project/components/Node.jsx';
+import { patchToNodeProps } from '../../project/utils.js';
+import { SLOT_SIZE } from '../../project/nodeLayout.js';
 
 const NODE_POSITION_IN_PREVIEW = {
   x: 3,
@@ -18,23 +18,25 @@ const NODE_POSITION_IN_PREVIEW = {
 const MAX_NODE_WIDTH = 245 - NODE_POSITION_IN_PREVIEW.x * 2;
 const NODE_PREVIEW_HEIGHT = 85;
 
-const formatPinType = R.when(XP.isGenericType, type => `generic ${type}`);
+const formatPinType = R.when(XP.isGenericType, (type) => `generic ${type}`);
 const getPinTypeClassName = R.when(XP.isGenericType, R.always('generic'));
 
-const PinInfo = ({ type, label, description, isVariadic }) => (
-  <div className="pin-info">
-    <div>
-      <span className="label">{label}</span>
-      <span className={cn('type', getPinTypeClassName(type))}>
-        {formatPinType(type)}
-      </span>
-      {isVariadic && <span className="variadic">&nbsp;(variadic)</span>}
+function PinInfo({ type, label, description, isVariadic }) {
+  return (
+    <div className="pin-info">
+      <div>
+        <span className="label">{label}</span>
+        <span className={cn('type', getPinTypeClassName(type))}>
+          {formatPinType(type)}
+        </span>
+        {isVariadic && <span className="variadic">&nbsp;(variadic)</span>}
+      </div>
+      <div className="description">
+        <span>{description}</span>
+      </div>
     </div>
-    <div className="description">
-      <span>{description}</span>
-    </div>
-  </div>
-);
+  );
+}
 
 PinInfo.propTypes = {
   type: PT.string.isRequired,
@@ -43,7 +45,7 @@ PinInfo.propTypes = {
   isVariadic: PT.bool.isRequired,
 };
 
-const InputPins = ({ pins, distanceBetweenPins }) => {
+function InputPins({ pins, distanceBetweenPins }) {
   if (R.isEmpty(pins)) return null;
 
   const [pin, ...restPins] = pins;
@@ -62,14 +64,14 @@ const InputPins = ({ pins, distanceBetweenPins }) => {
       )}
     </div>
   );
-};
+}
 
 InputPins.propTypes = {
   pins: PT.array.isRequired,
   distanceBetweenPins: PT.number.isRequired,
 };
 
-const OutputPins = ({ pins, distanceBetweenPins, isFirst }) => {
+function OutputPins({ pins, distanceBetweenPins, isFirst }) {
   if (R.isEmpty(pins)) return null;
 
   const [pin, ...restPins] = pins;
@@ -97,7 +99,7 @@ const OutputPins = ({ pins, distanceBetweenPins, isFirst }) => {
       </div>
     </div>
   );
-};
+}
 
 OutputPins.propTypes = {
   pins: PT.array.isRequired,
@@ -109,14 +111,14 @@ OutputPins.defaultProps = {
   isFirst: true,
 };
 
-const renderDeprecationReason = maybeDeprecated =>
+const renderDeprecationReason = (maybeDeprecated) =>
   foldMaybe(
     null,
-    reason => <div className="deprecated">Deprecated: {reason}</div>,
+    (reason) => <div className="deprecated">Deprecated: {reason}</div>,
     maybeDeprecated
   );
 
-const PatchDocs = ({ patch, minimal }) => {
+function PatchDocs({ patch, minimal }) {
   const variadicPinKeys = R.compose(
     foldEither(R.always([]), R.map(XP.getPinKey)),
     XP.listVariadicValuePins
@@ -126,7 +128,7 @@ const PatchDocs = ({ patch, minimal }) => {
     R.map(R.sortBy(XP.getPinOrder)),
     R.partition(XP.isInputPin),
     XP.normalizeEmptyPinLabels,
-    R.map(pin =>
+    R.map((pin) =>
       R.assoc('isVariadic', R.contains(XP.getPinKey(pin), variadicPinKeys), pin)
     ),
     XP.listPins
@@ -220,7 +222,7 @@ const PatchDocs = ({ patch, minimal }) => {
       )}
     </div>
   );
-};
+}
 
 PatchDocs.defaultProps = {
   minimal: false,

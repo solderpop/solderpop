@@ -1,5 +1,5 @@
-import * as R from 'ramda';
-import * as CONST from '../constants';
+import R from 'ramda';
+import * as CONST from '../constants.js';
 
 const EXPANDED_PATCH_NAME_SUFFIX = '-$';
 
@@ -62,7 +62,7 @@ export const isValidPatchBasename = R.test(patchBaseNameRegExp);
 export const isProjectNameValid = R.either(isValidIdentifier, R.isEmpty);
 
 // :: ([String] -> Boolean) -> * -> Boolean
-const checkPathParts = partsChecker =>
+const checkPathParts = (partsChecker) =>
   R.both(R.is(String), R.compose(partsChecker, R.split('/')));
 
 // :: String -> Boolean

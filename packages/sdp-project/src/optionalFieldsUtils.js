@@ -1,7 +1,7 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { subtractObject } from 'sdp-func-tools';
 
-import { def } from './types';
+import { def } from './types.js';
 
 export const OPTIONAL_NODE_FIELDS = {
   boundLiterals: {},

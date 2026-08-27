@@ -1,15 +1,17 @@
 import { test } from '@oclif/test';
-import { assert } from 'chai';
+import chai from 'chai';
 import path from 'path';
 import process from 'process';
 import fs from 'fs-extra';
-import { bundledWorkspacePath, createWorkingDirectory } from './helpers';
+import { bundledWorkspacePath, createWorkingDirectory } from './helpers.js';
+
+const { assert } = chai;
 
 // save process.exit for unmocking
-const exit = process.exit;
+const { exit } = process;
 
 // save tty status
-const isTTY = process.stdout.isTTY;
+const { isTTY } = process.stdout;
 
 // default inputs
 const apiSuffixDefault = 'solderpop.io';
@@ -21,7 +23,7 @@ const token = 'token';
 const projectPath = path.resolve(bundledWorkspacePath, 'blink');
 
 // nock mocks
-const postAuthEndpoint = api =>
+const postAuthEndpoint = (api) =>
   api
     .post('/auth', {
       username,
@@ -33,49 +35,49 @@ const postAuthEndpoint = api =>
       refresh_token: 123,
     });
 
-const postAuthEndpointFailed = api => api.post('/auth').reply(403);
+const postAuthEndpointFailed = (api) => api.post('/auth').reply(403);
 
-const getUserEndpoint = api =>
+const getUserEndpoint = (api) =>
   api.get(/users\/.*/).reply(200, {
     username,
     trusts: [],
   });
 
-const getUserEndpointFailed404 = api => api.get(/users\/.*/).reply(404);
+const getUserEndpointFailed404 = (api) => api.get(/users\/.*/).reply(404);
 
-const getUserEndpointFailed500 = api => api.get(/users\/.*/).reply(500);
+const getUserEndpointFailed500 = (api) => api.get(/users\/.*/).reply(500);
 
-const getUserEndpointAnother = api =>
+const getUserEndpointAnother = (api) =>
   api.get(`/users/${onBehalfUsername}`).reply(200, {
     username: onBehalfUsername,
     trusts: [username],
   });
 
-const getUserEndpointAnotherWithoutTrust = api =>
+const getUserEndpointAnotherWithoutTrust = (api) =>
   api.get(`/users/${onBehalfUsername}`).reply(200, {
     username: onBehalfUsername,
     trusts: [],
   });
 
-const getLibEndpoint = api => api.get(/users\/.*\/libs\/.*/).reply(200, {});
+const getLibEndpoint = (api) => api.get(/users\/.*\/libs\/.*/).reply(200, {});
 
-const getLibEndpointFailed404 = api => api.get(/.*/).reply(404);
+const getLibEndpointFailed404 = (api) => api.get(/.*/).reply(404);
 
-const getLibEndpointFailed500 = api => api.get(/.*/).reply(500);
+const getLibEndpointFailed500 = (api) => api.get(/.*/).reply(500);
 
-const putLibEndpoint = api =>
+const putLibEndpoint = (api) =>
   api
     .put(/users\/.*\/libs\/.*/)
     .matchHeader('content-type', 'application/json')
     .matchHeader('authorization', `Bearer ${token}`)
     .reply(200);
 
-const putLibEndpointFailed = api => api.put(/users\/.*\/libs\/.*/).reply(404);
+const putLibEndpointFailed = (api) => api.put(/users\/.*\/libs\/.*/).reply(404);
 
-const putLibEndpointFailed403 = api =>
+const putLibEndpointFailed403 = (api) =>
   api.put(/users\/.*\/libs\/.*/).reply(403);
 
-const postVersionEndpoint = api =>
+const postVersionEndpoint = (api) =>
   api
     .post(/users\/.*\/libs\/.*\/versions/, {
       description: /.*/,
@@ -86,13 +88,13 @@ const postVersionEndpoint = api =>
     .matchHeader('authorization', `Bearer ${token}`)
     .reply(200);
 
-const postVersionEndpointFailed = api =>
+const postVersionEndpointFailed = (api) =>
   api.post(/users\/.*\/libs\/.*\/versions/).reply(403);
 
-const postVersionEndpointFailed409 = api =>
+const postVersionEndpointFailed409 = (api) =>
   api.post(/users\/.*\/libs\/.*\/versions/).reply(409);
 
-const its = wd => {
+const its = (wd) => {
   const stdMock = test.stdout().stderr();
 
   stdMock
@@ -101,7 +103,7 @@ const its = wd => {
     .command(['publish'])
     .it(
       `cannot find project without argument, prints error to stderr, non-zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be emply');
         assert.match(
           ctx.stderr,
@@ -119,7 +121,7 @@ const its = wd => {
       'publish',
       path.resolve(wd, 'kajsdhflkjsdhflkjashldkfjlkjasdfkjl'),
     ])
-    .it('fails when wrong path to project, exits with non-zero code', ctx => {
+    .it('fails when wrong path to project, exits with non-zero code', (ctx) => {
       assert.equal(ctx.stdout, '', 'stdout must be emply');
       assert.match(
         ctx.stderr,
@@ -140,7 +142,7 @@ const its = wd => {
     .command(['publish', projectPath])
     .it(
       `can't authenticate, stderr with error, stdin is empty, non-zero exit`,
-      ctx => {
+      (ctx) => {
         // sorry, when TTY is off some mocking bug happens
         if (process.stdout.isTTY) {
           assert.equal(ctx.stdout, '', 'stdout must be empty');
@@ -161,7 +163,7 @@ const its = wd => {
     .command(['publish', projectPath])
     .it(
       `can't publish because user not found, stderr with error, stdin is empty, non-zero exit`,
-      ctx => {
+      (ctx) => {
         // sorry, when TTY is off some mocking bug happens
         if (process.stdout.isTTY) {
           assert.equal(ctx.stdout, '', 'stdout must be empty');
@@ -182,7 +184,7 @@ const its = wd => {
     .command(['publish', projectPath])
     .it(
       `can't publish because of failed fetch of user, stderr with error, stdin is empty, non-zero exit`,
-      ctx => {
+      (ctx) => {
         // sorry, when TTY is off some mocking bug happens
         if (process.stdout.isTTY) {
           assert.equal(ctx.stdout, '', 'stdout must be empty');
@@ -208,7 +210,7 @@ const its = wd => {
     .command(['publish', projectPath])
     .it(
       `can't publish because of target users not trusts current user, stderr with error, stdin is empty, non-zero exit`,
-      ctx => {
+      (ctx) => {
         // sorry, when TTY is off some mocking bug happens
         if (process.stdout.isTTY) {
           assert.equal(ctx.stdout, '', 'stdout must be empty');
@@ -230,7 +232,7 @@ const its = wd => {
     .command(['publish', projectPath])
     .it(
       `can't publish because of library not found and can't put new one, stderr with error, stdin is empty, non-zero exit`,
-      ctx => {
+      (ctx) => {
         // sorry, when TTY is off some mocking bug happens
         if (process.stdout.isTTY) {
           assert.equal(ctx.stdout, '', 'stdout must be empty');
@@ -251,7 +253,7 @@ const its = wd => {
     .command(['publish', projectPath])
     .it(
       `can't publish because of can't get library, stderr with error, stdin is empty, non-zero exit`,
-      ctx => {
+      (ctx) => {
         // sorry, when TTY is off some mocking bug happens
         if (process.stdout.isTTY) {
           assert.equal(ctx.stdout, '', 'stdout must be empty');
@@ -277,7 +279,7 @@ const its = wd => {
     .command(['publish', projectPath])
     .it(
       `can't publish because of library not found and access denied on creating, stderr with error, stdin is empty, non-zero exit`,
-      ctx => {
+      (ctx) => {
         // sorry, when TTY is off some mocking bug happens
         if (process.stdout.isTTY) {
           assert.equal(ctx.stdout, '', 'stdout must be empty');
@@ -300,7 +302,7 @@ const its = wd => {
     .command(['publish', projectPath])
     .it(
       `can't publish because post version return unknown error, stderr with error, stdin is empty, non-zero exit`,
-      ctx => {
+      (ctx) => {
         // sorry, when TTY is off some mocking bug happens
         if (process.stdout.isTTY) {
           assert.equal(ctx.stdout, '', 'stdout must be empty');
@@ -323,7 +325,7 @@ const its = wd => {
     .command(['publish', projectPath])
     .it(
       `can't publish because version exists, stderr with error, stdin is empty, non-zero exit`,
-      ctx => {
+      (ctx) => {
         // sorry, when TTY is off some mocking bug happens
         if (process.stdout.isTTY) {
           assert.equal(ctx.stdout, '', 'stdout must be empty');
@@ -346,7 +348,7 @@ const its = wd => {
     ])
     .it(
       `can publish library when good username and password from flag and default api suffix, stderr with messages, stdout is empty, exits with zero code`,
-      ctx => {
+      (ctx) => {
         // sorry, when TTY is off some mocking bug happens
         if (process.stdout.isTTY) {
           assert.equal(ctx.stdout, '', 'stdout must be empty');
@@ -373,7 +375,7 @@ const its = wd => {
     ])
     .it(
       `can publish library on behalf when good username, password from flag set, non-standart api from flag, on-behalf user from flag with with correct trusts, quiet, stderr is empty, stdout is empty, exits with zero code`,
-      ctx => {
+      (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.equal(ctx.stderr, '', 'stderr must be empty');
         assert.equal(process.exitCode, 0, 'exit code must be zero');
@@ -393,7 +395,7 @@ const its = wd => {
     .command(['publish', `--quiet`, projectPath])
     .it(
       `can publish library on behalf when good username, password from flag set, non-standart api from flag, on-behalf user from flag with with correct trusts, quiet, stderr is empty, stdout is empty, exits with zero code (flags from ENV)`,
-      ctx => {
+      (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.equal(ctx.stderr, '', 'stderr must be empty');
         assert.equal(process.exitCode, 0, 'exit code must be zero');
@@ -401,7 +403,7 @@ const its = wd => {
     );
 };
 
-describe('xodc publish', () => {
+describe('sdpc publish', () => {
   // working directory
   const wd = createWorkingDirectory('publish');
 
@@ -419,7 +421,7 @@ describe('xodc publish', () => {
   describe('common', () => {
     // mock process.exit
     beforeEach(() => {
-      process.exit = code => {
+      process.exit = (code) => {
         process.exitCode = code;
       };
     });
@@ -436,7 +438,7 @@ describe('xodc publish', () => {
       .catch(/EEXIT: 0/)
       .it(
         `shows help in stdout, doesn't print to stderr, exits with 0`,
-        ctx => {
+        (ctx) => {
           assert.include(ctx.stdout, 'PROJECT', 'PROJECT argument not found');
           assert.include(ctx.stdout, '--help', '--help flag not found');
           assert.include(ctx.stdout, '--password', '--password flag not found');
@@ -460,7 +462,7 @@ describe('xodc publish', () => {
       .catch(/EEXIT: 0/)
       .it(
         `shows version in stdout, doesn't print to stderr and exits with 0`,
-        ctx => {
+        (ctx) => {
           assert.include(ctx.stdout, 'sdp-cli', 'version string not found');
           assert.equal(ctx.stderr, '', 'stderr should be emply');
         }
@@ -472,7 +474,7 @@ describe('xodc publish', () => {
     beforeEach(() => {
       process.stdout.isTTY = true;
       process.stderr.isTTY = true;
-      process.exit = code => {
+      process.exit = (code) => {
         process.exitCode = code;
       };
     });
@@ -490,7 +492,7 @@ describe('xodc publish', () => {
     beforeEach(() => {
       process.stdout.isTTY = false;
       process.stderr.isTTY = false;
-      process.exit = code => {
+      process.exit = (code) => {
         process.exitCode = code;
       };
     });

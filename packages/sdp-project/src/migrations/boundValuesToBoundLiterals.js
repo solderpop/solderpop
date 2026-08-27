@@ -1,14 +1,16 @@
 import R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import RamdaFantasy from 'ramda-fantasy';
 import { enquote, unquote, foldMaybe, catMaybies } from 'sdp-func-tools';
 
-import { def } from '../types';
-import { PIN_TYPE, INPUT_PULSE_PIN_BINDING_OPTIONS } from '../constants';
+import { def } from '../types.js';
+import { PIN_TYPE, INPUT_PULSE_PIN_BINDING_OPTIONS } from '../constants.js';
 
-import * as Project from '../project';
-import * as Patch from '../patch';
-import * as Node from '../node';
-import * as Pin from '../pin';
+import * as Project from '../project.js';
+import * as Patch from '../patch.js';
+import * as Node from '../node.js';
+import * as Pin from '../pin.js';
+
+const { Maybe } = RamdaFantasy;
 
 //
 // Literals
@@ -35,7 +37,7 @@ export const ensureLiteral = def(
           )
         )(value);
       case PIN_TYPE.BOOLEAN:
-        return R.when(R.is(Boolean), v => (v ? 'True' : 'False'))(value);
+        return R.when(R.is(Boolean), (v) => (v ? 'True' : 'False'))(value);
       case PIN_TYPE.NUMBER:
         return R.when(R.is(Number), R.toString)(value);
       case PIN_TYPE.STRING:
@@ -79,7 +81,7 @@ const migrateNodeBoundValues = R.curry((node, pins) => {
     // and then convert all other bound values
     R.reduce(convertBoundValueToBoundLiteral, R.__, pins),
     // omit bound values to nonexistent pins
-    wrongPinKeys =>
+    (wrongPinKeys) =>
       R.over(R.lensProp(LEGACY_BOUND_VALUES_PROP), R.omit(wrongPinKeys), node),
     R.difference(R.__, pinKeys),
     R.keys,
@@ -91,7 +93,7 @@ const migrateNodeBoundValues = R.curry((node, pins) => {
 // that does not exist in the Project/Workspace
 // E.G. Project uses third-party library and it's not installed yet
 // :: Node -> Node
-const migrateNodeBoundValuesWithoutTypes = node =>
+const migrateNodeBoundValuesWithoutTypes = (node) =>
   R.compose(
     R.reduce(
       (acc, [pinKey, pinValue]) =>
@@ -118,7 +120,7 @@ const migratePatchBoundValuesToBoundLiterals = R.curry((patch, project) =>
   R.compose(
     Project.assocPatch(Patch.getPatchPath(patch), R.__, project),
     Patch.upsertNodes(R.__, patch),
-    R.map(node =>
+    R.map((node) =>
       R.compose(
         // Remove `boundValues` completely if it's empty
         R.when(
@@ -145,7 +147,7 @@ const migratePatchBoundValuesToBoundLiterals = R.curry((patch, project) =>
 
 export const migrateBoundValuesToBoundLiterals = def(
   'migrateBoundValuesToBoundLiterals :: Project -> Project',
-  project =>
+  (project) =>
     R.compose(
       R.reduce(
         (proj, patch) =>

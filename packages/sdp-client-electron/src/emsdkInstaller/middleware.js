@@ -1,9 +1,9 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as client from 'sdp-client';
 
-import { installEmsdk } from './runners';
-import { installEmsdkProcess } from './actions';
-import { formatErrorMessage, formatLogError } from '../view/formatError';
+import { installEmsdk } from './runners.js';
+import { installEmsdkProcess } from './actions.js';
+import { formatErrorMessage, formatLogError } from '../view/formatError.js';
 
 // sdp-deploy/src/progress.js's ProgressData uses `note`, not `message` —
 // different from arduino-cli's own progress parser (parseProgressLog.js),
@@ -15,7 +15,7 @@ const progressToProcess = R.curry((processFn, progressData) => {
   processFn(progressData.note, progressData.percentage);
 });
 
-export default store => next => action => {
+export default (store) => (next) => (action) => {
   if (
     action.type === client.MESSAGE_BUTTON_CLICKED &&
     action.payload === client.INSTALL_EMSDK_MSG
@@ -41,7 +41,7 @@ export default store => next => action => {
         // internal ResizeObserver logic.
         setTimeout(() => window.dispatchEvent(new Event('resize')), 0);
       })
-      .catch(err => {
+      .catch((err) => {
         const snackbarError = formatErrorMessage(err);
         const logErr = formatLogError(err);
         store.dispatch(client.addError(snackbarError));

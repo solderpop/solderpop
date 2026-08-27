@@ -1,15 +1,15 @@
 // It's a clone of `resizingComment` mode with a little changes
 // One day we'll get rid of special "Comment" entity and only this mode will stay
 
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import * as XP from 'sdp-project';
 
-import { EDITOR_MODE } from '../../../constants';
+import { EDITOR_MODE } from '../../../constants.js';
 
-import PatchSVG from '../../../../project/components/PatchSVG';
-import * as Layers from '../../../../project/components/layers';
+import PatchSVG from '../../../../project/components/PatchSVG.jsx';
+import * as Layers from '../../../../project/components/layers/index.js';
 
 import {
   addPoints,
@@ -22,15 +22,15 @@ import {
   NODE_HEIGHT,
   PIN_RADIUS,
   SLOT_SIZE,
-} from '../../../../project/nodeLayout';
-import { getPxSize } from '../../../../project/pxDimensions';
+} from '../../../../project/nodeLayout.js';
+import { getPxSize } from '../../../../project/pxDimensions.js';
 
-import { getOffsetMatrix, bindApi, getMousePosition } from '../modeUtils';
-import { isLinkConnectedToNodeIds } from '../../../../project/utils';
-import { shortenDraggedLinks } from './moving';
+import { getOffsetMatrix, bindApi, getMousePosition } from '../modeUtils.js';
+import { isLinkConnectedToNodeIds } from '../../../../project/utils.js';
+import { shortenDraggedLinks } from './moving.jsx';
 
-const updateLinksPositions = R.uncurryN(2)(resizedNodes =>
-  R.map(link => {
+const updateLinksPositions = R.uncurryN(2)((resizedNodes) =>
+  R.map((link) => {
     // only outputs are moving during node resizing
     const nodeId = XP.getLinkOutputNodeId(link);
 
@@ -48,17 +48,17 @@ const updateLinksPositions = R.uncurryN(2)(resizedNodes =>
 
 let patchSvgRef = null;
 
-const getDeltaPosition = api =>
+const getDeltaPosition = (api) =>
   subtractPoints(api.state.mousePosition, api.state.dragStartPosition);
 
-const addDeltaToSize = R.uncurryN(2)(deltaPosition =>
+const addDeltaToSize = R.uncurryN(2)((deltaPosition) =>
   R.compose(pointToSize, addPoints(deltaPosition), sizeToPoint)
 );
 
 const addDeltaToPinPosition = R.curry((deltaPosition, pin) =>
   R.over(
     R.lensProp('position'),
-    pinPosition => ({
+    (pinPosition) => ({
       x: pinPosition.x,
       y: Math.max(
         pinPosition.y + deltaPosition.y,
@@ -69,7 +69,7 @@ const addDeltaToPinPosition = R.curry((deltaPosition, pin) =>
   )
 );
 
-const addDeltaToNodeSizes = R.uncurryN(2)(deltaPosition =>
+const addDeltaToNodeSizes = R.uncurryN(2)((deltaPosition) =>
   R.map(
     R.compose(
       R.over(
@@ -187,7 +187,7 @@ const resizingNodeMode = {
         <PatchSVG
           onMouseMove={bindApi(api, this.onMouseMove)}
           onMouseUp={bindApi(api, this.onMouseUp)}
-          svgRef={svg => {
+          svgRef={(svg) => {
             patchSvgRef = svg;
           }}
         >

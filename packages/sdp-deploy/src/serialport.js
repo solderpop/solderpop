@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { tapP, delay as delayP } from 'sdp-func-tools';
 
 // =============================================================================
@@ -39,13 +39,13 @@ import { tapP, delay as delayP } from 'sdp-func-tools';
 //
 // =============================================================================
 
-const delay = ms => () => delayP(ms);
+const delay = (ms) => () => delayP(ms);
 
 // :: PortOptions -> Port -> Promise Port Error
 const setPortOptions = R.curry(
   (options, port) =>
     new Promise((resolve, reject) => {
-      port.set(options, err => {
+      port.set(options, (err) => {
         if (err) {
           reject(err);
         }
@@ -55,9 +55,9 @@ const setPortOptions = R.curry(
 );
 
 // :: Port -> Promise Port Error
-const flushPort = port =>
+const flushPort = (port) =>
   new Promise((resolve, reject) => {
-    port.flush(err => {
+    port.flush((err) => {
       if (err) reject(err);
       resolve(port);
     });
@@ -73,7 +73,7 @@ const flushPort = port =>
  * @type {Function}
  * @return {Promise<Port[], Error>} */
 // :: () -> [PortInfo]
-export const listPorts = () => {
+export const listPorts = () =>
   // serialport is a native module that can conflict in ABI versions
   // with one built for Electron:
   //
@@ -82,56 +82,48 @@ export const listPorts = () => {
   //   NODE_MODULE_VERSION 53. This version of Node.js requires
   //   NODE_MODULE_VERSION 51. Please try re-compiling or re-installing
   //
-  // Localize it’s require so that the conflict never arise if we’re
+  // Localize its import so that the conflict never arises if we're
   // using CLI for things not related to serial port.
-  //
-  // eslint-disable-next-line global-require
-  const { SerialPort } = require('serialport');
-
-  return SerialPort.list();
-};
+  import('serialport').then(({ SerialPort }) => SerialPort.list());
 
 // :: PortName -> PortOptions -> Promise Port Error
 export const openPort = (portName, opts = {}) =>
-  new Promise((resolve, reject) => {
-    // eslint-disable-next-line global-require
-    const { SerialPort } = require('serialport');
-
-    try {
-      const port = new SerialPort(
-        Object.assign({ path: portName }, opts),
-        err => (err ? reject(err) : resolve(port))
-      );
-    } catch (err) {
-      reject(err);
-    }
-  });
+  import('serialport').then(
+    ({ SerialPort }) =>
+      new Promise((resolve, reject) => {
+        try {
+          const port = new SerialPort({ path: portName, ...opts }, (err) =>
+            err ? reject(err) : resolve(port)
+          );
+        } catch (err) {
+          reject(err);
+        }
+      })
+  );
 
 // :: Port -> Promise Port Error
-export const closePort = port =>
+export const closePort = (port) =>
   new Promise((resolve, reject) => {
-    port.close(err => (err ? reject(err) : resolve(port)));
+    port.close((err) => (err ? reject(err) : resolve(port)));
   });
 
 // :: PortName -> Boolean -> (String -> *) -> (* -> *) -> Promise Port Error
-export const openAndReadPort = (portName, disableRts, onData, onClose) => {
-  // eslint-disable-next-line global-require
-  const { ReadlineParser } = require('serialport');
+export const openAndReadPort = (portName, disableRts, onData, onClose) =>
+  import('serialport').then(({ ReadlineParser }) =>
+    openPort(portName, {
+      baudRate: 115200,
+    }).then(
+      R.tap((port) => {
+        const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
 
-  return openPort(portName, {
-    baudRate: 115200,
-  }).then(
-    R.tap(port => {
-      const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
-
-      parser.on('data', onData);
-      port.on('close', onClose);
-    })
+        parser.on('data', onData);
+        port.on('close', onClose);
+      })
+    )
   );
-};
 
 // :: PortName -> Promise Port Error
-export const flushSerialBuffer = portName =>
+export const flushSerialBuffer = (portName) =>
   openPort(portName)
     .then(flushPort)
     .then(setPortOptions({ dtr: false, rts: false }))
@@ -140,14 +132,14 @@ export const flushSerialBuffer = portName =>
     .then(closePort);
 
 // :: PortName -> Promise Port Error
-export const touchPort1200 = portName =>
+export const touchPort1200 = (portName) =>
   openPort(portName, { baudRate: 1200 })
     .then(setPortOptions({ dtr: false }))
     .then(closePort)
     .then(tapP(delay(400)));
 
 // :: PortName -> Promise PortName Error
-export const waitNewPort = async initialPorts => {
+export const waitNewPort = async (initialPorts) => {
   let beforePorts = initialPorts;
   let elapsed = 0;
   const enumDelay = 50;

@@ -3,9 +3,9 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 import '../src/core/styles/main.scss';
-import Pin from '../src/project/components/Pin';
+import Pin from '../src/project/components/Pin.jsx';
 // because filters are defined there
-import PatchSVG from '../src/project/components/PatchSVG';
+import PatchSVG from '../src/project/components/PatchSVG.jsx';
 
 const pinCenter = { x: 70, y: 70 };
 
@@ -22,7 +22,7 @@ const baseProps = {
 };
 
 storiesOf('Pin', module)
-  .addDecorator(story => (
+  .addDecorator((story) => (
     <PatchSVG>
       <rect width={pinCenter.x * 2} height={pinCenter.y * 2} fill="#676767" />
       <line

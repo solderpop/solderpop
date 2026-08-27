@@ -1,11 +1,11 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
 import { isAmong } from 'sdp-func-tools';
 
-import * as Node from '../node';
-import * as Link from '../link';
-import * as Patch from '../patch';
-import { def } from '../types';
+import * as Node from '../node.js';
+import * as Link from '../link.js';
+import * as Patch from '../patch.js';
+import { def } from '../types.js';
 
 const replacePatchContents = def(
   'replacePatchContents :: [Node] -> [Link] -> Patch -> Patch',
@@ -59,7 +59,7 @@ const squashSingleOutputNodes = def(
     const squashedNodeId = Node.getNodeId(squashedNode);
 
     const linksFromSquashedNode = R.map(
-      oldLink =>
+      (oldLink) =>
         Link.createLink(
           Link.getLinkInputPinKey(oldLink),
           Link.getLinkInputNodeId(oldLink),

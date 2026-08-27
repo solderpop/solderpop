@@ -36,8 +36,17 @@ defs:
         - arduino15-{{ arch }}-{{ checksum ".circleci/cache-version" }}
 
   machines:
+    # Was xodio/cci-node:12.12.3-cimg -- a custom Node 12 image. Babel 8
+    # (this repo's current toolchain, migrated 2026-08) requires Node
+    # ^22.18.0 || >=24.11.0, which that image predates entirely, and
+    # there's no evidence a Node-24 successor of that custom image was
+    # ever published for the SolderPop rebrand. Using CircleCI's own
+    # official convenience image instead, pinned to .nvmrc's version --
+    # this is the best verifiable option from outside CI itself; it may
+    # be missing whatever extra system packages the old custom image
+    # bundled beyond plain Node (unknown without access to its Dockerfile).
     docker-custom-nodejs: &docker-custom-nodejs
-      - image: xodio/cci-node:12.12.3-cimg
+      - image: cimg/node:24.11
 
   steps:
     step-install-arduino-cli-on-mac: &step-install-arduino-cli-on-mac
@@ -205,6 +214,9 @@ jobs:
       - save_cache: *cache-node_modules
       - run: *step-build
       - run: *step-verify-git-clean
+      - run: *step-lint
+      - run: *step-test
+      - run: *step-verify-git-clean
 
   test-cpp:
     docker: *docker-custom-nodejs
@@ -231,7 +243,7 @@ jobs:
           name: Generate tabtests
           command: |
             ls -d workspace/__lib__/xod/* workspace/test/* | xargs -n 1 \
-              yarn xodc tabtest --no-build | cat
+              yarn sdpc tabtest --no-build | cat
       - run:
           name: Build tabtests
           command: make -C $XOD_OUTPUT

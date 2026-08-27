@@ -1,7 +1,7 @@
-import * as R from 'ramda';
-import * as Utils from './utils';
-import * as Node from './node';
-import { def } from './types';
+import R from 'ramda';
+import * as Utils from './utils.js';
+import * as Node from './node.js';
+import { def } from './types.js';
 
 /**
  * @typedef {Object} Link
@@ -129,7 +129,7 @@ export const getLinkPinKeys = R.juxt([getLinkInputPinKey, getLinkOutputPinKey]);
  */
 const isGetterEqualTo = def(
   'isGetterEqualTo :: (b -> a) -> (a -> b -> Boolean)',
-  getter => R.useWith(R.equals, [R.identity, getter])
+  (getter) => R.useWith(R.equals, [R.identity, getter])
 );
 
 /**

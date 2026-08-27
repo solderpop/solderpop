@@ -1,8 +1,12 @@
 import fs from 'fs';
 import path from 'path';
-import { assert } from 'chai';
+import { fileURLToPath } from 'url';
+import chai from 'chai';
 
-import parseLegacyImplementation from '../src/parseLegacyImplementation';
+import parseLegacyImplementation from '../src/parseLegacyImplementation.js';
+
+const { assert } = chai;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 describe('parseLegacyImplementation', () => {
   it('separates code based on GENERATED_CODE token', () => {

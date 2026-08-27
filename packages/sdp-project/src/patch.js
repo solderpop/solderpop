@@ -1,5 +1,5 @@
-import * as R from 'ramda';
-import { Maybe, Either } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
 import {
   explodeMaybe,
   explodeEither,
@@ -19,20 +19,20 @@ import {
   maybeFind,
 } from 'sdp-func-tools';
 
-import * as CONST from './constants';
-import * as Comment from './comment';
-import * as Node from './node';
-import * as Link from './link';
-import * as Pin from './pin';
-import * as Utils from './utils';
-import * as Attachment from './attachment';
-import { sortGraph } from './gmath';
-import { def } from './types';
+import * as CONST from './constants.js';
+import * as Comment from './comment.js';
+import * as Node from './node.js';
+import * as Link from './link.js';
+import * as Pin from './pin.js';
+import * as Utils from './utils.js';
+import * as Attachment from './attachment.js';
+import { sortGraph } from './gmath.js';
+import { def } from './types.js';
 import {
   getHardcodedPinsForPatchPath,
   getPinKeyForTerminalDirection,
   getCustomTypeTerminalPins,
-} from './builtinTerminalPatches';
+} from './builtinTerminalPatches.js';
 import {
   getBaseName,
   getLocalPath,
@@ -50,10 +50,12 @@ import {
   getSpecializationPatchPath,
   normalizeTypeNameForAbstractsResolution,
   isTweakPath,
-} from './patchPathUtils';
-import { isBindableCustomType } from './custom-types';
+} from './patchPathUtils.js';
+import { isBindableCustomType } from './custom-types.js';
 
-import BUILT_IN_PATCHES from '../dist/built-in-patches.json';
+import BUILT_IN_PATCHES from './internal/builtInPatches.js';
+
+const { Maybe, Either } = RamdaFantasy;
 
 /**
  * An object representing single patch in a project
@@ -338,7 +340,7 @@ export const canBindToOutputs = def(
   )
 );
 
-const compareNodesPositionAxis = axis =>
+const compareNodesPositionAxis = (axis) =>
   R.ascend(R.pipe(Node.getNodePosition, R.prop(axis)));
 
 // :: Patch -> Node -> Number -> Pin
@@ -392,7 +394,7 @@ const pinsMemoizer = R.compose(
 );
 
 // :: Patch -> StrMap Pins
-const computePins = R.memoizeWith(pinsMemoizer, patch =>
+const computePins = R.memoizeWith(pinsMemoizer, (patch) =>
   R.compose(
     R.indexBy(Pin.getPinKey),
     R.unnest,
@@ -503,7 +505,7 @@ export const isTerminalPatch = def(
 // detects clashing pin labels
 export const validatePinLabels = def(
   'validatePinLabels :: Patch -> Either Error Patch',
-  patch =>
+  (patch) =>
     R.ifElse(
       R.pipe(getPatchPath, getBaseName, isExpandedVariadicPatchBasename),
       // duplicate labels appear in expanded variadic patches by design
@@ -523,7 +525,7 @@ export const validatePinLabels = def(
             R.toPairs
           )
         ),
-        R.filter(groupedPins => groupedPins.length > 1),
+        R.filter((groupedPins) => groupedPins.length > 1),
         R.groupBy(Pin.getPinLabel),
         Pin.normalizeEmptyPinLabels,
         listPins
@@ -805,10 +807,11 @@ export const dissocNode = def(
       getNodeById
     )(id, patch);
 
-    return R.compose(removeManagedAttachment, removeNode, removeLinks)(
-      patch,
-      links
-    );
+    return R.compose(
+      removeManagedAttachment,
+      removeNode,
+      removeLinks
+    )(patch, links);
   }
 );
 
@@ -823,9 +826,10 @@ export const upsertNodes = def(
 export const hasNodeWithType = def(
   'hasNodeWithType :: PatchPath -> Patch -> Boolean',
   (nodeType, patch) =>
-    R.compose(R.any(R.pipe(Node.getNodeType, R.equals(nodeType))), listNodes)(
-      patch
-    )
+    R.compose(
+      R.any(R.pipe(Node.getNodeType, R.equals(nodeType))),
+      listNodes
+    )(patch)
 );
 
 // =============================================================================
@@ -935,7 +939,8 @@ export const sendDeferNodesToBottom = def(
  */
 export const getTopology = def(
   'getTopology :: Patch -> Either Error [NodeId]',
-  patch => R.compose(R.map(sendDeferNodesToBottom(patch)), toposortGraph)(patch)
+  (patch) =>
+    R.compose(R.map(sendDeferNodesToBottom(patch)), toposortGraph)(patch)
 );
 
 /**
@@ -944,7 +949,12 @@ export const getTopology = def(
 export const getTopologyMap = def(
   'getTopologyMap :: Patch -> Either Error (Map NodeId String)',
   R.compose(
-    R.map(R.compose(R.fromPairs, mapIndexed((x, idx) => [x, idx.toString()]))),
+    R.map(
+      R.compose(
+        R.fromPairs,
+        mapIndexed((x, idx) => [x, idx.toString()])
+      )
+    ),
     getTopology
   )
 );
@@ -983,7 +993,7 @@ export const applyNodeIdMap = def(
  */
 export const toposortNodes = def(
   'toposortNodes :: Patch -> Either Error Patch',
-  patch => R.compose(R.map(applyNodeIdMap(patch)), getTopologyMap)(patch)
+  (patch) => R.compose(R.map(applyNodeIdMap(patch)), getTopologyMap)(patch)
 );
 
 /**
@@ -994,10 +1004,10 @@ export const getNondeadNodePins = def(
   'getNondeadNodePins :: Node -> Patch -> Map PinKey Pin',
   (node, patch) =>
     R.compose(
-      R.map(pin =>
+      R.map((pin) =>
         Pin.setPinValue(Node.getBoundValueOrDefault(pin, node), pin)
       ),
-      patchPins =>
+      (patchPins) =>
         R.compose(
           R.mergeWith(R.merge, R.__, patchPins),
           R.map(R.compose(R.objOf('normalizedLabel'), Pin.getPinLabel)),
@@ -1104,11 +1114,11 @@ export const upsertDeadPins = def(
           R.map(
             R.ifElse(
               Link.isLinkInputNodeIdEquals(nodeId),
-              link => [
+              (link) => [
                 Link.getLinkInputPinKey(link),
                 CONST.PIN_DIRECTION.INPUT,
               ],
-              link => [
+              (link) => [
                 Link.getLinkOutputPinKey(link),
                 CONST.PIN_DIRECTION.OUTPUT,
               ]
@@ -1131,10 +1141,10 @@ export const upsertDeadPins = def(
  * This function is used in loading of libraries.
  */
 // :: Patch -> Patch
-export const resolveNodeTypesInPatch = patch =>
+export const resolveNodeTypesInPatch = (patch) =>
   R.compose(
     R.reduce(R.flip(assocNode), patch),
-    R.map(node =>
+    R.map((node) =>
       R.compose(
         Node.setNodeType(R.__, node),
         resolvePatchPath(R.__, getPatchPath(patch)),
@@ -1185,7 +1195,7 @@ export const isGenuinePatch = def(
   R.compose(
     R.not,
     R.anyPass([
-      patchPath => R.has(patchPath, BUILT_IN_PATCHES),
+      (patchPath) => R.has(patchPath, BUILT_IN_PATCHES),
       isTerminalPatchPath,
     ]),
     getPatchPath
@@ -1208,7 +1218,7 @@ export const patchListEqualsBy = def(
     const diffPatchPaths = diffSet(prevPatchPaths, nextPatchPaths);
     if (diffPatchPaths.size > 0) return false;
 
-    return R.all(pp => {
+    return R.all((pp) => {
       const patchPath = getPatchPath(pp);
       const np = nextPatchesMap[patchPath];
       return compFn(pp, np);
@@ -1278,7 +1288,7 @@ const checkArityMarkersAmount = def(
  */
 export const computeVariadicPins = def(
   'computeVariadicPins :: Patch -> Either Error Object',
-  patch => {
+  (patch) => {
     const patchPath = getPatchPath(patch);
 
     if (!isVariadicPatch(patch)) {
@@ -1314,7 +1324,8 @@ export const computeVariadicPins = def(
         outputCount,
         minInputs: outputCount + arityStep,
       });
-    } else if (isVariadicPass && inputCount < arityStep) {
+    }
+    if (isVariadicPass && inputCount < arityStep) {
       return fail('NOT_ENOUGH_VARIADIC_PASS_INPUTS', {
         trace: [patchPath],
         arityStep,
@@ -1407,11 +1418,11 @@ export const addVariadicPins = def(
     const pinsToRepeat = explodeEither(variadicPins);
     const variadicCount = pinsToRepeat.length;
     const newPins = R.times(
-      idx =>
+      (idx) =>
         R.map(
-          originalPin =>
+          (originalPin) =>
             R.compose(
-              newPin =>
+              (newPin) =>
                 Pin.setPinValue(
                   Node.getBoundValueOrDefault(newPin, node),
                   newPin
@@ -1431,9 +1442,11 @@ export const addVariadicPins = def(
       arityLevel - 1
     );
 
-    return R.compose(R.merge(originalPins), R.indexBy(Pin.getPinKey), R.unnest)(
-      newPins
-    );
+    return R.compose(
+      R.merge(originalPins),
+      R.indexBy(Pin.getPinKey),
+      R.unnest
+    )(newPins);
   }
 );
 
@@ -1473,7 +1486,7 @@ export const validateAbstractPatch = def(
   'validateAbstractPatch :: Patch -> Either Error Patch',
   R.ifElse(
     isAbstractPatch, // TODO: also validate composite patches!
-    patch => {
+    (patch) => {
       const patchPath = getPatchPath(patch);
       const [genericInputTypes, genericOutputTypes] = R.compose(
         R.map(R.map(Pin.getPinType)),
@@ -1507,7 +1520,7 @@ export const validateAbstractPatch = def(
       }
 
       const expectedPinTypes = R.compose(
-        R.map(i => `t${i}`),
+        R.map((i) => `t${i}`),
         R.range(1),
         R.inc,
         R.length
@@ -1612,9 +1625,8 @@ export const checkSpecializationMatchesAbstraction = def(
       return fail('SPECIALIZATION_PATCH_MUST_HAVE_SAME_ARITY_LEVEL', {});
     }
 
-    const checkedPatchDoesHaveGenericPins = doesPatchHaveGenericPins(
-      specializationPatch
-    );
+    const checkedPatchDoesHaveGenericPins =
+      doesPatchHaveGenericPins(specializationPatch);
 
     if (checkedPatchDoesHaveGenericPins) {
       return fail('SPECIALIZATION_PATCH_CANT_HAVE_GENERIC_PINS', {});
@@ -1679,16 +1691,17 @@ export const checkSpecializationMatchesAbstraction = def(
 
     const ambiguousGenerics = R.compose(
       R.toPairs,
-      R.filter(resolutions => resolutions.length > 1),
+      R.filter((resolutions) => resolutions.length > 1),
       R.map(R.pipe(R.map(R.nth(1)), R.uniqBy(Pin.getPinType))),
       R.groupBy(R.pipe(R.nth(0), Pin.getPinType))
     )(genericPinPairs);
 
     if (!R.isEmpty(ambiguousGenerics)) {
       const [genericType, pinsWithDifferentTypes] = ambiguousGenerics[0];
-      const typeNames = R.compose(R.join(', '), R.map(Pin.getPinType))(
-        pinsWithDifferentTypes
-      );
+      const typeNames = R.compose(
+        R.join(', '),
+        R.map(Pin.getPinType)
+      )(pinsWithDifferentTypes);
 
       return fail('SPECIALIZATION_HAS_CONFLICTING_TYPES_FOR_GENERIC', {
         genericType,
@@ -1697,9 +1710,10 @@ export const checkSpecializationMatchesAbstraction = def(
       });
     }
 
-    const abstractPatchBaseName = R.compose(getBaseName, getPatchPath)(
-      abstractPatch
-    );
+    const abstractPatchBaseName = R.compose(
+      getBaseName,
+      getPatchPath
+    )(abstractPatch);
 
     const specializationTypes = R.compose(
       R.map(R.nth(1)),
@@ -1710,9 +1724,10 @@ export const checkSpecializationMatchesAbstraction = def(
       R.groupBy(R.pipe(R.nth(0), Pin.getPinType))
     )(genericPinPairs);
 
-    const specializationPatchLibrary = R.compose(getLibraryName, getPatchPath)(
-      specializationPatch
-    );
+    const specializationPatchLibrary = R.compose(
+      getLibraryName,
+      getPatchPath
+    )(specializationPatch);
     const typeInTheSameLibrary = R.compose(
       R.all(R.equals(specializationPatchLibrary)),
       R.map(getLibraryName),
@@ -1723,9 +1738,10 @@ export const checkSpecializationMatchesAbstraction = def(
       getSpecializationPatchPath(abstractPatchBaseName),
       R.map(normalizeTypeNameForAbstractsResolution)
     )(specializationTypes);
-    const actualSpecializationBaseName = R.compose(getBaseName, getPatchPath)(
-      specializationPatch
-    );
+    const actualSpecializationBaseName = R.compose(
+      getBaseName,
+      getPatchPath
+    )(specializationPatch);
 
     if (
       !(
@@ -1782,7 +1798,7 @@ export const isUnpackRecordPatch = def(
 
 export const validateConstructorPatch = def(
   'validateConstructorPatch :: Patch -> Either Error Patch',
-  patch =>
+  (patch) =>
     R.compose(
       prependTraceToError(getPatchPath(patch)),
       R.ifElse(
@@ -1805,7 +1821,7 @@ export const validateConstructorPatch = def(
 
 export const validateRecordPatch = def(
   'validateRecordPatch :: Patch -> Either Error Patch',
-  patch =>
+  (patch) =>
     R.compose(
       prependTraceToError(getPatchPath(patch)),
       R.ifElse(
@@ -1869,7 +1885,7 @@ export const validateRecordPatch = def(
 
 export const validateBuses = def(
   'validateBuses :: Patch -> Either Error Patch',
-  patch => {
+  (patch) => {
     const nodes = listNodes(patch);
 
     const toBusNodes = R.filter(
@@ -1882,14 +1898,15 @@ export const validateBuses = def(
 
     // :: [Node] | Undefined
     const toBusNodesWithConflictingLabel = R.compose(
-      R.find(ns => ns.length > 1),
+      R.find((ns) => ns.length > 1),
       R.values
     )(toBusNodesByLabel);
 
     if (toBusNodesWithConflictingLabel) {
-      const label = R.compose(Node.getNodeLabel, R.head)(
-        toBusNodesWithConflictingLabel
-      );
+      const label = R.compose(
+        Node.getNodeLabel,
+        R.head
+      )(toBusNodesWithConflictingLabel);
       const nodeIds = R.map(Node.getNodeId, toBusNodesWithConflictingLabel);
 
       return fail('CONFLICTING_TO_BUS_NODES', {
@@ -1908,7 +1925,7 @@ export const validateBuses = def(
     // :: [Node] | Undefined
     const floatingToBusNode = R.compose(
       R.head,
-      R.reject(nId => R.has(Node.getNodeId(nId), linksByInputNodeId))
+      R.reject((nId) => R.has(Node.getNodeId(nId), linksByInputNodeId))
     )(toBusNodes);
 
     if (floatingToBusNode) {
@@ -1982,7 +1999,7 @@ export const sameNodeTypes = def(
     const prevNodes = listNodes(prevPatch);
     const nextNodes = getNodes(nextPatch);
 
-    return R.all(prevNode => {
+    return R.all((prevNode) => {
       const nodeId = Node.getNodeId(prevNode);
       return (
         nextNodes[nodeId] &&
@@ -1997,7 +2014,7 @@ export const sameNodeBoundValues = def(
   (prevPatch, nextPatch) => {
     const prevNodes = listNodes(prevPatch);
     const nextNodes = getNodes(nextPatch);
-    return R.all(prevNode => {
+    return R.all((prevNode) => {
       const nodeId = Node.getNodeId(prevNode);
       return (
         nextNodes[nodeId] &&

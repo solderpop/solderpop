@@ -2,7 +2,7 @@ import React from 'react';
 import PT from 'prop-types';
 import * as XP from 'sdp-project';
 
-import PinWidget from './pinWidgets/PinWidget';
+import PinWidget from './pinWidgets/PinWidget.jsx';
 
 class PulseTweakWidget extends React.Component {
   constructor(props) {

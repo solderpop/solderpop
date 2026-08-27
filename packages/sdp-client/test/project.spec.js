@@ -1,14 +1,14 @@
 import R from 'ramda';
-import thunk from 'redux-thunk';
+import thunkModule from 'redux-thunk';
 import { createStore, applyMiddleware } from 'redux';
-import { assert } from 'chai';
-import { Maybe } from 'ramda-fantasy';
+import chai from 'chai';
+import RamdaFantasy from 'ramda-fantasy';
 
 import * as XP from 'sdp-project';
 
-import initialState from '../src/core/state';
-import generateReducers from '../src/core/reducer';
-import { getProject } from '../src/project/selectors';
+import initialState from '../src/core/state.js';
+import generateReducers from '../src/core/reducer.js';
+import { getProject } from '../src/project/selectors.js';
 
 import {
   createProject,
@@ -24,7 +24,14 @@ import {
   resizeComment,
   editComment,
   bulkDeleteNodesAndComments,
-} from '../src/project/actions';
+} from '../src/project/actions.js';
+
+const thunk =
+  typeof thunkModule === 'function' ? thunkModule : thunkModule.default;
+
+const { assert } = chai;
+
+const { Maybe } = RamdaFantasy;
 
 describe('project reducer', () => {
   describe('Project management', () => {
@@ -139,7 +146,7 @@ describe('project reducer', () => {
 
     it('should delete a patch', () => {
       const addPatchAction = store.dispatch(addPatch('label'));
-      const patchPath = addPatchAction.payload.patchPath;
+      const { patchPath } = addPatchAction.payload;
       store.dispatch(deletePatch(patchPath));
 
       const project = getProject(store.getState());
@@ -349,15 +356,15 @@ describe('project reducer', () => {
     let store = null;
     let testPatchPath = '';
 
-    const getCommentsList = R.uncurryN(2)(patchPath =>
+    const getCommentsList = R.uncurryN(2)((patchPath) =>
       R.compose(XP.listComments, XP.getPatchByPathUnsafe(patchPath), getProject)
     );
 
-    const getAddedComment = R.uncurryN(2)(patchPath =>
+    const getAddedComment = R.uncurryN(2)((patchPath) =>
       R.compose(R.head, getCommentsList(patchPath))
     );
 
-    const getAddedCommentId = R.uncurryN(2)(patchPath =>
+    const getAddedCommentId = R.uncurryN(2)((patchPath) =>
       R.compose(XP.getCommentId, getAddedComment(patchPath))
     );
 

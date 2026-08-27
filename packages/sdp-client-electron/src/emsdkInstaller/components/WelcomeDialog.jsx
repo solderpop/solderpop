@@ -4,7 +4,21 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as R from 'ramda';
 
-import client, { SolderpopLockup } from 'sdp-client';
+import client from 'sdp-client';
+
+import lockupLight from '../../view/assets/solderpop-lockup.svg';
+import lockupDark from '../../view/assets/solderpop-lockup-dark.svg';
+
+// Picks the lockup variant readable against the dialog's own chrome
+// background (which follows the selected theme), rather than hardcoding
+// by theme name — stays correct if more themes get added later.
+const relativeLuminance = (hex) => {
+  const value = hex.replace('#', '');
+  const r = parseInt(value.substring(0, 2), 16) / 255;
+  const g = parseInt(value.substring(2, 4), 16) / 255;
+  const b = parseInt(value.substring(4, 6), 16) / 255;
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
 
 class WelcomeDialog extends React.Component {
   constructor(props) {
@@ -25,7 +39,7 @@ class WelcomeDialog extends React.Component {
   }
 
   onToggle() {
-    this.setState(state => ({ enableSimulation: !state.enableSimulation }));
+    this.setState((state) => ({ enableSimulation: !state.enableSimulation }));
   }
 
   onContinue() {
@@ -48,7 +62,7 @@ class WelcomeDialog extends React.Component {
         <select
           id="welcome-theme-select"
           value={currentTheme}
-          onChange={e => this.handleThemeChange(e.target.value)}
+          onChange={(e) => this.handleThemeChange(e.target.value)}
         >
           {R.toPairs(themes).map(([themeKey, theme]) => (
             <option key={themeKey} value={themeKey}>
@@ -63,21 +77,27 @@ class WelcomeDialog extends React.Component {
   render() {
     if (!this.props.isVisible) return null;
 
+    const { currentTheme, themes } = this.props;
+    const { chromeBg } = themes[currentTheme].colors;
+    const lockupSrc =
+      relativeLuminance(chromeBg) < 0.5 ? lockupDark : lockupLight;
+
     return (
-      <div
-        className="theme-window-overlay"
-        role="presentation"
-      >
+      <div className="theme-window-overlay" role="presentation">
         <div // eslint-disable-line jsx-a11y/no-static-element-interactions
-          className="theme-window"
+          className="theme-window welcome-dialog"
           role="dialog"
           aria-label="Welcome to SolderPop IDE"
         >
           <div className="theme-window-body">
-            <div className="welcome-lockup">
-              <SolderpopLockup />
-            </div>
-            <h2 className="welcome-title">Welcome to SolderPop IDE</h2>
+            <h2 className="welcome-title">
+              Welcome to
+              <img
+                className="welcome-title-lockup"
+                src={lockupSrc}
+                alt="SolderPop IDE"
+              />
+            </h2>
             <p className="welcome-intro">
               SolderPop IDE lets you build and simulate circuits visually.
             </p>
@@ -133,7 +153,7 @@ const mapStateToProps = R.applySpec({
   themes: client.theme.selectors.getThemeList,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(client.theme.actions, dispatch),
 });
 

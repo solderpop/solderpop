@@ -1,9 +1,11 @@
-import * as R from 'ramda';
-import { assert } from 'chai';
+import R from 'ramda';
+import chai from 'chai';
 
-import * as H from './helpers';
-import * as XP from '../src';
-import { setNodeId } from '../src/node';
+import * as H from './helpers.js';
+import * as XP from '../src/index.js';
+import { setNodeId } from '../src/node.js';
+
+const { assert } = chai;
 
 describe('traversing', () => {
   const project = H.loadXodball('./fixtures/traversing.xodball');

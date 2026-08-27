@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { throttle, debounce } from 'throttle-debounce';
@@ -9,22 +9,22 @@ import { bindActionCreators } from 'redux';
 import ReactResizeDetector from 'react-resize-detector';
 import normalizeWheel from 'normalize-wheel';
 
-import * as EditorActions from '../../actions';
-import * as ProjectActions from '../../../project/actions';
-import * as DebuggerActions from '../../../debugger/actions';
+import * as EditorActions from '../../actions.js';
+import * as ProjectActions from '../../../project/actions.js';
+import * as DebuggerActions from '../../../debugger/actions.js';
 
-import * as EditorSelectors from '../../selectors';
-import * as ProjectSelectors from '../../../project/selectors';
-import * as DebugSelectors from '../../../debugger/selectors';
+import * as EditorSelectors from '../../selectors.js';
+import * as ProjectSelectors from '../../../project/selectors.js';
+import * as DebugSelectors from '../../../debugger/selectors.js';
 
 import {
   RenderableLink,
   RenderableNode,
   RenderableComment,
-} from '../../../types';
-import sanctuaryPropType from '../../../utils/sanctuaryPropType';
+} from '../../../types.js';
+import sanctuaryPropType from '../../../utils/sanctuaryPropType.js';
 
-import dropTarget from './dropTarget';
+import dropTarget from './dropTarget.js';
 
 import {
   EDITOR_MODE,
@@ -32,26 +32,26 @@ import {
   FOCUS_AREAS,
   MIN_ZOOM,
   MAX_ZOOM,
-} from '../../constants';
+} from '../../constants.js';
 
-import selectingMode from './modes/selecting';
-import linkingMode from './modes/linking';
-import panningMode from './modes/panning';
-import movingMode from './modes/moving';
-import resizingCommentMode from './modes/resizingComment';
-import resizingNodeMode from './modes/resizingNode';
-import acceptingDraggedPatchMode from './modes/acceptingDraggedPatch';
-import debuggingMode from './modes/debugging';
-import marqueeSelectingMode from './modes/marqueeSelecting';
-import changingArityLevelMode from './modes/changingArityLevel';
+import selectingMode from './modes/selecting.jsx';
+import linkingMode from './modes/linking.jsx';
+import panningMode from './modes/panning.jsx';
+import movingMode from './modes/moving.jsx';
+import resizingCommentMode from './modes/resizingComment.jsx';
+import resizingNodeMode from './modes/resizingNode.jsx';
+import acceptingDraggedPatchMode from './modes/acceptingDraggedPatch.jsx';
+import debuggingMode from './modes/debugging.jsx';
+import marqueeSelectingMode from './modes/marqueeSelecting.jsx';
+import changingArityLevelMode from './modes/changingArityLevel.jsx';
 
-import nodeHoverContextType from '../../nodeHoverContextType';
+import nodeHoverContextType from '../../nodeHoverContextType.js';
 
 import {
   pixelPositionToSlots,
   slotPositionToPixels,
   pixelSizeToSlots,
-} from '../../../project/nodeLayout';
+} from '../../../project/nodeLayout.js';
 
 const MODE_HANDLERS = {
   [EDITOR_MODE.DEFAULT]: selectingMode,
@@ -121,7 +121,7 @@ class Patch extends React.Component {
     return {
       nodeHover: {
         nodeId: this.state.hoveredNodeId,
-        onMouseOver: nodeId => this.setState({ hoveredNodeId: nodeId }),
+        onMouseOver: (nodeId) => this.setState({ hoveredNodeId: nodeId }),
         onMouseLeave: () => this.setState({ hoveredNodeId: null }),
       },
     };
@@ -170,7 +170,7 @@ class Patch extends React.Component {
       goToMode: this.goToMode,
       goToDefaultMode: this.goToDefaultMode,
       getOffset: () => this.state.offset,
-      setOffset: offset => this.setState({ offset }),
+      setOffset: (offset) => this.setState({ offset }),
       getZoom: () => this.state.zoom,
     };
   }
@@ -199,6 +199,7 @@ class Patch extends React.Component {
   getModeStorage(mode) {
     return () => this.storage[mode] || {};
   }
+
   setModeStorage(mode, newData) {
     this.storage[mode] = R.merge(this.storage[mode], newData);
   }
@@ -262,9 +263,10 @@ class Patch extends React.Component {
   }
 
   resizeWorkarea(width, height) {
-    return R.compose(this.props.actions.patchWorkareaResized, pixelSizeToSlots)(
-      { width, height }
-    );
+    return R.compose(
+      this.props.actions.patchWorkareaResized,
+      pixelSizeToSlots
+    )({ width, height });
   }
 
   render() {
@@ -283,7 +285,7 @@ class Patch extends React.Component {
     return this.props.connectDropTarget(
       <div
         className={cn('PatchWrapper-container', currentMode)}
-        ref={r => {
+        ref={(r) => {
           this.dropTargetRootRef = r;
         }}
         onWheel={this.handleScroll}
@@ -349,7 +351,7 @@ const mapStateToProps = R.applySpec({
   chunkActiveIndex: EditorSelectors.getBreadcrumbActiveIndex,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(
     {
       addNode: ProjectActions.addNode,
@@ -366,7 +368,6 @@ const mapDispatchToProps = dispatch => ({
       selectEntity: EditorActions.selectEntity,
       deselectEntity: EditorActions.deselectEntity,
       setSelection: EditorActions.setEditorSelection,
-      combineSelection: EditorActions.combineEditorSelection,
       addEntityToSelection: EditorActions.addEntityToSelection,
       doPinSelection: EditorActions.setPinSelection,
       linkPin: EditorActions.linkPin,

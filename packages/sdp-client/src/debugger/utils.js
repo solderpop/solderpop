@@ -1,25 +1,25 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 import { foldMaybe, mapIndexed } from 'sdp-func-tools';
 
-import { UPLOAD_MSG_TYPE } from './constants';
+import { UPLOAD_MSG_TYPE } from './constants.js';
 
-export const createSystemMessage = message => ({
+export const createSystemMessage = (message) => ({
   type: UPLOAD_MSG_TYPE.SYSTEM,
   message,
 });
 
-export const createFlasherMessage = message => ({
+export const createFlasherMessage = (message) => ({
   type: UPLOAD_MSG_TYPE.UPLOADER,
   message,
 });
 
-export const createErrorMessage = message => ({
+export const createErrorMessage = (message) => ({
   type: UPLOAD_MSG_TYPE.ERROR,
   message,
 });
 
-export const createOutgoingLogMessage = message => ({
+export const createOutgoingLogMessage = (message) => ({
   type: UPLOAD_MSG_TYPE.LOG_OUTGOING,
   message,
 });
@@ -66,13 +66,13 @@ export const getTableLogSourceLabels = R.curry(
               R.ifElse(
                 R.equals(0),
                 () => R.assoc('finalLabel', chunk.label, chunk),
-                num =>
+                (num) =>
                   R.assoc('finalLabel', `${chunk.label} #${num + 1}`, chunk)
               ),
               R.length,
               R.uniqBy(R.both(R.prop('label'), R.prop('nodeId'))),
               R.filter(
-                rc =>
+                (rc) =>
                   rc.nodeId !== chunk.nodeId &&
                   rc.label === chunk.label &&
                   rc.parent === chunk.parent
@@ -85,7 +85,7 @@ export const getTableLogSourceLabels = R.curry(
         );
         return [...acc, result];
       }, []),
-      R.map(nodeId => {
+      R.map((nodeId) => {
         // Convert chained NodeId (`a~b~c`) into [NodeId] (['a', 'b', 'c'])
         const splittedNodeId = R.split('~', nodeId);
         return R.compose(
@@ -115,7 +115,7 @@ export const getTableLogSourceLabels = R.curry(
             )
           ),
           XP.mapNestedNodes(
-            node => {
+            (node) => {
               const nodeType = XP.getNodeType(node);
               const label = XP.getNodeLabel(node);
               return {

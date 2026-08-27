@@ -1,4 +1,4 @@
-import ConfirmationPopup from './ConfirmationPopup';
+import ConfirmationPopup from './ConfirmationPopup.js';
 
 class PromptPopup extends ConfirmationPopup {
   async typeText(text) {
@@ -7,14 +7,14 @@ class PromptPopup extends ConfirmationPopup {
   }
 }
 
-PromptPopup.findOnPage = async page => {
+PromptPopup.findOnPage = async (page) => {
   const elementHandle = await page.$('.PopupPrompt');
   if (!elementHandle) return null;
 
   return new PromptPopup(page, elementHandle);
 };
 
-PromptPopup.waitOnPage = async page => {
+PromptPopup.waitOnPage = async (page) => {
   await page.waitFor('.PopupPrompt', { timeout: 5000 });
   return PromptPopup.findOnPage(page);
 };

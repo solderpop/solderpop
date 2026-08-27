@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 
 import '../src/core/styles/main.scss';
-import PatchGroup from '../src/projectBrowser/components/PatchGroup';
+import PatchGroup from '../src/projectBrowser/components/PatchGroup.jsx';
 
 const ipsum = (
   <p style={{ color: '#CCC' }}>
@@ -14,7 +14,7 @@ const ipsum = (
 );
 
 storiesOf('PatchGroup', module)
-  .addDecorator(story => (
+  .addDecorator((story) => (
     <div style={{ height: '100vh', backgroundColor: 'tomato' }}>
       <p>some content to see the top border</p>
       {story()}

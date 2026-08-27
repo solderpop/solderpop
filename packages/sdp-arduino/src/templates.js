@@ -1,35 +1,35 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import Handlebars from 'handlebars';
 
 import { unquote } from 'sdp-func-tools';
 import * as XP from 'sdp-project';
 
-import { def } from './types';
+import { def } from './types.js';
 
-import parseImplementation from './parseImplementation';
-import parseLegacyImplementation from './parseLegacyImplementation';
+import parseImplementation from './parseImplementation.js';
+import parseLegacyImplementation from './parseLegacyImplementation.js';
 
-import configTpl from '../platform/configuration.tpl.cpp';
-import patchContextTpl from '../platform/patchContext.tpl.cpp';
-import patchPinTypesTpl from '../platform/patchPinTypes.tpl.cpp';
-import patchTemplateDefinitionTpl from '../platform/patchTemplateDefinition.tpl.cpp';
-import legacyPatchTpl from '../platform/patch.legacy.tpl.cpp';
-import patchTpl from '../platform/patch.tpl.cpp';
-import implListTpl from '../platform/implList.tpl.cpp';
-import programTpl from '../platform/program.tpl.cpp';
+import configTpl from '../platform/configuration.tpl.cpp.js';
+import patchContextTpl from '../platform/patchContext.tpl.cpp.js';
+import patchPinTypesTpl from '../platform/patchPinTypes.tpl.cpp.js';
+import patchTemplateDefinitionTpl from '../platform/patchTemplateDefinition.tpl.cpp.js';
+import legacyPatchTpl from '../platform/patch.legacy.tpl.cpp.js';
+import patchTpl from '../platform/patch.tpl.cpp.js';
+import implListTpl from '../platform/implList.tpl.cpp.js';
+import programTpl from '../platform/program.tpl.cpp.js';
 
-import preambleH from '../platform/preamble.h';
-import listViewsH from '../platform/listViews.h';
-import listFuncsH from '../platform/listFuncs.h';
-import typesH from '../platform/types.h';
-import formatNumberH from '../platform/formatNumber.h';
-import uartH from '../platform/uart.h';
-import memoryH from '../platform/memory.h';
-import stlH from '../platform/stl.h';
-import runtimeCpp from '../platform/runtime.cpp';
+import preambleH from '../platform/preamble.h.js';
+import listViewsH from '../platform/listViews.h.js';
+import listFuncsH from '../platform/listFuncs.h.js';
+import typesH from '../platform/types.h.js';
+import formatNumberH from '../platform/formatNumber.h.js';
+import uartH from '../platform/uart.h.js';
+import memoryH from '../platform/memory.h.js';
+import stlH from '../platform/stl.h.js';
+import runtimeCpp from '../platform/runtime.cpp.js';
 
-import recordImplementation from '../platform/nodes/record.tpl.cpp';
-import unpackRecordImplementation from '../platform/nodes/unpackRecord.tpl.cpp';
+import recordImplementation from '../platform/nodes/record.tpl.cpp.js';
+import unpackRecordImplementation from '../platform/nodes/unpackRecord.tpl.cpp.js';
 
 // =============================================================================
 //
@@ -61,14 +61,14 @@ const omitLocalIncludes = R.replace(/#include ".*$/gm, '');
 
 const indexByPinKey = R.indexBy(R.prop('pinKey'));
 
-const getPatchPins = direction =>
+const getPatchPins = (direction) =>
   R.compose(indexByPinKey, R.path(['patch', direction]));
 
 const omitNullValues = R.map(
   R.when(R.propSatisfies(R.isNil, 'value'), R.omit(['value']))
 );
 
-const getNodePins = direction =>
+const getNodePins = (direction) =>
   R.compose(indexByPinKey, omitNullValues, R.prop(direction));
 
 const mergeAndListPins = (direction, node) =>
@@ -96,11 +96,11 @@ const cppType = def(
     R.has(R.__, builtInTypeNames),
     R.prop(R.__, builtInTypeNames),
     // it is a custom type
-    R.pipe(patchPathToNSName, ns => `${ns}::Node::Type`)
+    R.pipe(patchPathToNSName, (ns) => `${ns}::Node::Type`)
   )
 );
 
-const escapeCppString = str => R.replace(/"/g, '\\"', unquote(str));
+const escapeCppString = (str) => R.replace(/"/g, '\\"', unquote(str));
 
 // Formats a plain JS string into C++ string object
 const cppStringLiteral = def(
@@ -112,11 +112,11 @@ const cppStringLiteral = def(
     [R.pipe(unquote, R.isEmpty), R.always('XString()')],
     // Special string literal: `=XOD_LITERAL`
     [
-      str => R.any(R.equals(str), R.values(XP.GLOBALS_LITERALS)),
+      (str) => R.any(R.equals(str), R.values(XP.GLOBALS_LITERALS)),
       R.tail, // `XOD_LITERAL`
     ],
     // All other strings: "Hello, world"
-    [R.T, str => `XStringCString("${escapeCppString(str)}")`],
+    [R.T, (str) => `XStringCString("${escapeCppString(str)}")`],
   ])
 );
 
@@ -133,7 +133,7 @@ export const byteLiteralToDecimal = R.ifElse(
       R.last
     ),
   ]),
-  plainDecimal => parseInt(plainDecimal, 10)
+  (plainDecimal) => parseInt(plainDecimal, 10)
 );
 
 // Formats XOD byte literal into C++ byte literal
@@ -152,7 +152,7 @@ const cppByteLiteral = def(
     R.compose(
       R.concat('0x'),
       R.toUpper,
-      x => x.toString(16),
+      (x) => x.toString(16),
       byteLiteralToDecimal
     )
   )
@@ -187,15 +187,15 @@ Handlebars.registerHelper('ns', R.pipe(R.prop('patchPath'), patchPathToNSName));
 Handlebars.registerHelper('json', JSON.stringify);
 
 // https://github.com/wycats/handlebars.js/issues/927
-Handlebars.registerHelper('switchByTweakType', function switchHelper(
-  value,
-  options
-) {
-  this._switch_value_ = XP.getTweakType(value);
-  const html = options.fn(this); // Process the body of the switch block
-  delete this._switch_value_;
-  return html;
-});
+Handlebars.registerHelper(
+  'switchByTweakType',
+  function switchHelper(value, options) {
+    this._switch_value_ = XP.getTweakType(value);
+    const html = options.fn(this); // Process the body of the switch block
+    delete this._switch_value_;
+    return html;
+  }
+);
 
 Handlebars.registerHelper('case', function caseHelper(value, options) {
   if (value === this._switch_value_) {
@@ -208,12 +208,10 @@ Handlebars.registerHelper('case', function caseHelper(value, options) {
 Handlebars.registerHelper('getStringTweakLength', XP.getStringTweakLength);
 
 // Returns declaration type specifier for an initial value of an output
-Handlebars.registerHelper(
-  'decltype',
-  (type, value) =>
-    type === XP.PIN_TYPE.STRING && unquote(value) !== ''
-      ? 'static XStringCString'
-      : `constexpr ${cppType(type)}`
+Handlebars.registerHelper('decltype', (type, value) =>
+  type === XP.PIN_TYPE.STRING && unquote(value) !== ''
+    ? 'static XStringCString'
+    : `constexpr ${cppType(type)}`
 );
 
 // Check that variable is not undefined
@@ -235,14 +233,14 @@ Handlebars.registerHelper('global', function global(options) {
   ].join('\n');
 });
 
-Handlebars.registerHelper('cppType', type => cppType(type));
+Handlebars.registerHelper('cppType', (type) => cppType(type));
 
 // Converts bound value literals or JS-typed data value to a
 // string that is valid and expected C++ literal representing that value
 Handlebars.registerHelper('cppValue', (type, value) =>
   R.propOr(R.always(`{ /* ${type} */ }`), type, {
     [XP.PIN_TYPE.PULSE]: R.always('false'),
-    [XP.PIN_TYPE.BOOLEAN]: v => (v === 'True' ? 'true' : 'false'),
+    [XP.PIN_TYPE.BOOLEAN]: (v) => (v === 'True' ? 'true' : 'false'),
     [XP.PIN_TYPE.NUMBER]: R.cond([
       [R.equals('Inf'), R.always('INFINITY')],
       [R.equals('+Inf'), R.always('INFINITY')],
@@ -254,7 +252,7 @@ Handlebars.registerHelper('cppValue', (type, value) =>
     [XP.PIN_TYPE.BYTE]: cppByteLiteral,
     [XP.PIN_TYPE.PORT]: cppPortLiteral,
     [XP.BINDABLE_CUSTOM_TYPES.COLOR]: R.compose(
-      rgb => `/* RGB */ { ${rgb} }`,
+      (rgb) => `/* RGB */ { ${rgb} }`,
       R.join(', '),
       R.map(R.concat('0x')),
       R.splitEvery(2),
@@ -265,7 +263,7 @@ Handlebars.registerHelper('cppValue', (type, value) =>
 
 Handlebars.registerHelper('escapeCppString', escapeCppString);
 
-const hasUpstreamErrorRaisers = nodeOrInput =>
+const hasUpstreamErrorRaisers = (nodeOrInput) =>
   R.pathOr(0, ['upstreamErrorRaisers', 'length'], nodeOrInput) > 0;
 
 Handlebars.registerHelper('hasUpstreamErrorRaisers', hasUpstreamErrorRaisers);
@@ -327,7 +325,7 @@ Handlebars.registerHelper(
   R.pipe(R.filter(isTemplatableCustomTypePin), R.isEmpty, R.not)
 );
 
-const isConstantType = type => XP.CONSTANT_PIN_TYPES.includes(type);
+const isConstantType = (type) => XP.CONSTANT_PIN_TYPES.includes(type);
 
 Handlebars.registerHelper('isConstantType', isConstantType);
 
@@ -344,12 +342,14 @@ Handlebars.registerHelper(
   'indent',
   R.compose(
     R.join('\n'),
-    R.map(R.unless(R.isEmpty, str => `    ${str}`)),
+    R.map(R.unless(R.isEmpty, (str) => `    ${str}`)),
     R.split('\n')
   )
 );
 
-Handlebars.registerHelper('unindent', str => str.replace(/^( {1,4}|\t)/gm, ''));
+Handlebars.registerHelper('unindent', (str) =>
+  str.replace(/^( {1,4}|\t)/gm, '')
+);
 
 Handlebars.registerHelper({
   eq: (v1, v2) => v1 === v2,
@@ -435,9 +435,10 @@ export const withTetheringInetNode = R.find(
   )
 );
 Handlebars.registerHelper('withTetheringInetNode', (nodes, block) =>
-  R.compose(R.ifElse(R.isNil, block.inverse, block.fn), withTetheringInetNode)(
-    nodes
-  )
+  R.compose(
+    R.ifElse(R.isNil, block.inverse, block.fn),
+    withTetheringInetNode
+  )(nodes)
 );
 
 // =============================================================================
@@ -489,7 +490,7 @@ export const renderPatchPinTypes = def(
 
 const generatedCodeRegEx = /^\s*{{\s*GENERATED_CODE\s*}}\s*$/gm;
 
-export const renderImpl = def('renderImpl :: TPatch -> String', tPatch => {
+export const renderImpl = def('renderImpl :: TPatch -> String', (tPatch) => {
   const impl = R.cond([
     [R.prop('isRecord'), templates.nodes.record],
     [R.prop('isUnpackRecord'), templates.nodes.unpackRecord],
@@ -530,16 +531,17 @@ export const renderImplList = def(
   R.compose(
     trimTrailingWhitespace,
     templates.implList,
-    R.map(patch => R.assoc('implementation', renderImpl(patch), patch))
+    R.map((patch) => R.assoc('implementation', renderImpl(patch), patch))
   )
 );
 
-export const renderProgram = def('renderProgram :: [TNode] -> String', nodes =>
-  trimTrailingWhitespace(templates.program({ nodes }))
+export const renderProgram = def(
+  'renderProgram :: [TNode] -> String',
+  (nodes) => trimTrailingWhitespace(templates.program({ nodes }))
 );
 export const renderProject = def(
   'renderProject :: TProject -> String',
-  originalProject => {
+  (originalProject) => {
     // HACK: We have to clone TProject to prevent mutating
     // of original TProject by Handlebars templates.
     const project = R.clone(originalProject);

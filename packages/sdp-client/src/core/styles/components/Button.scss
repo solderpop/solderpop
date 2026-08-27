@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 .Button {
   padding: 10px 30px;
   color: $button-fg-color-dark;

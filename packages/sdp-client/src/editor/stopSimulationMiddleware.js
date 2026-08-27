@@ -2,19 +2,19 @@
  * Middleware stops simulation on close debugger tab
  */
 
-import { isSimulationAbortable } from '../debugger/selectors';
-import { abortSimulation } from './actions';
-import { TAB_CLOSE } from './actionTypes';
+import { isSimulationAbortable } from '../debugger/selectors.js';
+import { abortSimulation } from './actions.js';
+import { TAB_CLOSE } from './actionTypes.js';
 import {
   PROJECT_CREATE,
   PROJECT_OPEN,
   PROJECT_IMPORT,
-} from '../project/actionTypes';
-import { DEBUGGER_TAB_ID } from './constants';
-import { SIMULATION_STOPPED_BY_CLOSING_TAB } from './messages';
-import { addError } from '../messages/actions';
+} from '../project/actionTypes.js';
+import { DEBUGGER_TAB_ID } from './constants.js';
+import { SIMULATION_STOPPED_BY_CLOSING_TAB } from './messages.js';
+import { addError } from '../messages/actions.js';
 
-export default store => next => action => {
+export default (store) => (next) => (action) => {
   const result = next(action);
 
   if (!isSimulationAbortable(store.getState())) return result;

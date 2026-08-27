@@ -90,12 +90,12 @@ export default class TitleBar extends React.Component {
           <img className="TitleBar-icon" src={iconUrl} alt="" />
           {this.state.menuItems.length > 0 ? (
             <nav className="TitleBar-menu">
-              {this.state.menuItems.map(item => (
+              {this.state.menuItems.map((item) => (
                 <button
                   key={item.label}
                   type="button"
                   className="TitleBar-menuItem"
-                  onClick={event => this.onMenuItemClick(item, event)}
+                  onClick={(event) => this.onMenuItemClick(item, event)}
                 >
                   {item.label}
                 </button>

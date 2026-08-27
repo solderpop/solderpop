@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { createStore } from 'redux';
 
-import generateReducers from '../reducer';
-import { default as defaultInitialState } from '../state';
-import composeMiddlewares from '../middlewares';
+import generateReducers from '../reducer.js';
+import { default as defaultInitialState } from '../state.js';
+import composeMiddlewares from '../middlewares.js';
 
-import { loadPanelSettings } from '../../editor/utils';
-import { setSidebarLayout } from '../../editor/actions';
+import { loadPanelSettings } from '../../editor/utils.js';
+import { setSidebarLayout } from '../../editor/actions.js';
 
-import Catcher from './Catcher';
+import Catcher from './Catcher.jsx';
 
 export default class Root extends React.Component {
   constructor(props) {
@@ -21,6 +21,7 @@ export default class Root extends React.Component {
       composeMiddlewares(this.props.extraMiddlewares)
     );
   }
+
   componentDidMount() {
     // dispatch actions "on init"
     this.store.dispatch(setSidebarLayout(loadPanelSettings()));

@@ -1,0 +1,57 @@
+@ocaml.doc(" Tabular test data parsing facilities. The tabular data is basically a TSV
+    file, but stricter:
+
+    - Header line is required
+    - Data is strongly typed, so strings must be enquoted
+
+    Empty lines are allowed and ignored.
+ ")
+// Warning 44 (open-statement shadows an identifier): intentional, this
+// file uses Belt's collections, not ReScript's built-in ones.
+@@warning("-44")
+open Belt
+
+@ocaml.doc(" Corresponds to a single cell in the TSV ")
+module Value: {
+  type t =
+    | Empty
+    | NaN
+    | Number(float)
+    | ApproxNumber(float, int)
+    | Boolean(bool)
+    | String(string)
+    | Byte(int)
+    | Pulse(bool)
+    | RaisedError
+    | Invalid(string)
+}
+
+@ocaml.doc(" Corresponds to a single data line in the TSV ")
+module Record: {
+  type t = Map.String.t<Value.t>
+  let get: (t, string) => option<Value.t>
+}
+
+@ocaml.doc(" Corresponds to the whole TSV ")
+type t = list<Record.t>
+
+@ocaml.doc(" Maps all records in data like regular lists do ")
+let map: (t, Record.t => 'v) => List.t<'v>
+
+@ocaml.doc(" Maps all records in data with indexes like regular lists do ")
+let mapWithIndex: (t, (int, Record.t) => 'v) => List.t<'v>
+
+@ocaml.doc(" Returns a list of strings separated by `\n` without comments and empty lines ")
+let listDataLines: string => list<string>
+
+@ocaml.doc(
+  " Returns a list of strings separated by tabs and with leading/trailing whitespace trimmed "
+)
+let tabSplit: string => list<string>
+
+@ocaml.doc(" Parses a plain source (as read from file) into tabular data.
+
+    Note, the parsing always succeeds leaving `Value.Invalid` for
+    the cells which failed to parse. It’s up to a consumer to handle
+    the data errors. ")
+let parse: string => t

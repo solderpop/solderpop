@@ -1,14 +1,14 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import shortid from 'shortid';
 import * as XP from 'sdp-project';
 
-import * as EAT from './actionTypes';
-import * as PAT from '../project/actionTypes';
-import * as DAT from '../debugger/actionTypes';
-import { REMOVE_SELECTION } from '../projectBrowser/actionTypes';
+import * as EAT from './actionTypes.js';
+import * as PAT from '../project/actionTypes.js';
+import * as DAT from '../debugger/actionTypes.js';
+import { REMOVE_SELECTION } from '../projectBrowser/actionTypes.js';
 
-import { DEFAULT_PANNING_OFFSET } from '../project/nodeLayout';
-import { MAIN_PATCH_PATH } from '../project/constants';
+import { DEFAULT_PANNING_OFFSET } from '../project/nodeLayout.js';
+import { MAIN_PATCH_PATH } from '../project/constants.js';
 import {
   DEBUGGER_TAB_ID,
   TABLE_LOG_TAB_ID,
@@ -17,19 +17,19 @@ import {
   SELECTION_ENTITY_TYPE,
   TAB_TYPES,
   PANEL_IDS,
-} from './constants';
-import { STATUS } from '../utils/constants';
+} from './constants.js';
+import { STATUS } from '../utils/constants.js';
 import {
   createSelectionEntity,
   getNewSelection,
   getTabByPatchPath,
-} from './utils';
-import { setCurrentPatchOffset, switchPatchUnsafe } from './actions';
+} from './utils.js';
+import { setCurrentPatchOffset, switchPatchUnsafe } from './actions.js';
 
-import { getInitialPatchOffset } from '../project/utils';
-import { isErrorMessage } from '../debugger/utils';
+import { getInitialPatchOffset } from '../project/utils.js';
+import { isErrorMessage } from '../debugger/utils.js';
 
-import { default as initialState } from './state';
+import { default as initialState } from './state.js';
 
 // =============================================================================
 //
@@ -76,7 +76,7 @@ const setTabOffset = R.curry((offset, tabId, state) =>
   R.compose(
     R.when(
       () => tabId === DEBUGGER_TAB_ID,
-      newState =>
+      (newState) =>
         R.assocPath(
           [
             'tabs',
@@ -108,9 +108,11 @@ const getTabIdbyPatchPath = R.curry((patchPath, state) =>
 );
 
 const listTabsByPatchPath = R.curry((patchPath, state) =>
-  R.compose(R.filter(R.propEq('patchPath', patchPath)), R.values, getTabs)(
-    state
-  )
+  R.compose(
+    R.filter(R.propEq('patchPath', patchPath)),
+    R.values,
+    getTabs
+  )(state)
 );
 
 const syncTabOffset = R.curry((offset, state) => {
@@ -136,7 +138,7 @@ const setPropsToTab = R.curry((id, props, state) =>
   )(state)
 );
 
-const getTabNewIndex = state => {
+const getTabNewIndex = (state) => {
   const tabs = R.prop('tabs')(state);
   const lastIndex = R.reduce(
     (acc, tab) => R.pipe(R.prop('index'), R.max(acc))(tab),
@@ -195,7 +197,7 @@ const resetCurrentPatchPath = (reducer, state, project) => {
   const stateWithClearedTabs = R.assoc('tabs', {}, state);
 
   return R.compose(
-    R.ifElse(R.isNil, R.always(stateWithClearedTabs), firstLocalPatch => {
+    R.ifElse(R.isNil, R.always(stateWithClearedTabs), (firstLocalPatch) => {
       const firstPatchPath = XP.getPatchPath(firstLocalPatch);
       const offset = getInitialPatchOffset(firstPatchPath, project);
 
@@ -259,7 +261,7 @@ const closeTabById = R.curry((tabId, state) => {
     isCurrentTabClosing
   );
 
-  const openOriginalPatch = patchPath =>
+  const openOriginalPatch = (patchPath) =>
     R.compose(
       R.converge(setTabOffset(tabToClose.offset), [
         getTabIdbyPatchPath(patchPath),
@@ -672,14 +674,19 @@ const editorReducer = (state = initialState, action) => {
     case DAT.INSTALL_ARDUINO_DEPENDENCIES:
     case DAT.UPGRADE_ARDUINO_DEPENDECIES:
     case DAT.CHECK_ARDUINO_DEPENDENCIES: {
-      const { type, meta: { status } } = action;
+      const {
+        type,
+        meta: { status },
+      } = action;
       return type !== DAT.CHECK_ARDUINO_DEPENDENCIES &&
         (status === STATUS.STARTED || status === STATUS.FAILED)
         ? showDebuggerPane(state)
         : state;
     }
     case DAT.UPLOAD: {
-      const { meta: { status } } = action;
+      const {
+        meta: { status },
+      } = action;
       return status === STATUS.FAILED ? showDebuggerPane(state) : state;
     }
     case DAT.DEBUGGER_LOG_ADD_MESSAGES: {

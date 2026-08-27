@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from 'react-fa';
 import * as XP from 'sdp-project';
-import sanctuaryPropType from '../../utils/sanctuaryPropType';
-import PopupForm from '../../utils/components/PopupForm';
-import deepSCU from '../../utils/deepSCU';
-import { lowercaseKebabMask } from '../../utils/inputFormatting';
+import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
+import PopupForm from '../../utils/components/PopupForm.jsx';
+import deepSCU from '../../utils/deepSCU.js';
+import { lowercaseKebabMask } from '../../utils/inputFormatting.js';
 
-const getInitialState = project => {
+const getInitialState = (project) => {
   const version = XP.getProjectVersion(project);
 
   return {
@@ -46,19 +46,24 @@ class PopupProjectPreferences extends React.Component {
     const { name, license, version, description, apiKey } = this.state;
     this.props.onChange({ name, license, version, description, apiKey });
   }
+
   onNameChange(event) {
     const val = lowercaseKebabMask(event.target.value);
     this.setState({ name: val });
   }
+
   onLicenseChange(event) {
     this.setState({ license: event.target.value });
   }
+
   onVersionChange(event) {
     this.setState({ dirtyVersion: event.target.value });
   }
+
   onDescriptionChange(event) {
     this.setState({ description: event.target.value });
   }
+
   onApiKeyChange(event) {
     this.setState({ apiKey: event.target.value });
   }
@@ -136,7 +141,7 @@ class PopupProjectPreferences extends React.Component {
           />
         </div>
         <div className="ModalContent">
-          <label htmlFor="cloudApiKey">XOD Cloud API Key: </label>
+          <label htmlFor="cloudApiKey">SolderPop Cloud API Key: </label>
           <div
             style={{
               display: 'flex',

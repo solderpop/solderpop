@@ -1,10 +1,12 @@
 {
   "name": "sdp-cloud-compile",
+  "type": "module",
   "version": "0.38.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "babel src/ -d dist/ --source-maps"
+    "build": "babel src/ -d dist/ --source-maps",
+    "test": "mocha --require ../../tools/babel-register.js --color --timeout 30000 test/**/*.spec.js"
   },
   "repository": {
     "type": "git",
@@ -20,11 +22,16 @@
     "node-fetch": "^2.3.0",
     "ramda": "^0.24.1",
     "string-to-arraybuffer": "^1.0.2",
+    "sdp-cli": "^0.38.0",
     "sdp-func-tools": "^0.34.0",
     "sdp-tabtest": "^0.38.0"
   },
   "devDependencies": {
-    "babel-plugin-inline-import": "^2.0.4",
+    "@babel/cli": "^8.0.4",
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
+    "@babel/register": "^8.0.1",
+    "babel-plugin-inline-import": "^3.0.0",
     "chai": "^4.1.2",
     "sdp-fs": "^0.38.0"
   },

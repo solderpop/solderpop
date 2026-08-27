@@ -1,6 +1,6 @@
-import * as R from 'ramda';
-import * as EVENTS from '../shared/events';
-import { updateAvailableMessage } from '../shared/messages';
+import R from 'ramda';
+import * as EVENTS from '../shared/events.js';
+import { updateAvailableMessage } from '../shared/messages.js';
 
 export const UPDATE_IDE_MESSAGE_ID = 'updateIde';
 
@@ -29,6 +29,6 @@ export const subscribeAutoUpdaterEvents = (ipcRenderer, App) => {
   });
 };
 
-export const downloadUpdate = ipcRenderer => {
+export const downloadUpdate = (ipcRenderer) => {
   ipcRenderer.send(EVENTS.APP_UPDATE_DOWNLOAD_REQUEST);
 };

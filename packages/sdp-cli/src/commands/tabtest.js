@@ -2,7 +2,7 @@
 import path from 'path';
 import { exit } from 'process';
 import { tmpdir } from 'os';
-import { append, compose, identity, map, pick, toPairs } from 'ramda';
+import R from 'ramda';
 import fs from 'fs-extra';
 import { flags } from '@oclif/command';
 
@@ -11,23 +11,25 @@ import { createError, foldEither, allPromises } from 'sdp-func-tools';
 import { loadProject, resolvePath } from 'sdp-fs';
 import * as Tabtest from 'sdp-tabtest';
 
-import BaseCommand from '../baseCommand';
-import * as commonArgs from '../args';
-import * as myFlags from '../flags';
-import { getListr } from '../listr';
+import BaseCommand from '../baseCommand.js';
+import * as commonArgs from '../args.js';
+import * as myFlags from '../flags.js';
+import { getListr } from '../listr.js';
 import {
   resolveBundledCatch2Path,
   resolveBundledCatch2UtilsPath,
   resolveBundledTabtestSrcPath,
   resolveBundledTabtestWorkspacePath,
   resolveBundledWorkspacePath,
-} from '../paths';
+} from '../paths.js';
+
+const { append, compose, identity, map, pick, toPairs } = R;
 
 const defaultOutputDir = path.resolve(tmpdir(), 'sdp-tabtest');
 
 const spawn = (cmd, args, opts) =>
   new Promise((resolve, reject) => {
-    childProcess.spawn(cmd, args, opts).on('exit', code => {
+    childProcess.spawn(cmd, args, opts).on('exit', (code) => {
       if (code === 0) {
         resolve();
       } else {
@@ -57,8 +59,8 @@ class TabtestCommand extends BaseCommand {
 
     const loadProjectTask = {
       title: 'Loading project',
-      task: ctx =>
-        loadProject(workspaces, projectPath).then(project => {
+      task: (ctx) =>
+        loadProject(workspaces, projectPath).then((project) => {
           ctx.project = project;
           ctx.outDir =
             outDir === defaultOutputDir
@@ -69,23 +71,22 @@ class TabtestCommand extends BaseCommand {
 
     const prepareDirectoryTask = {
       title: 'Preparing directory',
-      task: ctx =>
+      task: (ctx) =>
         fs
           .ensureDir(ctx.outDir)
-          .then(
-            () =>
-              outDir === defaultOutputDir
-                ? fs.emptyDir(ctx.outDir)
-                : Promise.resolve()
+          .then(() =>
+            outDir === defaultOutputDir
+              ? fs.emptyDir(ctx.outDir)
+              : Promise.resolve()
           ),
     };
 
     const generateCppTask = {
       title: 'Generating C++ code',
-      task: ctx => {
+      task: (ctx) => {
         ctx.pairs = compose(
           toPairs,
-          foldEither(err => {
+          foldEither((err) => {
             throw err;
           }, identity)
         )(
@@ -98,7 +99,7 @@ class TabtestCommand extends BaseCommand {
 
     const saveFilesTask = {
       title: 'Saving files',
-      task: async ctx =>
+      task: async (ctx) =>
         await compose(
           allPromises,
           append(fs.copy(resolveBundledTabtestSrcPath(), ctx.outDir)),
@@ -116,7 +117,7 @@ class TabtestCommand extends BaseCommand {
       { collapse: false }
     )
       .run()
-      .then(async ctx => {
+      .then(async (ctx) => {
         if (!noBuild) {
           const childProcessOpts = {
             stdio: quiet
@@ -132,7 +133,7 @@ class TabtestCommand extends BaseCommand {
         }
       })
       .then(() => exit(0))
-      .catch(err => {
+      .catch((err) => {
         this.printError(err);
         return exit((err.payload || err).code || 100);
       });
@@ -152,7 +153,7 @@ TabtestCommand.flags = {
     env: 'XOD_OUTPUT',
     helpValue: 'path',
     default: defaultOutputDir,
-    parse: p => resolvePath(p),
+    parse: (p) => resolvePath(p),
   }),
   'no-build': flags.boolean({
     description: 'do not build',
@@ -164,9 +165,9 @@ TabtestCommand.args = [commonArgs.entrypoint];
 
 TabtestCommand.examples = [
   `Build tabtests for project in current working directory\n` +
-    `$ xodc tabtest\n`,
+    `$ sdpc tabtest\n`,
   `Specify target directory and project, only generate tests\n` +
-    `$ xodc tabtest --no-build --output-dir=/tmp/sdp-tabtest ./workspace/__lib__/xod/net`,
+    `$ sdpc tabtest --no-build --output-dir=/tmp/sdp-tabtest ./workspace/__lib__/xod/net`,
 ];
 
 TabtestCommand.strict = false;

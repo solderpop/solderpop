@@ -1,10 +1,10 @@
-import userState from '../user/state';
-import editorState from '../editor/state';
-import projectState from '../project/state';
-import debuggerState from '../debugger/state';
-import projectBrowserState from '../projectBrowser/state';
-import hintingState from '../hinting/state';
-import { INITIAL_STATE as themeState } from '../theme/state';
+import userState from '../user/state.js';
+import editorState from '../editor/state.js';
+import projectState from '../project/state.js';
+import debuggerState from '../debugger/state.js';
+import projectBrowserState from '../projectBrowser/state.js';
+import hintingState from '../hinting/state.js';
+import { INITIAL_STATE as themeState } from '../theme/state.js';
 
 export default {
   user: userState,

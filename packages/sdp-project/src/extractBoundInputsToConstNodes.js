@@ -1,22 +1,24 @@
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
+import R from 'ramda';
+import RamdaFantasy from 'ramda-fantasy';
 import { maybeProp, catMaybies, isAmong } from 'sdp-func-tools';
 
-import * as Pin from './pin';
-import * as Node from './node';
-import * as Link from './link';
-import * as Patch from './patch';
-import * as Project from './project';
-import { ensureLiteral } from './migrations/boundValuesToBoundLiterals';
+import * as Pin from './pin.js';
+import * as Node from './node.js';
+import * as Link from './link.js';
+import * as Patch from './patch.js';
+import * as Project from './project.js';
+import { ensureLiteral } from './migrations/boundValuesToBoundLiterals.js';
 import {
   PIN_TYPE,
   CONST_NODETYPES,
   PULSE_CONST_NODETYPES,
   INPUT_PULSE_PIN_BINDING_OPTIONS,
-} from './constants';
-import squashSingleOutputNodes from './optimizers/squashSingleOutputNodes';
-import { isBuiltInType } from './utils';
-import { def } from './types';
+} from './constants.js';
+import squashSingleOutputNodes from './optimizers/squashSingleOutputNodes.js';
+import { isBuiltInType } from './utils.js';
+import { def } from './types.js';
+
+const { Maybe } = RamdaFantasy;
 
 const getMapOfNodePinsWithLinks = def(
   'getMapOfNodePinsWithLinks :: [Node] -> [Link] -> Map NodeId [PinKey]',
@@ -54,7 +56,7 @@ const getNodePinValues = def(
   'getNodePinValues :: Project -> Map NodeId Node -> Map NodeId (Map PinKey DataValue)',
   (project, nodes) =>
     R.map(
-      node =>
+      (node) =>
         R.compose(
           // 'Never' is not extracted to a constant node.
           // It literally menas "do nothing", so it's just ignored.
@@ -143,9 +145,9 @@ const getMapOfPathsToPinKeys = def(
   (constantPaths, project) =>
     R.compose(
       R.fromPairs,
-      R.map(constPath =>
+      R.map((constPath) =>
         R.compose(
-          constPinKey => [constPath, constPinKey],
+          (constPinKey) => [constPath, constPinKey],
           Pin.getPinKey,
           // TODO: add more logic here about 'output-self'?
           R.head,
@@ -159,9 +161,10 @@ const getMapOfPathsToPinKeys = def(
 // do not transfer bound values to 'pulse constants'
 // and constructors for custom types
 // :: PatchPath -> Boolean
-const doesConstNodeNeedBoundValue = R.compose(isAmong, R.values)(
-  CONST_NODETYPES
-);
+const doesConstNodeNeedBoundValue = R.compose(
+  isAmong,
+  R.values
+)(CONST_NODETYPES);
 
 const createNodesWithBoundValues = def(
   'createNodesWithBoundValues :: Map NodeId (Map PinKey DataValue) -> Map NodeId (Map PinKey PatchPath) -> Map PatchPath PinKey -> Map NodeId (Map PinKey Node)',

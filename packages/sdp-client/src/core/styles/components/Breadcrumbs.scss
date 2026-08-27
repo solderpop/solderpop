@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 .Breadcrumbs {
   display: flex;
   flex-direction: row;

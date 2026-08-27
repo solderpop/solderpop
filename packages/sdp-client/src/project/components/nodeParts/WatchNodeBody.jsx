@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as XP from 'sdp-project';
 
-import { NODE_CORNER_RADIUS } from '../../nodeLayout';
-import NodeLabel from './NodeLabel';
-import ResizeHandle from './ResizeHandle';
+import { NODE_CORNER_RADIUS } from '../../nodeLayout.js';
+import NodeLabel from './NodeLabel.jsx';
+import ResizeHandle from './ResizeHandle.jsx';
 
 const NODE_BODY_RECT_PROPS = {
   rx: NODE_CORNER_RADIUS,
@@ -15,18 +15,20 @@ const NODE_BODY_RECT_PROPS = {
   height: '100%',
 };
 
-const WatchNodeBody = props => (
-  <g className={classNames('watch-node', { active: props.isDebugSession })}>
-    <rect className="body" {...NODE_BODY_RECT_PROPS} />
-    <NodeLabel
-      text={props.nodeValue || props.label || XP.getBaseName(props.type)}
-      width={props.pxSize.width}
-      height={props.pxSize.height}
-    />
-    <rect className="outline" {...NODE_BODY_RECT_PROPS} />
-    <ResizeHandle {...props} />
-  </g>
-);
+function WatchNodeBody(props) {
+  return (
+    <g className={classNames('watch-node', { active: props.isDebugSession })}>
+      <rect className="body" {...NODE_BODY_RECT_PROPS} />
+      <NodeLabel
+        text={props.nodeValue || props.label || XP.getBaseName(props.type)}
+        width={props.pxSize.width}
+        height={props.pxSize.height}
+      />
+      <rect className="outline" {...NODE_BODY_RECT_PROPS} />
+      <ResizeHandle {...props} />
+    </g>
+  );
+}
 
 WatchNodeBody.propTypes = {
   type: PropTypes.string,

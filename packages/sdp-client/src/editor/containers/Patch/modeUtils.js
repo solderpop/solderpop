@@ -1,6 +1,9 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
-export const bindApi = (api, fn) => (...args) => fn(api, ...args);
+export const bindApi =
+  (api, fn) =>
+  (...args) =>
+    fn(api, ...args);
 
 // :: Point -> Number -> String
 export const getOffsetMatrix = ({ x, y }, zoom) =>

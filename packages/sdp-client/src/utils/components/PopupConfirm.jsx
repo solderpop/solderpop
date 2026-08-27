@@ -4,10 +4,10 @@ import classNames from 'classnames';
 import { SkyLightStateless } from 'react-skylight';
 import EventListener from 'react-event-listener';
 
-import { noop } from '../../utils/ramda';
-import { KEYCODE } from '../../utils/constants';
+import { noop } from '../ramda.js';
+import { KEYCODE } from '../constants.js';
 
-const PopupConfirm = ({
+function PopupConfirm({
   title,
   children,
   confirmText,
@@ -17,11 +17,11 @@ const PopupConfirm = ({
   onClose,
   isClosable,
   isVisible,
-}) => {
+}) {
   const wrapperClassNames = classNames('PopupConfirm', className);
   const onCloseClicked = isClosable ? onClose : noop;
 
-  const onKeyDown = event => {
+  const onKeyDown = (event) => {
     if (!isVisible) return;
 
     const keycode = event.keycode || event.which;
@@ -58,7 +58,7 @@ const PopupConfirm = ({
       </SkyLightStateless>
     </div>
   );
-};
+}
 
 PopupConfirm.propTypes = {
   title: PropTypes.string,

@@ -1,13 +1,17 @@
-import chai, { assert } from 'chai';
+import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import * as XP from 'sdp-project';
 
 import path from 'path';
+import { fileURLToPath } from 'url';
 import R from 'ramda';
-import * as Loader from '../src/load';
+import * as Loader from '../src/load.js';
 
-import { fixture, expectRejectedWithCode } from './utils';
-import * as ERROR_CODES from '../src/errorCodes';
+import { fixture, expectRejectedWithCode } from './utils.js';
+import * as ERROR_CODES from '../src/errorCodes.js';
+
+const { assert } = chai;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 chai.use(chaiAsPromised);
 
@@ -20,7 +24,7 @@ describe('Loader', () => {
   const projectPath = 'awesome-project';
 
   it('getLocalProjects: return an array of local projects in workspace', () =>
-    Loader.getLocalProjects(workspace).then(projects => {
+    Loader.getLocalProjects(workspace).then((projects) => {
       assert.deepEqual(projects, [
         {
           path: path.resolve(workspace, projectPath),
@@ -38,7 +42,7 @@ describe('Loader', () => {
     }));
 
   it('getProjects: return an array of projects in workspace, including libs', () =>
-    Loader.getProjects(workspace).then(projects => {
+    Loader.getProjects(workspace).then((projects) => {
       assert.lengthOf(projects, 5);
     }));
   it('getProjects: reject CANT_ENUMERATE_PROJECTS for non-existent workspace', () =>
@@ -48,7 +52,7 @@ describe('Loader', () => {
     ));
 
   it('getLocalProjects: return an array of local projects in workspace', () =>
-    Loader.getLocalProjects(workspace).then(projects => {
+    Loader.getLocalProjects(workspace).then((projects) => {
       assert.lengthOf(projects, 1);
     }));
   it('getLocalProjects: reject CANT_ENUMERATE_PROJECTS for non-existent workspace', () =>
@@ -89,7 +93,7 @@ describe('Loader', () => {
   });
 
   describe('loadProject', () => {
-    const assertPatchPaths = project =>
+    const assertPatchPaths = (project) =>
       assert.includeMembers(XP.listPatchPaths(project), [
         '@/main',
         '@/qux',

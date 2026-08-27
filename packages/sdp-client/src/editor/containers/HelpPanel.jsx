@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -9,42 +9,42 @@ import {
 } from 'sdp-project';
 import { $Maybe, foldMaybe, explodeMaybe } from 'sdp-func-tools';
 
-import { PANEL_IDS, SIDEBAR_IDS } from '../constants';
+import { PANEL_IDS, SIDEBAR_IDS } from '../constants.js';
 
-import SidebarPanel from '../components/SidebarPanel';
-import { getPatchOfSelectedNodeForQuickHelp } from '../../core/selectors';
-import PatchDocs from '../components/PatchDocs';
-import CppPatchDocs from '../components/CppPatchDocs';
-import TabtestPatchDocs from '../components/TabtestPatchDocs';
-import sanctuaryPropType from '../../utils/sanctuaryPropType';
-import { getEditingAttachmentPatchPath } from '../selectors';
-import { getCurrentPatch } from '../../project/selectors';
+import SidebarPanel from '../components/SidebarPanel.jsx';
+import { getPatchOfSelectedNodeForQuickHelp } from '../../core/selectors.js';
+import PatchDocs from '../components/PatchDocs.jsx';
+import CppPatchDocs from '../components/CppPatchDocs.jsx';
+import TabtestPatchDocs from '../components/TabtestPatchDocs.jsx';
+import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
+import { getEditingAttachmentPatchPath } from '../selectors.js';
+import { getCurrentPatch } from '../../project/selectors.js';
 
 const getDocsForSelectedNode = foldMaybe(
   <div className="no-selection">
     Select a node or patch to view its documentation article
   </div>,
-  patch => <PatchDocs patch={patch} minimal />
+  (patch) => <PatchDocs patch={patch} minimal />
 );
 
 const getDocsForCpp = R.compose(
-  patch => <CppPatchDocs patch={patch} />,
+  (patch) => <CppPatchDocs patch={patch} />,
   explodeMaybe('Imposible error')
 );
 
 const getDocsForTabtest = R.compose(
-  patch => <TabtestPatchDocs patch={patch} />,
+  (patch) => <TabtestPatchDocs patch={patch} />,
   explodeMaybe('Imposible error')
 );
 
-const HelpPanel = ({
+function HelpPanel({
   maybeSelectedPatch,
   maybeCurrentPatch,
   editingAttachmentPatchPath,
   sidebarId,
   autohide,
-}) => {
-  const content = (attachmentPatchPath => {
+}) {
+  const content = ((attachmentPatchPath) => {
     switch (attachmentPatchPath) {
       case NOT_IMPLEMENTED_IN_XOD_PATH:
         return getDocsForCpp(maybeCurrentPatch);
@@ -66,7 +66,7 @@ const HelpPanel = ({
       <div className="HelpPanel-content">{content}</div>
     </SidebarPanel>
   );
-};
+}
 
 HelpPanel.propTypes = {
   sidebarId: PropTypes.oneOf(R.values(SIDEBAR_IDS)).isRequired,

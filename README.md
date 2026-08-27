@@ -21,7 +21,7 @@ Clone the repository and set working directory to its root. Then run:
 
 ```bash
 # Install all JavaScript and ReasonML dependencies
-yarn
+yarn install
 
 # Build all packages
 yarn build

@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import {
   renameKeys,
   invertMap,
@@ -30,19 +30,19 @@ import {
   TETHERING_INET_CHUNKS_ADDED,
   TETHERING_INET_CHUNK_SENT,
   TETHERING_INET_CLEAR_CHUNKS,
-} from './actionTypes';
+} from './actionTypes.js';
 
-import * as EAT from '../editor/actionTypes';
+import * as EAT from '../editor/actionTypes.js';
 
 import {
   UPLOAD_MSG_TYPE,
   LOG_TAB_TYPE,
   SESSION_TYPE,
   NEW_SHEET,
-} from './constants';
-import * as MSG from './messages';
-import { STATUS } from '../utils/constants';
-import { isXodErrorMessage } from './debugProtocol';
+} from './constants.js';
+import * as MSG from './messages.js';
+import { STATUS } from '../utils/constants.js';
+import { isXodErrorMessage } from './debugProtocol.js';
 
 import {
   createSystemMessage,
@@ -50,9 +50,12 @@ import {
   createErrorMessage,
   createOutgoingLogMessage,
   isErrorMessage,
-} from './utils';
+} from './utils.js';
 
-import { default as initialState, DEFAULT_TETHERING_INET_STATE } from './state';
+import {
+  default as initialState,
+  DEFAULT_TETHERING_INET_STATE,
+} from './state.js';
 
 const MAX_LOG_CHARACTERS = 10000;
 
@@ -62,7 +65,7 @@ const MAX_LOG_CHARACTERS = 10000;
 //
 // =============================================================================
 
-const formatMessage = msg => {
+const formatMessage = (msg) => {
   switch (msg.type) {
     case UPLOAD_MSG_TYPE.SYSTEM:
       return `=== ${msg.message} ===`;
@@ -86,14 +89,14 @@ const formatMessage = msg => {
   }
 };
 
-const overTabLog = tabType => R.over(R.lensPath([tabType, 'log']));
+const overTabLog = (tabType) => R.over(R.lensPath([tabType, 'log']));
 const overInstallerLog = overTabLog(LOG_TAB_TYPE.INSTALLER);
 const overCompilerLog = overTabLog(LOG_TAB_TYPE.COMPILER);
 const overUploaderLog = overTabLog(LOG_TAB_TYPE.UPLOADER);
 const overDebuggerLog = overTabLog(LOG_TAB_TYPE.DEBUGGER);
 const overTesterLog = overTabLog(LOG_TAB_TYPE.TESTER);
 
-const overStageError = stage => R.over(R.lensPath([stage, 'error']));
+const overStageError = (stage) => R.over(R.lensPath([stage, 'error']));
 
 const appendMessage = R.curry((msg, log) => {
   const formattedMessage = formatMessage(msg);
@@ -103,11 +106,11 @@ const appendMessage = R.curry((msg, log) => {
 const appendMessageAndTruncate = R.curry((msg, prevLog) =>
   R.compose(
     R.when(
-      log => log.length > MAX_LOG_CHARACTERS,
+      (log) => log.length > MAX_LOG_CHARACTERS,
       R.compose(
-        log => `=== Older lines are truncated ===\n${log}`,
-        log => log.slice(log.indexOf('\n') + 1),
-        log => log.slice(-MAX_LOG_CHARACTERS)
+        (log) => `=== Older lines are truncated ===\n${log}`,
+        (log) => log.slice(log.indexOf('\n') + 1),
+        (log) => log.slice(-MAX_LOG_CHARACTERS)
       )
     ),
     appendMessage(msg)
@@ -119,11 +122,11 @@ const addMessageToDebuggerLog = R.curry((message, state) =>
 );
 
 const addPlainTextToDebuggerLog = R.curry((plainMessage, state) =>
-  overDebuggerLog(log => `${log}\n${plainMessage}`, state)
+  overDebuggerLog((log) => `${log}\n${plainMessage}`, state)
 );
 
 const addPlainTextToTesterLog = R.curry((plainMessage, state) =>
-  overTesterLog(log => `${log}\n${plainMessage}`, state)
+  overTesterLog((log) => `${log}\n${plainMessage}`, state)
 );
 
 const addMessageListToDebuggerLog = R.curry((messages, state) =>
@@ -133,15 +136,14 @@ const addMessageListToDebuggerLog = R.curry((messages, state) =>
   )
 );
 
-const addMessagesOrIncrementSkippedLines = R.curry(
-  (logMessages, state) =>
-    state.isSkippingNewSerialLogLines
-      ? R.over(
-          R.lensProp('numberOfSkippedSerialLogLines'),
-          R.add(R.length(logMessages)),
-          state
-        )
-      : addMessageListToDebuggerLog(logMessages, state)
+const addMessagesOrIncrementSkippedLines = R.curry((logMessages, state) =>
+  state.isSkippingNewSerialLogLines
+    ? R.over(
+        R.lensProp('numberOfSkippedSerialLogLines'),
+        R.add(R.length(logMessages)),
+        state
+      )
+    : addMessageListToDebuggerLog(logMessages, state)
 );
 
 const updateInteractiveNodeValues = R.curry((messageList, state) => {
@@ -162,7 +164,7 @@ const updateInteractiveNodeValues = R.curry((messageList, state) => {
   )(messageList);
 
   const updateWatchNodeValues = R.compose(
-    newValues =>
+    (newValues) =>
       R.over(R.lensProp('watchNodeValues'), R.merge(R.__, newValues)),
     R.map(R.compose(R.prop('content'), R.last))
   )(watchNodeMessages);
@@ -191,7 +193,7 @@ const updateInteractiveNodeValues = R.curry((messageList, state) => {
         R.lensProp(nodeId),
         R.compose(
           R.concat(R.__, newSheets),
-          sheets =>
+          (sheets) =>
             R.over(
               R.lensIndex(sheets.length - 1),
               R.concat(R.__, dataToLastSheet),
@@ -217,7 +219,7 @@ const updateInteractiveNodeValues = R.curry((messageList, state) => {
 const createNewTableLogSheet = R.curry((tableLogNodeIds, state) =>
   R.over(
     R.lensProp('tableLogValues'),
-    tableLogValues =>
+    (tableLogValues) =>
       R.compose(
         R.merge(tableLogValues),
         R.map(
@@ -251,7 +253,7 @@ const updateInteractiveErroredNodePins = R.curry((messageList, state) => {
   const pinKeysByNodeId = R.prop('nodePinKeysMap', state);
   return R.over(
     R.lensProp('interactiveErroredNodePins'),
-    oldValues =>
+    (oldValues) =>
       R.compose(
         R.reject(R.isEmpty),
         R.merge(oldValues),
@@ -293,11 +295,11 @@ const getStdErrLogFromErrResponce = R.compose(
 );
 
 const getErrorTypeFromErrResponce = R.compose(
-  foldMaybe('', errType => `Error type: ${errType}\n`),
+  foldMaybe('', (errType) => `Error type: ${errType}\n`),
   maybePath(['payload', 'data', 'type'])
 );
 
-const formatWasmError = err => {
+const formatWasmError = (err) => {
   switch (err.type) {
     case ERROR_CODES.WASM_COMPILATION_RESULTS_FETCH_ERROR:
       return MSG.WASM_NETWORK_ERROR;
@@ -363,7 +365,11 @@ export default (state = initialState, action) => {
     case UPGRADE_ARDUINO_DEPENDECIES:
     case CHECK_ARDUINO_DEPENDENCIES:
     case INSTALL_EMSDK: {
-      const { type, payload, meta: { status } } = action;
+      const {
+        type,
+        payload,
+        meta: { status },
+      } = action;
 
       const beginMsg = {
         [INSTALL_ARDUINO_DEPENDENCIES]: MSG.INSTALLING_DEPENDENCIES,
@@ -436,7 +442,10 @@ export default (state = initialState, action) => {
       return state;
     }
     case UPLOAD: {
-      const { payload, meta: { status } } = action;
+      const {
+        payload,
+        meta: { status },
+      } = action;
 
       if (status === STATUS.STARTED) {
         return R.compose(

@@ -1,6 +1,8 @@
-import { assert } from 'chai';
+import chai from 'chai';
 
-import * as XP from '../src';
+import * as XP from '../src/index.js';
+
+const { assert } = chai;
 
 describe('Comment', () => {
   describe('createComment', () => {

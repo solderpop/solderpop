@@ -2,10 +2,10 @@ import fs from 'fs-extra';
 import path from 'path';
 import copy from 'recursive-copy';
 
-const lastDir = dir =>
+const lastDir = (dir) =>
   dir
     .split(path.sep)
-    .filter(name => name !== '')
+    .filter((name) => name !== '')
     .pop();
 
 export class Backup {
@@ -39,7 +39,7 @@ export class Backup {
         fs.mkdirSync(this.path.dataTemp);
       }
 
-      copy(this.path.data, this.path.dataTemp, err => {
+      copy(this.path.data, this.path.dataTemp, (err) => {
         if (err) {
           reject(err);
           return;
@@ -70,7 +70,7 @@ export class Backup {
 
     return new Promise((resolve, reject) => {
       fs.removeSync(this.path.data);
-      copy(this.path.dataTemp, this.path.data, err => {
+      copy(this.path.dataTemp, this.path.data, (err) => {
         if (err) {
           reject(err);
           return;

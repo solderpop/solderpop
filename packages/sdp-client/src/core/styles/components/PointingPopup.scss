@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 .PointingPopup {
   position: fixed;
   z-index: 15;

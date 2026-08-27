@@ -5,8 +5,23 @@ import fs from 'fs-extra';
 import { cwd, exit, stderr } from 'process';
 import { cli } from 'cli-ux';
 import chalk from 'chalk';
-import Command from '@oclif/command';
+import { Command } from '@oclif/command';
+import R from 'ramda';
 import {
+  getPathToXodProject,
+  isBasename,
+  isWorkspaceValid,
+  resolvePath,
+  spawnWorkspaceFile,
+} from 'sdp-fs';
+import * as xP from 'sdp-project';
+import * as xdb from 'sdp-deploy-bin';
+import { createError } from 'sdp-func-tools';
+import { resolveBundledWorkspacePath } from './paths.js';
+import * as myFlags from './flags.js';
+import localMsgs from './messages.js';
+
+const {
   allPass,
   complement,
   compose,
@@ -22,20 +37,7 @@ import {
   startsWith,
   T,
   when,
-} from 'ramda';
-import {
-  getPathToXodProject,
-  isBasename,
-  isWorkspaceValid,
-  resolvePath,
-  spawnWorkspaceFile,
-} from 'sdp-fs';
-import * as xP from 'sdp-project';
-import * as xdb from 'sdp-deploy-bin';
-import { createError } from 'sdp-func-tools';
-import { resolveBundledWorkspacePath } from './paths';
-import * as myFlags from './flags';
-import localMsgs from './messages';
+} = R;
 
 // convert (projectPath, patchPath) to patch name
 const getPatchName = (projectPath, patchPath) =>
@@ -44,7 +46,7 @@ const getPatchName = (projectPath, patchPath) =>
     [
       T,
       compose(
-        name => `@/${name}`,
+        (name) => `@/${name}`,
         when(isBasename('patch.xodp'), path.dirname)
       ),
     ],
@@ -55,8 +57,8 @@ const getPatchName = (projectPath, patchPath) =>
 const getProjectPathPatchName = (somePath, patch = null) => {
   const fullPath = resolvePath(somePath);
   return pipeP(
-    p => fs.pathExists(p),
-    exists =>
+    (p) => fs.pathExists(p),
+    (exists) =>
       exists
         ? getPathToXodProject(fullPath)
         : Promise.reject(
@@ -64,15 +66,15 @@ const getProjectPathPatchName = (somePath, patch = null) => {
               path: fullPath,
             })
           ),
-    projectPath =>
+    (projectPath) =>
       compose(
-        patchName => ({
+        (patchName) => ({
           projectPath,
           patchName,
         }),
         when(
           allPass([complement(isNil), complement(xP.isValidPatchPath)]),
-          p => {
+          (p) => {
             throw createError('INVALID_PATCH_PATH', {
               patchPath: p,
             });
@@ -80,7 +82,7 @@ const getProjectPathPatchName = (somePath, patch = null) => {
         ),
         cond([
           [either(isEmpty, isNil), () => getPatchName(projectPath, fullPath)],
-          [T, when(complement(startsWith('@/')), x => `@/${x}`)],
+          [T, when(complement(startsWith('@/')), (x) => `@/${x}`)],
         ])
       )(patch)
   )(fullPath);
@@ -117,7 +119,7 @@ class BaseCommand extends Command {
       // get formatter
       const defaultCode = 'UNKNOWN_ERROR';
       const f = compose(
-        formatters => error =>
+        (formatters) => (error) =>
           formatters[error.type]
             ? formatters[error.type](error.payload)
             : formatters[defaultCode](error),
@@ -172,11 +174,11 @@ class BaseCommand extends Command {
   async parseEntrypoint(argvs) {
     const argv = argvs || this.argv;
     await getProjectPathPatchName(argv[0] || cwd(), argv[1] || null)
-      .then(result => {
+      .then((result) => {
         this.args.projectPath = result.projectPath;
         this.args.patchName = result.patchName;
       })
-      .catch(err => {
+      .catch((err) => {
         this.printError(err);
         return exit(255);
       });
@@ -186,15 +188,17 @@ class BaseCommand extends Command {
   async ensureWorkspace(wPath) {
     const targetPath = resolvePath(wPath || this.flags.workspace);
 
-    this.flags.workspace = await isWorkspaceValid(targetPath).catch(async e => {
-      switch (e.errorCode) {
-        case 'WORKSPACE_DIR_NOT_EXIST_OR_EMPTY':
-          return spawnWorkspaceFile(e.path);
-        default:
-          this.printError(e);
-          return exit(254);
+    this.flags.workspace = await isWorkspaceValid(targetPath).catch(
+      async (e) => {
+        switch (e.errorCode) {
+          case 'WORKSPACE_DIR_NOT_EXIST_OR_EMPTY':
+            return spawnWorkspaceFile(e.path);
+          default:
+            this.printError(e);
+            return exit(254);
+        }
       }
-    });
+    );
     await xdb.prepareWorkspacePackagesDir(
       resolveBundledWorkspacePath(),
       this.flags.workspace

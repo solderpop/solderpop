@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 .CloseButton {
   position: absolute;
   z-index: 10;

@@ -1,6 +1,6 @@
-const R = require('ramda');
-const chai = require('chai');
-const chaiAsPromised = require('chai-as-promised');
+import R from 'ramda';
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 
 chai.use(chaiAsPromised);
 const { assert } = chai;
@@ -9,7 +9,7 @@ const { assert } = chai;
 // Func utils
 //-----------------------------------------------------------------------------
 const hasClass = R.curry((className, element) =>
-  R.composeP(R.contains(className), R.split(' '), el =>
+  R.composeP(R.contains(className), R.split(' '), (el) =>
     el.getAttribute('class')
   )(element)
 );
@@ -79,7 +79,7 @@ function closePopup(client) {
 //-----------------------------------------------------------------------------
 // Project browser
 //-----------------------------------------------------------------------------
-const getSelectorForPatchInProjectBrowser = nodeName =>
+const getSelectorForPatchInProjectBrowser = (nodeName) =>
   `.PatchGroupItem[data-id="${nodeName}"]`;
 
 function findProjectBrowser(client) {
@@ -209,7 +209,7 @@ function assertPatchSelected(client, name) {
   return assert.eventually.include(
     client
       .$(getSelectorForPatchInProjectBrowser(name))
-      .then(el => el.getAttribute('class')),
+      .then((el) => el.getAttribute('class')),
     'isSelected'
   );
 }
@@ -262,7 +262,7 @@ async function assertLibraryFound(client) {
 }
 
 function installLibrary(client) {
-  return findLibSuggester(client).then(el =>
+  return findLibSuggester(client).then((el) =>
     el.doubleClick('.Suggester-item--library')
   );
 }
@@ -277,8 +277,10 @@ function assertProjectBrowserHasInstallingLib(client, libName) {
   return assert.eventually.equal(
     client
       .$(selector)
-      .then(el => el.waitForExist({ timeout: 10000 }).then(() => el.$('.name')))
-      .then(el => el.getText()),
+      .then((el) =>
+        el.waitForExist({ timeout: 10000 }).then(() => el.$('.name'))
+      )
+      .then((el) => el.getText()),
     libName
   );
 }
@@ -457,10 +459,7 @@ const API = {
  * API methods with `client` already bound.
  */
 function createPageObject(client) {
-  return R.map(fn => R.partial(fn, [client]))(API);
+  return R.map((fn) => R.partial(fn, [client]))(API);
 }
 
-module.exports = {
-  createPageObject,
-  API,
-};
+export default { createPageObject, API };

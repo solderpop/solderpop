@@ -9,7 +9,7 @@ import { resolveLibPath } from 'sdp-fs';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Application } from 'spectron';
 
-import Page from './pageObject';
+import Page from './pageObject.js';
 
 const DEBUG = process.env.XOD_DEBUG_TESTS;
 // =============================================================================
@@ -41,7 +41,7 @@ export default function prepareSuite() {
     // with Mocha
     return fse
       .mkdtemp(tmpDir)
-      .then(home => {
+      .then((home) => {
         state.app = new Application({
           path: appPath,
           args: ['.'],
@@ -71,7 +71,7 @@ export default function prepareSuite() {
 
   after(() => {
     if (!state.passed || DEBUG) {
-      state.app.client.getMainProcessLogs().then(logs => {
+      state.app.client.getMainProcessLogs().then((logs) => {
         logs.forEach(console.log); // eslint-disable-line no-console
       });
     }

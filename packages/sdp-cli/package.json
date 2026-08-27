@@ -1,10 +1,11 @@
 {
   "name": "sdp-cli",
+  "type": "module",
   "version": "0.38.0",
   "description": "SolderPop IDE: Command Line Interface",
   "author": "SolderPop <dev@solderpop.io>",
   "bin": {
-    "xodc": "./bin/run"
+    "sdpc": "./bin/run"
   },
   "bugs": "https://github.com/solderpop/solderpop/issues",
   "dependencies": {
@@ -32,6 +33,10 @@
     "sdp-tabtest": "^0.38.0"
   },
   "devDependencies": {
+    "@babel/cli": "^8.0.4",
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
+    "@babel/register": "^8.0.1",
     "@oclif/dev-cli": "^1.19.4",
     "@oclif/test": "^1.2.2",
     "chai": "^4.2.0",
@@ -59,13 +64,13 @@
   "main": "bin/run",
   "oclif": {
     "commands": "./lib/commands",
-    "bin": "xodc",
+    "bin": "sdpc",
     "plugins": [
       "@oclif/plugin-autocomplete",
       "@oclif/plugin-help",
       "@oclif/plugin-not-found"
     ],
-    "repositoryPrefix": "<%- repo %>/blob/master/packages/sdp-cli/<%- commandPath %>",
+    "repositoryPrefix": "<%- repo %>/blob/main/packages/sdp-cli/<%- commandPath %>",
     "topics": {
       "install": {
         "description": "install toolchains and libraries"
@@ -86,6 +91,6 @@
     "build": "yarn run build:bundle && yarn run build:src",
     "dev": "yarn run build --watch",
     "postpack": "rm -f oclif.manifest.json",
-    "test-func": "BABEL_DISABLE_CACHE=1 mocha --opts test-func/mocha.opts test-func/**/*.spec.js"
+    "test-func": "BABEL_DISABLE_CACHE=1 mocha --require ../../tools/babel-register.js --color --timeout 600000 test-func/**/*.spec.js"
   }
 }

@@ -2,8 +2,8 @@
 import { exit } from 'process';
 import fs from 'fs-extra';
 import * as xdb from 'sdp-deploy-bin';
-import BaseCommand from '../../baseCommand';
-import { resolveBundledWorkspacePath } from '../../paths';
+import BaseCommand from '../../baseCommand.js';
+import { resolveBundledWorkspacePath } from '../../paths.js';
 
 class InstallArchCommand extends BaseCommand {
   async run() {
@@ -22,7 +22,7 @@ class InstallArchCommand extends BaseCommand {
         workspace,
         sketchDir
       );
-      await aCli.core.install(progress => {
+      await aCli.core.install((progress) => {
         if (progress.message !== null) messages.push(progress.message);
         this.printArduinoCliProgress(progress);
       }, fqbn);
@@ -49,7 +49,7 @@ InstallArchCommand.args = [
     required: true,
     hidden: false,
     description:
-      'Board FQBN. `arduino:sam` for example. See `xodc boards` list for the full list.',
+      'Board FQBN. `arduino:sam` for example. See `sdpc boards` list for the full list.',
   },
 ];
 

@@ -1,12 +1,23 @@
 import R from 'ramda';
-import { assert } from 'chai';
+import chai from 'chai';
 
-import * as XP from '../src';
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import * as XP from '../src/index.js';
 
-import * as Helper from './helpers';
+import * as Helper from './helpers.js';
 
 // TODO: automatically load from workspace?
-import constantPatches from './fixtures/constant-patches.json';
+// See src/project.js for why this isn't a plain `import ... from '*.json'`.
+
+const { assert } = chai;
+
+const constantPatches = JSON.parse(
+  readFileSync(
+    fileURLToPath(new URL('./fixtures/constant-patches.json', import.meta.url)),
+    'utf8'
+  )
+);
 
 // :: Patch -> Map NodeType Node
 const getNodesByNodeTypes = R.compose(R.indexBy(XP.getNodeType), XP.listNodes);
@@ -15,7 +26,7 @@ describe('extractBoundInputsToConstNodes', () => {
   const mainPatchPath = XP.getLocalPath('main');
   const testPatchPath = XP.getLocalPath('test');
 
-  const getInputPinKey = type => `${type}-input`;
+  const getInputPinKey = (type) => `${type}-input`;
 
   const testPatch = Helper.defaultizePatch({
     nodes: {
@@ -103,9 +114,11 @@ describe('extractBoundInputsToConstNodes', () => {
 
   it('extracts default bound values into constant nodes', () => {
     const findNodeByType = R.curry((type, patch) =>
-      R.compose(R.propOr(null, type), R.indexBy(XP.getNodeType), XP.listNodes)(
-        patch
-      )
+      R.compose(
+        R.propOr(null, type),
+        R.indexBy(XP.getNodeType),
+        XP.listNodes
+      )(patch)
     );
 
     const project = R.clone(testProject);

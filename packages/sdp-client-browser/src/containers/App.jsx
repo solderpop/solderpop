@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import urlParse from 'url-parse';
@@ -8,18 +8,17 @@ import EventListener from 'react-event-listener';
 import { HotKeys } from 'react-hotkeys';
 
 import * as XP from 'sdp-project';
-import client from 'sdp-client';
+import client, { ThemeSettingsPopup } from 'sdp-client';
 import { foldEither, notNil } from 'sdp-func-tools';
 import { LIVENESS } from 'sdp-arduino';
 
 import packageJson from '../../package.json';
-import PopupInstallApp from '../components/PopupInstallApp';
-import { ThemeSettingsPopup } from 'sdp-client';
+import PopupInstallApp from '../components/PopupInstallApp.jsx';
 
 const DEFAULT_CANVAS_WIDTH = 800;
 const DEFAULT_CANVAS_HEIGHT = 600;
 
-const applyTheme = colors => {
+const applyTheme = (colors) => {
   if (!colors || typeof document === 'undefined') return;
   R.forEachObjIndexed((value, key) => {
     const cssKey = `--theme-${key
@@ -54,9 +53,8 @@ class App extends client.App {
     this.onSave = this.onSave.bind(this);
     this.onCloseApp = this.onCloseApp.bind(this);
     this.onCreateProject = this.onCreateProject.bind(this);
-    this.onStopDebuggerSessionClicked = this.onStopDebuggerSessionClicked.bind(
-      this
-    );
+    this.onStopDebuggerSessionClicked =
+      this.onStopDebuggerSessionClicked.bind(this);
     this.onFirstRun = this.onFirstRun.bind(this);
 
     this.hideInstallAppPopup = this.hideInstallAppPopup.bind(this);
@@ -67,7 +65,7 @@ class App extends client.App {
       {
         [client.COMMAND.NEW_PROJECT]: this.onCreateProject,
         [client.COMMAND.ADD_PATCH]: this.props.actions.createPatch,
-        [client.COMMAND.TOGGLE_DEBUGGER]: e => {
+        [client.COMMAND.TOGGLE_DEBUGGER]: (e) => {
           e.preventDefault();
           this.props.actions.toggleDebugger();
         },
@@ -85,11 +83,13 @@ class App extends client.App {
     document.addEventListener('click', this.onDocumentClick);
     applyTheme(this.props.themeColors);
   }
+
   componentDidUpdate(prevProps) {
     if (prevProps.themeColors !== this.props.themeColors) {
       applyTheme(this.props.themeColors);
     }
   }
+
   componentWillUnmount() {
     super.componentWillUnmount();
     document.removeEventListener('click', this.onDocumentClick);
@@ -176,7 +176,7 @@ class App extends client.App {
     const file = event.target.files[0];
     const reader = new window.FileReader();
 
-    reader.onload = e => {
+    reader.onload = (e) => {
       this.onLoad(e.target.result);
 
       // drop the value of the file input to make possible to open
@@ -236,7 +236,7 @@ class App extends client.App {
 
     const openProject = {
       key: items.openProject.key,
-      click: event => {
+      click: (event) => {
         if (
           event.target === this.menuRefs.openProject ||
           event.target.parentNode === this.menuRefs.openProject.parentNode
@@ -253,7 +253,7 @@ class App extends client.App {
             accept=".xodball"
             onChange={this.onLoadChange}
             id="openProjectButton"
-            ref={input => {
+            ref={(input) => {
               this.menuRefs.openProject = input;
             }}
           />
@@ -264,7 +264,7 @@ class App extends client.App {
 
     const link = (itemProps, componentProps) => ({
       key: itemProps.key,
-      click: event => {
+      click: (event) => {
         if (event.target === this.menuRefs[itemProps.key]) return;
         event.stopPropagation();
         this.menuRefs[itemProps.key].click();
@@ -274,7 +274,7 @@ class App extends client.App {
           className="menu-link"
           target="_blank"
           rel="noopener noreferrer"
-          ref={el => {
+          ref={(el) => {
             this.menuRefs[itemProps.key] = el;
           }}
           {...componentProps}
@@ -465,7 +465,7 @@ const mapStateToProps = R.applySpec({
   },
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(
     R.merge(client.App.actions, {
       // Put custom actions for sdp-client-browser here

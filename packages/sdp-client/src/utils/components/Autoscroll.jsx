@@ -5,21 +5,21 @@
   - Added `scrollDown` method
  */
 
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 
 const SCROLLED_DOWN_THRESHOLD = 0;
 
 /* eslint-disable no-param-reassign */
-const hasOverflow = el => el.clientHeight < el.scrollHeight;
+const hasOverflow = (el) => el.clientHeight < el.scrollHeight;
 const isScrolledDown = (el, threshold) => {
   const actualScrollTop = el.scrollTop;
   const bottomScrollTop = el.scrollHeight - el.clientHeight - threshold;
   return actualScrollTop >= bottomScrollTop;
 };
-const isScrolledUp = el => el.scrollTop === 0;
-const scrollDown = el => (el.scrollTop = el.scrollHeight - el.clientHeight);
+const isScrolledUp = (el) => el.scrollTop === 0;
+const scrollDown = (el) => (el.scrollTop = el.scrollHeight - el.clientHeight);
 const scrollDownBy = (amount, el) => (el.scrollTop += amount);
 /* eslint-enable no-param-reassign */
 
@@ -30,12 +30,15 @@ class Autoscroll extends React.PureComponent {
     this._el = null;
     this._scrollHeight = null;
   }
+
   componentDidMount() {
     this.scrollDownIfNeeded();
   }
+
   componentWillUpdate() {
     this._scrollHeight = this._el.scrollHeight;
   }
+
   componentDidUpdate() {
     /* if the list is scrolled all the way up and new items are added, preserve the current scroll position */
     if (isScrolledUp(this._el) && this._scrollHeight !== null) {
@@ -45,15 +48,18 @@ class Autoscroll extends React.PureComponent {
       scrollDownBy(difference, this._el);
     } else this.scrollDownIfNeeded();
   }
+
   scrollDownIfNeeded() {
     if (this._isScrolledDown && hasOverflow(this._el)) {
       scrollDown(this._el);
     }
   }
+
   scrollDown() {
     scrollDown(this._el);
     this._isScrolledDown = true;
   }
+
   handleScroll(e) {
     const nextIsScrolledDown = isScrolledDown(
       this._el,
@@ -76,6 +82,7 @@ class Autoscroll extends React.PureComponent {
       this.props.onScrolled(e);
     }
   }
+
   render() {
     const restProps = R.omit(
       ['onScrolled', 'onScrolledTop', 'onScrolledFromBottom'],
@@ -84,8 +91,8 @@ class Autoscroll extends React.PureComponent {
     return (
       <div
         {...restProps}
-        ref={el => (this._el = el)}
-        onScroll={e => this.handleScroll(e)}
+        ref={(el) => (this._el = el)}
+        onScroll={(e) => this.handleScroll(e)}
       />
     );
   }

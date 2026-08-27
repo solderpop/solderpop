@@ -1,12 +1,12 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { PopupForm } from 'sdp-client';
 
-import { ENUMERATING_BOARDS } from '../../shared/messages';
-import { updateIndexFiles } from '../../arduinoDependencies/runners';
+import { ENUMERATING_BOARDS } from '../../shared/messages.js';
+import { updateIndexFiles } from '../../arduinoDependencies/runners.js';
 
-import PortSelect from './PortSelect';
+import PortSelect from './PortSelect.jsx';
 
 class PopupUploadConfig extends React.Component {
   constructor(props) {
@@ -32,7 +32,7 @@ class PopupUploadConfig extends React.Component {
   }
 
   componentDidMount() {
-    this.getSelectedBoard().then(selectedBoard =>
+    this.getSelectedBoard().then((selectedBoard) =>
       this.getBoards(selectedBoard)
     );
   }
@@ -46,7 +46,7 @@ class PopupUploadConfig extends React.Component {
   }
 
   onUploadClicked() {
-    const selectedBoard = this.state.selectedBoard;
+    const { selectedBoard } = this.state;
     const originalBoardData = this.state.boards[selectedBoard.index];
     const boardToUpload = R.assoc(
       'selectedOptions',
@@ -87,8 +87,8 @@ class PopupUploadConfig extends React.Component {
         )
       )
       .then(R.sortBy(R.pipe(R.prop('name'), R.toLower)))
-      .then(R.tap(boards => this.setState({ boards })))
-      .then(boards => {
+      .then(R.tap((boards) => this.setState({ boards })))
+      .then((boards) => {
         const doesSelectedBoardExist =
           isBoardSelected && boards[selectedBoard.index];
 
@@ -118,7 +118,7 @@ class PopupUploadConfig extends React.Component {
   getSelectedBoard() {
     return this.props
       .getSelectedBoard()
-      .then(R.tap(selBoard => this.setState({ selectedBoard: selBoard })));
+      .then(R.tap((selBoard) => this.setState({ selectedBoard: selBoard })));
   }
 
   updateIndexes() {
@@ -126,7 +126,7 @@ class PopupUploadConfig extends React.Component {
     this.setState({ boards: null });
     updateIndexFiles()
       .then(() => this.getBoards())
-      .catch(err => {
+      .catch((err) => {
         this.props.onError(err);
         this.setState({ boards: oldBoards });
       });
@@ -206,7 +206,7 @@ class PopupUploadConfig extends React.Component {
   }
 
   renderBoardOptions() {
-    const selectedBoard = this.state.selectedBoard;
+    const { selectedBoard } = this.state;
     if (!selectedBoard || !this.state.boards) return null;
 
     const board = this.state.boards[selectedBoard.index];
@@ -216,7 +216,7 @@ class PopupUploadConfig extends React.Component {
     return (
       <div className="boardOptions">
         {R.map(
-          opt => (
+          (opt) => (
             <div key={opt.optionId}>
               <label htmlFor={`option_${opt.optionId}`}>
                 {opt.optionName}:
@@ -224,13 +224,13 @@ class PopupUploadConfig extends React.Component {
               <select
                 id={`option_${opt.optionId}`}
                 className="inspectorSelectInput inspectorInput--full-width"
-                onChange={e =>
+                onChange={(e) =>
                   this.changeBoardOption(opt.optionId, e.target.value)
                 }
                 value={R.pathOr('', ['options', opt.optionId], selectedBoard)}
               >
                 {R.map(
-                  val => (
+                  (val) => (
                     <option key={val.value} value={val.value}>
                       {val.name}
                     </option>

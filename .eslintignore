@@ -4,3 +4,10 @@ node_modules/
 
 **/*.bs.js
 **/*.ne.js
+
+# Uses the "with { type: 'json' }" import attribute (real Node ESM JSON
+# import syntax), which eslint@8's bundled espree parser can't parse even
+# with ecmaVersion: 'latest' -- it's a very recent stage, not yet shipped
+# there. One line, functionally verified (see the file's own comment for
+# why it needs this exact form); not worth a parser swap for.
+packages/sdp-project/src/internal/builtInPatches.js

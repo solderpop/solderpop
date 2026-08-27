@@ -1,7 +1,10 @@
-import { curry, unless, test, concat, __ } from 'ramda';
-import { outputFile } from 'fs-extra';
+import R from 'ramda';
+import fse from 'fs-extra';
 import stringify from 'json-stable-stringify';
-import { resolvePath } from './utils';
+import { resolvePath } from './utils.js';
+
+const { curry, unless, test, concat, __ } = R;
+const { outputFile } = fse;
 
 // :: outputPath -> data -> Promise
 export const writeFile = curry((outputPath, data, encoding) => {
@@ -11,7 +14,7 @@ export const writeFile = curry((outputPath, data, encoding) => {
 
   return outputFile(resolvedPath, dataWithEol, encoding)
     .then(() => ({ path: resolvedPath, data }))
-    .catch(err =>
+    .catch((err) =>
       Promise.reject(Object.assign(err, { path: resolvedPath, data }))
     );
 });

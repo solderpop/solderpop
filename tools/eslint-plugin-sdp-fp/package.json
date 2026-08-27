@@ -1,0 +1,10 @@
+{
+  "name": "eslint-plugin-sdp-fp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "In-repo replacement for the abandoned eslint-plugin-xod-fp (last published for eslint@~3.9.1). Same rule, ported so it doesn't depend on an unmaintained npm package.",
+  "main": "index.js",
+  "dependencies": {
+    "ramda": "^0.24.1"
+  }
+}

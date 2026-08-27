@@ -1,4 +1,4 @@
-import composeMessage from './composeMessage';
+import composeMessage from './composeMessage.js';
 
 export const CODE_TRANSPILED =
   'Project was successfully transpiled. Searching for device...';
@@ -27,7 +27,7 @@ export const DEBUG_SESSION_STOPPED_ON_TAB_CLOSE = {
 };
 export const DEBUG_LOST_CONNECTION = 'Lost connection with the device.';
 
-export const updateAvailableMessage = version =>
+export const updateAvailableMessage = (version) =>
   composeMessage(
     'Update available',
     `New version ${version} of SolderPop\u00A0IDE is available`,
@@ -35,7 +35,7 @@ export const updateAvailableMessage = version =>
     true
   );
 
-export const compilationBegun = boardName =>
+export const compilationBegun = (boardName) =>
   `Begin compiling code for the board ${boardName}`;
 
 export const dontForgetToChangeProjectName = (

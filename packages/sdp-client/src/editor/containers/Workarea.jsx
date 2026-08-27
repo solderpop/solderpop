@@ -1,19 +1,19 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import cn from 'classnames';
-import debounce from 'throttle-debounce/debounce';
+import debounce from 'throttle-debounce/debounce.js';
 import { notEquals } from 'sdp-func-tools';
 
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
-import Debugger from '../../debugger/containers/Debugger';
+import Debugger from '../../debugger/containers/Debugger.jsx';
 
-import { SLOT_SIZE } from '../../project/nodeLayout';
-import { PANEL_IDS } from '../constants';
-import * as Actions from '../actions';
-import * as EditorSelectors from '../selectors';
+import { SLOT_SIZE } from '../../project/nodeLayout.js';
+import { PANEL_IDS } from '../constants.js';
+import * as Actions from '../actions.js';
+import * as EditorSelectors from '../selectors.js';
 
 const pickPropsToCheck = R.compose(
   R.evolve({ panelSettings: R.map(R.omit(['size'])) }),
@@ -38,10 +38,12 @@ class Workarea extends React.Component {
 
     this.resizePanelAction = debounce(300, this.props.actions.resizePanel);
   }
+
   shouldComponentUpdate(nextProps) {
     // Optimize rendering
     return notEquals(pickPropsToCheck(nextProps), pickPropsToCheck(this.props));
   }
+
   onResizePanel(event) {
     const { name, flex } = event.component.props;
     this.setState(R.assocPath(['sizes', name], flex));
@@ -50,16 +52,20 @@ class Workarea extends React.Component {
       this.state.sizes[PANEL_IDS.DEPLOYMENT]
     );
   }
+
   onStartResizePanel() {
     this.setState({ resizing: true });
   }
+
   onStopResizePanel() {
     this.setState({ resizing: false });
   }
+
   getDeploymentPanelSize() {
     const size = R.propOr(0.2, 'size', this.props.panelSettings);
     return this.props.isDebugPanelExpanded ? size : 0;
   }
+
   render() {
     return (
       <ReflexContainer
@@ -126,7 +132,7 @@ const mapStateToProps = R.applySpec({
   panelSettings: EditorSelectors.getPanelSettings(PANEL_IDS.DEPLOYMENT),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(
     {
       resizePanel: Actions.resizePanel,

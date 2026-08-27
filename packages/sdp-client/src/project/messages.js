@@ -1,4 +1,4 @@
-import { LINK_ERRORS as LE } from '../editor/constants';
+import { LINK_ERRORS as LE } from '../editor/constants.js';
 
 export const SUCCESSFULLY_PUBLISHED = {
   title: 'Library published',
@@ -34,8 +34,7 @@ export const PROJECT_NAME_NEEDED_TO_GENERATE_APIKEY = {
 
 export const CANT_GET_TOKEN_WITHOUT_APIKEY = {
   title: 'API key not set',
-  note:
-    'The program uses the `=XOD_TOKEN` literal. The project should have XOD Cloud API Key set to make it work.',
+  note: 'The program uses the `=XOD_TOKEN` literal. The project should have XOD Cloud API Key set to make it work.',
   solution:
     'Open Project Preferences to generate a new API key or enter existing one.',
 };
@@ -45,13 +44,12 @@ export const CANT_GET_TOKEN_WITHOUT_APIKEY = {
 // 404 — revoked/invalid API key
 export const CANT_GET_TOKEN_BECAUSE_OF_WRONG_APIKEY = {
   title: 'API key invalid',
-  note:
-    'The program uses the `=XOD_TOKEN` literal. The API key was revoked or has a wrong format.',
+  note: 'The program uses the `=XOD_TOKEN` literal. The API key was revoked or has a wrong format.',
   solution:
     'Open Project Preferences to generate a new API key or enter existing one.',
 };
 
-export const cantCloneNoPatchFound = patchPath => ({
+export const cantCloneNoPatchFound = (patchPath) => ({
   title: 'Cannot clone patch',
   note: `Patch with path "${patchPath}" not found in the project`,
 });

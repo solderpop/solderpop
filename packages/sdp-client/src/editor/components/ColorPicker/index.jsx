@@ -1,19 +1,19 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import convert from 'color-convert';
 import { debounce } from 'throttle-debounce';
 
-import colorPropType from './colorPropType';
-import HueCircle from './HueCircle';
-import SatLightBox from './SatLightBox';
+import colorPropType from './colorPropType.js';
+import HueCircle from './HueCircle.jsx';
+import SatLightBox from './SatLightBox.jsx';
 
-const getNewColor = newHsl => ({
+const getNewColor = (newHsl) => ({
   hsl: newHsl,
   hex: `#${convert.hsl.hex(newHsl)}`,
 });
 
-const getStateColors = color => ({
+const getStateColors = (color) => ({
   color,
   hue: (color.hsl[0] / 360).toFixed(3),
   saturation: (color.hsl[1] / 100).toFixed(3),
@@ -34,9 +34,8 @@ class ColorPicker extends React.Component {
     // Basic handlers
     this.onChange = debounce(10, this.onChange.bind(this));
     this.onHuePickerChange = this.onHuePickerChange.bind(this);
-    this.onSaturationLightnessChange = this.onSaturationLightnessChange.bind(
-      this
-    );
+    this.onSaturationLightnessChange =
+      this.onSaturationLightnessChange.bind(this);
     // Input
     this.onHueInputChange = this.onHueInputChange.bind(this);
     this.onSaturationInputChange = this.onSaturationInputChange.bind(this);
@@ -55,26 +54,33 @@ class ColorPicker extends React.Component {
   onChange(newHsl) {
     this.props.onChange(getNewColor(newHsl));
   }
+
   onSaturationLightnessChange(saturation, lightness) {
     this.onChange([this.state.color.hsl[0], saturation, lightness]);
   }
+
   onHuePickerChange(degree) {
     this.onChange([degree, this.state.color.hsl[1], this.state.color.hsl[2]]);
   }
+
   onHueInputChange(event) {
     this.setState({ hue: normalizeInputValue(event.target.value) });
   }
+
   onSaturationInputChange(event) {
     this.setState({ saturation: normalizeInputValue(event.target.value) });
   }
+
   onLightnessInputChange(event) {
     this.setState({ lightness: normalizeInputValue(event.target.value) });
   }
+
   onInputKeyDown(event) {
     if (event.keyCode === 13) {
       this.commitInputs();
     }
   }
+
   commitInputs() {
     this.onChange([
       this.state.hue * 360,
@@ -152,7 +158,7 @@ ColorPicker.propTypes = {
 
 export default ColorPicker;
 
-export const hex2color = hex => ({
+export const hex2color = (hex) => ({
   hsl: convert.hex.hsl(hex),
   hex,
 });

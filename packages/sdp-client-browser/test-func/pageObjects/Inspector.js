@@ -1,5 +1,5 @@
-import BasePageObject from './BasePageObject';
-import Input from './Input';
+import BasePageObject from './BasePageObject.js';
+import Input from './Input.js';
 
 class Inspector extends BasePageObject {
   async setPinValue(pinName, value) {
@@ -25,7 +25,7 @@ class Inspector extends BasePageObject {
   }
 }
 
-Inspector.findOnPage = async page => {
+Inspector.findOnPage = async (page) => {
   const elementHandle = await page.$('.Inspector');
   return new Inspector(page, elementHandle);
 };

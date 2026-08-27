@@ -18,3 +18,10 @@ packages/*/lib/
 *.bs.js
 .merlin
 .bsb.lock
+
+# caveman-init rule files
+.cursor/
+.windsurf/
+.clinerules/
+.github/copilot-instructions.md
+AGENTS.md

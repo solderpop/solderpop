@@ -3,37 +3,40 @@ import PropTypes from 'prop-types';
 import R from 'ramda';
 import * as XP from 'sdp-project';
 
-import { WIDGET_TYPE } from '../constants';
-import { NODE_PROPERTY_KIND, NODE_PROPERTY_KEY } from '../../project/constants';
+import { WIDGET_TYPE } from '../constants.js';
+import {
+  NODE_PROPERTY_KIND,
+  NODE_PROPERTY_KEY,
+} from '../../project/constants.js';
 
-import PinWidgetsGroup from './PinWidgetsGroup';
+import PinWidgetsGroup from './PinWidgetsGroup.jsx';
 import {
   Widget,
   HintWidget,
   NodeSpecializationWidget,
   PulseTweakWidget,
   getNodeWidgetConfig,
-} from './inspectorWidgets';
+} from './inspectorWidgets/index.js';
 
-import { RenderableNode } from '../../types';
-import sanctuaryPropType from '../../utils/sanctuaryPropType';
-import { getUtmSiteUrl } from '../../utils/urls';
+import { RenderableNode } from '../../types.js';
+import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
+import { getUtmSiteUrl } from '../../utils/urls.js';
 
-import * as MESSAGES from '../messages';
+import * as MESSAGES from '../messages.js';
 
 const isTweakPulseNode = R.compose(
-  nodeType =>
+  (nodeType) =>
     XP.isTweakPath(nodeType) && XP.getTweakType(nodeType) === XP.PIN_TYPE.PULSE,
   XP.getNodeType
 );
 
-const NodeInspector = ({
+function NodeInspector({
   node,
   isDebugSession,
   onPropUpdate,
   onNodeSpecializationChanged,
   onSendTweakPulse,
-}) => {
+}) {
   const type = XP.getNodeType(node);
   const baseName = XP.getBaseName(type);
   const nodeId = XP.getNodeId(node);
@@ -107,7 +110,7 @@ const NodeInspector = ({
       />
     </div>
   );
-};
+}
 
 NodeInspector.propTypes = {
   node: sanctuaryPropType(RenderableNode),

@@ -1,4 +1,6 @@
 **/*.ne.js
+platform/**/*.cpp.js
+platform/**/*.h.js
 
 test-cpp/run-tests
 test-cpp/run-tests.dSYM

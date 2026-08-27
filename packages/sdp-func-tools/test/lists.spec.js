@@ -1,6 +1,8 @@
-import { assert } from 'chai';
+import chai from 'chai';
 
-import { isAmong, uniqLists, swap } from '../src/lists';
+import { isAmong, uniqLists, swap } from '../src/lists.js';
+
+const { assert } = chai;
 
 describe('lists', () => {
   describe('isAmong', () => {
@@ -15,7 +17,11 @@ describe('lists', () => {
   describe('uniqLists()', () => {
     it('returns filtered list', () => {
       assert.deepEqual(
-        uniqLists([['a', 'b', 'c'], ['b', 'c', 'd'], ['a', 'd', 'e', 'f']]),
+        uniqLists([
+          ['a', 'b', 'c'],
+          ['b', 'c', 'd'],
+          ['a', 'd', 'e', 'f'],
+        ]),
         [['a', 'b', 'c'], ['d'], ['e', 'f']]
       );
     });

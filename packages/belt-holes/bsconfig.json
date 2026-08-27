@@ -1,29 +1,19 @@
-// This is the configuration file used by BuckleScript's build system bsb. Its documentation lives here: http://bucklescript.github.io/bucklescript/docson/#build-schema.json
-// BuckleScript comes with its own parser for bsconfig.json, which is normal JSON, with the extra support of comments and trailing commas.
 {
   "name": "belt-holes",
-  "version": "0.29.0",
   "sources": [
     {
-      "dir" : "src",
-      "subdirs" : true
-    },
-    {
-      "dir" : "test",
-      "type" : "dev"
+      "dir": "src",
+      "subdirs": true
     }
   ],
   "package-specs": {
-    "module": "commonjs",
+    "module": "esmodule",
     "in-source": true
   },
   "suffix": ".bs.js",
-  "bs-dependencies": [
-  ],
-  "bs-dev-dependencies": ["@glennsl/bs-jest"],
+  "dependencies": [],
   "warnings": {
-    "error" : "+a"
+    "error": "+a"
   },
-  "namespace": false,
-  "refmt": 3
+  "namespace": false
 }

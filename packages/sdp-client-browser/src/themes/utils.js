@@ -3,12 +3,12 @@ import * as R from 'ramda';
 // applyTheme - Sets CSS variables for theme colors
 export const applyTheme = (colors) => {
   if (!colors || typeof document === 'undefined') return;
-  
+
   // Normalize color keys to match our CSS variable names
   const cssVariableMap = {
     // Primary colors
     primary: '--theme-color-primary',
-    secondary: '--theme-color-secondary', 
+    secondary: '--theme-color-secondary',
     accent: '--theme-color-accent',
     success: '--theme-color-success',
     warning: '--theme-color-warning',
@@ -31,7 +31,7 @@ export const applyTheme = (colors) => {
     borderColor: '--theme-border-color',
     borderRadius: '--theme-border-radius',
     shadow: '--theme-shadow',
-    
+
     // Canvas
     canvasBg: '--theme-canvas-bg',
     canvasGridlines: '--theme-canvas-gridlines',
@@ -70,7 +70,7 @@ export const applyTheme = (colors) => {
     inputBg: '--theme-input-bg',
     inputText: '--theme-input-text',
     inputBorder: '--theme-input-border',
-    
+
     // Buttons
     darkButtonBg: '--theme-button-dark-bg',
     darkButtonHoverBg: '--theme-button-dark-hover-bg',
@@ -93,7 +93,7 @@ export const applyTheme = (colors) => {
     // Status indicators
     statusSuccess: '--theme-status-success',
     statusWarning: '--theme-status-warning',
-    statusDanger: '--theme-status-danger'
+    statusDanger: '--theme-status-danger',
   };
 
   R.forEachObjIndexed((value, key) => {
@@ -107,11 +107,11 @@ export const applyTheme = (colors) => {
 // resetTheme - Resets all theme variables to their defaults
 export const resetTheme = () => {
   if (typeof document === 'undefined') return;
-  
+
   // Reset all CSS variables to their default values as defined in the base.css file
   const defaultValues = {
     primary: '#3b82f6',
-    secondary: '#64748b', 
+    secondary: '#64748b',
     accent: '#ff6b6b',
     success: '#10b981',
     warning: '#f59e00',
@@ -170,9 +170,9 @@ export const resetTheme = () => {
     chromeLightBg: '#f1f5f9',
     statusSuccess: '#10b981',
     statusWarning: '#f59e00',
-    statusDanger: '#ef4444'
+    statusDanger: '#ef4444',
   };
-  
+
   R.forEachObjIndexed((value, key) => {
     const cssVar = `--theme-${key}`;
     document.documentElement.style.setProperty(cssVar, value);
@@ -182,15 +182,14 @@ export const resetTheme = () => {
 // getThemeStyles - Get CSS variables string for use in themes
 export const getThemeStyles = (colors) => {
   if (!colors) return '';
-  
+
   const colorVars = R.toPairs(colors)
     .map(([key, value]) => `--theme-${key}: ${value}`)
     .join('\n');
-  
+
   return `
     :root {
       ${colorVars}
     }
   `;
 };
-

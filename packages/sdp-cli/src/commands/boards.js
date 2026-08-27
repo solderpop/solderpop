@@ -1,26 +1,19 @@
 /* eslint-disable no-param-reassign */
 import { exit } from 'process';
-import {
-  compose,
-  concat,
-  filter,
-  map,
-  none,
-  pluck,
-  prop,
-  sortBy,
-  startsWith,
-} from 'ramda';
+import R from 'ramda';
 import asTable from 'as-table';
 import * as xdb from 'sdp-deploy-bin';
-import BaseCommand from '../baseCommand';
-import { resolveBundledWorkspacePath } from '../paths';
+import BaseCommand from '../baseCommand.js';
+import { resolveBundledWorkspacePath } from '../paths.js';
+
+const { compose, concat, filter, map, none, pluck, prop, sortBy, startsWith } =
+  R;
 
 const mergeAvailableInstalled = (available, installed) => {
   const fqbns = pluck('fqbn', installed);
   return concat(
     installed,
-    compose(filter(el => none(startsWith(el.package))(fqbns)))(available)
+    compose(filter((el) => none(startsWith(el.package))(fqbns)))(available)
   );
 };
 
@@ -39,15 +32,17 @@ class BoardsCommand extends BaseCommand {
       );
 
       const boards = compose(
-        map(el => ({
+        map((el) => ({
           'Board Name': el.name,
           FQBN: el.fqbn || `${el.package} [not installed]`,
         })),
         sortBy(prop('name')),
-        b => mergeAvailableInstalled(b.available, b.installed)
+        (b) => mergeAvailableInstalled(b.available, b.installed)
       )(await xdb.listBoards(resolveBundledWorkspacePath(), workspace, aCli));
 
-      const rows = quiet ? map(b => [b['Board Name'], b.FQBN])(boards) : boards;
+      const rows = quiet
+        ? map((b) => [b['Board Name'], b.FQBN])(boards)
+        : boards;
 
       const table = process.stdout.columns
         ? asTable.configure({ maxTotalWidth: process.stdout.columns })(rows)

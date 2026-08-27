@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
@@ -7,25 +7,27 @@ import { bindActionCreators } from 'redux';
 import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu';
 import { Icon } from 'react-fa';
 import { foldMaybe } from 'sdp-func-tools';
-import { Maybe } from 'ramda-fantasy';
+import RamdaFantasy from 'ramda-fantasy';
 
-import { LOG_TAB_TYPE } from '../constants';
-import { PANEL_IDS } from '../../editor/constants';
-import * as selectors from '../selectors';
-import { addError, addConfirmation } from '../../messages/actions';
-import * as DA from '../actions';
+import { LOG_TAB_TYPE } from '../constants.js';
+import { PANEL_IDS } from '../../editor/constants.js';
+import * as selectors from '../selectors.js';
+import { addError, addConfirmation } from '../../messages/actions.js';
+import * as DA from '../actions.js';
 import {
   LOG_COPIED,
   LOG_COPY_NOT_SUPPORTED,
   logCopyError,
   logSaveError,
-} from '../messages';
+} from '../messages.js';
 
-import Log from './Log';
-import SerialInput from '../components/SerialInput';
+import Log from './Log.jsx';
+import SerialInput from '../components/SerialInput.jsx';
 
-import * as EditorSelectors from '../../editor/selectors';
-import * as EditorActions from '../../editor/actions';
+import * as EditorSelectors from '../../editor/selectors.js';
+import * as EditorActions from '../../editor/actions.js';
+
+const { Maybe } = RamdaFantasy;
 
 const contextMenuAttrs = {
   className: 'contextmenu filter-button',
@@ -34,7 +36,8 @@ const contextMenuAttrs = {
 const DEPLOYMENT_PANEL_FILTER_CONTEXT_MENU_ID =
   'DEPLOYMENT_PANEL_FILTER_CONTEXT_MENU_ID';
 
-const checkmark = active => (active ? <span className="state">✔</span> : null);
+const checkmark = (active) =>
+  active ? <span className="state">✔</span> : null;
 
 const TAB_NAMES = {
   [LOG_TAB_TYPE.INSTALLER]: 'Installer',
@@ -71,7 +74,7 @@ class Debugger extends React.PureComponent {
       () => {
         this.props.actions.addConfirmation(LOG_COPIED);
       },
-      err => {
+      (err) => {
         this.props.actions.addError(logCopyError(err));
       }
     );
@@ -79,9 +82,10 @@ class Debugger extends React.PureComponent {
 
   onSaveLogClicked() {
     const tabLabel = TAB_NAMES[this.props.currentTab];
-    const defaultFilename = R.compose(R.concat(R.__, '-log.txt'), R.toLower)(
-      tabLabel
-    );
+    const defaultFilename = R.compose(
+      R.concat(R.__, '-log.txt'),
+      R.toLower
+    )(tabLabel);
 
     try {
       const data = new window.Blob([this.props.log], { type: 'text/plain' });
@@ -100,16 +104,13 @@ class Debugger extends React.PureComponent {
   }
 
   renderControlsForExpandedState() {
-    const {
-      isExpanded,
-      isCapturingDebuggerProtocolMessages,
-      actions,
-    } = this.props;
+    const { isExpanded, isCapturingDebuggerProtocolMessages, actions } =
+      this.props;
 
     if (!isExpanded) return null;
 
     return (
-      <React.Fragment>
+      <>
         <button
           className="clear-log-button"
           onClick={actions.clearLog}
@@ -130,14 +131,14 @@ class Debugger extends React.PureComponent {
             Watched Values
           </MenuItem>
         </ContextMenu>
-      </React.Fragment>
+      </>
     );
   }
 
   renderTabActions() {
     const isDisabled = R.isEmpty(this.props.log);
     return (
-      <React.Fragment>
+      <>
         <li role="menuitem" key="save" className="tab-action">
           <Icon
             name="save"
@@ -160,7 +161,7 @@ class Debugger extends React.PureComponent {
             className="copy-log"
           />
         </li>
-      </React.Fragment>
+      </>
     );
   }
 
@@ -170,7 +171,7 @@ class Debugger extends React.PureComponent {
     return (
       <ul role="menu" className="tab-selector">
         {this.renderTabActions()}
-        {TAB_ORDER.map(tabName => (
+        {TAB_ORDER.map((tabName) => (
           <li // eslint-disable-line jsx-a11y/no-static-element-interactions
             role="menuitem"
             key={tabName}
@@ -202,7 +203,7 @@ class Debugger extends React.PureComponent {
 
     const uploadProgress = foldMaybe(
       null,
-      progress => (
+      (progress) => (
         <div className="progress-trail">
           <div
             className="progress-line"
@@ -236,7 +237,7 @@ class Debugger extends React.PureComponent {
                   className="abort-process-button"
                   name="ban"
                   title="Abort Test"
-                  onClickCapture={e => {
+                  onClickCapture={(e) => {
                     e.stopPropagation();
                     actions.abortTabtest();
                   }}
@@ -249,7 +250,7 @@ class Debugger extends React.PureComponent {
                   className="abort-process-button"
                   name="ban"
                   title="Stop Simulation"
-                  onClickCapture={e => {
+                  onClickCapture={(e) => {
                     e.stopPropagation();
                     actions.abortSimulation();
                   }}
@@ -262,7 +263,7 @@ class Debugger extends React.PureComponent {
                   className="abort-process-button"
                   name="ban"
                   title="Stop Session"
-                  onClickCapture={e => {
+                  onClickCapture={(e) => {
                     e.stopPropagation();
                     stopDebuggerSession();
                   }}
@@ -299,7 +300,7 @@ class Debugger extends React.PureComponent {
         </div>
 
         {isExpanded ? (
-          <React.Fragment>
+          <>
             {this.renderTabSelector()}
             <div className="container">
               <Log compact={isDebuggerTab} doNotSkipLines={isResizing} />
@@ -310,7 +311,7 @@ class Debugger extends React.PureComponent {
                 />
               ) : null}
             </div>
-          </React.Fragment>
+          </>
         ) : null}
       </div>
     );
@@ -353,7 +354,7 @@ const mapStateToProps = R.applySpec({
 const toggleDeploymentPane = () =>
   EditorActions.togglePanel(PANEL_IDS.DEPLOYMENT);
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(
     {
       toggleDebugger: toggleDeploymentPane,

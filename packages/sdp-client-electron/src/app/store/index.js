@@ -1,9 +1,9 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import { bindActionCreators } from 'redux';
 
-import createStore from './store';
-import * as Actions from './actions';
-import * as Selectors from './selectors';
+import createStore from './store.js';
+import * as Actions from './actions.js';
+import * as Selectors from './selectors.js';
 
 export default () => {
   const store = createStore({});
@@ -34,6 +34,13 @@ export default () => {
     // The similar thing as `dispatch`, but its just a Map with
     // functions, that could select some data from State.
     // Motivation to do this is the same as in the dispatch method.
-    select: R.map(fn => () => fn(store.getState()), Selectors),
+    //
+    // `R.map` dispatches on `Object.prototype.toString.call(functor)`,
+    // which reports a real ESM module namespace object as
+    // `[object Module]`, not `[object Object]` -- so it silently falls
+    // through to R.map's array-like branch instead of its object-map
+    // branch. Spreading into a plain object first restores the
+    // `[object Object]` tag Ramda expects.
+    select: R.map((fn) => () => fn(store.getState()), { ...Selectors }),
   };
 };

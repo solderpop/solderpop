@@ -4,15 +4,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Root } from 'sdp-client';
 
-import App from './containers/App';
+import App from './containers/App.jsx';
 import tutorialProject from '../tutorialProject.json';
 
 if (process.env.WHY_DID_YOU_UPDATE) {
-  // silence no-extraneous-dependencies and global-require warnings
-  // eslint-disable-next-line
-  const { whyDidYouUpdate } = require('why-did-you-update');
-
-  whyDidYouUpdate(React);
+  // eslint-disable-next-line import/no-extraneous-dependencies
+  import('why-did-you-update').then(({ whyDidYouUpdate }) => {
+    whyDidYouUpdate(React);
+  });
 }
 
 ReactDOM.render(

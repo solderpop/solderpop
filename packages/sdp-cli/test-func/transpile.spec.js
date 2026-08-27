@@ -1,15 +1,17 @@
 import { test } from '@oclif/test';
-import { assert } from 'chai';
+import chai from 'chai';
 import path from 'path';
 import process from 'process';
 import fs from 'fs-extra';
-import { bundledWorkspacePath, createWorkingDirectory } from './helpers';
+import { bundledWorkspacePath, createWorkingDirectory } from './helpers.js';
+
+const { assert } = chai;
 
 // save process.exit for unmocking
-const exit = process.exit;
+const { exit } = process;
 
 // save tty status
-const isTTY = process.stdout.isTTY;
+const { isTTY } = process.stdout;
 
 const its = (wd, outCppPath) => {
   const myWSPath = path.resolve(wd, 'workspace');
@@ -21,7 +23,7 @@ const its = (wd, outCppPath) => {
     .command(['transpile', `--workspace=${myWSPath}`])
     .it(
       `cannot find project without argument, but creates workspace, stderr , non-zero exit code`,
-      async ctx => {
+      async (ctx) => {
         assert.isOk(
           await fs.pathExists(path.resolve(myWSPath, '.xodworkspace')),
           'workspace should be created'
@@ -44,7 +46,7 @@ const its = (wd, outCppPath) => {
     ])
     .it(
       'fails when wrong path to project, workspace from ENV, exits with non-zero code',
-      ctx => {
+      (ctx) => {
         assert.equal(ctx.stdout, '', 'stdout must be empty');
         assert.match(
           ctx.stderr,
@@ -58,7 +60,7 @@ const its = (wd, outCppPath) => {
   stdMock
     .env({ XOD_WORKSPACE: myWSPath })
     .command(['transpile', projectSrcPath, 'asdfasdfasdfasdfasdfasdfasdf'])
-    .it('fails when wrong patch name, exits with non-zero code', ctx => {
+    .it('fails when wrong patch name, exits with non-zero code', (ctx) => {
       assert.equal(ctx.stdout, '', 'stdout must be empty');
       assert.match(
         ctx.stderr,
@@ -73,7 +75,7 @@ const its = (wd, outCppPath) => {
     .command(['transpile', `--output=${outCppPath}`, projectSrcPath])
     .it(
       'transpiles project (default patchname - main) to output path, stderr with messages, stdout is empty, exit with zero code',
-      async ctx => {
+      async (ctx) => {
         assert.isOk(
           await fs.pathExists(outCppPath),
           'output file should be created'
@@ -90,7 +92,7 @@ const its = (wd, outCppPath) => {
     .command(['transpile', '--quiet', projectSrcPath, '@/main'])
     .it(
       'transpiles project to output path (from ENV), stderr is empty, stdout is empty, exit with zero code',
-      async ctx => {
+      async (ctx) => {
         assert.isOk(
           await fs.pathExists(outCppPath),
           'output file should be created'
@@ -106,7 +108,7 @@ const its = (wd, outCppPath) => {
     .command(['transpile', projectSrcPath])
     .it(
       'transpiles project (default patchname - main) to stdout, stderr with messages, exit with zero code',
-      ctx => {
+      (ctx) => {
         assert.include(
           ctx.stdout,
           'namespace xod {',
@@ -127,7 +129,7 @@ const its = (wd, outCppPath) => {
     .command(['transpile', '--debug', projectSrcPath])
     .it(
       'transpile project (default patchname - main) to stdout with debug on, stderr with messages, exit with zero code',
-      ctx => {
+      (ctx) => {
         assert.include(
           ctx.stdout,
           'namespace xod {',
@@ -144,7 +146,7 @@ const its = (wd, outCppPath) => {
     );
 };
 
-describe('xodc transpile', () => {
+describe('sdpc transpile', () => {
   // working directory and output file
   const wd = createWorkingDirectory('transpile');
   const outCppPath = path.resolve(wd, 'out.cpp');
@@ -166,7 +168,7 @@ describe('xodc transpile', () => {
   describe('common', () => {
     // mock process.exit
     beforeEach(() => {
-      process.exit = code => {
+      process.exit = (code) => {
         process.exitCode = code;
       };
     });
@@ -183,7 +185,7 @@ describe('xodc transpile', () => {
       .catch(/EEXIT: 0/)
       .it(
         `shows help in stdout, doesn't print to stderr, exits with 0`,
-        ctx => {
+        (ctx) => {
           assert.include(
             ctx.stdout,
             'ENTRYPOINT',
@@ -210,7 +212,7 @@ describe('xodc transpile', () => {
       .catch(/EEXIT: 0/)
       .it(
         `shows version in stdout, doesn't print to stderr and exits with 0`,
-        ctx => {
+        (ctx) => {
           assert.include(ctx.stdout, 'sdp-cli', 'version string not found');
           assert.equal(ctx.stderr, '', 'stderr should be emply');
         }
@@ -225,7 +227,7 @@ describe('xodc transpile', () => {
 
     // mock process.exit
     beforeEach(() => {
-      process.exit = code => {
+      process.exit = (code) => {
         process.exitCode = code;
       };
     });
@@ -248,7 +250,7 @@ describe('xodc transpile', () => {
 
     // mock process.exit
     beforeEach(() => {
-      process.exit = code => {
+      process.exit = (code) => {
         process.exitCode = code;
       };
     });

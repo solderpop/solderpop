@@ -2,20 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import ReactCodeMirror from 'react-codemirror';
-import '../codemirrorXodMode';
+import '../codemirrorXodMode.js';
 
 // See comments below
 let codeMirror = null;
 let refreshed = false;
 
-const CppImplementationEditor = ({
+function CppImplementationEditor({
   patchPath,
   isActive,
   source,
   isInDebuggerTab,
   onChange,
   onClose,
-}) => {
+}) {
   const options = {
     lineNumbers: true,
     readOnly: isInDebuggerTab,
@@ -23,7 +23,7 @@ const CppImplementationEditor = ({
     theme: 'xod',
     indentUnit: 4,
     extraKeys: {
-      Tab: CM => {
+      Tab: (CM) => {
         if (CM.somethingSelected()) {
           const sel = CM.getSelection('\n');
           // Indent only if there are multiple lines selected, or if the selection spans a full line
@@ -43,7 +43,7 @@ const CppImplementationEditor = ({
           CM.execCommand('insertSoftTab');
         }
       },
-      'Shift-Tab': CM => CM.indentSelection('subtract'),
+      'Shift-Tab': (CM) => CM.indentSelection('subtract'),
       'Ctrl-/': 'toggleComment',
       'Cmd-/': 'toggleComment',
     },
@@ -90,14 +90,14 @@ const CppImplementationEditor = ({
           value={source}
           onChange={onChange}
           options={options}
-          ref={el => {
+          ref={(el) => {
             codeMirror = codeMirror || el;
           }}
         />
       </div>
     </div>
   );
-};
+}
 
 CppImplementationEditor.propTypes = {
   patchPath: PropTypes.string.isRequired,

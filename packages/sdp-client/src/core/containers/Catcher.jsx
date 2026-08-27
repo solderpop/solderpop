@@ -1,14 +1,14 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
-import storeShape from 'react-redux/src/utils/storeShape';
+import storeShape from 'react-redux/src/utils/storeShape.js';
 import { Icon } from 'react-fa';
 import cls from 'classnames';
 
-import { recoverState } from '../actions';
-import CloseButton from '../components/CloseButton';
-import { getUtmForumUrl } from '../../utils/urls';
+import { recoverState } from '../actions.js';
+import CloseButton from '../components/CloseButton.jsx';
+import { getUtmForumUrl } from '../../utils/urls.js';
 
 class Catcher extends React.Component {
   constructor(props) {
@@ -73,7 +73,7 @@ class Catcher extends React.Component {
     ].join('\n');
 
     const stableStateReport = R.compose(
-      stableState => JSON.stringify(stableState, null, 2),
+      (stableState) => JSON.stringify(stableState, null, 2),
       R.assocPath(['project', 'apiKey'], 'SECRET'),
       R.assocPath(['user', 'grant'], 'SECRET'),
       R.omit(['lastSavedProject', 'projectHistory'])
@@ -155,7 +155,7 @@ class Catcher extends React.Component {
           </p>
           <textarea
             readOnly
-            ref={el => (this.textareaRef = el)}
+            ref={(el) => (this.textareaRef = el)}
             onFocus={this.selectAllTextareaContent}
             value={this.getErrorReport()}
           />
@@ -168,12 +168,14 @@ class Catcher extends React.Component {
     const childElement = React.Children.only(this.props.children);
 
     return (
-      <React.Fragment>
+      <>
         {this.renderErrorReport()}
         <Provider store={this.props.store}>
-          {React.cloneElement(childElement, { ref: el => (this.appRef = el) })}
+          {React.cloneElement(childElement, {
+            ref: (el) => (this.appRef = el),
+          })}
         </Provider>
-      </React.Fragment>
+      </>
     );
   }
 }

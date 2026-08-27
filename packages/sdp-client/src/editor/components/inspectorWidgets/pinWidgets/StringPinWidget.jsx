@@ -1,11 +1,11 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { enquote, unquote } from 'sdp-func-tools';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import cls from 'classnames';
 
-import PinWidget from './PinWidget';
+import PinWidget from './PinWidget.jsx';
 
 const isStringModeValue = R.startsWith('"');
 
@@ -17,7 +17,7 @@ const StringWidget = compose(
   // because we're changing it's value on focus
   withState('selection', 'setSelection', [0, 0]),
   withState('inputRef', 'setInputRef', null),
-  withState('isStringMode', 'setStringMode', props =>
+  withState('isStringMode', 'setStringMode', (props) =>
     isStringModeValue(props.value)
   ),
   // We have to handle it in case we just added a leading quote
@@ -33,11 +33,11 @@ const StringWidget = compose(
     },
   }),
   withHandlers({
-    onChangeHandler: props => event => {
-      const value = event.target.value;
+    onChangeHandler: (props) => (event) => {
+      const { value } = event.target;
       props.onChange(props.isStringMode ? enquote(value) : value);
     },
-    onKeyDown: props => event => {
+    onKeyDown: (props) => (event) => {
       if (
         event.target.selectionStart === 0 &&
         event.target.selectionEnd === 0
@@ -63,20 +63,20 @@ const StringWidget = compose(
 
       props.onKeyDown(event);
     },
-    onFocus: props => event => {
+    onFocus: (props) => (event) => {
       props.setSelection([
         event.target.selectionStart,
         event.target.selectionEnd,
       ]);
       props.setFocus(true);
     },
-    onBlur: props => _ => {
+    onBlur: (props) => (_) => {
       props.setFocus(false);
       props.setSelection([0, 0]);
       props.onBlur();
     },
   })
-)(props => {
+)((props) => {
   const showQuotes = props.focused && props.isStringMode;
   const wrapperClassNames = cls('inspector-input-wrapper', {
     'with-fake-quotes': showQuotes,

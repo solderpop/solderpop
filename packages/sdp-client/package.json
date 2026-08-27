@@ -1,12 +1,13 @@
 {
   "name": "sdp-client",
+  "type": "module",
   "version": "0.38.0",
   "description": "SolderPop IDE: Client application",
   "scripts": {
-    "build": "babel src/ -d dist/ --source-maps",
+    "build": "babel src/ -d dist/ --source-maps --keep-file-extension",
     "clean:dist": "rimraf ./dist",
     "dev": "yarn run build --watch",
-    "test": "mocha test --recursive",
+    "test": "NODE_OPTIONS=\"--import ./tools/registerJsxLoader.mjs\" mocha --require ../../tools/babel-register.js --color --timeout 10000 test --recursive",
     "test:watch": "yarn run test --watch",
     "storybook": "start-storybook -p 9001 -c .storybook"
   },
@@ -73,9 +74,28 @@
     "sdp-tabtest": "^0.38.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.29.7",
+    "@babel/core": "^7.29.7",
+    "@babel/preset-env": "^7.29.7",
+    "@babel/preset-react": "^7.29.7",
+    "@babel/register": "^7.29.7",
     "@storybook/addon-actions": "^3.2.17",
     "@storybook/react": "^3.2.17",
+    "autoprefixer": "^10.5.4",
+    "babel-loader": "^10.1.1",
     "chai": "^4.1.2",
-    "redux-mock-store": "^1.2.3"
+    "copy-webpack-plugin": "^14.0.0",
+    "css-loader": "^7.1.4",
+    "postcss": "^8.5.26",
+    "postcss-loader": "^8.2.1",
+    "redux-mock-store": "^1.2.3",
+    "sass": "^1.102.0",
+    "sass-loader": "^17.0.0",
+    "sdp-client-browser": "^0.38.0",
+    "source-map-loader": "^5.0.0",
+    "style-loader": "^4.0.0",
+    "terser-webpack-plugin": "^5.6.1",
+    "webpack": "^5.109.2",
+    "worker-loader": "^3.0.8"
   }
 }

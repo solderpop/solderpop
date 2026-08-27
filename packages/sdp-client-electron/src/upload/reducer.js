@@ -1,7 +1,7 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import client from 'sdp-client';
-import { SELECT_SERIAL_PORT, UPLOAD } from '../upload/actionTypes';
-import { UPGRADE_ARDUINO_DEPENDECIES } from '../shared/events';
+import { SELECT_SERIAL_PORT, UPLOAD } from './actionTypes.js';
+import { UPGRADE_ARDUINO_DEPENDECIES } from '../shared/events.js';
 
 const initialState = {
   selectedSerialPort: null,

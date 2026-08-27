@@ -1,6 +1,6 @@
-import * as R from 'ramda';
-import { HOTKEY, ELECTRON_ACCELERATOR, COMMAND } from './constants';
-import { isMacOS } from './browser';
+import R from 'ramda';
+import { HOTKEY, ELECTRON_ACCELERATOR, COMMAND } from './constants.js';
+import { isMacOS } from './browser.js';
 
 const rawItems = {
   file: {
@@ -167,6 +167,9 @@ const rawItems = {
   forum: {
     label: 'Forum',
   },
+  about: {
+    label: 'About SolderPop IDE...',
+  },
 };
 
 const containsCmd = R.contains('command');
@@ -201,13 +204,14 @@ export const filterOsHotkeys = R.compose(
   R.unless(R.is(Array), R.of)
 );
 
-const assignHotkeys = menuItem =>
+const assignHotkeys = (menuItem) =>
   R.when(
     R.prop('command'),
     R.merge({
-      hotkey: R.compose(filterOsHotkeys, R.propOr([], menuItem.command))(
-        HOTKEY
-      ),
+      hotkey: R.compose(
+        filterOsHotkeys,
+        R.propOr([], menuItem.command)
+      )(HOTKEY),
       accelerator: ELECTRON_ACCELERATOR[menuItem.command],
     }),
     menuItem

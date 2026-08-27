@@ -2,13 +2,13 @@ import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { NODE_CORNER_RADIUS } from '../../nodeLayout';
-import { getRenderablePinType } from '../../utils';
+import { NODE_CORNER_RADIUS } from '../../nodeLayout.js';
+import { getRenderablePinType } from '../../utils.js';
 
 const INPUT_PINKEY = '__in__';
 const OUTPUT_PINKEY = '__out__';
 
-const JumperNodeBody = ({ pins }) => {
+function JumperNodeBody({ pins }) {
   const inConnected = R.path([INPUT_PINKEY, 'isConnected'], pins);
   const outConnected = R.path([OUTPUT_PINKEY, 'isConnected'], pins);
 
@@ -40,7 +40,7 @@ const JumperNodeBody = ({ pins }) => {
       />
     </g>
   );
-};
+}
 
 JumperNodeBody.propTypes = {
   pins: PropTypes.object,

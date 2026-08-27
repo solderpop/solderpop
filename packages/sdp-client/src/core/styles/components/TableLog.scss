@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 @mixin header-vertical-centered {
   height: 22px;
   padding: 8px 0;

@@ -1,12 +1,12 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import PinOverlay from './PinOverlay';
-import { noop } from '../../utils/ramda';
-import { isPinSelected } from '../../editor/utils';
+import PinOverlay from './PinOverlay.jsx';
+import { noop } from '../../utils/ramda.js';
+import { isPinSelected } from '../../editor/utils.js';
 
-import nodeHoverContextType from '../../editor/nodeHoverContextType';
+import nodeHoverContextType from '../../editor/nodeHoverContextType.js';
 
 class NodePinsOverlay extends React.Component {
   constructor(props) {
@@ -50,7 +50,7 @@ class NodePinsOverlay extends React.Component {
         data-label={nodeLabel} // for func tests
       >
         <g className="pins">
-          {pinsArr.map(pin => (
+          {pinsArr.map((pin) => (
             <g key={pin.key}>
               <PinOverlay
                 {...pin}

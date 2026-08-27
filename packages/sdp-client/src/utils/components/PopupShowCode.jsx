@@ -10,6 +10,7 @@ class PopupShowCode extends React.PureComponent {
 
     this.assignPopupRef = this.assignPopupRef.bind(this);
   }
+
   componentWillReceiveProps(nextProps) {
     if (!this.props.isVisible && nextProps.isVisible) {
       this.show();
@@ -45,7 +46,8 @@ class PopupShowCode extends React.PureComponent {
           <textarea className="Codebox" value={this.props.code} readOnly />
           <div className="ModalBody ModalBody--light">
             <div className="ModalFooter">
-              This code could be uploaded onto your device.<br />
+              This code could be uploaded onto your device.
+              <br />
               Just connect your device via USB and click on &quot;Upload&quot;
               button.
             </div>

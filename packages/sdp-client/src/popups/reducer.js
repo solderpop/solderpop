@@ -1,17 +1,19 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
-import initialState from './state';
-import { POPUP_ID } from './constants';
+import initialState from './state.js';
+import { POPUP_ID } from './constants.js';
 import {
   PATCH_CREATE_REQUESTED,
   PATCH_RENAME_REQUESTED,
   PATCH_DELETE_REQUESTED,
-} from '../projectBrowser/actionTypes';
+} from '../projectBrowser/actionTypes.js';
 import {
   HIDE_ALL_POPUPS,
   SHOW_PROJECT_PREFERENCES,
   HIDE_PROJECT_PREFERENCES,
-} from './actionTypes';
+  SHOW_ABOUT,
+  HIDE_ABOUT,
+} from './actionTypes.js';
 
 import {
   PATCH_ADD,
@@ -26,9 +28,8 @@ import {
   PROJECT_UPDATE_META,
   PROJECT_CREATE,
   PROJECT_OPEN,
-  PROJECT_RENAME,
-} from '../project/actionTypes';
-import { SHOW_CODE_REQUESTED } from '../core/actionTypes';
+} from '../project/actionTypes.js';
+import { SHOW_CODE_REQUESTED } from '../core/actionTypes.js';
 
 // =============================================================================
 //
@@ -116,6 +117,11 @@ const popupsReducer = (state = initialState, action) => {
     case PROJECT_UPDATE_META:
       return hideOnePopup(POPUP_ID.EDITING_PROJECT_PREFERENCES, state);
 
+    case SHOW_ABOUT:
+      return showOnlyPopup(POPUP_ID.ABOUT, {}, state);
+    case HIDE_ABOUT:
+      return hideOnePopup(POPUP_ID.ABOUT, state);
+
     case PATCH_ADD:
       return hideOnePopup(POPUP_ID.CREATING_PATCH, state);
     case PATCH_RENAME:
@@ -127,8 +133,6 @@ const popupsReducer = (state = initialState, action) => {
       return hideOnePopup(POPUP_ID.CREATING_PROJECT, state);
     case PROJECT_OPEN:
       return hideOnePopup(POPUP_ID.OPENING_PROJECT, state);
-    case PROJECT_RENAME:
-      return hideOnePopup(POPUP_ID.RENAMING_PROJECT, state);
 
     case HIDE_ALL_POPUPS:
       return initialState;

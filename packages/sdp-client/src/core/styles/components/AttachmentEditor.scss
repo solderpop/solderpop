@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 @mixin scrollable-attachment($top, $scroll: scroll) {
   position: absolute;
   top: $top;

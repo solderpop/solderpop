@@ -6,11 +6,13 @@ import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 /* eslint-enable import/no-extraneous-dependencies */
 
-import { assert } from 'chai';
+import chai from 'chai';
 import R from 'ramda';
-import config from '../webpack.config.test';
+import config from '../webpack.config.test.cjs';
 
-import { PORT } from './server.config';
+import { PORT } from './server.config.js';
+
+const { assert } = chai;
 
 const globalVariables = R.pick(['browser', 'assert'], global);
 
@@ -23,7 +25,7 @@ const startServer = () =>
     compiler.plugin('done', () => {
       resolve(server);
     });
-    server.listen(PORT, 'localhost', err => {
+    server.listen(PORT, 'localhost', (err) => {
       if (err) {
         console.error(err); // eslint-disable-line no-console
         reject(err);

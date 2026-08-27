@@ -1,4 +1,0 @@
---require babel-register
---colors
---timeout=90000
---bail

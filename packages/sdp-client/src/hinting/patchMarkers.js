@@ -1,8 +1,8 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import * as XP from 'sdp-project';
 import { foldMaybe, isAmong } from 'sdp-func-tools';
-import * as PAT from '../project/actionTypes';
-import * as EAT from '../editor/actionTypes';
+import * as PAT from '../project/actionTypes.js';
+import * as EAT from '../editor/actionTypes.js';
 
 // :: Action -> Boolean
 const isLoadingProjectAction = R.propSatisfies(
@@ -38,7 +38,7 @@ const doesMarkerNodePasted = R.allPass([
 // :: Action -> Boolean
 const doesAnyNodeDeleted = R.allPass([
   R.propEq('type', PAT.BULK_DELETE_ENTITIES),
-  R.pathSatisfies(nodeList => nodeList.length > 0, ['payload', 'nodeIds']),
+  R.pathSatisfies((nodeList) => nodeList.length > 0, ['payload', 'nodeIds']),
 ]);
 
 // :: Action -> Boolean
@@ -61,7 +61,7 @@ export const shallUpdatePatchMarkers = R.anyPass([
 ]);
 
 // :: Patch -> PatchMarkers
-const getPatchMarkersForPatch = patch => ({
+const getPatchMarkersForPatch = (patch) => ({
   utility: XP.isUtilityPatch(patch),
   deprecated: XP.isDeprecatedPatch(patch),
 });

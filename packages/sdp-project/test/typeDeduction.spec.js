@@ -1,15 +1,19 @@
-import { assert } from 'chai';
-import { Either } from 'ramda-fantasy';
+import chai from 'chai';
+import RamdaFantasy from 'ramda-fantasy';
 
-import * as Helper from './helpers';
+import * as Helper from './helpers.js';
 import {
   getPatchByPathUnsafe,
   assocPatch,
   listGenuinePatches,
-} from '../src/project';
-import { PIN_TYPE } from '../src/constants';
+} from '../src/project.js';
+import { PIN_TYPE } from '../src/constants.js';
 
-import { autoresolveTypes, deducePinTypes } from '../src';
+import { autoresolveTypes, deducePinTypes } from '../src/index.js';
+
+const { assert } = chai;
+
+const { Either } = RamdaFantasy;
 
 describe('deducePinTypes', () => {
   const project = Helper.loadXodball('./fixtures/pin-types-deduction.xodball');
@@ -223,12 +227,15 @@ describe('autoresolveTypes', () => {
       './fixtures/abstract-nodes-resolution.resolved.xodball'
     );
 
-    Helper.expectEitherRight(actualResolvedProject => {
-      assert.sameDeepMembers(
-        listGenuinePatches(actualResolvedProject),
-        listGenuinePatches(expectedResolvedProject)
-      );
-    }, autoresolveTypes('@/case1-ok', project));
+    Helper.expectEitherRight(
+      (actualResolvedProject) => {
+        assert.sameDeepMembers(
+          listGenuinePatches(actualResolvedProject),
+          listGenuinePatches(expectedResolvedProject)
+        );
+      },
+      autoresolveTypes('@/case1-ok', project)
+    );
   });
   it('detects missing specializations', () => {
     Helper.expectEitherError(
@@ -257,36 +264,45 @@ describe('autoresolveTypes', () => {
       './fixtures/abstract-nodes-resolution.resolved-variadics.xodball'
     );
 
-    Helper.expectEitherRight(actualResolvedProject => {
-      assert.sameDeepMembers(
-        listGenuinePatches(actualResolvedProject),
-        listGenuinePatches(expectedResolvedProject)
-      );
-    }, autoresolveTypes('@/case3-variadics', project));
+    Helper.expectEitherRight(
+      (actualResolvedProject) => {
+        assert.sameDeepMembers(
+          listGenuinePatches(actualResolvedProject),
+          listGenuinePatches(expectedResolvedProject)
+        );
+      },
+      autoresolveTypes('@/case3-variadics', project)
+    );
   });
   it('does not lose values bound to non-generic pins', () => {
     const expectedResolvedProject = Helper.loadXodball(
       './fixtures/abstract-nodes-resolution.resolved-bound-nongenerics.xodball'
     );
 
-    Helper.expectEitherRight(actualResolvedProject => {
-      assert.sameDeepMembers(
-        listGenuinePatches(actualResolvedProject),
-        listGenuinePatches(expectedResolvedProject)
-      );
-    }, autoresolveTypes('@/case4-bound-non-generic-pins', project));
+    Helper.expectEitherRight(
+      (actualResolvedProject) => {
+        assert.sameDeepMembers(
+          listGenuinePatches(actualResolvedProject),
+          listGenuinePatches(expectedResolvedProject)
+        );
+      },
+      autoresolveTypes('@/case4-bound-non-generic-pins', project)
+    );
   });
   it('resolves abstract nodes in patches that have no generic inputs', () => {
     const expectedResolvedProject = Helper.loadXodball(
       './fixtures/abstract-nodes-resolution.resolved-abstracts-inside-regular.xodball'
     );
 
-    Helper.expectEitherRight(actualResolvedProject => {
-      assert.sameDeepMembers(
-        listGenuinePatches(actualResolvedProject),
-        listGenuinePatches(expectedResolvedProject)
-      );
-    }, autoresolveTypes('@/case5-abstracts-deep-inside-regular-patches', project));
+    Helper.expectEitherRight(
+      (actualResolvedProject) => {
+        assert.sameDeepMembers(
+          listGenuinePatches(actualResolvedProject),
+          listGenuinePatches(expectedResolvedProject)
+        );
+      },
+      autoresolveTypes('@/case5-abstracts-deep-inside-regular-patches', project)
+    );
   });
 
   it('resolves custom types on generics', () => {
@@ -298,11 +314,14 @@ describe('autoresolveTypes', () => {
       './fixtures/custom-types.resolved.xodball'
     );
 
-    Helper.expectEitherRight(actualResolvedProject => {
-      assert.sameDeepMembers(
-        listGenuinePatches(actualResolvedProject),
-        listGenuinePatches(expectedResolvedProject)
-      );
-    }, autoresolveTypes('@/main', projectWithCustomTypes));
+    Helper.expectEitherRight(
+      (actualResolvedProject) => {
+        assert.sameDeepMembers(
+          listGenuinePatches(actualResolvedProject),
+          listGenuinePatches(expectedResolvedProject)
+        );
+      },
+      autoresolveTypes('@/main', projectWithCustomTypes)
+    );
   });
 });

@@ -1,10 +1,10 @@
-import * as R from 'ramda';
+import R from 'ramda';
 import $ from 'sanctuary-def';
 
 import * as XF from 'sdp-func-tools';
 import * as XP from 'sdp-project';
 
-import { SELECTION_ENTITY_TYPE } from './editor/constants';
+import { SELECTION_ENTITY_TYPE } from './editor/constants.js';
 
 /* Types are by convention starts with a capital leter, so: */
 /* eslint-disable new-cap */
