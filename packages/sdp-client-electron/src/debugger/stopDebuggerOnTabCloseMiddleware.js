@@ -1,7 +1,9 @@
 import client from 'sdp-client';
-import { ipcRenderer } from 'electron';
+import electron from 'electron';
 import { sendStopDebuggerSession } from './ipcActions.js';
 import { DEBUG_SESSION_STOPPED_ON_TAB_CLOSE } from '../shared/messages.js';
+
+const { ipcRenderer } = electron;
 
 export default (store) => (next) => (action) => {
   const state = store.getState();

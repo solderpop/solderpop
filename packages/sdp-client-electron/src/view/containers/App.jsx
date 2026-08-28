@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { HotKeys } from 'react-hotkeys';
 import EventListener from 'react-event-listener';
-import { ipcRenderer, shell } from 'electron';
+import electron from 'electron';
 import * as remoteElectron from '@electron/remote';
 
 import client from 'sdp-client';
@@ -95,6 +95,8 @@ import UpdateArduinoPackagesPopup from '../../arduinoDependencies/components/Upd
 import { checkArduinoDependencies } from '../../arduinoDependencies/runners.js';
 
 import { formatErrorMessage, formatLogError } from '../formatError.js';
+
+const { ipcRenderer, shell } = electron;
 
 const { app, dialog, Menu } = remoteElectron;
 const DEFAULT_CANVAS_WIDTH = 800;
@@ -624,7 +626,7 @@ class App extends client.App {
       return;
     }
 
-    this.saveAs(this.state.projectPath, false, true).catch(error =>
+    this.saveAs(this.state.projectPath, false, true).catch((error) =>
       this.showError(error)
     );
   }

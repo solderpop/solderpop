@@ -1,7 +1,9 @@
 import client from 'sdp-client';
-import { ipcRenderer } from 'electron';
+import electron from 'electron';
 
 import { UPDATE_IDE_MESSAGE_ID, downloadUpdate } from './autoupdate.js';
+
+const { ipcRenderer } = electron;
 
 export default () => (next) => (action) => {
   if (

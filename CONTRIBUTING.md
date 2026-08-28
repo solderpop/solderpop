@@ -86,7 +86,7 @@ To keep history clean we rebase topic branches rather than merge. Once you want 
 
     $ git checkout main
     $ git pull
-    $ git checkout <feature-branch-name>
+    $ git checkout <feature/branch-name>
     $ git rebase main
 
 Follow Git hints to resolve any conflicts.

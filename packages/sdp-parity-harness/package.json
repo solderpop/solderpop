@@ -1,0 +1,24 @@
+{
+  "name": "@sdp/parity-harness",
+  "version": "0.1.0",
+  "description": "SolderPop IDE: strangler-fig migration parity harness -- diffs an old JS implementation's output against a new TS/ReScript one via canonical JSON, so existing XOD test suites and the workspace/ xodball corpus can act as executable specs during the rewrite",
+  "type": "module",
+  "license": "AGPL-3.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean:dist": "rimraf ./dist",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@sdp/foundation": "workspace:^0.1.0"
+  },
+  "devDependencies": {
+    "rimraf": "^2.5.4",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

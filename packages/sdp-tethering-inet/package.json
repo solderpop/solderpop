@@ -5,7 +5,7 @@
   "scripts": {
     "refmt": "rescript format -all",
     "build:re": "rescript build",
-    "build": "yarn build:re",
+    "build": "pnpm build:re",
     "clean:dist": "rimraf ./lib ./src/**/*.bs.js",
     "dev": "rescript build -w",
     "test": "jest"
@@ -18,14 +18,14 @@
   "main": "src/AtInternet.bs.js",
   "dependencies": {
     "address": "^1.1.2",
-    "belt-holes": "^0.34.0",
+    "belt-holes": "workspace:^0.34.0",
     "internet-available": "^1.0.0",
-    "tcp-ping": "^0.1.1"
+    "tcp-ping": "^0.1.1",
+    "@rescript/runtime": "^12.3.0"
   },
   "devDependencies": {
     "@babel/core": "^8.0.1",
     "@babel/preset-env": "^8.0.2",
-    "@rescript/runtime": "^12.3.0",
     "babel-jest": "^24.9.0",
     "rescript": "^12.3.0",
     "ramda": "^0.24.1"
@@ -42,7 +42,15 @@
         "babel-jest",
         {
           "presets": [
-            ["@babel/preset-env", { "modules": "commonjs", "targets": { "node": "current" } }]
+            [
+              "@babel/preset-env",
+              {
+                "modules": "commonjs",
+                "targets": {
+                  "node": "current"
+                }
+              }
+            ]
           ]
         }
       ]

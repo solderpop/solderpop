@@ -18,7 +18,6 @@
   "devDependencies": {
     "@babel/core": "^8.0.1",
     "@babel/preset-env": "^8.0.2",
-    "@rescript/runtime": "^12.3.0",
     "babel-jest": "^24.9.0",
     "rescript": "^12.3.0"
   },
@@ -33,5 +32,8 @@
   "files": [
     "src",
     "bsconfig.json"
-  ]
+  ],
+  "dependencies": {
+    "@rescript/runtime": "^12.3.0"
+  }
 }

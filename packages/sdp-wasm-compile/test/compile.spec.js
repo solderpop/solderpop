@@ -60,7 +60,7 @@ describe('writeSources', () => {
       'main.cpp',
     ];
     await Promise.all(
-      shimFiles.map(async fileName => {
+      shimFiles.map(async (fileName) => {
         const contents = await fse.readFile(
           path.join(buildDir, fileName),
           'utf8'

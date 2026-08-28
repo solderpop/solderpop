@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { shell } from 'electron';
+import electron from 'electron';
 
 import client, { SolderpopLockup } from 'sdp-client';
+
+const { shell } = electron;
 
 const openDocs = () =>
   shell.openExternal(client.getUtmSiteUrl('/docs/', 'docs', 'about'));
@@ -33,7 +35,7 @@ class PopupAbout extends React.Component {
           className="theme-window about-window"
           role="dialog"
           aria-label="About SolderPop IDE"
-          onClick={e => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
         >
           <div className="theme-window-header">
             <span className="theme-window-title">About SolderPop IDE</span>

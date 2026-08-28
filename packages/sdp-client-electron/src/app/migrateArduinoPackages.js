@@ -10,9 +10,11 @@
 import path from 'path';
 import R from 'ramda';
 import fse from 'fs-extra';
-import { app } from 'electron';
+import electron from 'electron';
 
 import { ARDUINO_PACKAGES_DIRNAME } from 'sdp-deploy-bin';
+
+const { app } = electron;
 
 const OLD_PACKAGE_VERSIONS = {
   avr: '1.6.19',

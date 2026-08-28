@@ -1,5 +1,5 @@
 import path from 'path';
-import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import electron from 'electron';
 import * as remoteMain from '@electron/remote/main/index.js';
 import electronUpdater from 'electron-updater';
 import log from 'electron-log';
@@ -58,6 +58,8 @@ import {
 import createAppStore from './store/index.js';
 
 import { STATES, getEventNameWithState } from '../shared/eventStates.js';
+
+const { app, BrowserWindow, ipcMain, shell } = electron;
 
 // Main Process is real native ESM once compiled (package.json "type":
 // "module"), which has no `__dirname` global.

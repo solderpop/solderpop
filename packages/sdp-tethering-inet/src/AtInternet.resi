@@ -48,4 +48,4 @@ let subscribe: (t, string => unit) => unit
  * Creates AtInternet object, which has an internal state and
  * methods to work with the Internet.
  ")
-let create: (string => unit, string) => unit
+let create: (string => unit) => (string => unit)

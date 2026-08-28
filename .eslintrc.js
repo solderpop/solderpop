@@ -57,6 +57,11 @@ module.exports = {
     'import/extensions': ['error', 'ignorePackages', {
       js: 'always',
       jsx: 'always',
+      // TS source imports still write the eventual `.js` output
+      // extension (TS's own convention); the resolved file being .ts
+      // shouldn't force `./foo.ts` in the specifier.
+      ts: 'never',
+      tsx: 'never',
     }],
     'sdp-fp/max-composition-depth': ['error', {
       max: 11, // TODO: it should be lowered to 6
@@ -96,6 +101,8 @@ module.exports = {
         // *.test.js: the jest-based packages' naming convention (belt-holes,
         // sdp-tabtest, sdp-tethering-inet), never covered by *.spec.js above.
         '**/*.test.js',
+        // *.test.ts: same convention, TS packages (sdp-foundation onward).
+        '**/*.test.ts',
         // Everything else under test/ or test-func/: helper/fixture files
         // (e.g. test/utils.js) that don't match either spec pattern above
         // but are exactly as test-only as the specs that import them.
@@ -145,6 +152,11 @@ module.exports = {
     'react/no-array-index-key': 'off',
     'react/jsx-no-useless-fragment': 'off',
     'react/prop-types': 'off',
+    // Same deferral, different source: componentWillReceiveProps/
+    // componentWillUpdate/ReactDOM.render usage across the class-
+    // component codebase. Real fix is the hooks conversion (rewrite
+    // plan Phase 5), not a lint-config side effect.
+    'react/no-deprecated': 'off',
     // jsx-a11y went from ^2.2.2 to ^6.10.2 -- a jump of many years of new
     // accessibility rules (keyboard-equivalents for mouse/click handlers,
     // label/control association, autofocus, interactive-role rules).
@@ -179,6 +191,31 @@ module.exports = {
   },
 
   overrides: [
+    {
+      // TS files (introduced starting with the TS/ReScript rewrite, P0
+      // onward): typescript-eslint's parser + recommended rules layered
+      // on top of the same airbnb/prettier base above, not a replacement
+      // for it -- airbnb's JS rules above are deliberately tuned (see the
+      // comment block above) and still apply to every .js/.jsx file.
+      // Non-type-aware only for now (no parserOptions.project) -- flip on
+      // per-package once a package's tsconfig.json is stable enough to
+      // commit to as an eslint input.
+      files: ['**/*.ts', '**/*.tsx'],
+      parser: '@typescript-eslint/parser',
+      plugins: ['@typescript-eslint'],
+      extends: ['plugin:@typescript-eslint/recommended'],
+      settings: {
+        // import/no-unresolved otherwise can't follow TS's own convention
+        // of writing `./foo.js` in source while the file on disk is `foo.ts`.
+        'import/resolver': { typescript: {} },
+      },
+      rules: {
+        '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+        // TS's own checker covers these; airbnb's JS-era versions false-positive on types.
+        'no-unused-vars': 'off',
+        'no-undef': 'off',
+      },
+    },
     {
       // belt-holes/sdp-tabtest/sdp-tethering-inet run on jest (see Phase 1
       // findings in docs/esm-migration-plan.md), whose globals (test,

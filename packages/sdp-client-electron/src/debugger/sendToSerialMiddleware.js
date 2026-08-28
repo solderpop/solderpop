@@ -3,9 +3,11 @@ import * as XP from 'sdp-project';
 import client from 'sdp-client';
 import { foldMaybe } from 'sdp-func-tools';
 import { formatTweakMessage } from 'sdp-arduino';
-import { ipcRenderer } from 'electron';
+import electron from 'electron';
 
 import { DEBUG_SERIAL_SEND } from '../shared/events.js';
+
+const { ipcRenderer } = electron;
 
 export default ({ getState }) =>
   (next) =>

@@ -11,7 +11,7 @@
     "build:workspace": "cpx \"../../workspace/**/*\" \"src-babel/workspace\"",
     "build:gui": "webpack --color --config webpack.config.cjs",
     "build:app": "babel src/app/ -d src-babel/app/ && babel src/shared/ -d src-babel/shared/",
-    "build": "yarn build:gui && yarn build:app && yarn build:workspace",
+    "build": "pnpm build:gui && pnpm build:app && pnpm build:workspace",
     "clean:dist": "rimraf ./src-babel",
     "start": "electron . --no-sandbox --ozone-platform=x11",
     "postinstall": "electron-builder install-app-deps",
@@ -45,15 +45,15 @@
     "redux": "^3.0.5",
     "redux-thunk": "^2.1.0",
     "serialport": "^13.0.0",
-    "sdp-arduino": "^0.38.0",
-    "sdp-client": "^0.38.0",
-    "sdp-deploy": "^0.38.0",
-    "sdp-deploy-bin": "^0.38.0",
-    "sdp-fs": "^0.38.0",
-    "sdp-func-tools": "^0.34.0",
-    "sdp-project": "^0.38.0",
-    "sdp-tethering-inet": "^0.34.0",
-    "sdp-wasm-compile": "^0.1.0"
+    "sdp-arduino": "workspace:^0.38.0",
+    "sdp-client": "workspace:^0.38.0",
+    "sdp-deploy": "workspace:^0.38.0",
+    "sdp-deploy-bin": "workspace:^0.38.0",
+    "sdp-fs": "workspace:^0.38.0",
+    "sdp-func-tools": "workspace:^0.34.0",
+    "sdp-project": "workspace:^0.38.0",
+    "sdp-tethering-inet": "workspace:^0.34.0",
+    "sdp-wasm-compile": "workspace:^0.1.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.29.7",
@@ -80,7 +80,8 @@
     "webpack-merge": "^6.0.1",
     "electron-devtools-installer": "^3.1.1",
     "electron-mocha": "^13.1.0",
-    "fsp": "^0.1.2"
+    "fsp": "^0.1.2",
+    "font-awesome": "^4.6.3"
   },
   "build": {
     "appId": "io.solderpop.ide",

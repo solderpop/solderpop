@@ -1,0 +1,64 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  // Forced serial: the ReScript compiler has a real concurrency bug when
+  // multiple `rescript build` invocations run in parallel across sibling
+  // packages (belt-holes/sdp-func-tools/sdp-project/sdp-arduino/
+  // sdp-tabtest/sdp-tethering-inet all invoke it) -- verified directly,
+  // parallel runs intermittently produce "Compiled 0 modules" and emit
+  // no .bs.js output, silently succeeding turbo's own task while leaving
+  // broken/missing build artifacts. Do not raise this without re-testing
+  // that specific failure mode first.
+  "concurrency": "2",
+  "tasks": {
+    "build:re": {
+      "dependsOn": ["^build:re"],
+      "outputs": ["**/*.bs.js"]
+    },
+    "build": {
+      "dependsOn": ["^build", "build:re"],
+      "outputs": ["dist/**", "lib/**", "build/**", "src-babel/**"]
+    },
+    "test": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "test-func": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "test-cpp": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "typecheck": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "doc": {
+      "dependsOn": ["^build"],
+      "outputs": ["doc/**"]
+    },
+    "clean:dist": {
+      "cache": false
+    },
+    "dev": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    },
+    "storybook": {
+      "dependsOn": ["^build", "build"],
+      "cache": false,
+      "persistent": true
+    },
+    "start": {
+      "dependsOn": ["^build", "build"],
+      "cache": false,
+      "persistent": true
+    },
+    "benchmark": {
+      "dependsOn": ["build"],
+      "cache": false
+    }
+  }
+}

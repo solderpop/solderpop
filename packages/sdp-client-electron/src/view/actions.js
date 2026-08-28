@@ -1,5 +1,5 @@
 import R from 'ramda';
-import { ipcRenderer } from 'electron';
+import electron from 'electron';
 import { basename } from 'path';
 
 import { getProjectName } from 'sdp-project';
@@ -21,6 +21,8 @@ import {
 import * as EVENTS from '../shared/events.js';
 import * as MESSAGES from '../shared/messages.js';
 import { STATES, getEventNameWithState } from '../shared/eventStates.js';
+
+const { ipcRenderer } = electron;
 
 // =============================================================================
 //

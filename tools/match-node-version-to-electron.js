@@ -11,13 +11,21 @@
  */
 
 /* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable import/no-dynamic-require */
 /* eslint-disable no-console */
 
 const fs = require('fs');
 const path = require('path');
-const fetch = require('node-fetch');
 
-const electronVersion = require('electron/package.json').version;
+// Reads sdp-client-electron's own installed electron -- the actual
+// version this repo builds against -- rather than requiring a redundant
+// root-level `electron` dependency that could drift out of sync with it.
+const electronPackageJsonPath = path.resolve(
+  __dirname,
+  '..',
+  'packages/sdp-client-electron/node_modules/electron/package.json'
+);
+const electronVersion = require(electronPackageJsonPath).version;
 
 function updateEngines(nodeVersion) {
   const pathToPackageJson = path.resolve(__dirname, '..', 'package.json');

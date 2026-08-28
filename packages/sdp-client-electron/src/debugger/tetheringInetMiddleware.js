@@ -2,9 +2,11 @@ import R from 'ramda';
 import { create as createAtNet } from 'sdp-tethering-inet';
 import client from 'sdp-client';
 import { allPromises } from 'sdp-func-tools';
-import { ipcRenderer } from 'electron';
+import electron from 'electron';
 
 import { DEBUG_SERIAL_SEND } from '../shared/events.js';
+
+const { ipcRenderer } = electron;
 
 const EOT = String.fromCharCode(4); // end of transmittion
 const ACK = String.fromCharCode(6); // acknowledge

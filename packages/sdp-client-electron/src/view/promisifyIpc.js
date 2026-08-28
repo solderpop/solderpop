@@ -1,6 +1,8 @@
 import R from 'ramda';
-import { ipcRenderer } from 'electron';
+import electron from 'electron';
 import { getAllStatesForEvent } from '../shared/eventStates.js';
+
+const { ipcRenderer } = electron;
 
 // :: Map EVENT_STATE EVENT_NAME_WITH_STATE -> _
 const removeListenersForAllEventStates = R.compose(

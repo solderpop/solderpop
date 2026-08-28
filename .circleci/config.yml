@@ -13,9 +13,10 @@ defs:
 
   cache:
     cache-node_modules: &cache-node_modules
-      key: node_modules-{{ arch }}-{{ checksum ".circleci/cache-version" }}-{{ checksum "yarn.lock" }}
+      key: node_modules-{{ arch }}-{{ checksum ".circleci/cache-version" }}-{{ checksum "pnpm-lock.yaml" }}
       paths:
         - node_modules
+        - .pnpm-store
 
     cache-arduino15: &cache-arduino15
       # update cache only if package_index.json changed
@@ -25,8 +26,8 @@ defs:
 
     restore-node_modules: &restore-node_modules
       keys:
-        - node_modules-{{ arch }}-{{ checksum ".circleci/cache-version" }}-{{ checksum "yarn.lock" }}
-        # if cache for exact version of `yarn.lock` is not present then
+        - node_modules-{{ arch }}-{{ checksum ".circleci/cache-version" }}-{{ checksum "pnpm-lock.yaml" }}
+        # if cache for exact version of `pnpm-lock.yaml` is not present then
         # load any most recent one
         - node_modules-{{ arch }}-{{ checksum ".circleci/cache-version" }}
 
@@ -98,26 +99,35 @@ defs:
             nvm use `cat .nvmrc`
       shell: bash
 
-    step-install-yarn-on-windows: &step-install-yarn-on-windows
-      name: Install yarn
-      command: npm install yarn@1.22.10 -g
+    step-install-pnpm-on-windows: &step-install-pnpm-on-windows
+      name: Install pnpm
+      command: npm install pnpm@10 -g
 
     step-install: &step-install
       name: Install Node modules
       # to always instal some essential tools(electron-builder etc)
-      command: NODE_ENV=development yarn install --force
+      command: NODE_ENV=development pnpm install --force
 
     step-bump-version: &step-bump-version
       name: Bump version
+      # TODO(P0 follow-up): lerna (the publish/canary-versioning command,
+      # not the bootstrap/task-runner usage this phase retires) has been
+      # removed along with lerna.json -- turbo has no equivalent publish
+      # command. This only fires on prerelease-(patch|minor)-* branches,
+      # never on the branch/PR verify workflow, so it's left as a known
+      # gap rather than solved as a side effect of the toolchain swap.
+      # Needs its own decision: reintroduce lerna for this one purpose,
+      # or pick a changesets-style replacement.
       command: |
         if [[ $CIRCLE_BRANCH =~ ^prerelease-(patch|minor)- ]]; then
-          yarn lerna publish --skip-git --skip-npm --canary --cd-version ${BASH_REMATCH[1]} --yes
+          echo "Canary publish is unimplemented post-lerna-retirement; see step-bump-version TODO in .circleci/config.yml" >&2
+          exit 1
         fi
       shell: bash
 
     step-build: &step-build
       name: Build
-      command: yarn build
+      command: pnpm build
 
     step-verify-git-clean: &step-verify-git-clean
       name: Verify that previous step made no side-effects
@@ -126,24 +136,24 @@ defs:
 
     step-build-electron: &step-build-electron
       name: Build electron IDE app
-      command: yarn build:electron
+      command: pnpm build:electron
 
     step-lint: &step-lint
       name: Lint
       # run prettier on md files separately because of https://github.com/prettier/eslint-plugin-prettier/issues/67
-      command: yarn lint && yarn prettier-md-check
+      command: pnpm lint && pnpm prettier-md-check
 
     step-test: &step-test
       name: Unit tests
-      command: yarn test
+      command: pnpm test
 
     step-test-func: &step-test-func
       name: Functional tests
-      command: yarn test-func
+      command: pnpm test-func
 
     step-dist-electron: &step-dist-electron
       name: Build electron IDE distro
-      command: yarn dist:electron
+      command: pnpm dist:electron
       no_output_timeout: 30m
 
 orbs:
@@ -183,7 +193,7 @@ jobs:
     macos:
       xcode: "11.2.1"
     environment:
-      YARN_CACHE_FOLDER: /tmp/yarn-cache
+      PNPM_CACHE_FOLDER: /tmp/pnpm-cache
       SDP_ARDUINO_CLI: /tmp/arduino-cli/arduino-cli
     steps:
       - checkout
@@ -207,10 +217,10 @@ jobs:
       - checkout
       - restore_cache: *restore-node_modules
       - run: *step-install-node-on-windows
-      - run: *step-install-yarn-on-windows
+      - run: *step-install-pnpm-on-windows
       - run:
           name: Install Node modules
-          command: yarn
+          command: pnpm install
       - save_cache: *cache-node_modules
       - run: *step-build
       - run: *step-verify-git-clean
@@ -238,12 +248,12 @@ jobs:
           command: ./packages/sdp-arduino/tools/test-avr-size.sh
       - run:
           name: Build CLI
-          command: yarn build:cli
+          command: pnpm build:cli
       - run:
           name: Generate tabtests
           command: |
             ls -d workspace/__lib__/xod/* workspace/test/* | xargs -n 1 \
-              yarn sdpc tabtest --no-build | cat
+              pnpm sdpc tabtest --no-build | cat
       - run:
           name: Build tabtests
           command: make -C $XOD_OUTPUT
@@ -312,18 +322,18 @@ jobs:
       - checkout
       - restore_cache: *restore-node_modules
       - run: *step-install-node-on-windows
-      - run: *step-install-yarn-on-windows
+      - run: *step-install-pnpm-on-windows
       - run: *step-install-arduino-cli-on-windows
       - run:
           name: Install Node modules
-          command: yarn
+          command: pnpm install
       - run: *step-bump-version
       - run:
           name: Build electron IDE distro
           command: |
             $env:NODE_ENV="production"
-            yarn build:electron
-            yarn dist:electron
+            pnpm build:electron
+            pnpm dist:electron
           no_output_timeout: 30m
       - persist_to_workspace:
           root: packages/sdp-client-electron/dist
@@ -383,11 +393,11 @@ jobs:
             echo $IMAGE_TAG > $PKG/image/IMAGE_TAG
       - run:
           name: Build browser IDE app
-          command: yarn build:browser
+          command: pnpm build:browser
       - setup_remote_docker
       - run:
           name: Build docker image
-          command: yarn dockerize:browser --tag $(cat $PKG/image/IMAGE_TAG)
+          command: pnpm dockerize:browser --tag $(cat $PKG/image/IMAGE_TAG)
       - run:
           name: Tar docker image
           command: |

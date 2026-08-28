@@ -5,3 +5,4 @@ doc/_build/
 xod.iml
 dist/
 .tmp/
+stories/tutorialProject.json

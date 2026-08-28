@@ -5,11 +5,11 @@
   "description": "SolderPop IDE: Client browser application",
   "scripts": {
     "build:tutorial-project": "node ./tools/loadTutorialProject.cjs",
-    "build": "yarn run build:tutorial-project && webpack --color --config webpack.config.cjs",
+    "build": "pnpm run build:tutorial-project && webpack --color --config webpack.config.cjs",
     "clean:dist": "rimraf ./dist ./tutorialProject.json",
     "benchmark": "node -r babel-register ./benchmark/index.js",
     "test-func": "mocha --require ../../tools/babel-register.js --color --timeout 90000 --bail test-func/bootstrap.js test-func/**/*.spec.js",
-    "dev": "yarn run build:tutorial-project && webpack-dev-server --watch --color --hot --config webpack.config.dev.cjs"
+    "dev": "pnpm run build:tutorial-project && webpack-dev-server --watch --color --hot --config webpack.config.dev.cjs"
   },
   "dependencies": {
     "babel-polyfill": "^6.16.0",
@@ -25,10 +25,10 @@
     "redux": "^3.0.5",
     "redux-thunk": "^2.1.0",
     "url-parse": "^1.2.0",
-    "sdp-arduino": "^0.38.0",
-    "sdp-client": "^0.38.0",
-    "sdp-func-tools": "^0.34.0",
-    "sdp-project": "^0.38.0"
+    "sdp-arduino": "workspace:^0.38.0",
+    "sdp-client": "workspace:^0.38.0",
+    "sdp-func-tools": "workspace:^0.34.0",
+    "sdp-project": "workspace:^0.38.0"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
@@ -50,7 +50,8 @@
     "webpack-merge": "^6.0.1",
     "worker-loader": "^3.0.8",
     "why-did-you-update": "^0.1.0",
-    "sdp-fs": "^0.38.0"
+    "sdp-fs": "workspace:^0.38.0",
+    "font-awesome": "^4.6.3"
   },
   "author": "SolderPop <dev@solderpop.io>",
   "license": "AGPL-3.0"

@@ -25,12 +25,12 @@
     "node-fetch": "^2.3.0",
     "ramda": "^0.24.1",
     "source-map-support": "^0.5.9",
-    "sdp-arduino": "^0.38.0",
-    "sdp-deploy-bin": "^0.38.0",
-    "sdp-fs": "^0.38.0",
-    "sdp-func-tools": "^0.34.0",
-    "sdp-project": "^0.38.0",
-    "sdp-tabtest": "^0.38.0"
+    "sdp-arduino": "workspace:^0.38.0",
+    "sdp-deploy-bin": "workspace:^0.38.0",
+    "sdp-fs": "workspace:^0.38.0",
+    "sdp-func-tools": "workspace:^0.34.0",
+    "sdp-project": "workspace:^0.38.0",
+    "sdp-tabtest": "workspace:^0.38.0"
   },
   "devDependencies": {
     "@babel/cli": "^8.0.4",
@@ -85,11 +85,11 @@
     "build:tabtestSrc": "cpx \"../sdp-tabtest/cpp/**\" \"./bundle/tabtest-cpp\"",
     "build:catch2": "cpx \"../../vendor/catch2/**\" \"./bundle/catch2\"",
     "build:catch2utils": "cpx \"../../cpplib/catch2utils/**\" \"./bundle/catch2utils\"",
-    "build:bundle": "yarn run build:workspace && yarn run build:tabtestWorkspace && yarn run build:tabtestSrc && yarn run build:catch2 && yarn run build:catch2utils",
+    "build:bundle": "pnpm run build:workspace && pnpm run build:tabtestWorkspace && pnpm run build:tabtestSrc && pnpm run build:catch2 && pnpm run build:catch2utils",
     "build:readme": "oclif-dev readme && sed -i -e 's/lib\\/commands\\//src\\/commands\\//g' README.md",
     "build:src": "babel src/ -d lib/ --source-maps",
-    "build": "yarn run build:bundle && yarn run build:src",
-    "dev": "yarn run build --watch",
+    "build": "pnpm run build:bundle && pnpm run build:src",
+    "dev": "pnpm run build --watch",
     "postpack": "rm -f oclif.manifest.json",
     "test-func": "BABEL_DISABLE_CACHE=1 mocha --require ../../tools/babel-register.js --color --timeout 600000 test-func/**/*.spec.js"
   }

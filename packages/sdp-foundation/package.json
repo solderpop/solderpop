@@ -1,0 +1,21 @@
+{
+  "name": "@sdp/foundation",
+  "version": "0.1.0",
+  "description": "SolderPop IDE: language-neutral foundation types (Result, SdpError, ids, canonical JSON, deep-clone) shared by TS and ReScript packages",
+  "type": "module",
+  "license": "AGPL-3.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean:dist": "rimraf ./dist",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "rimraf": "^2.5.4",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

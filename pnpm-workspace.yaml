@@ -1,0 +1,47 @@
+packages:
+  - "packages/*"
+  # Not under packages/ (it's referenced via a plain `file:` devDependency
+  # for historical reasons), but it needs to be a real workspace member
+  # so pnpm actually installs its own `ramda` dependency -- a `file:` dep
+  # outside the workspace glob only gets linked, its own deps never get
+  # resolved (unlike yarn's hoisting, which was masking this).
+  - "tools/eslint-plugin-sdp-fp"
+
+overrides:
+  ramda-fantasy>ramda: ^0.24.1
+  electron-is-dev: ^2.0.0
+  spdy: file:./tools/spdy-shim
+
+# pnpm blocks install/build scripts for any dependency by default as a
+# supply-chain guard, and lists everything it skipped after install.
+# Decisions below, one line per package:
+allowBuilds:
+  # Native addons actually used at runtime/build time -- needed.
+  '@serialport/bindings-cpp': true # USB/serial device I/O (sdp-deploy, sdp-client-electron)
+  esbuild: true # needs its postinstall to fetch the platform binary
+  '@parcel/watcher': true # native fs watcher (webpack5/vitest watch mode)
+  es5-ext: true # widely-relied-on transitive polyfill; postinstall wires its own module aliasing
+
+  # Postinstall is pure telemetry/nag, not functionality -- skip.
+  '@scarf/scarf': false # telemetry ping
+  core-js: false # opencollective donation nag
+  core-js-pure: false # same
+
+  # Superseded / not used on this platform / not needed for the P0 gate.
+  bs-platform: false # old ReScript compiler; repo already migrated to `rescript` (see esm-migration)
+  fsevents: false # macOS-only optional watcher, irrelevant on Linux CI
+  electron-chromedriver: false # spectron's browser fetch; spectron is slated for Playwright replacement (Phase 5)
+  electron-winstaller: false # Windows .exe installer packaging only, not needed for the verify/build/test gate
+  puppeteer: false # downloads a full Chromium; not needed for build/lint/unit-test, only test-func e2e
+  spectron: false # downloads Electron; same as above, and also slated for Playwright replacement
+  highlight.js: false # docs-only language bundle postinstall, unused by the build/test/lint path
+  uglifyjs-webpack-plugin: false # webpack3-era transitive leftover, not invoked by the webpack5 pipeline
+  '@tree-sitter-grammars/tree-sitter-yaml': false # transitive (docs tooling), not on the build/lint/test path
+  tree-sitter: false
+  tree-sitter-json: false
+  unrs-resolver: true # native resolver backing eslint-import-resolver-typescript
+  # Forked xodio git dependencies: pre-2016 `rc-tools`-era build scripts
+  # (prepublish) using the `natives` package to monkeypatch `fs`, broken
+  # on Node >=12 ("primordials is not defined"). rc-menu is now vendored
+  # locally (vendor/rc-menu, see .pnpmfile.cjs comment) with the script
+  # stripped -- the others haven't hit this gate yet; same fix if they do.
