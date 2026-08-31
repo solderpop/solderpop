@@ -1,0 +1,108 @@
+name: Verify
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      SDP_ARDUINO_CLI: ${{ github.workspace }}/packages/sdp-client-electron/arduino-cli${{ matrix.os == 'windows-latest' && '.exe' || '' }}
+    steps:
+      # Matches the old CircleCI Windows job's step-configure-git-on-windows:
+      # avoids CRLF/long-path checkout issues on Windows runners.
+      - name: Configure git for Windows
+        if: matrix.os == 'windows-latest'
+        shell: bash
+        run: |
+          git config --global core.autocrlf input
+          git config --system core.longpaths true
+
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - name: Install Node modules
+        run: pnpm install
+
+      - name: Ensure correct node versions are specified in .nvmrc and package.json
+        if: matrix.os == 'ubuntu-latest'
+        run: node ./tools/match-node-version-to-electron.js
+
+      - name: Verify that previous step made no side-effects
+        shell: bash
+        run: ./tools/verify-git-clean.sh
+
+      # Same arduino-cli version (0.12.0) and install locations the old
+      # CircleCI config used, just ported per-OS rather than switched to a
+      # newer version -- untested against a version bump.
+      - name: Install arduino-cli (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          curl -L -s --create-dirs -o "$HOME/arduino-cli.tar.gz" "https://github.com/arduino/arduino-cli/releases/download/0.12.0/arduino-cli_0.12.0_Linux_64bit.tar.gz"
+          tar xvf "$HOME/arduino-cli.tar.gz" -C "$HOME"
+          cp "$HOME/arduino-cli" "./packages/sdp-client-electron/arduino-cli"
+
+      - name: Install arduino-cli (macOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          curl -L -s --create-dirs -o "$HOME/arduino-cli.tar.gz" "https://github.com/arduino/arduino-cli/releases/download/0.12.0/arduino-cli_0.12.0_macOS_64bit.tar.gz"
+          tar xvf "$HOME/arduino-cli.tar.gz" -C "$HOME"
+          cp "$HOME/arduino-cli" "./packages/sdp-client-electron/arduino-cli"
+
+      - name: Install arduino-cli (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: bash
+        run: |
+          curl -L -s --create-dirs -o "$HOME/arduino-cli.zip" "https://github.com/arduino/arduino-cli/releases/download/0.12.0/arduino-cli_0.12.0_Windows_64bit.zip"
+          unzip "$HOME/arduino-cli.zip" -d "$HOME"
+          cp "$HOME/arduino-cli.exe" "./packages/sdp-client-electron/arduino-cli.exe"
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Verify that previous step made no side-effects
+        shell: bash
+        run: ./tools/verify-git-clean.sh
+
+      - name: Lint
+        run: |
+          pnpm run lint
+          pnpm run prettier-md-check
+
+      - name: Unit tests
+        run: pnpm run test
+
+      # Matches the old CircleCI config exactly: Windows never ran
+      # test-func (no Xvfb-equivalent was ever configured for it there
+      # either), so this isn't a new gap, just an unchanged one.
+      #
+      # xvfb-run (not a backgrounded `Xvfb &`): GHA runs each step in its
+      # own shell invocation, so a process backgrounded in one step doesn't
+      # survive into the next -- xvfb-run starts the display, runs the
+      # given command, and tears it down within a single step instead.
+      - name: Install xvfb (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y xvfb
+
+      - name: Functional tests (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: xvfb-run --auto-servernum pnpm run test-func
+
+      - name: Functional tests (macOS)
+        if: matrix.os == 'macos-latest'
+        run: pnpm run test-func
+
+      - name: Verify that previous step made no side-effects
+        shell: bash
+        run: ./tools/verify-git-clean.sh

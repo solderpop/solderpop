@@ -1,5 +1,80 @@
 # Branch changelist — feature/general-improvements
 
+## 2026-08-31 — CircleCI → GitHub Actions (verify pipeline only)
+
+**Context:** separate from the pnpm/turbo migration above. CircleCI is
+being retired in favor of GitHub Actions (matching what the site already
+uses) with self-hosted Buildbot runners planned for later once hardware
+is sorted. Scoped deliberately to just the "verify" pipeline (install/
+build/lint/test/test-func across 3 platforms) for this pass — the dist/
+docker/GCS-upload jobs need GitHub secrets added on the account side
+before they can run at all, and the lerna canary version-bump step is
+being replaced by Changesets as a separate, properly-scoped follow-up
+rather than ported as-is.
+
+**`.github/workflows/verify.yml` (new):** matrix across ubuntu-latest/
+macos-latest/windows-latest. Deliberately simplifies what CircleCI needed
+manual per-OS workarounds for, now that both are just standard GHA
+actions: `pnpm/action-setup` + `actions/setup-node` (`node-version-file:
+.nvmrc`, `cache: pnpm`) replace CircleCI's separate nvm-curl-install-on-
+macOS and `npm install yarn@1.22.10 -g`-on-Windows steps entirely.
+
+Preserved exactly from the old CircleCI behavior, not "improved" without
+being asked to: the pinned arduino-cli **0.12.0** (not bumped to a newer
+release — untested against a version change), the Windows job's Xvfb-less
+skip of `test-func` (same reasoning as before: no equivalent virtual
+display was ever configured for it), and the `verify-git-clean.sh`
+checks after install/build/test-func.
+
+**One real bug caught before it shipped:** the natural CircleCI→GHA port
+of "run Xvfb in the background, then run tests" doesn't work — CircleCI's
+`background: true` keeps a process alive for the whole job, but GitHub
+Actions runs each step in its own separate shell invocation, so a
+backgrounded process dies when its step's shell exits. Used `xvfb-run
+--auto-servernum` wrapping the test-func command in a single step
+instead (starts the display, runs the command, tears it down, all within
+one step) rather than the naive port.
+
+**Verified:** YAML valid, `actionlint` v1.7.12 (the authoritative GHA
+linter, includes shellcheck on every `run:` block) — clean, zero
+findings. Every individual command in the Linux leg (`pnpm install`,
+`pnpm run build`, `pnpm run lint`, `pnpm run test`, `pnpm run test-func`,
+the arduino-cli curl+tar install, `xvfb-run`) was already verified working
+standalone earlier in this session on this same Linux environment.
+**Not verified:** a full dynamic run — `act` (runs GHA workflows locally
+via Docker) is installed but the Docker daemon isn't actually running in
+this sandbox (client only, no socket), so this couldn't be executed
+end-to-end here. The macOS/Windows legs mirror the original CircleCI
+commands closely but are genuinely untested beyond that. Only a real push
+to GitHub confirms those.
+
+**`.circleci/` removed entirely** (`config.yml`, `cache-version`, and a
+`Dockerfile` for a custom Node-12 image that was already unused/orphaned
+— the config had already switched to the plain `cimg/node:24.11`
+convenience image earlier, per that switch's own comment in the file
+history).
+
+**Deliberately not done this pass, tracked as follow-ups:**
+- `test-cpp` job (AVR-size test, tabtest generation/build/run) — not
+  ported yet.
+- `dist-linux`/`dist-macos`/`dist-windows` (electron-builder distro
+  builds) + `upload-distros` (GCS upload) — need `GOOGLE_CLOUD_STORAGE_
+  CONFIG` added as a GitHub secret before they're even runnable.
+- `dockerize-ide`/`push-docker-images` (browser IDE Docker image build +
+  push) — need `DOCKER_PASS` as a GitHub secret; also still references
+  the old `xodio/site-ide` image name and `xodbot` Docker Hub account,
+  unrelated leftover branding not addressed here.
+- Lerna's canary version-bump step (`lerna publish --skip-git --skip-npm
+  --canary --cd-version X --yes`, triggered on `prerelease-(patch|minor)-*`
+  branches) has no replacement wired up yet. Decided: adopt Changesets
+  (`@changesets/cli`) as the replacement, but that's a real workflow
+  change (PR-committed changeset files + a release job, not a branch-
+  name-triggered canary bump) — scoped as its own follow-up, not bundled
+  into this pass. `lerna.json` and the `lerna` devDependency are still in
+  the repo, doing nothing now that turbo/pnpm cover task-running and
+  workspace-linking — safe to remove once Changesets (or whatever
+  replaces the version-bump step) actually lands, not before.
+
 ## 2026-08-31 — yarn/lerna → pnpm/turborepo migration
 
 **Context:** `.turbo/cache/*` (66 files, ~13MB) had been accidentally
