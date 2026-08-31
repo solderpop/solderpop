@@ -6,7 +6,7 @@ import RamdaFantasy from 'ramda-fantasy';
 import classNames from 'classnames';
 import Autosuggest from 'react-autosuggest';
 import Highlighter from 'react-highlight-words';
-import { Icon } from 'react-fa';
+import Icon from '../../core/components/Icon.jsx';
 import debounce from 'throttle-debounce/debounce.js';
 
 import { fetchLibData, searchLibraries, parseLibQuery } from 'sdp-pm';

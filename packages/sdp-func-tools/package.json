@@ -1,22 +1,23 @@
 {
   "name": "sdp-func-tools",
   "type": "module",
-  "version": "0.34.0",
+  "version": "0.1.0",
   "description": "",
   "keywords": [],
-  "author": "SolderPop <dev@solderpop.io>",
+  "author": "SolderPop <contact@solderpop.io>",
   "license": "AGPL-3.0",
   "main": "dist/index.js",
   "scripts": {
     "doc": "documentation build --format html --output doc --sort-order alpha src/",
     "build:js": "babel src/ -d dist/ --source-maps",
     "build:re": "rescript build",
-    "build": "yarn build:re && yarn build:js",
+    "build": "pnpm run build:re && pnpm run build:js",
     "clean:dist": "rimraf ./dist ./lib ./src/**/*.bs.js",
-    "dev": "yarn run build --watch",
+    "dev": "pnpm run build --watch",
     "test": "mocha --require ../../tools/babel-register.js --color test/**/*.spec.js"
   },
   "dependencies": {
+    "@rescript/runtime": "^12.3.0",
     "hm-def": "^0.3.2",
     "ramda": "^0.24.1",
     "ramda-fantasy": "^0.8.0",

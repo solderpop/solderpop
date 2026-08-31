@@ -1,26 +1,31 @@
-import { test } from '@oclif/test';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { runCommand } from '@oclif/test';
 import chai from 'chai';
 
 const { assert } = chai;
 
-describe('sdpc help', () => {
-  const stdMock = test.stdout().stderr();
+// @oclif/test's own root auto-detection walks up from require.main / the
+// require.cache under Node's CJS interop, which resolves to somewhere
+// under mocha's own install rather than this package when run via
+// mocha+babel-register -- pass the real root explicitly instead of relying
+// on it (confirmed empirically: without this, every command silently
+// resolves to "command X not found" and stdout comes back empty).
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-  stdMock.command(['help']).it('prints help to stdout', (ctx) => {
-    assert.include(
-      ctx.stdout,
-      'autocomplete',
-      'autocomplete command not found'
-    );
-    assert.include(ctx.stdout, 'boards', 'boards command not found');
-    assert.include(ctx.stdout, 'compile', 'compile command not found');
-    assert.include(ctx.stdout, 'help', 'help command not found');
-    assert.include(ctx.stdout, 'install', 'install command not found');
-    assert.include(ctx.stdout, 'publish', 'publish command not found');
-    assert.include(ctx.stdout, 'resave', 'resave command not found');
-    assert.include(ctx.stdout, 'tabtest', 'tabtest command not found');
-    assert.include(ctx.stdout, 'transpile', 'transpile command not found');
-    assert.include(ctx.stdout, 'upload', 'upload command not found');
+describe('sdpc help', () => {
+  it('prints help to stdout', async () => {
+    const { stdout } = await runCommand(['help'], { root });
+    assert.include(stdout, 'autocomplete', 'autocomplete command not found');
+    assert.include(stdout, 'boards', 'boards command not found');
+    assert.include(stdout, 'compile', 'compile command not found');
+    assert.include(stdout, 'help', 'help command not found');
+    assert.include(stdout, 'install', 'install command not found');
+    assert.include(stdout, 'publish', 'publish command not found');
+    assert.include(stdout, 'resave', 'resave command not found');
+    assert.include(stdout, 'tabtest', 'tabtest command not found');
+    assert.include(stdout, 'transpile', 'transpile command not found');
+    assert.include(stdout, 'upload', 'upload command not found');
   });
 
   [
@@ -35,14 +40,13 @@ describe('sdpc help', () => {
     'transpile',
     'upload',
   ].forEach((command) => {
-    stdMock
-      .command(['help', command])
-      .it(`prints help to stdout for command '${command}'`, (ctx) => {
-        assert.include(
-          ctx.stdout,
-          command,
-          `help for command '${command}' not found`
-        );
-      });
+    it(`prints help to stdout for command '${command}'`, async () => {
+      const { stdout } = await runCommand(['help', command], { root });
+      assert.include(
+        stdout,
+        command,
+        `help for command '${command}' not found`
+      );
+    });
   });
 });

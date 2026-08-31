@@ -1,7 +1,7 @@
 import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from 'react-fa';
+import Icon from '../../core/components/Icon.jsx';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { sortableContainer, sortableElement } from 'react-sortable-hoc';

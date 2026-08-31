@@ -8,10 +8,13 @@ packages/*/dist/
 *.log
 .dir-locals.el
 .opencode
-.claude
+.claude/
 
 coverage/
 .nyc_output/
+
+# turborepo local cache — machine/run-specific, never commit
+.turbo/
 
 # bucklescript stuff
 packages/*/lib/

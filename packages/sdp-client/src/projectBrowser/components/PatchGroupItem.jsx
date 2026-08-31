@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { DragSource } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { Icon } from 'react-fa';
+import Icon from '../../core/components/Icon.jsx';
 import { ContextMenuTrigger } from 'react-contextmenu';
 
 import { PATCH_GROUP_CONTEXT_MENU_ID } from '../constants.js';

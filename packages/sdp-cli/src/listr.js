@@ -8,11 +8,12 @@ const { mergeDeepRight } = R;
 
 // here we mocks and unmocks the stdout with the stderr for the listr renderers
 
-const stdOutWrite = process.stdout.write;
-const consoleLog = console.log;
-
 const updateRender = UpdateRenderer.prototype.render;
 UpdateRenderer.prototype.render = function render() {
+  // Captured per-call on `this`, not a shared module-level constant --
+  // otherwise this goes stale as soon as anything else (e.g. a test's
+  // stdout mock) reassigns process.stdout.write later.
+  this._realStdoutWrite = process.stdout.write;
   process.stdout.write = (() =>
     function writeMock(buffer) {
       process.stderr.write(buffer);
@@ -23,11 +24,12 @@ UpdateRenderer.prototype.render = function render() {
 const updateEnd = UpdateRenderer.prototype.end;
 UpdateRenderer.prototype.end = function end(...args) {
   updateEnd.apply(this, args);
-  process.stdout.write = stdOutWrite;
+  process.stdout.write = this._realStdoutWrite;
 };
 
 const verboseRender = VerboseRenderer.prototype.render;
 VerboseRenderer.prototype.render = function render() {
+  this._realConsoleLog = console.log;
   console.log = (() =>
     function writeMock(str) {
       console.error(str);
@@ -38,7 +40,7 @@ VerboseRenderer.prototype.render = function render() {
 const verboseEnd = VerboseRenderer.prototype.end;
 VerboseRenderer.prototype.end = function end() {
   verboseEnd.apply(this);
-  console.log = consoleLog;
+  console.log = this._realConsoleLog;
 };
 
 export const getListr = (verbose = true, tasks = [], opts = {}) =>

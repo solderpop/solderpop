@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import $ from 'sanctuary-def';
 import { $Maybe, foldMaybe, noop } from 'sdp-func-tools';
-import { Icon } from 'react-fa';
+import Icon from '../../core/components/Icon.jsx';
 import { shouldUpdate } from 'recompose';
 
 import sanctuaryPropType from '../../utils/sanctuaryPropType.js';

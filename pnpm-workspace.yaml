@@ -1,0 +1,86 @@
+packages:
+  - 'packages/*'
+
+# Converted from the old yarn "resolutions" field in root package.json
+# (pnpm v11+ doesn't read package.json's "pnpm" field at all -- this file
+# is the only place these settings live now).
+overrides:
+  'ramda-fantasy>ramda': '^0.24.1'
+  electron-is-dev: '^2.0.0'
+  spdy: 'file:./tools/spdy-shim'
+  # bundled ^0.3.9 can't resolve "exports"-only packages (e.g. @oclif/core)
+  eslint-import-resolver-node: '^0.4.0'
+
+# Packages with an install/postinstall script that pnpm blocks by default
+# (supply-chain hardening — see https://pnpm.io/settings/build#allowbuilds).
+# Verified against each package's actual package.json "scripts" before
+# deciding, not guessed:
+allowBuilds:
+  # Real install scripts that are functionally required:
+  # downloads the chromedriver binary spectron needs to drive Electron
+  # for the sdp-client-electron functional test suite.
+  electron-chromedriver: true
+  # downloads the Chromium binary puppeteer needs — used by the
+  # sdp-client-browser functional test suite and tools/screenshot-xodball.
+  puppeteer: true
+  # postinstall fixes the bundled electron binary's rpath on some
+  # platforms — needed for spectron to launch Electron correctly.
+  spectron: true
+  # Real native compiler installer — this repo's ReScript/BuckleScript
+  # packages (sdp-project, sdp-arduino, belt-holes, sdp-tabtest) run
+  # `rescript build` and need the actual bsb/bsc binary this fetches.
+  bs-platform: true
+  # Real native binding — required for the Electron app's actual
+  # USB/serial communication with Arduino boards (upload, serial monitor).
+  '@serialport/bindings-cpp': true
+  # Selects the correct 7z binary for the current platform, needed by
+  # electron-builder's Windows installer target (dist-windows in CI).
+  electron-winstaller: true
+
+  # No script exists, or a defensive no-op ("try{...}catch{}" /
+  # "|| exit 0") that only prints a donation/version nag — nothing is
+  # lost by disallowing.
+  command-join: false
+  core-js: false
+  core-js-pure: false
+  es5-ext: false
+  highlight.js: false
+  # Telemetry/analytics postinstall (phones home on install) — block
+  # deliberately, not just because it's unnecessary.
+  '@scarf/scarf': false
+  # prepare script rebuilds its own dist/ via babel — redundant for a
+  # regular npm-registry install, which already ships the built dist/ in
+  # the published tarball.
+  uglifyjs-webpack-plugin: false
+  # Native filesystem-watcher binding, but optional (see pnpm-lock.yaml —
+  # platform variants are marked optional) with a well-known, standard JS
+  # fallback if unavailable. Blocking costs a slower dev-mode file watcher
+  # at worst, not broken functionality.
+  '@parcel/watcher': false
+  # Unclear which of this repo's actual (not just transitively-present)
+  # dependencies exercises these tree-sitter grammar bindings. Defaulting
+  # to blocked (safer default per pnpm's own posture) rather than
+  # approving native compilation for something unverified; flip to true
+  # if something surfaces a clear "missing tree-sitter binding" error.
+  tree-sitter: false
+  tree-sitter-json: false
+  '@tree-sitter-grammars/tree-sitter-yaml': false
+  # Standard napi-postinstall pattern (selects the correct prebuilt native
+  # binary for the platform) — pulled in by the jest@30 bump, needed for
+  # its own module resolution to work.
+  unrs-resolver: true
+
+# rc-menu (was git+https://github.com/xodio/menu.git#npm, a xodio-org
+# fork) is vendored at vendor/rc-menu instead — see that directory and
+# packages/sdp-client/package.json. pnpm shells out to a real `npm
+# install` in a temp dir to "prepare" any git-hosted dependency, which
+# reads the package.json straight off disk — this bypasses both
+# allowBuilds and a .pnpmfile.cjs readPackage hook (tried both; neither
+# intercepts that step). The fork's own package.json's "prepublish":
+# "rc-tools run guard" is a legacy pre-publish safety check, not the
+# actual build (lib/ is already committed, "main" points straight at it),
+# and hard-fails under modern Node (old graceful-fs + `natives` package
+# references `primordials`, removed from Node's internal fs.js).
+# Vendoring the exact pinned commit with just that one script stripped
+# was the only mechanism that actually worked — same code, zero
+# behavior change, no external repo needed.

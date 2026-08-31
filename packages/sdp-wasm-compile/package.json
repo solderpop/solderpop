@@ -2,19 +2,20 @@
   "name": "sdp-wasm-compile",
   "type": "module",
   "version": "0.1.0",
-  "description": "Local Emscripten-based C++ to WASM compiler for Simulate, replacing the old xod.io cloud compile service",
+  "private": true,
+  "description": "Local Emscripten-based C++ to WASM compiler for Simulation",
   "main": "dist/index.js",
   "scripts": {
     "build": "babel src/ -d dist/ --source-maps",
     "clean:dist": "rimraf ./dist",
-    "dev": "yarn run build --watch",
+    "dev": "pnpm run build --watch",
     "test": "mocha --require ../../tools/babel-register.js --color --timeout 30000 test/**/*.spec.js"
   },
   "keywords": [
     "xod",
     "xodlang"
   ],
-  "author": "SolderPop <dev@solderpop.io>",
+  "author": "SolderPop <contact@solderpop.io>",
   "license": "AGPL-3.0",
   "repository": {
     "type": "git",
@@ -25,8 +26,8 @@
   },
   "dependencies": {
     "fs-extra": "^7.0.1",
-    "sdp-arduino": "^0.38.0",
-    "sdp-func-tools": "^0.34.0",
+    "sdp-arduino": "workspace:*",
+    "sdp-func-tools": "workspace:*",
     "which": "^1.3.1"
   },
   "devDependencies": {

@@ -1,31 +1,33 @@
 {
   "name": "sdp-arduino",
   "type": "module",
-  "version": "0.38.0",
+  "version": "0.1.0",
+  "private": true,
   "description": "SolderPop IDE: Arduino transpiler",
   "scripts": {
     "build:nearley": "nearleyc src/implementationGrammar.ne -o src/implementationGrammar.ne.js && node ./tools/fixNearleyGrammarEsm.cjs src/implementationGrammar.ne.js",
     "build:templates": "node ./tools/generateTemplateModules.cjs",
     "build:js": "babel src/ -d dist/ --source-maps",
     "build:re": "rescript build",
-    "build": "yarn build:nearley && yarn build:templates && yarn build:re && yarn build:js",
+    "build": "pnpm run build:nearley && pnpm run build:templates && pnpm run build:re && pnpm run build:js",
     "dev:re": "rescript build -w",
-    "dev": "onchange \"src/**/*.js\" \"platform/**/*\" -- yarn run build:templates && yarn run build:js",
+    "dev": "onchange \"src/**/*.js\" \"platform/**/*\" -- pnpm run build:templates && pnpm run build:js",
     "doc": "documentation build --format html --output doc --sort-order alpha src/",
     "refmt": "rescript format -all",
     "clean:dist": "rimraf ./dist ./lib ./src/**/*.bs.js ./platform/**/*.cpp.js ./platform/**/*.h.js",
-    "pretest": "yarn build:templates",
+    "pretest": "pnpm run build:templates",
     "test": "BABEL_DISABLE_CACHE=1 mocha --require ../../tools/babel-register.js --color --timeout 240000 test/**/*.spec.js",
     "test-cpp": "./tools/test-cpp.sh && ./tools/test-avr-size.sh"
   },
   "repository": {},
   "keywords": [],
-  "author": "SolderPop <dev@solderpop.io>",
+  "author": "SolderPop <contact@solderpop.io>",
   "license": "AGPL-3.0",
   "main": "dist/index.js",
   "dependencies": {
     "@glennsl/bs-revamp": "^0.1.1",
-    "belt-holes": "^0.34.0",
+    "@rescript/runtime": "^12.3.0",
+    "belt-holes": "workspace:*",
     "handlebars": "^4.0.6",
     "hm-def": "^0.3.2",
     "moo": "^0.5.1",
@@ -33,8 +35,8 @@
     "ramda": "^0.24.1",
     "ramda-fantasy": "^0.8.0",
     "sanctuary-def": "^0.14.0",
-    "sdp-func-tools": "^0.34.0",
-    "sdp-project": "^0.38.0"
+    "sdp-func-tools": "workspace:*",
+    "sdp-project": "workspace:*"
   },
   "devDependencies": {
     "@babel/cli": "^8.0.4",
@@ -45,7 +47,7 @@
     "rescript": "^12.3.0",
     "chai": "^4.1.2",
     "onchange": "^5.2.0",
-    "sdp-fs": "^0.38.0"
+    "sdp-fs": "workspace:*"
   },
   "files": [
     "dist",

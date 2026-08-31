@@ -1,17 +1,23 @@
-import { test } from '@oclif/test';
-import chai from 'chai';
 import path from 'path';
 import os from 'os';
+import { fileURLToPath } from 'url';
 import process from 'process';
 import fs from 'fs-extra';
-import { bundledWorkspacePath, createWorkingDirectory } from './helpers.js';
+import { runCommand } from '@oclif/test';
+import chai from 'chai';
+import {
+  bundledWorkspacePath,
+  createWorkingDirectory,
+  stripOclifTestTsWarning,
+  withEnv,
+} from './helpers.js';
 
 const { assert } = chai;
 
-const defaultOutputDir = path.resolve(os.tmpdir(), 'sdp-tabtest');
+// see test-func/help.spec.js for why this is needed
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-// save process.exit for unmocking
-const { exit } = process;
+const defaultOutputDir = path.resolve(os.tmpdir(), 'sdp-tabtest');
 
 // save tty status
 const { isTTY } = process.stdout;
@@ -19,115 +25,137 @@ const { isTTY } = process.stdout;
 const its = (wd, tabtestOutDir) => {
   const myWSPath = path.resolve(wd, 'workspace');
 
-  const stdMock = test.stdout().stderr();
-
-  stdMock
-    .command(['tabtest', `--workspace=${myWSPath}`])
-    .it(
-      `cannot find project without argument, but creates workspace, prints error to stderr, non-zero exit code`,
-      async (ctx) => {
-        assert.isOk(
-          await fs.pathExists(path.resolve(myWSPath, '.xodworkspace')),
-          'workspace should be created'
-        );
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
-        assert.match(
-          ctx.stderr,
-          /could not find project directory around/,
-          'stderr must be with error'
-        );
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
-      }
+  it(`cannot find project without argument, but creates workspace, prints error to stderr, non-zero exit code`, async () => {
+    const { stdout, stderr, error } = await runCommand(
+      ['tabtest', `--workspace=${myWSPath}`],
+      { root }
     );
-
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .command([
-      'tabtest',
-      path.resolve(myWSPath, 'kajsdhflkjsdhflkjashldkfjlkjasdfkjl'),
-    ])
-    .it(
-      'fails when wrong path to project, workspace from ENV, exits with non-zero code',
-      (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
-        assert.match(
-          ctx.stderr,
-          /Invalid file path/,
-          'stderr must be with error'
-        );
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
-      }
+    assert.isOk(
+      await fs.pathExists(path.resolve(myWSPath, '.xodworkspace')),
+      'workspace should be created'
     );
+    assert.equal(stdout, '', 'stdout must be empty');
+    assert.match(
+      stderr,
+      /could not find project directory around/,
+      'stderr must be with error'
+    );
+    assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
+  });
 
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .command([
-      'tabtest',
-      path.resolve(bundledWorkspacePath, '__lib__', 'xod', 'bits'),
-      'asdfasdfasdfasdfasdfasdfasdf',
-    ])
-    .it('fails when wrong patch name, exits with non-zero code', (ctx) => {
-      assert.equal(ctx.stdout, '', 'stdout must be empty');
+  it('fails when wrong path to project, workspace from ENV, exits with non-zero code', () =>
+    withEnv({ XOD_WORKSPACE: myWSPath }, async () => {
+      const { stdout, stderr, error } = await runCommand(
+        [
+          'tabtest',
+          path.resolve(myWSPath, 'kajsdhflkjsdhflkjashldkfjlkjasdfkjl'),
+        ],
+        { root }
+      );
+      assert.equal(stdout, '', 'stdout must be empty');
+      assert.match(stderr, /Invalid file path/, 'stderr must be with error');
+      assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
+    }));
+
+  it('fails when wrong patch name, exits with non-zero code', () =>
+    withEnv({ XOD_WORKSPACE: myWSPath }, async () => {
+      const { stdout, stderr, error } = await runCommand(
+        [
+          'tabtest',
+          path.resolve(bundledWorkspacePath, '__lib__', 'xod', 'bits'),
+          'asdfasdfasdfasdfasdfasdfasdf',
+        ],
+        { root }
+      );
+      assert.equal(stdout, '', 'stdout must be empty');
       assert.match(
-        ctx.stderr,
+        stderr,
         /does not exist in the project/,
         'stderr must be with error'
       );
-      assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
-    });
+      assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
+    }));
 
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .command([
-      'tabtest',
-      '--no-build',
-      path.resolve(bundledWorkspacePath, '__lib__', 'xod', 'bits'),
-    ])
-    .it(
-      'create output dir, run tests for whole project, but do not build (--no-build), stderr with messages, stdout is empty, exit with zero code',
-      async (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
-        assert.notEqual(ctx.stderr, '', 'stderr must be with messages');
-        assert.equal(process.exitCode, 0, 'exit code must be zero');
-        assert.isOk(
-          await fs.pathExists(defaultOutputDir),
-          'output dir should be created'
-        );
-        assert.isOk(
-          await fs.pathExists(
-            path.resolve(defaultOutputDir, 'bits', 'bcd-to-dec.sketch.cpp')
+  it('create output dir, run tests for whole project, but do not build (--no-build), stderr with messages, stdout is empty, exit with zero code', () =>
+    withEnv({ XOD_WORKSPACE: myWSPath }, async () => {
+      const { stdout, stderr, error } = await runCommand(
+        [
+          'tabtest',
+          '--no-build',
+          path.resolve(bundledWorkspacePath, '__lib__', 'xod', 'bits'),
+        ],
+        { root }
+      );
+      assert.equal(stdout, '', 'stdout must be empty');
+      assert.notEqual(stderr, '', 'stderr must be with messages');
+      assert.equal(error?.oclif?.exit, 0, 'exit code must be zero');
+      assert.isOk(
+        await fs.pathExists(defaultOutputDir),
+        'output dir should be created'
+      );
+      assert.isOk(
+        await fs.pathExists(
+          path.resolve(defaultOutputDir, 'bits', 'bcd-to-dec.sketch.cpp')
+        ),
+        'tabtest sketch must be copied'
+      );
+    }));
+
+  it('create output dir, run tests for patch by full path, but do not build (--no-build), stderr with messages, stdout is empty, exit with zero code', () =>
+    withEnv({ XOD_WORKSPACE: myWSPath }, async () => {
+      const { stdout, stderr, error } = await runCommand(
+        [
+          'tabtest',
+          '--no-build',
+          '--quiet',
+          `--output-dir=${tabtestOutDir}`,
+          path.resolve(
+            bundledWorkspacePath,
+            '__lib__',
+            'xod',
+            'bits',
+            'bcd-to-dec',
+            'patch.xodp'
           ),
-          'tabtest sketch must be copied'
-        );
-      }
-    );
+        ],
+        { root }
+      );
+      assert.equal(stdout, '', 'stdout must be empty');
+      assert.equal(stderr, '', 'stderr must be empty');
+      assert.equal(error?.oclif?.exit, 0, 'exit code must be zero');
+      assert.isOk(
+        await fs.pathExists(tabtestOutDir),
+        'output dir should be created'
+      );
+      assert.isOk(
+        await fs.pathExists(
+          path.resolve(tabtestOutDir, 'bcd-to-dec.sketch.cpp')
+        ),
+        'tabtest sketch must be copied'
+      );
+    }));
 
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .command([
-      'tabtest',
-      '--no-build',
-      '--quiet',
-      `--output-dir=${tabtestOutDir}`,
-      path.resolve(
-        bundledWorkspacePath,
-        '__lib__',
-        'xod',
-        'bits',
-        'bcd-to-dec',
-        'patch.xodp'
-      ),
-    ])
-    .it(
-      'create output dir, run tests for patch by full path, but do not build (--no-build), stderr with messages, stdout is empty, exit with zero code',
-      async (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
-        assert.equal(ctx.stderr, '', 'stderr must be empty');
-        assert.equal(process.exitCode, 0, 'exit code must be zero');
+  it('create output dir, run tests for patch by project path + short patch name, but do not build (--no-build), stderr with messages, stdout is empty, exit with zero code', () =>
+    withEnv(
+      { XOD_WORKSPACE: myWSPath, XOD_OUTPUT: tabtestOutDir },
+      async () => {
+        const { stdout, stderr, error } = await runCommand(
+          [
+            'tabtest',
+            '--no-build',
+            '--quiet',
+            path.resolve(bundledWorkspacePath, '__lib__', 'xod', 'bits'),
+            'bcd-to-dec',
+          ],
+          { root }
+        );
         assert.isOk(
           await fs.pathExists(tabtestOutDir),
           'output dir should be created'
         );
+        assert.equal(stdout, '', 'stdout must be empty');
+        assert.equal(stderr, '', 'stderr must be empty');
+        assert.equal(error?.oclif?.exit, 0, 'exit code must be zero');
         assert.isOk(
           await fs.pathExists(
             path.resolve(tabtestOutDir, 'bcd-to-dec.sketch.cpp')
@@ -135,62 +163,34 @@ const its = (wd, tabtestOutDir) => {
           'tabtest sketch must be copied'
         );
       }
-    );
+    ));
 
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .env({ XOD_OUTPUT: tabtestOutDir })
-    .command([
-      'tabtest',
-      '--no-build',
-      '--quiet',
-      path.resolve(bundledWorkspacePath, '__lib__', 'xod', 'bits'),
-      'bcd-to-dec',
-    ])
-    .it(
-      'create output dir, run tests for patch by project path + short patch name, but do not build (--no-build), stderr with messages, stdout is empty, exit with zero code',
-      async (ctx) => {
+  it('create output dir, run tests for patch by project path + long patch name, build, stderr with messages, stdout is empty, exit with zero code', () =>
+    withEnv(
+      { XOD_WORKSPACE: myWSPath, XOD_OUTPUT: tabtestOutDir },
+      async () => {
+        const { stdout, stderr, error } = await runCommand(
+          [
+            'tabtest',
+            '--quiet',
+            path.resolve(bundledWorkspacePath, '__lib__', 'xod', 'bits'),
+            '@/bcd-to-dec',
+          ],
+          { root }
+        );
         assert.isOk(
           await fs.pathExists(tabtestOutDir),
           'output dir should be created'
         );
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
-        assert.equal(ctx.stderr, '', 'stderr must be empty');
-        assert.equal(process.exitCode, 0, 'exit code must be zero');
-        assert.isOk(
-          await fs.pathExists(
-            path.resolve(tabtestOutDir, 'bcd-to-dec.sketch.cpp')
-          ),
-          'tabtest sketch must be copied'
-        );
-      }
-    );
-
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .env({ XOD_OUTPUT: tabtestOutDir })
-    .command([
-      'tabtest',
-      '--quiet',
-      path.resolve(bundledWorkspacePath, '__lib__', 'xod', 'bits'),
-      '@/bcd-to-dec',
-    ])
-    .it(
-      'create output dir, run tests for patch by project path + long patch name, build, stderr with messages, stdout is empty, exit with zero code',
-      async (ctx) => {
-        assert.isOk(
-          await fs.pathExists(tabtestOutDir),
-          'output dir should be created'
-        );
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
-        assert.equal(ctx.stderr, '', 'stderr must be empty');
-        assert.equal(process.exitCode, 0, 'exit code must be zero');
+        assert.equal(stdout, '', 'stdout must be empty');
+        assert.equal(stderr, '', 'stderr must be empty');
+        assert.equal(error?.oclif?.exit, 0, 'exit code must be zero');
         assert.isOk(
           await fs.pathExists(path.resolve(tabtestOutDir, 'bcd-to-dec.run')),
           'tabtest must be compiled'
         );
       }
-    );
+    ));
 };
 
 describe('sdpc tabtest', () => {
@@ -210,61 +210,35 @@ describe('sdpc tabtest', () => {
   });
 
   describe('common', () => {
-    // mock process.exit
-    beforeEach(() => {
-      process.exit = (code) => {
-        process.exitCode = code;
-      };
+    it(`shows help in stdout, doesn't print to stderr, exits with 0`, async () => {
+      const { stdout, stderr } = await runCommand(['tabtest', '--help'], {
+        root,
+      });
+      assert.include(stdout, 'ENTRYPOINT', 'ENTRYPOINT argument not found');
+      assert.include(stdout, '--help', '--help flag not found');
+      assert.include(stdout, '--no-build', '--no-build flag not found');
+      assert.include(stdout, '--output-dir', '--output-dir flag not found');
+      assert.include(stdout, '--quiet', '--quiet flag not found');
+      assert.include(stdout, '--version', '--version flag not found');
+      assert.include(stdout, '--workspace', '--workspace flag not found');
+      assert.equal(
+        stripOclifTestTsWarning(stderr),
+        '',
+        'stderr should be emply'
+      );
     });
 
-    // unmock process.exit
-    afterEach(() => {
-      process.exit = exit;
+    it(`shows version in stdout, doesn't print to stderr and exits with 0`, async () => {
+      const { stdout, stderr } = await runCommand(['tabtest', '--version'], {
+        root,
+      });
+      assert.include(stdout, 'sdp-cli', 'version string not found');
+      assert.equal(
+        stripOclifTestTsWarning(stderr),
+        '',
+        'stderr should be emply'
+      );
     });
-
-    test
-      .stdout()
-      .stderr()
-      .command(['tabtest', '--help'])
-      .catch(/EEXIT: 0/)
-      .it(
-        `shows help in stdout, doesn't print to stderr, exits with 0`,
-        (ctx) => {
-          assert.include(
-            ctx.stdout,
-            'ENTRYPOINT',
-            'ENTRYPOINT argument not found'
-          );
-          assert.include(ctx.stdout, '--help', '--help flag not found');
-          assert.include(ctx.stdout, '--no-build', '--no-build flag not found');
-          assert.include(
-            ctx.stdout,
-            '--output-dir',
-            '--output-dir flag not found'
-          );
-          assert.include(ctx.stdout, '--quiet', '--quiet flag not found');
-          assert.include(ctx.stdout, '--version', '--version flag not found');
-          assert.include(
-            ctx.stdout,
-            '--workspace',
-            '--workspace flag not found'
-          );
-          assert.equal(ctx.stderr, '', 'stderr should be emply');
-        }
-      );
-
-    test
-      .stdout()
-      .stderr()
-      .command(['tabtest', '--version'])
-      .catch(/EEXIT: 0/)
-      .it(
-        `shows version in stdout, doesn't print to stderr and exits with 0`,
-        (ctx) => {
-          assert.include(ctx.stdout, 'sdp-cli', 'version string not found');
-          assert.equal(ctx.stderr, '', 'stderr should be emply');
-        }
-      );
   });
 
   describe('TTY', () => {
@@ -273,16 +247,7 @@ describe('sdpc tabtest', () => {
       process.stderr.isTTY = true;
     });
 
-    // mock process.exit
-    beforeEach(() => {
-      process.exit = (code) => {
-        process.exitCode = code;
-      };
-    });
-
-    // unmock process.exit
     afterEach(async () => {
-      process.exit = exit;
       // clean out tabtest working directory
       await fs.remove(tabtestOutDir);
       await fs.remove(defaultOutputDir);
@@ -297,16 +262,7 @@ describe('sdpc tabtest', () => {
       process.stderr.isTTY = false;
     });
 
-    // mock process.exit
-    beforeEach(() => {
-      process.exit = (code) => {
-        process.exitCode = code;
-      };
-    });
-
-    // unmock process.exit
     afterEach(async () => {
-      process.exit = exit;
       // clean out tabtest working directory
       await fs.remove(tabtestOutDir);
       await fs.remove(defaultOutputDir);

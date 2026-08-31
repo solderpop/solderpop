@@ -2,10 +2,9 @@
 import path from 'path';
 import rd from 'readline';
 import fs from 'fs-extra';
-import { cwd, exit, stderr } from 'process';
-import { cli } from 'cli-ux';
+import { cwd, stderr } from 'process';
+import { Command, ux } from '@oclif/core';
 import chalk from 'chalk';
-import { Command } from '@oclif/command';
 import R from 'ramda';
 import {
   getPathToXodProject,
@@ -90,6 +89,8 @@ const getProjectPathPatchName = (somePath, patch = null) => {
 
 class BaseCommand extends Command {
   async init() {
+    await super.init();
+
     this.flags = {
       quiet: false,
     };
@@ -163,8 +164,8 @@ class BaseCommand extends Command {
   }
 
   // parse flags and args
-  parseArgv(cls) {
-    const parsed = this.parse(cls);
+  async parseArgv(cls) {
+    const parsed = await this.parse(cls);
     this.argv = parsed.argv;
     this.args = parsed.args;
     this.flags = parsed.flags;
@@ -180,7 +181,7 @@ class BaseCommand extends Command {
       })
       .catch((err) => {
         this.printError(err);
-        return exit(255);
+        return this.exit(255);
       });
   }
 
@@ -195,7 +196,7 @@ class BaseCommand extends Command {
             return spawnWorkspaceFile(e.path);
           default:
             this.printError(e);
-            return exit(254);
+            return this.exit(254);
         }
       }
     );
@@ -209,10 +210,10 @@ class BaseCommand extends Command {
   // prompt for username and password if needed and patch flags
   async getCredentials() {
     this.flags.username =
-      this.flags.username || (await cli.prompt('XOD API Username'));
+      this.flags.username || (await ux.prompt('XOD API Username'));
     this.flags.password =
       this.flags.password ||
-      (await cli.prompt('XOD API Password', { type: 'hide' }));
+      (await ux.prompt('SDP API Password', { type: 'hide' }));
   }
 }
 

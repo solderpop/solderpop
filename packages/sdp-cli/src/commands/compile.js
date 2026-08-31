@@ -1,10 +1,9 @@
-/* eslint-disable no-param-reassign */
-import { cwd, exit } from 'process';
+import { cwd } from 'process';
 import path from 'path';
 import R from 'ramda';
 import fs from 'fs-extra';
 import chalk from 'chalk';
-import { flags } from '@oclif/command';
+import { Flags } from '@oclif/core';
 import { resolvePath } from 'sdp-fs';
 import * as xdb from 'sdp-deploy-bin';
 import BaseCommand from '../baseCommand.js';
@@ -23,7 +22,7 @@ const { dropLast, last, lensProp, when, over, pick } = R;
 
 class CompileCommand extends BaseCommand {
   async run() {
-    this.parseArgv(CompileCommand);
+    await this.parseArgv(CompileCommand);
     await this.ensureWorkspace();
     await this.parseEntrypoint();
     const { board, debug, workspace, quiet } = this.flags;
@@ -101,11 +100,14 @@ class CompileCommand extends BaseCommand {
           )}`
         );
       })
-      .then(() => exit(0))
+      .then(() => this.exit(0))
       .catch((err) => {
+        // this.exit(0) above throws an ExitError -- an already-intentional
+        // success exit, not a real failure. Let it propagate, don't re-handle it.
+        if (err.oclif?.exit !== undefined) throw err;
         if (messages) this.info(messages.join('\n'));
         this.printError(this.patchArduinoCliError(err));
-        return exit((err.payload || err).code || 100);
+        return this.exit((err.payload || err).code || 100);
       });
   }
 }
@@ -117,7 +119,7 @@ CompileCommand.usage = 'compile [options] [entrypoint]';
 CompileCommand.flags = {
   ...BaseCommand.flags,
   ...pick(['board', 'debug', 'workspace'], myFlags),
-  output: flags.string({
+  output: Flags.string({
     char: 'o',
     description:
       'save the result binary to the directory; the same directory is used for intermediate build artifacts; defaults to `cwd`',
@@ -126,7 +128,7 @@ CompileCommand.flags = {
   }),
 };
 
-CompileCommand.args = [commonArgs.entrypoint];
+CompileCommand.args = { entrypoint: commonArgs.entrypoint };
 
 CompileCommand.examples = [
   'Compile a program using the current patch as entry point\n' +

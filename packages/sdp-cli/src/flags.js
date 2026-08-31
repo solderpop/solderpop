@@ -1,21 +1,21 @@
-import { flags } from '@oclif/command';
+import { Flags } from '@oclif/core';
 
-export const help = flags.help({
+export const help = Flags.help({
   char: 'h',
 });
 
-export const version = flags.version({
+export const version = Flags.version({
   char: 'V',
 });
 
-export const api = flags.string({
+export const api = Flags.string({
   description: 'XOD API hostname',
   env: 'XOD_API',
   default: 'solderpop.io',
   helpValue: 'hostname',
 });
 
-export const board = flags.string({
+export const board = Flags.string({
   char: 'b',
   description: 'target board identifier (see `sdpc boards` output)',
   env: 'XOD_BOARD',
@@ -23,37 +23,37 @@ export const board = flags.string({
   helpValue: 'fqbn',
 });
 
-export const debug = flags.boolean({
+export const debug = Flags.boolean({
   description: 'enable debug traces',
   env: 'XOD_DEBUG',
   default: false,
 });
 
-export const onBehalf = flags.string({
+export const onBehalf = Flags.string({
   description: 'publish on behalf of the username',
   env: 'XOD_ONBEHALF',
   helpValue: 'username',
 });
 
-export const password = flags.string({
+export const password = Flags.string({
   description: 'XOD API password',
   env: 'XOD_PASSWORD',
   helpValue: 'password',
 });
 
-export const quiet = flags.boolean({
+export const quiet = Flags.boolean({
   char: 'q',
   description: 'do not log messages other than errors',
   default: false,
 });
 
-export const username = flags.string({
+export const username = Flags.string({
   description: 'XOD API username',
   env: 'XOD_USERNAME',
   helpValue: 'username',
 });
 
-export const workspace = flags.string({
+export const workspace = Flags.string({
   char: 'w',
   description: 'use the workspace specified, defaults to $HOME/xod',
   env: 'XOD_WORKSPACE',

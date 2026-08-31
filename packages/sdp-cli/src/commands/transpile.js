@@ -1,7 +1,6 @@
-/* eslint-disable no-param-reassign */
-import { exit, stdout } from 'process';
+import { stdout } from 'process';
 import R from 'ramda';
-import { flags } from '@oclif/command';
+import { Flags } from '@oclif/core';
 import { writeFile, resolvePath } from 'sdp-fs';
 
 import BaseCommand from '../baseCommand.js';
@@ -19,7 +18,7 @@ const { pick } = R;
 
 class TranspileCommand extends BaseCommand {
   async run() {
-    this.parseArgv(TranspileCommand);
+    await this.parseArgv(TranspileCommand);
     await this.ensureWorkspace();
     await this.parseEntrypoint();
     const { debug, output, quiet } = this.flags;
@@ -56,10 +55,13 @@ class TranspileCommand extends BaseCommand {
           stdout.write(ctx.transpile);
         }
       })
-      .then(() => exit(0))
+      .then(() => this.exit(0))
       .catch((err) => {
+        // this.exit(0) above throws an ExitError -- an already-intentional
+        // success exit, not a real failure. Let it propagate, don't re-handle it.
+        if (err.oclif?.exit !== undefined) throw err;
         this.printError(err);
-        return exit(100);
+        return this.exit(100);
       });
   }
 }
@@ -71,7 +73,7 @@ TranspileCommand.usage = 'transpile [options] [entrypoint]';
 TranspileCommand.flags = {
   ...BaseCommand.flags,
   ...pick(['debug', 'workspace'], myFlags),
-  output: flags.string({
+  output: Flags.string({
     char: 'o',
     description: 'C++ output file path, default to stdout',
     env: 'XOD_OUTPUT',
@@ -80,7 +82,7 @@ TranspileCommand.flags = {
   }),
 };
 
-TranspileCommand.args = [commonArgs.entrypoint];
+TranspileCommand.args = { entrypoint: commonArgs.entrypoint };
 
 TranspileCommand.examples = [
   'Transpile a program using the cwd patch as entry point, print to stdout\n' +

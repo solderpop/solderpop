@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-import { exit } from 'process';
 import R from 'ramda';
 import asTable from 'as-table';
 import * as xdb from 'sdp-deploy-bin';
@@ -19,7 +17,7 @@ const mergeAvailableInstalled = (available, installed) => {
 
 class BoardsCommand extends BaseCommand {
   async run() {
-    this.parseArgv(BoardsCommand);
+    await this.parseArgv(BoardsCommand);
     await this.ensureWorkspace();
     const { workspace, quiet } = this.flags;
 
@@ -48,10 +46,13 @@ class BoardsCommand extends BaseCommand {
         ? asTable.configure({ maxTotalWidth: process.stdout.columns })(rows)
         : asTable(rows);
       process.stdout.write(`${table}\n`);
-      return exit(0);
+      return this.exit(0);
     } catch (err) {
+      // this.exit(0) above throws an ExitError -- an already-intentional
+      // success exit, not a real failure. Let it propagate, don't re-handle it.
+      if (err.oclif?.exit !== undefined) throw err;
       this.printError(this.patchArduinoCliError(err));
-      return exit((err.payload || err).code || 100);
+      return this.exit((err.payload || err).code || 100);
     }
   }
 }
@@ -62,7 +63,7 @@ BoardsCommand.usage = 'boards [options]';
 
 BoardsCommand.flags = BaseCommand.flags;
 
-BoardsCommand.args = [];
+BoardsCommand.args = {};
 
 BoardsCommand.strict = false;
 

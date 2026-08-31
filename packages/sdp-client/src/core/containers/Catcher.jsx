@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import storeShape from 'react-redux/src/utils/storeShape.js';
-import { Icon } from 'react-fa';
+import Icon from '../components/Icon.jsx';
 import cls from 'classnames';
 
 import { recoverState } from '../actions.js';
