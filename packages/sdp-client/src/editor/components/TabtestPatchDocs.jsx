@@ -2,7 +2,7 @@ import React from 'react';
 import PT from 'prop-types';
 import R from 'ramda';
 import * as XP from 'sdp-project';
-import Icon from 'react-fa';
+import Icon from '../../core/components/Icon.jsx';
 
 import { getUtmSiteUrl } from '../../utils/urls.js';
 

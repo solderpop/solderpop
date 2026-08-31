@@ -27,7 +27,7 @@ const registerPath = require.resolve('@babel/register', {
 // requiring the same file under a different root/config.
 process.env.BABEL_DISABLE_CACHE = '1';
 // See the require.resolve comment above for why this can't be a static path.
-// eslint-disable-next-line import/no-dynamic-require, global-require
+// eslint-disable-next-line import/no-dynamic-require
 const registerModule = require(registerPath);
 // Babel 7's @babel/register exports the register function directly
 // (callable, with .default pointing back at itself for interop). Babel 8's

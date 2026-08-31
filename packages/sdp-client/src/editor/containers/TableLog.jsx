@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import ReactDataSheet from 'react-datasheet';
-import { Icon } from 'react-fa';
+import Icon from '../../core/components/Icon.jsx';
 
 import * as Actions from '../actions.js';
 import * as DebuggerSelectors from '../../debugger/selectors.js';

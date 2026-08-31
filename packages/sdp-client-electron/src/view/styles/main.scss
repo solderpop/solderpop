@@ -1,6 +1,5 @@
-@import
-  'components/SaveProgressBar',
-  'components/PopupProjectSelection',
-  'components/TitleBar',
-  'components/WelcomeDialog',
-  'components/PopupAbout';
+@use 'components/SaveProgressBar';
+@use 'components/PopupProjectSelection';
+@use 'components/TitleBar';
+@use 'components/WelcomeDialog';
+@use 'components/PopupAbout';

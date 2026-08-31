@@ -8,6 +8,8 @@ overrides:
   'ramda-fantasy>ramda': '^0.24.1'
   electron-is-dev: '^2.0.0'
   spdy: 'file:./tools/spdy-shim'
+  # bundled ^0.3.9 can't resolve "exports"-only packages (e.g. @oclif/core)
+  eslint-import-resolver-node: '^0.4.0'
 
 # Packages with an install/postinstall script that pnpm blocks by default
 # (supply-chain hardening — see https://pnpm.io/settings/build#allowbuilds).

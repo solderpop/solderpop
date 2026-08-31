@@ -1,14 +1,19 @@
-import { test } from '@oclif/test';
-import chai from 'chai';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import process from 'process';
 import fs from 'fs-extra';
-import { createWorkingDirectory } from './helpers.js';
+import { runCommand } from '@oclif/test';
+import chai from 'chai';
+import {
+  createWorkingDirectory,
+  stripOclifTestTsWarning,
+  withEnv,
+} from './helpers.js';
 
 const { assert } = chai;
 
-// save process.exit for unmocking
-const { exit } = process;
+// see test-func/help.spec.js for why this is needed
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 // save tty status
 const { isTTY } = process.stdout;
@@ -18,88 +23,79 @@ const stderrWidth = process.stderr.columns;
 const its = (wd) => {
   const myWSPath = path.resolve(wd, 'workspace');
 
-  const stdMock = test.stdout().stderr();
+  it(`list boards, creates workspace, stderr is empty, zero exit code`, async () => {
+    const { stdout, stderr, error } = await runCommand(
+      ['boards', `--workspace=${myWSPath}`],
+      { root }
+    );
+    assert.isOk(
+      await fs.pathExists(path.resolve(myWSPath, '.xodworkspace')),
+      'workspace should be created'
+    );
+    assert.include(stdout, 'Board Name', 'stdout must contain table');
+    if (!process.stdout.columns) {
+      assert.include(
+        stdout,
+        'not installed',
+        'table with [not installed] flag'
+      );
+    }
+    assert.equal(stderr, '', 'stderr must be empty');
+    assert.equal(error?.oclif?.exit, 0, 'exit code must be zero');
+  });
 
-  stdMock
-    .command(['boards', `--workspace=${myWSPath}`])
-    .it(
-      `list boards, creates workspace, stderr is empty, zero exit code`,
-      async (ctx) => {
-        assert.isOk(
-          await fs.pathExists(path.resolve(myWSPath, '.xodworkspace')),
-          'workspace should be created'
+  it(`list boards (without header), creates workspace, stderr is empty, zero exit code`, () =>
+    withEnv({ XOD_WORKSPACE: myWSPath }, async () => {
+      const { stdout, stderr, error } = await runCommand(['boards', `-q`], {
+        root,
+      });
+      assert.isOk(
+        await fs.pathExists(path.resolve(myWSPath, '.xodworkspace')),
+        'workspace should be created'
+      );
+      assert.notInclude(
+        stdout,
+        'Board Name',
+        'stdout should not contain header'
+      );
+      if (!process.stdout.columns) {
+        assert.include(
+          stdout,
+          'not installed',
+          'table with [not installed] flag'
         );
-        assert.include(ctx.stdout, 'Board Name', 'stdout must contain table');
-        if (!process.stdout.columns) {
-          assert.include(
-            ctx.stdout,
-            'not installed',
-            'table with [not installed] flag'
-          );
-        }
-        assert.equal(ctx.stderr, '', 'stderr must be empty');
-        assert.equal(process.exitCode, 0, 'exit code must be zero');
       }
-    );
+      assert.equal(stderr, '', 'stderr must be empty');
+      assert.equal(error?.oclif?.exit, 0, 'exit code must be zero');
+    }));
 
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .command(['boards', `-q`])
-    .it(
-      `list boards (without header), creates workspace, stderr is empty, zero exit code`,
-      async (ctx) => {
-        assert.isOk(
-          await fs.pathExists(path.resolve(myWSPath, '.xodworkspace')),
-          'workspace should be created'
-        );
-        assert.notInclude(
-          ctx.stdout,
-          'Board Name',
-          'stdout should not contain header'
-        );
+  it(`arduino-cli not found, stdout is empty, stderr with error, non-zero exit code`, () =>
+    withEnv(
+      { XOD_WORKSPACE: myWSPath, SDP_ARDUINO_CLI: '/nonexistent' },
+      async () => {
+        const { stdout, stderr, error } = await runCommand(['boards'], {
+          root,
+        });
+        assert.equal(stdout, '', 'stdout must be empty');
         if (!process.stdout.columns) {
-          assert.include(
-            ctx.stdout,
-            'not installed',
-            'table with [not installed] flag'
-          );
+          assert.include(stderr, 'arduino-cli not found', 'stderr with error');
         }
-        assert.equal(ctx.stderr, '', 'stderr must be empty');
-        assert.equal(process.exitCode, 0, 'exit code must be zero');
+        assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
       }
-    );
+    ));
 
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .env({ SDP_ARDUINO_CLI: '/nonexistent' })
-    .command(['boards'])
-    .it(
-      `arduino-cli not found, stdout is empty, stderr with error, non-zero exit code`,
-      async (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
-        if (!process.stdout.columns) {
-          assert.include(
-            ctx.stderr,
-            'arduino-cli not found',
-            'stderr with error'
-          );
-        }
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
+  it(`arduino-cli not found, quiet flag, stdout is empty, stderr is empty, non-zero exit code`, () =>
+    withEnv(
+      { XOD_WORKSPACE: myWSPath, SDP_ARDUINO_CLI: '/nonexistent' },
+      async () => {
+        const { stdout, stderr, error } = await runCommand(['boards', '-q'], {
+          root,
+        });
+        assert.equal(stdout, '', 'stdout must be empty');
+        assert.equal(stderr, '', 'stderr must be empty');
+        assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
       }
-    );
-
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .env({ SDP_ARDUINO_CLI: '/nonexistent' })
-    .command(['boards', '-q'])
-    .it(
-      `arduino-cli not found, quiet flag, stdout is empty, stderr is empty, non-zero exit code`,
-      async (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
-        assert.equal(ctx.stderr, '', 'stderr must be empty');
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
-      }
-    );
+    ));
 };
 
 describe('sdpc boards', () => {
@@ -120,50 +116,32 @@ describe('sdpc boards', () => {
   });
 
   describe('common', () => {
-    // mock process.exit
-    beforeEach(() => {
-      process.exit = (code) => {
-        process.exitCode = code;
-      };
+    it(`shows help in stdout, doesn't print to stderr, exits with 0`, async () => {
+      const { stdout, stderr } = await runCommand(['boards', '--help'], {
+        root,
+      });
+      assert.include(stdout, '--version', '--version flag not found');
+      assert.include(stdout, '--help', '--help flag not found');
+      assert.include(stdout, '--quiet', '--quiet flag not found');
+      assert.include(stdout, '--workspace', '--workspace flag not found');
+      assert.equal(
+        stripOclifTestTsWarning(stderr),
+        '',
+        'stderr should be emply'
+      );
     });
 
-    // unmock process.exit
-    afterEach(() => {
-      process.exit = exit;
+    it(`shows version in stdout, doesn't print to stderr and exits with 0`, async () => {
+      const { stdout, stderr } = await runCommand(['boards', '--version'], {
+        root,
+      });
+      assert.include(stdout, 'sdp-cli', 'version string not found');
+      assert.equal(
+        stripOclifTestTsWarning(stderr),
+        '',
+        'stderr should be emply'
+      );
     });
-
-    test
-      .stdout()
-      .stderr()
-      .command(['boards', '--help'])
-      .catch(/EEXIT: 0/)
-      .it(
-        `shows help in stdout, doesn't print to stderr, exits with 0`,
-        (ctx) => {
-          assert.include(ctx.stdout, '--version', '--version flag not found');
-          assert.include(ctx.stdout, '--help', '--help flag not found');
-          assert.include(ctx.stdout, '--quiet', '--quiet flag not found');
-          assert.include(
-            ctx.stdout,
-            '--workspace',
-            '--workspace flag not found'
-          );
-          assert.equal(ctx.stderr, '', 'stderr should be emply');
-        }
-      );
-
-    test
-      .stdout()
-      .stderr()
-      .command(['boards', '--version'])
-      .catch(/EEXIT: 0/)
-      .it(
-        `shows version in stdout, doesn't print to stderr and exits with 0`,
-        (ctx) => {
-          assert.include(ctx.stdout, 'sdp-cli', 'version string not found');
-          assert.equal(ctx.stderr, '', 'stderr should be emply');
-        }
-      );
   });
 
   describe('TTY', () => {
@@ -172,18 +150,6 @@ describe('sdpc boards', () => {
       process.stderr.isTTY = true;
       process.stdout.columns = 80;
       process.stderr.columns = 80;
-    });
-
-    // mock process.exit
-    beforeEach(() => {
-      process.exit = (code) => {
-        process.exitCode = code;
-      };
-    });
-
-    // unmock process.exit
-    afterEach(() => {
-      process.exit = exit;
     });
 
     its(wd);
@@ -195,18 +161,6 @@ describe('sdpc boards', () => {
       process.stderr.isTTY = false;
       process.stdout.columns = undefined;
       process.stderr.columns = undefined;
-    });
-
-    // mock process.exit
-    beforeEach(() => {
-      process.exit = (code) => {
-        process.exitCode = code;
-      };
-    });
-
-    // unmock process.exit
-    afterEach(() => {
-      process.exit = exit;
     });
 
     its(wd);

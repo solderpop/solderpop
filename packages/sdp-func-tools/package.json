@@ -17,6 +17,7 @@
     "test": "mocha --require ../../tools/babel-register.js --color test/**/*.spec.js"
   },
   "dependencies": {
+    "@rescript/runtime": "^12.3.0",
     "hm-def": "^0.3.2",
     "ramda": "^0.24.1",
     "ramda-fantasy": "^0.8.0",

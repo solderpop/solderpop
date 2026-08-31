@@ -1,10 +1,8 @@
-/* eslint-disable no-param-reassign */
 import path from 'path';
-import { exit } from 'process';
 import { tmpdir } from 'os';
 import R from 'ramda';
 import fs from 'fs-extra';
-import { flags } from '@oclif/command';
+import { Flags } from '@oclif/core';
 
 import childProcess from 'child_process';
 import { createError, foldEither, allPromises } from 'sdp-func-tools';
@@ -40,7 +38,7 @@ const spawn = (cmd, args, opts) =>
 
 class TabtestCommand extends BaseCommand {
   async run() {
-    this.parseArgv(TabtestCommand);
+    await this.parseArgv(TabtestCommand);
     await this.ensureWorkspace();
     await this.parseEntrypoint();
     const {
@@ -132,10 +130,13 @@ class TabtestCommand extends BaseCommand {
           await spawn('make', ['test'], childProcessOpts);
         }
       })
-      .then(() => exit(0))
+      .then(() => this.exit(0))
       .catch((err) => {
+        // this.exit(0) above throws an ExitError -- an already-intentional
+        // success exit, not a real failure. Let it propagate, don't re-handle it.
+        if (err.oclif?.exit !== undefined) throw err;
         this.printError(err);
-        return exit((err.payload || err).code || 100);
+        return this.exit((err.payload || err).code || 100);
       });
   }
 }
@@ -147,7 +148,7 @@ TabtestCommand.usage = 'tabtest [options] [entrypoint]';
 TabtestCommand.flags = {
   ...BaseCommand.flags,
   ...pick(['workspace'], myFlags),
-  'output-dir': flags.string({
+  'output-dir': Flags.string({
     char: 'o',
     description: 'path to directory where to save tabtest data',
     env: 'XOD_OUTPUT',
@@ -155,13 +156,13 @@ TabtestCommand.flags = {
     default: defaultOutputDir,
     parse: (p) => resolvePath(p),
   }),
-  'no-build': flags.boolean({
+  'no-build': Flags.boolean({
     description: 'do not build',
     default: false,
   }),
 };
 
-TabtestCommand.args = [commonArgs.entrypoint];
+TabtestCommand.args = { entrypoint: commonArgs.entrypoint };
 
 TabtestCommand.examples = [
   `Build tabtests for project in current working directory\n` +

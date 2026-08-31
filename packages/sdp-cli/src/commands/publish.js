@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-import { exit } from 'process';
 import R from 'ramda';
 import * as xodFs from 'sdp-fs';
 import {
@@ -50,7 +48,7 @@ const uriToString = (libUri) =>
 
 class PublishCommand extends BaseCommand {
   async run() {
-    this.parseArgv(PublishCommand);
+    await this.parseArgv(PublishCommand);
     await this.parseEntrypoint();
     await this.getCredentials();
     const {
@@ -161,8 +159,12 @@ class PublishCommand extends BaseCommand {
       title: 'Publish library',
       task: (ctx) =>
         postUserLib(api, ctx.token, targetUsername, ctx.libname, ctx.version)
-          .then(() => exit(0))
+          .then(() => this.exit(0))
           .catch((error) => {
+            // this.exit(0) above throws an ExitError -- an already-intentional
+            // success exit, not a real failure. Let it propagate, don't
+            // re-wrap it as a publish error.
+            if (error.oclif?.exit !== undefined) throw error;
             if (error.status === 409) {
               throw createError('PUBLISH_LIBVERSION_EXISTS', {
                 lib: uriToString(ctx.libUri),
@@ -192,10 +194,13 @@ class PublishCommand extends BaseCommand {
       { collapse: false }
     )
       .run()
-      .then(() => exit(0))
+      .then(() => this.exit(0))
       .catch((err) => {
+        // this.exit(0) above throws an ExitError -- an already-intentional
+        // success exit, not a real failure. Let it propagate, don't re-handle it.
+        if (err.oclif?.exit !== undefined) throw err;
         this.printError(err);
-        return exit(100);
+        return this.exit(100);
       });
   }
 }
@@ -210,7 +215,7 @@ PublishCommand.flags = {
   'on-behalf': myFlags.onBehalf,
 };
 
-PublishCommand.args = [commonArgs.project];
+PublishCommand.args = { project: commonArgs.project };
 
 PublishCommand.examples = [
   'Publish the current project with the version defined in `project.xod`\n' +

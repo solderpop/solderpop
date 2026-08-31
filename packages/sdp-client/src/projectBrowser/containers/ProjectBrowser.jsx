@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Icon } from 'react-fa';
+import Icon from '../../core/components/Icon.jsx';
 import { HotKeys } from 'react-hotkeys';
 import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu';
 

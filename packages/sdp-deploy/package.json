@@ -31,7 +31,6 @@
     "ramda": "^0.24.1",
     "ramda-fantasy": "^0.8.0",
     "serialport": "^13.0.0",
-    "tar": "^4.0.1",
     "unbzip2-stream": "^1.2.5",
     "ws": "^3.1.0",
     "sdp-fs": "workspace:*",
@@ -42,6 +41,7 @@
     "@babel/core": "^8.0.1",
     "@babel/preset-env": "^8.0.2",
     "@babel/register": "^8.0.1",
+    "cpx": "^1.5.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "chai-fs": "^2.0.0"

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import Icon from 'react-fa';
+import Icon from '../../core/components/Icon.jsx';
 import * as XP from 'sdp-project';
 import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
 import PopupForm from '../../utils/components/PopupForm.jsx';

@@ -54,7 +54,7 @@ Do use hyphens, lower case letters and digits, do not use slashes or any other s
 
 ### Writing code
 
-The code should follow some stylistic rules. These rules are based on [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) with slight modifications and enforcements. See [ESLint configuration](./.eslintrc.js) for details. To verify your code follows the rules run:
+The code should follow some stylistic rules. These rules are based on [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) with slight modifications and enforcements. See [ESLint configuration](./eslint.config.js) for details. To verify your code follows the rules run:
 
     $ pnpm run lint
 

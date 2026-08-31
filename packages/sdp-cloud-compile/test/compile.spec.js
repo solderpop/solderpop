@@ -34,7 +34,7 @@ const fakeFetch = ({ ok, status, json, body }) => {
   return fetchImpl;
 };
 
-const rejects = async promise => {
+const rejects = async (promise) => {
   try {
     await promise;
   } catch (err) {
@@ -53,7 +53,7 @@ describe('compile', () => {
       { 'sketch.ino': 'void setup(){}' },
       { fqbn: 'wasm:simulation', options: {} },
       fetchImpl
-    ).then(result => {
+    ).then((result) => {
       assert.deepEqual(result, { ok: true });
     });
   });

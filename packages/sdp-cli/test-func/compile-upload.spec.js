@@ -1,14 +1,20 @@
-import { test } from '@oclif/test';
-import chai from 'chai';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import process from 'process';
 import fs from 'fs-extra';
-import { createWorkingDirectory, getFilesFromPath } from './helpers.js';
+import { runCommand } from '@oclif/test';
+import chai from 'chai';
+import {
+  createWorkingDirectory,
+  getFilesFromPath,
+  stripOclifTestTsWarning,
+  withEnv,
+} from './helpers.js';
 
 const { assert } = chai;
 
-// save process.exit for unmocking
-const { exit } = process;
+// see test-func/help.spec.js for why this is needed
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 // save tty status
 const { isTTY } = process.stdout;
@@ -19,108 +25,107 @@ const getBinPath = (outputPath, fqbn) =>
   path.resolve(outputPath, 'build', fqbn.replace(/:/g, '.'));
 
 const compile = (wd, myWSPath, outputPath) => {
-  const stdMock = test.stdout().stderr();
+  it(`fails with nonexistent board, stdout is empty, stderr with error, non-zero exit code`, () =>
+    withEnv({ XOD_WORKSPACE: myWSPath }, async () => {
+      const { stdout, stderr, error } = await runCommand(
+        [
+          'compile',
+          '--board',
+          'arduino:avr:due',
+          'bundle/workspace/blink',
+          '@/main',
+        ],
+        { root }
+      );
+      assert.equal(stdout, '', 'stdout must be empty');
+      assert.include(
+        stderr,
+        'Arduino dependencies missing',
+        'stderr must be with error'
+      );
+      assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
+    }));
 
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .command([
-      'compile',
-      '--board',
-      'arduino:avr:due',
-      'bundle/workspace/blink',
-      '@/main',
-    ])
-    .it(
-      `fails with nonexistent board, stdout is empty, stderr with error, non-zero exit code`,
-      async (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
-        assert.include(
-          ctx.stderr,
-          'Arduino dependencies missing',
-          'stderr must be with error'
+  it(`fails with nonexistent board, stdout is empty, stderr is empty (quiet), non-zero exit code`, () =>
+    withEnv({ XOD_WORKSPACE: myWSPath }, async () => {
+      const { stdout, stderr, error } = await runCommand(
+        [
+          'compile',
+          '--quiet',
+          '--board',
+          'fqbn:aslkdjflaskjdflkasaf',
+          'bundle/workspace/blink',
+          '@/main',
+        ],
+        { root }
+      );
+      assert.equal(stdout, '', 'stdout must be empty');
+      assert.equal(stderr, '', 'stderr must be empty');
+      assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
+    }));
+
+  it(`fails with nonexistent project/patch, stdout is empty, stderr with error, non-zero exit code`, () =>
+    withEnv(
+      { XOD_WORKSPACE: myWSPath, XOD_BOARD: 'esp8266:esp8266:wifi_slot' },
+      async () => {
+        const { stdout, stderr, error } = await runCommand(
+          [
+            'compile',
+            'bundle/workspace/blinkaslkajdfhlaskdjfhlkasjdf',
+            '@/mainsdf',
+          ],
+          { root }
         );
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
-      }
-    );
-
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .command([
-      'compile',
-      '--quiet',
-      '--board',
-      'fqbn:aslkdjflaskjdflkasaf',
-      'bundle/workspace/blink',
-      '@/main',
-    ])
-    .it(
-      `fails with nonexistent board, stdout is empty, stderr is empty (quiet), non-zero exit code`,
-      async (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
-        assert.equal(ctx.stderr, '', 'stderr must be empty');
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
-      }
-    );
-
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .env({ XOD_BOARD: 'esp8266:esp8266:wifi_slot' })
-    .command([
-      'compile',
-      'bundle/workspace/blinkaslkajdfhlaskdjfhlkasjdf',
-      '@/mainsdf',
-    ])
-    .it(
-      `fails with nonexistent project/patch, stdout is empty, stderr with error, non-zero exit code`,
-      async (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
+        assert.equal(stdout, '', 'stdout must be empty');
         assert.include(
-          ctx.stderr,
+          stderr,
           'Invalid file path',
           'stderr must be with error'
         );
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
+        assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
       }
-    );
+    ));
 
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .env({ XOD_BOARD: 'esp8266:esp8266:wifi_slot' })
-    .command([
-      'compile',
-      '--quiet',
-      'bundle/workspace/blinkaslkajdfhlaskdjfhlkasjdf',
-      '@/mainsdf',
-    ])
-    .it(
-      `fails with nonexistent project/patch, stdout is empty, stderr is empty (quiet), non-zero exit code`,
-      async (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
-        assert.equal(ctx.stderr, '', 'stderr must be empty');
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
+  it(`fails with nonexistent project/patch, stdout is empty, stderr is empty (quiet), non-zero exit code`, () =>
+    withEnv(
+      { XOD_WORKSPACE: myWSPath, XOD_BOARD: 'esp8266:esp8266:wifi_slot' },
+      async () => {
+        const { stdout, stderr, error } = await runCommand(
+          [
+            'compile',
+            '--quiet',
+            'bundle/workspace/blinkaslkajdfhlaskdjfhlkasjdf',
+            '@/mainsdf',
+          ],
+          { root }
+        );
+        assert.equal(stdout, '', 'stdout must be empty');
+        assert.equal(stderr, '', 'stderr must be empty');
+        assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
       }
-    );
+    ));
 
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .env({ XOD_BOARD: 'esp8266:esp8266:wifi_slot' })
-    .command([
-      'compile',
-      '--output',
-      outputPath,
-      'bundle/workspace/blink',
-      '@/main',
-    ])
-    .it(
-      `compile patch, stdout is empty, stderr with messages, zero exit code`,
-      async (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
+  it(`compile patch, stdout is empty, stderr with messages, zero exit code`, () =>
+    withEnv(
+      { XOD_WORKSPACE: myWSPath, XOD_BOARD: 'esp8266:esp8266:wifi_slot' },
+      async () => {
+        const { stdout, stderr, error } = await runCommand(
+          [
+            'compile',
+            '--output',
+            outputPath,
+            'bundle/workspace/blink',
+            '@/main',
+          ],
+          { root }
+        );
+        assert.equal(stdout, '', 'stdout must be empty');
         assert.include(
-          ctx.stderr,
+          stderr,
           'The sketch and compiled firmware',
           'stderr with messages'
         );
-        assert.equal(process.exitCode, 0, 'exit code must be zero');
+        assert.equal(error?.oclif?.exit, 0, 'exit code must be zero');
         assert.isNotEmpty(
           await getFilesFromPath(outputPath, 'ino'),
           'source file is must'
@@ -131,191 +136,199 @@ const compile = (wd, myWSPath, outputPath) => {
           'firmware file is must'
         );
       }
-    );
+    ));
 
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .command([
-      'compile',
-      '--board',
-      'esp8266:esp8266:wifi_slot',
-      '--output',
-      outputPath,
-      'bundle/workspace/blink',
-      '@/main',
-    ])
-    .it(
-      `compile patch with fqbn as argument, stdout is empty, stderr with messages, zero exit code`,
-      async (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
+  it(`compile patch with fqbn as argument, stdout is empty, stderr with messages, zero exit code`, () =>
+    withEnv({ XOD_WORKSPACE: myWSPath }, async () => {
+      const { stdout, stderr, error } = await runCommand(
+        [
+          'compile',
+          '--board',
+          'esp8266:esp8266:wifi_slot',
+          '--output',
+          outputPath,
+          'bundle/workspace/blink',
+          '@/main',
+        ],
+        { root }
+      );
+      assert.equal(stdout, '', 'stdout must be empty');
+      assert.include(
+        stderr,
+        'The sketch and compiled firmware',
+        'stderr with messages'
+      );
+      assert.equal(error?.oclif?.exit, 0, 'exit code must be zero');
+      assert.isNotEmpty(
+        await getFilesFromPath(outputPath, 'ino'),
+        'source file is must'
+      );
+      const binPath = getBinPath(outputPath, 'esp8266:esp8266:wifi_slot');
+      assert.isNotEmpty(
+        await getFilesFromPath(binPath, 'hex|bin|elf'),
+        'firmware file is must'
+      );
+    }));
+
+  it(`compile patch, stdout is empty, stderr is empty (quiet), zero exit code`, () =>
+    withEnv(
+      {
+        XOD_WORKSPACE: myWSPath,
+        XOD_BOARD: 'esp8266:esp8266:wifi_slot',
+        XOD_OUTPUT: outputPath,
+      },
+      async () => {
+        const { stdout, stderr, error } = await runCommand(
+          ['compile', '--debug', 'bundle/workspace/blink', '@/main'],
+          { root }
+        );
+        assert.equal(stdout, '', 'stdout must be empty');
         assert.include(
-          ctx.stderr,
+          stderr,
           'The sketch and compiled firmware',
           'stderr with messages'
         );
-        assert.equal(process.exitCode, 0, 'exit code must be zero');
+        assert.equal(error?.oclif?.exit, 0, 'exit code must be zero');
         assert.isNotEmpty(
           await getFilesFromPath(outputPath, 'ino'),
           'source file is must'
         );
+
         const binPath = getBinPath(outputPath, 'esp8266:esp8266:wifi_slot');
         assert.isNotEmpty(
           await getFilesFromPath(binPath, 'hex|bin|elf'),
           'firmware file is must'
         );
       }
-    );
-
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .env({ XOD_BOARD: 'esp8266:esp8266:wifi_slot' })
-    .env({ XOD_OUTPUT: outputPath })
-    .command(['compile', '--debug', 'bundle/workspace/blink', '@/main'])
-    .it(
-      `compile patch, stdout is empty, stderr is empty (quiet), zero exit code`,
-      async (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
-        assert.include(
-          ctx.stderr,
-          'The sketch and compiled firmware',
-          'stderr with messages'
-        );
-        assert.equal(process.exitCode, 0, 'exit code must be zero');
-        assert.isNotEmpty(
-          await getFilesFromPath(outputPath, 'ino'),
-          'source file is must'
-        );
-
-        const binPath = getBinPath(outputPath, 'esp8266:esp8266:wifi_slot');
-        assert.isNotEmpty(
-          await getFilesFromPath(binPath, 'hex|bin|elf'),
-          'firmware file is must'
-        );
-      }
-    );
+    ));
 };
 
 const upload = (wd, myWSPath) => {
-  const stdMock = test.stdout().stderr();
+  it(`fails with nonexistent board, stdout is empty, stderr with error, non-zero exit code`, () =>
+    withEnv({ XOD_WORKSPACE: myWSPath }, async () => {
+      const { stdout, stderr, error } = await runCommand(
+        [
+          'upload',
+          '--board',
+          'arduino:avr:due',
+          '--port',
+          '/dev/null',
+          'bundle/workspace/blink',
+          '@/main',
+        ],
+        { root }
+      );
+      assert.equal(stdout, '', 'stdout must be empty');
+      assert.include(
+        stderr,
+        'Arduino dependencies missing',
+        'stderr must be with error'
+      );
+      assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
+    }));
 
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .command([
-      'upload',
-      '--board',
-      'arduino:avr:due',
-      '--port',
-      '/dev/null',
-      'bundle/workspace/blink',
-      '@/main',
-    ])
-    .it(
-      `fails with nonexistent board, stdout is empty, stderr with error, non-zero exit code`,
-      async (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
-        assert.include(
-          ctx.stderr,
-          'Arduino dependencies missing',
-          'stderr must be with error'
+  it(`fails with nonexistent board, stdout is empty, stderr is empty (quiet), non-zero exit code`, () =>
+    withEnv({ XOD_WORKSPACE: myWSPath, XOD_PORT: '/dev/null' }, async () => {
+      const { stdout, stderr, error } = await runCommand(
+        [
+          'upload',
+          '--quiet',
+          '--board',
+          'fqbn:aslkdjflaskjdflkasaf',
+          'bundle/workspace/blink',
+          '@/main',
+        ],
+        { root }
+      );
+      assert.equal(stdout, '', 'stdout must be empty');
+      assert.equal(stderr, '', 'stderr must be empty');
+      assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
+    }));
+
+  it(`fails with nonexistent project/patch, stdout is empty, stderr with error, non-zero exit code`, () =>
+    withEnv(
+      {
+        XOD_WORKSPACE: myWSPath,
+        XOD_BOARD: 'esp8266:esp8266:wifi_slot',
+        XOD_PORT: '/dev/null',
+      },
+      async () => {
+        const { stdout, stderr, error } = await runCommand(
+          [
+            'upload',
+            'bundle/workspace/blinkaslkajdfhlaskdjfhlkasjdf',
+            '@/mainsdf',
+          ],
+          { root }
         );
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
-      }
-    );
-
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .env({ XOD_PORT: '/dev/null' })
-    .command([
-      'upload',
-      '--quiet',
-      '--board',
-      'fqbn:aslkdjflaskjdflkasaf',
-      'bundle/workspace/blink',
-      '@/main',
-    ])
-    .it(
-      `fails with nonexistent board, stdout is empty, stderr is empty (quiet), non-zero exit code`,
-      async (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
-        assert.equal(ctx.stderr, '', 'stderr must be empty');
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
-      }
-    );
-
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .env({ XOD_BOARD: 'esp8266:esp8266:wifi_slot' })
-    .env({ XOD_PORT: '/dev/null' })
-    .command([
-      'upload',
-      'bundle/workspace/blinkaslkajdfhlaskdjfhlkasjdf',
-      '@/mainsdf',
-    ])
-    .it(
-      `fails with nonexistent project/patch, stdout is empty, stderr with error, non-zero exit code`,
-      async (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
+        assert.equal(stdout, '', 'stdout must be empty');
         assert.include(
-          ctx.stderr,
+          stderr,
           'Invalid file path',
           'stderr must be with error'
         );
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
+        assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
       }
-    );
+    ));
 
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .env({ XOD_BOARD: 'esp8266:esp8266:wifi_slot' })
-    .env({ XOD_PORT: '/dev/null' })
-    .command([
-      'upload',
-      '--quiet',
-      'bundle/workspace/blinkaslkajdfhlaskdjfhlkasjdf',
-      '@/mainsdf',
-    ])
-    .it(
-      `fails with nonexistent project/patch, stdout is empty, stderr is empty (quiet), non-zero exit code`,
-      async (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
-        assert.equal(ctx.stderr, '', 'stderr must be empty');
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
+  it(`fails with nonexistent project/patch, stdout is empty, stderr is empty (quiet), non-zero exit code`, () =>
+    withEnv(
+      {
+        XOD_WORKSPACE: myWSPath,
+        XOD_BOARD: 'esp8266:esp8266:wifi_slot',
+        XOD_PORT: '/dev/null',
+      },
+      async () => {
+        const { stdout, stderr, error } = await runCommand(
+          [
+            'upload',
+            '--quiet',
+            'bundle/workspace/blinkaslkajdfhlaskdjfhlkasjdf',
+            '@/mainsdf',
+          ],
+          { root }
+        );
+        assert.equal(stdout, '', 'stdout must be empty');
+        assert.equal(stderr, '', 'stderr must be empty');
+        assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
       }
-    );
+    ));
 
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .env({ XOD_BOARD: 'esp8266:esp8266:wifi_slot' })
-    .env({ XOD_PORT: '/dev/null' })
-    .command(['upload', '--debug', 'bundle/workspace/blink', '@/main'])
-    .it(
-      `try to compile and upload patch, fail on nonexistent port, stdout is empty, stderr with messages, non-zero exit code`,
-      async (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
-        assert.include(ctx.stderr, 'Upload failed', 'stderr with messages');
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
+  it(`try to compile and upload patch, fail on nonexistent port, stdout is empty, stderr with messages, non-zero exit code`, () =>
+    withEnv(
+      {
+        XOD_WORKSPACE: myWSPath,
+        XOD_BOARD: 'esp8266:esp8266:wifi_slot',
+        XOD_PORT: '/dev/null',
+      },
+      async () => {
+        const { stdout, stderr, error } = await runCommand(
+          ['upload', '--debug', 'bundle/workspace/blink', '@/main'],
+          { root }
+        );
+        assert.equal(stdout, '', 'stdout must be empty');
+        assert.include(stderr, 'Upload failed', 'stderr with messages');
+        assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
       }
-    );
+    ));
 
-  stdMock
-    .env({ XOD_WORKSPACE: myWSPath })
-    .env({ XOD_BOARD: 'esp8266:esp8266:wifi_slot' })
-    .env({ XOD_PORT: '/dev/null' })
-    .command([
-      'upload',
-      '--debug',
-      '--quiet',
-      'bundle/workspace/blink',
-      '@/main',
-    ])
-    .it(
-      `try to compile and upload patch, fail on nonexistent port, stdout is empty, stderr is empty (quiet), non-zero exit code`,
-      async (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
-        assert.equal(ctx.stderr, '', 'stderr must be empty');
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
+  it(`try to compile and upload patch, fail on nonexistent port, stdout is empty, stderr is empty (quiet), non-zero exit code`, () =>
+    withEnv(
+      {
+        XOD_WORKSPACE: myWSPath,
+        XOD_BOARD: 'esp8266:esp8266:wifi_slot',
+        XOD_PORT: '/dev/null',
+      },
+      async () => {
+        const { stdout, stderr, error } = await runCommand(
+          ['upload', '--debug', '--quiet', 'bundle/workspace/blink', '@/main'],
+          { root }
+        );
+        assert.equal(stdout, '', 'stdout must be empty');
+        assert.equal(stderr, '', 'stderr must be empty');
+        assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
       }
-    );
+    ));
 };
 
 describe('sdpc', () => {
@@ -335,80 +348,52 @@ describe('sdpc', () => {
   });
 
   describe('install dependencies', () => {
-    // mock process.exit
-    beforeEach(() => {
-      process.exit = (code) => {
-        process.exitCode = code;
-      };
-    });
-
-    // unmock process.exit
-    afterEach(() => {
-      process.exit = exit;
-    });
-
-    test
-      .env({ XOD_WORKSPACE: myWSPath })
-      .command(['install:arch', '-q', 'esp8266:esp8266'])
-      .it(`install toolchain for tests`, async () => {
-        assert.equal(process.exitCode, 0, 'exit code must be zero');
+    it(`install toolchain for tests`, () =>
+      withEnv({ XOD_WORKSPACE: myWSPath }, async () => {
+        const { error } = await runCommand(
+          ['install:arch', '-q', 'esp8266:esp8266'],
+          { root }
+        );
+        assert.equal(error?.oclif?.exit, 0, 'exit code must be zero');
         assert.isOk(
           await fs.pathExists(
             path.resolve(myWSPath, '__packages__', 'packages', 'esp8266')
           ),
           'toolchain must be installed'
         );
-      });
+      }));
   });
 
   describe('compile', () => {
     describe('common', () => {
-      // mock process.exit
-      beforeEach(() => {
-        process.exit = (code) => {
-          process.exitCode = code;
-        };
+      it(`shows help in stdout, doesn't print to stderr, exits with 0`, async () => {
+        const { stdout, stderr } = await runCommand(['compile', '--help'], {
+          root,
+        });
+        assert.include(stdout, '--version', '--version flag not found');
+        assert.include(stdout, '--help', '--help flag not found');
+        assert.include(stdout, '--quiet', '--quiet flag not found');
+        assert.include(stdout, '--output', '--output flag not found');
+        assert.include(stdout, '--debug', '--debug flag not found');
+        assert.include(stdout, '--workspace', '--workspace flag not found');
+        assert.equal(
+          stripOclifTestTsWarning(stderr),
+          '',
+          'stderr should be emply'
+        );
       });
 
-      // unmock process.exit
-      afterEach(() => {
-        process.exit = exit;
+      it(`shows version in stdout, doesn't print to stderr and exits with 0`, async () => {
+        const { stdout, stderr } = await runCommand(['compile', '--version'], {
+          root,
+        });
+        assert.include(stdout, 'sdp-cli', 'version string not found');
+        assert.equal(
+          stripOclifTestTsWarning(stderr),
+          '',
+          'stderr should be emply'
+        );
       });
-
-      test
-        .stdout()
-        .stderr()
-        .command(['compile', '--help'])
-        .catch(/EEXIT: 0/)
-        .it(
-          `shows help in stdout, doesn't print to stderr, exits with 0`,
-          (ctx) => {
-            assert.include(ctx.stdout, '--version', '--version flag not found');
-            assert.include(ctx.stdout, '--help', '--help flag not found');
-            assert.include(ctx.stdout, '--quiet', '--quiet flag not found');
-            assert.include(ctx.stdout, '--output', '--output flag not found');
-            assert.include(ctx.stdout, '--debug', '--debug flag not found');
-            assert.include(
-              ctx.stdout,
-              '--workspace',
-              '--workspace flag not found'
-            );
-            assert.equal(ctx.stderr, '', 'stderr should be emply');
-          }
-        );
-
-      test
-        .stdout()
-        .stderr()
-        .command(['compile', '--version'])
-        .catch(/EEXIT: 0/)
-        .it(
-          `shows version in stdout, doesn't print to stderr and exits with 0`,
-          (ctx) => {
-            assert.include(ctx.stdout, 'sdp-cli', 'version string not found');
-            assert.equal(ctx.stderr, '', 'stderr should be emply');
-          }
-        );
     });
 
     describe('TTY', () => {
@@ -417,16 +402,7 @@ describe('sdpc', () => {
         process.stderr.isTTY = true;
       });
 
-      // mock process.exit
-      beforeEach(() => {
-        process.exit = (code) => {
-          process.exitCode = code;
-        };
-      });
-
-      // unmock process.exit and remove tmp dir
       afterEach(() => {
-        process.exit = exit;
         fs.removeSync(outputPath);
       });
 
@@ -439,16 +415,7 @@ describe('sdpc', () => {
         process.stderr.isTTY = false;
       });
 
-      // mock process.exit
-      beforeEach(() => {
-        process.exit = (code) => {
-          process.exitCode = code;
-        };
-      });
-
-      // unmock process.exit and remove tmp dir
       afterEach(() => {
-        process.exit = exit;
         fs.removeSync(outputPath);
       });
 
@@ -458,52 +425,34 @@ describe('sdpc', () => {
 
   describe('upload', () => {
     describe('common', () => {
-      // mock process.exit
-      beforeEach(() => {
-        process.exit = (code) => {
-          process.exitCode = code;
-        };
+      it(`shows help in stdout, doesn't print to stderr, exits with 0`, async () => {
+        const { stdout, stderr } = await runCommand(['upload', '--help'], {
+          root,
+        });
+        assert.include(stdout, '--version', '--version flag not found');
+        assert.include(stdout, '--help', '--help flag not found');
+        assert.include(stdout, '--quiet', '--quiet flag not found');
+        assert.include(stdout, '--port', '--port flag not found');
+        assert.include(stdout, '--debug', '--debug flag not found');
+        assert.include(stdout, '--workspace', '--workspace flag not found');
+        assert.equal(
+          stripOclifTestTsWarning(stderr),
+          '',
+          'stderr should be emply'
+        );
       });
 
-      // unmock process.exit
-      afterEach(() => {
-        process.exit = exit;
+      it(`shows version in stdout, doesn't print to stderr and exits with 0`, async () => {
+        const { stdout, stderr } = await runCommand(['upload', '--version'], {
+          root,
+        });
+        assert.include(stdout, 'sdp-cli', 'version string not found');
+        assert.equal(
+          stripOclifTestTsWarning(stderr),
+          '',
+          'stderr should be emply'
+        );
       });
-
-      test
-        .stdout()
-        .stderr()
-        .command(['upload', '--help'])
-        .catch(/EEXIT: 0/)
-        .it(
-          `shows help in stdout, doesn't print to stderr, exits with 0`,
-          (ctx) => {
-            assert.include(ctx.stdout, '--version', '--version flag not found');
-            assert.include(ctx.stdout, '--help', '--help flag not found');
-            assert.include(ctx.stdout, '--quiet', '--quiet flag not found');
-            assert.include(ctx.stdout, '--port', '--port flag not found');
-            assert.include(ctx.stdout, '--debug', '--debug flag not found');
-            assert.include(
-              ctx.stdout,
-              '--workspace',
-              '--workspace flag not found'
-            );
-            assert.equal(ctx.stderr, '', 'stderr should be emply');
-          }
-        );
-
-      test
-        .stdout()
-        .stderr()
-        .command(['upload', '--version'])
-        .catch(/EEXIT: 0/)
-        .it(
-          `shows version in stdout, doesn't print to stderr and exits with 0`,
-          (ctx) => {
-            assert.include(ctx.stdout, 'sdp-cli', 'version string not found');
-            assert.equal(ctx.stderr, '', 'stderr should be emply');
-          }
-        );
     });
 
     describe('TTY', () => {
@@ -512,16 +461,7 @@ describe('sdpc', () => {
         process.stderr.isTTY = true;
       });
 
-      // mock process.exit
-      beforeEach(() => {
-        process.exit = (code) => {
-          process.exitCode = code;
-        };
-      });
-
-      // unmock process.exit
       afterEach(() => {
-        process.exit = exit;
         fs.removeSync(outputPath);
       });
 
@@ -534,16 +474,7 @@ describe('sdpc', () => {
         process.stderr.isTTY = false;
       });
 
-      // mock process.exit
-      beforeEach(() => {
-        process.exit = (code) => {
-          process.exitCode = code;
-        };
-      });
-
-      // unmock process.exit
       afterEach(() => {
-        process.exit = exit;
         fs.removeSync(outputPath);
       });
 

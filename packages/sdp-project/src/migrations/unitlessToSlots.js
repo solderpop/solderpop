@@ -5,7 +5,6 @@ import { isTerminalPatchPath } from '../internal/patchPathUtils.js';
 
 import BUILT_IN_PATCHES from '../internal/builtInPatches.js';
 
-/* eslint-enable new-cap */
 //-----------------------------------------------------------------------------
 //
 // Constants

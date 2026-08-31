@@ -9,8 +9,8 @@ import tutorialProject from '../tutorialProject.json';
 
 if (process.env.WHY_DID_YOU_UPDATE) {
   // eslint-disable-next-line import/no-extraneous-dependencies
-  import('why-did-you-update').then(({ whyDidYouUpdate }) => {
-    whyDidYouUpdate(React);
+  import('@welldone-software/why-did-you-render').then(({ default: whyDidYouRender }) => {
+    whyDidYouRender(React, { trackAllPureComponents: true });
   });
 }
 

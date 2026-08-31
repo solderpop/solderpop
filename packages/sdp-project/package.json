@@ -24,6 +24,7 @@
     "test:watch": "pnpm run test --watch"
   },
   "dependencies": {
+    "@rescript/runtime": "^12.3.0",
     "belt-holes": "workspace:*",
     "hm-def": "^0.3.2",
     "ramda": "^0.24.1",

@@ -1,8 +1,7 @@
-/* eslint-disable no-param-reassign */
 import path from 'path';
-import { stdout, exit } from 'process';
+import { stdout } from 'process';
 import R from 'ramda';
-import { flags } from '@oclif/command';
+import { Flags } from '@oclif/core';
 import {
   loadProject,
   resolvePath,
@@ -20,7 +19,7 @@ const { pick } = R;
 
 class ResaveCommand extends BaseCommand {
   async run() {
-    this.parseArgv(ResaveCommand);
+    await this.parseArgv(ResaveCommand);
     await this.ensureWorkspace();
     await this.parseEntrypoint();
     const { output, workspace, quiet } = this.flags;
@@ -62,10 +61,13 @@ class ResaveCommand extends BaseCommand {
           stdout.write(toXodball(ctx.project));
         }
       })
-      .then(() => exit(0))
+      .then(() => this.exit(0))
       .catch((err) => {
+        // this.exit(0) above throws an ExitError -- an already-intentional
+        // success exit, not a real failure. Let it propagate, don't re-handle it.
+        if (err.oclif?.exit !== undefined) throw err;
         this.printError(err);
-        return exit(100);
+        return this.exit(100);
       });
   }
 }
@@ -78,7 +80,7 @@ ResaveCommand.usage = 'resave [options] [project]';
 ResaveCommand.flags = {
   ...BaseCommand.flags,
   ...pick(['workspace'], myFlags),
-  output: flags.string({
+  output: Flags.string({
     char: 'o',
     description:
       'xodball or multifile directory output path, defaults to stdout',
@@ -88,7 +90,7 @@ ResaveCommand.flags = {
   }),
 };
 
-ResaveCommand.args = [commonArgs.project];
+ResaveCommand.args = { project: commonArgs.project };
 
 ResaveCommand.examples = [
   `Exports the current multifile project to a xodball\n` +

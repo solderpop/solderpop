@@ -22,7 +22,6 @@ export default () => {
     // but it also have a binded action creators.
     dispatch: R.reduce(
       (acc, [actionName, fn]) => {
-        // eslint-disable-next-line no-param-reassign
         acc[actionName] = bindActionCreators(fn, acc);
         return acc;
       },

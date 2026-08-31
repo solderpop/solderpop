@@ -1,7 +1,8 @@
+import { Args } from '@oclif/core';
+
 // fake entrypoint argument just for --help
 // use with command's property strict == false
-export const entrypoint = {
-  name: 'entrypoint',
+export const entrypoint = Args.string({
   required: false,
   hidden: false,
   description:
@@ -12,11 +13,10 @@ export const entrypoint = {
     `  * ./path/to/proj.xodball main      # xodball + patch name\n` +
     `  * ./path/to/proj/main/patch.xodp   # just full path to a patch\n` +
     `  * main                             # a patch in the current project`,
-};
+});
 
 // fake project argument just for --help
-export const project = {
-  name: 'project',
+export const project = Args.string({
   required: false,
   hidden: false,
   description:
@@ -25,4 +25,4 @@ export const project = {
     `directory. Examples:\n\n` +
     `  * ./path/to/proj.xodball           # xodball\n` +
     `  * ./path/to/proj                   # just full path to a project`,
-};
+});
