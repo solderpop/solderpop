@@ -2,7 +2,8 @@
   "name": "sdp-wasm-compile",
   "type": "module",
   "version": "0.1.0",
-  "description": "Local Emscripten-based C++ to WASM compiler for Simulate, replacing the old xod.io cloud compile service",
+  "private": true,
+  "description": "Local Emscripten-based C++ to WASM compiler for Simulation",
   "main": "dist/index.js",
   "scripts": {
     "build": "babel src/ -d dist/ --source-maps",
@@ -14,7 +15,7 @@
     "xod",
     "xodlang"
   ],
-  "author": "SolderPop <dev@solderpop.io>",
+  "author": "SolderPop <contact@solderpop.io>",
   "license": "AGPL-3.0",
   "repository": {
     "type": "git",

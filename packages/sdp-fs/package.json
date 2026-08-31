@@ -1,7 +1,8 @@
 {
   "name": "sdp-fs",
   "type": "module",
-  "version": "0.38.0",
+  "version": "0.1.0",
+  "private": true,
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -10,7 +11,7 @@
     "dev": "pnpm run build --watch",
     "test": "mocha --require ../../tools/babel-register.js --color --timeout 30000 test/**/*.spec.js"
   },
-  "author": "SolderPop <dev@solderpop.io>",
+  "author": "SolderPop <contact@solderpop.io>",
   "license": "AGPL-3.0",
   "dependencies": {
     "fs-extra": "^4.0.2",

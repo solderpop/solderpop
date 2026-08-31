@@ -8,7 +8,7 @@ packages/*/dist/
 *.log
 .dir-locals.el
 .opencode
-.claude
+.claude/
 
 coverage/
 .nyc_output/

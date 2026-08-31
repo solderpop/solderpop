@@ -1,9 +1,10 @@
 {
   "name": "sdp-cli",
   "type": "module",
-  "version": "0.38.0",
+  "version": "0.1.0",
+  "private": true,
   "description": "SolderPop IDE: Command Line Interface",
-  "author": "SolderPop <dev@solderpop.io>",
+  "author": "SolderPop <contact@solderpop.io>",
   "bin": {
     "sdpc": "./bin/run"
   },

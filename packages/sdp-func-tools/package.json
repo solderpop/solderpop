@@ -1,10 +1,10 @@
 {
   "name": "sdp-func-tools",
   "type": "module",
-  "version": "0.34.0",
+  "version": "0.1.0",
   "description": "",
   "keywords": [],
-  "author": "SolderPop <dev@solderpop.io>",
+  "author": "SolderPop <contact@solderpop.io>",
   "license": "AGPL-3.0",
   "main": "dist/index.js",
   "scripts": {

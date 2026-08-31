@@ -1,7 +1,8 @@
 {
   "name": "sdp-arduino",
   "type": "module",
-  "version": "0.38.0",
+  "version": "0.1.0",
+  "private": true,
   "description": "SolderPop IDE: Arduino transpiler",
   "scripts": {
     "build:nearley": "nearleyc src/implementationGrammar.ne -o src/implementationGrammar.ne.js && node ./tools/fixNearleyGrammarEsm.cjs src/implementationGrammar.ne.js",
@@ -20,7 +21,7 @@
   },
   "repository": {},
   "keywords": [],
-  "author": "SolderPop <dev@solderpop.io>",
+  "author": "SolderPop <contact@solderpop.io>",
   "license": "AGPL-3.0",
   "main": "dist/index.js",
   "dependencies": {

@@ -1,7 +1,8 @@
 {
   "name": "sdp-client-browser",
   "type": "module",
-  "version": "0.38.0",
+  "version": "0.1.0",
+  "private": true,
   "description": "SolderPop IDE: Client browser application",
   "scripts": {
     "build:tutorial-project": "node ./tools/loadTutorialProject.cjs",
@@ -52,6 +53,6 @@
     "why-did-you-update": "^0.1.0",
     "sdp-fs": "workspace:*"
   },
-  "author": "SolderPop <dev@solderpop.io>",
+  "author": "SolderPop <contact@solderpop.io>",
   "license": "AGPL-3.0"
 }

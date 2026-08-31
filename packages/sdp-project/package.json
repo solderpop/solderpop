@@ -1,11 +1,12 @@
 {
   "name": "sdp-project",
   "type": "module",
-  "version": "0.38.0",
+  "version": "0.1.0",
+  "private": true,
   "description": "API functions to work on XOD project state",
   "keywords": [],
   "license": "AGPL-3.0",
-  "author": "SolderPop <dev@solderpop.io>",
+  "author": "SolderPop <contact@solderpop.io>",
   "main": "dist/index.js",
   "repository": {},
   "scripts": {

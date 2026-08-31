@@ -1,5 +1,78 @@
 # Branch changelist — feature/general-improvements
 
+## 2026-08-31 — lerna → Changesets
+
+**Removed:** `lerna.json`, the `lerna` devDependency, and the `"lerna":
+"lerna"` root script. Nothing else depended on lerna once the pnpm/turbo
+migration above landed — task-running was already turbo's job, workspace
+linking was already pnpm's job. The version-bump/canary step was the only
+real remaining use.
+
+**Real gap found and fixed along the way:** none of the 18 workspace
+packages had `"private": true` set (only the repo root did) — meaning
+nothing currently stops an accidental `npm publish`/`changeset publish`
+of an internal-only package to the real npm registry. This matters
+specifically because Changesets treats `private: true` as its "don't
+actually publish this" signal. Added `"private": true` to all 18.
+
+**`.changeset/config.json` (new):** `privatePackages: {version: true, tag:
+false}` — required, not optional: Changesets skips versioning `private`
+packages entirely by default, so without this, adding `"private": true`
+above would have silently made `changeset version` a no-op across the
+whole repo. `changelog: "@changesets/cli/changelog"` (the plain
+generator, not `@changesets/changelog-github` — that needs a GitHub API
+token for PR/commit metadata at release time, an extra secret this pass
+deliberately avoids needing). `access: "restricted"` — irrelevant in
+practice since `changeset publish` is never invoked, but the safer
+default if anyone ever did run it by mistake.
+
+**Workflow change, done deliberately, confirmed with the user first:**
+the old lerna flow was "push to a branch named `prerelease-(patch|minor)-
+*` → automatic canary version bump," triggered by branch name. Changesets'
+native flow is different: a contributor commits a changeset file
+alongside their PR, and a release job batches all pending changesets into
+a "Version Packages" PR on merge to `main`. Adopted the native flow as-is
+rather than fight it into matching the old branch-name-triggered pattern
+(Changesets' "pre" mode could approximate that, but with real added
+complexity for less benefit).
+
+**`.github/workflows/release.yml` (new):** on push to `main`, runs
+`changesets/action@v1` with no `publish:` input — meaning it only ever
+opens/updates the Version Packages PR, never attempts an actual `npm
+publish` (matches the "private packages, version-only" design above).
+Needs only the automatic `secrets.GITHUB_TOKEN` (`contents: write` +
+`pull-requests: write` permissions) to create/update that PR — no new
+secret to add on the account side, unlike the still-unported dist/docker
+CI jobs.
+
+**`CONTRIBUTING.md`:** added an "Adding a changeset" section (`pnpm
+changeset` before opening a PR). Also fixed two stale `yarn run
+lint`/`yarn run verify` references to `pnpm run` while already in this
+file for an unrelated reason — found, not hunted for.
+
+**Verified for real, not just written:**
+- `pnpm exec changeset status` — config loads without error, correctly
+  detects real pending changes against `baseBranch: main`.
+- Wrote an actual test changeset (`sdp-func-tools`, patch bump), ran
+  `pnpm exec changeset version` for real: version bumped `0.34.0` →
+  `0.34.1` correctly, `CHANGELOG.md` generated with the right content.
+  Confirms `privatePackages` config is doing its job — this package IS
+  `private: true` and versioned fine. Reverted both (package.json version,
+  the generated CHANGELOG.md) immediately after confirming — this was a
+  pipeline test, not a real release.
+- `.github/workflows/release.yml` — YAML valid, `actionlint` v1.7.12
+  clean (checked alongside `verify.yml` together, still clean).
+- Full `pnpm install` + `pnpm run build` (18/18) re-run clean after the
+  lerna removal and all 18 `private: true` additions — nothing broke.
+
+**Not done, still open:** CircleCI's `dist-*`/`upload-distros`/
+`dockerize-ide` jobs (need GitHub secrets added first, see the GHA
+changelist entry above) still reference the old `lerna publish --canary`
+step conceptually in spirit — once those get ported to GitHub Actions,
+their version-stamping needs to use whatever `changeset version` last
+produced, not lerna. Not addressed here since those jobs aren't ported
+yet at all.
+
 ## 2026-08-31 — CircleCI → GitHub Actions (verify pipeline only)
 
 **Context:** separate from the pnpm/turbo migration above. CircleCI is

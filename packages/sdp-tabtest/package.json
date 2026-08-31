@@ -1,7 +1,8 @@
 {
   "name": "sdp-tabtest",
   "type": "module",
-  "version": "0.38.0",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
     "refmt": "rescript format -all",
     "build:lib": "node ./tools/loadTabtestLibPatches.cjs",
@@ -45,7 +46,15 @@
         "babel-jest",
         {
           "presets": [
-            ["@babel/preset-env", { "modules": "commonjs", "targets": { "node": "current" } }]
+            [
+              "@babel/preset-env",
+              {
+                "modules": "commonjs",
+                "targets": {
+                  "node": "current"
+                }
+              }
+            ]
           ]
         }
       ]

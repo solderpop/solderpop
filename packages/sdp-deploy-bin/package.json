@@ -1,7 +1,8 @@
 {
   "name": "sdp-deploy-bin",
   "type": "module",
-  "version": "0.38.0",
+  "version": "0.1.0",
+  "private": true,
   "description": "SolderPop wrapper over arduino-cli wrapper",
   "main": "dist/index.js",
   "scripts": {
@@ -13,7 +14,7 @@
     "xod",
     "xodlang"
   ],
-  "author": "SolderPop <dev@solderpop.io>",
+  "author": "SolderPop <contact@solderpop.io>",
   "license": "AGPL-3.0",
   "dependencies": {
     "arduino-cli": "workspace:*",

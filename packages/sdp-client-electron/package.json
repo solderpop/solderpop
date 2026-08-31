@@ -1,12 +1,13 @@
 {
-  "author": "SolderPop <dev@solderpop.io>",
+  "author": "SolderPop <contact@solderpop.io>",
   "description": "SolderPop IDE for the XOD visual programming language",
   "homepage": "https://solderpop.io/",
   "license": "AGPL-3.0",
   "main": "src-babel/app/main.js",
   "name": "sdp-client-electron",
   "type": "module",
-  "version": "0.38.0",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
     "build:workspace": "cpx \"../../workspace/**/*\" \"src-babel/workspace\"",
     "build:gui": "webpack --color --config webpack.config.cjs",

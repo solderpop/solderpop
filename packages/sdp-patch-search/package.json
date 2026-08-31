@@ -1,7 +1,8 @@
 {
   "name": "sdp-patch-search",
   "type": "module",
-  "version": "0.38.0",
+  "version": "0.1.0",
+  "private": true,
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -14,7 +15,7 @@
     "type": "git",
     "url": "git+https://github.com/solderpop/solderpop.git"
   },
-  "author": "SolderPop <dev@solderpop.io>",
+  "author": "SolderPop <contact@solderpop.io>",
   "license": "AGPL-3.0",
   "bugs": {
     "url": "https://github.com/solderpop/solderpop/issues"

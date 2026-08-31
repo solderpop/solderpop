@@ -1,7 +1,8 @@
 {
   "name": "belt-holes",
   "type": "module",
-  "version": "0.34.0",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
     "refmt": "rescript format -all",
     "build": "rescript build",

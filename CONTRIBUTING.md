@@ -44,9 +44,9 @@ Any changes are delivered via pull requests. So any work should be done in a top
 
     $ git checkout -b fix-101-delete-empty-patch
 
-Use `<type>-<issue_number>-<slug>` notation for the branch name.
+Use `<type>/<issue_number>-<slug>` notation for the branch name.
 
-The type should reflect underlying issue category. Use one of: `fix` (bug fix), `feat` (user story implementation), `tweak`, `refactor`, or `doc`.
+The type should reflect underlying issue category. Use one of: `fix` (bug fix), `feature` (user story implementation), `tweak`, `refactor`, or `doc`.
 
 Slug should shortly reflect the issue purpose.
 
@@ -56,7 +56,7 @@ Do use hyphens, lower case letters and digits, do not use slashes or any other s
 
 The code should follow some stylistic rules. These rules are based on [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) with slight modifications and enforcements. See [ESLint configuration](./.eslintrc.js) for details. To verify your code follows the rules run:
 
-    $ yarn run lint
+    $ pnpm run lint
 
 In addition to the style ensure that new functionality is covered by unit tests.
 
@@ -95,9 +95,17 @@ Follow Git hints to resolve any conflicts.
 
 There is a series of checks that should be passed for the code to have a chance to be merged into `main`. They are unit tests, linting and possibly other things.
 
-Run `yarn run verify` to make sure your code doesn’t break anything.
+Run `pnpm run verify` to make sure your code doesn’t break anything.
 
 These checks are expected to run in CI, but ensuring your PR would not break anything in advance is a good habit.
+
+### Adding a changeset
+
+If your change affects a package's behavior (not just docs, tests, or internal tooling), add a changeset before opening your PR:
+
+    $ pnpm changeset
+
+This asks which package(s) changed, how significant the change is (patch/minor/major), and a short summary — then writes a markdown file under `.changeset/` for you to commit alongside your change. On merge to `main`, a bot opens or updates a "Version Packages" pull request that bumps versions and writes changelogs from any pending changesets. See [`.changeset/README.md`](./.changeset/README.md) for more.
 
 ### Creating pull request
 
