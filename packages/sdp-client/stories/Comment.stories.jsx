@@ -1,5 +1,4 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 import '../src/core/styles/main.scss';
@@ -47,20 +46,26 @@ http://this-should-be-autolinked.com
 ![cirquit](https://solderpop.io/docs/tutorial/02-deploy/circuit.fz.png)
 `;
 
-storiesOf('Comment', module)
-  .addDecorator((story) => (
-    <svg width="500" height="500">
-      <rect width="100%" height="100%" fill="lightgrey" />
-      {story()}
-    </svg>
-  ))
-  .add('default', () => (
-    <Comment {...baseProps} content={contentThatRequiresWordWrap} />
-  ))
-  .add('markdown content', () => (
-    <Comment
-      {...baseProps}
-      content={markdownContent}
-      size={{ width: 350, height: 420 }}
-    />
-  ));
+export default {
+  title: 'Comment',
+  decorators: [
+    (Story) => (
+      <svg width="500" height="500">
+        <rect width="100%" height="100%" fill="lightgrey" />
+        <Story />
+      </svg>
+    ),
+  ],
+};
+
+export const Default = () => (
+  <Comment {...baseProps} content={contentThatRequiresWordWrap} />
+);
+
+export const MarkdownContent = () => (
+  <Comment
+    {...baseProps}
+    content={markdownContent}
+    size={{ width: 350, height: 420 }}
+  />
+);

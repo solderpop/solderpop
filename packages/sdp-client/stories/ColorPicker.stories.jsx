@@ -1,5 +1,4 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react';
 import { withState } from 'recompose';
 import convert from 'color-convert';
 
@@ -13,4 +12,6 @@ const ColorPickerContainer = withState('color', 'onChange', { hsl, hex })(
   ({ color, onChange }) => <ColorPicker color={color} onChange={onChange} />
 );
 
-storiesOf('ColorPicker', module).add('base', () => <ColorPickerContainer />);
+export default { title: 'ColorPicker' };
+
+export const Base = () => <ColorPickerContainer />;

@@ -1,5 +1,5 @@
 import path from 'path';
-// eslint-disable-next-line import/no-extraneous-dependencies
+import { fileURLToPath } from 'url';
 import puppeteer from 'puppeteer';
 
 import { startServer, stopServer, PORT } from '../tools/staticServer.js';
@@ -11,11 +11,13 @@ import PromptPopup from '../test-func/pageObjects/PromptPopup.js';
 import PatchGroupItemContextMenu from '../test-func/pageObjects/PatchGroupItemContextMenu.js';
 import { getSelectedNodes } from '../test-func/pageObjects/Node.js';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 const getTracingResultsPath = (name) =>
   path.resolve(__dirname, `./tracing-results/${name}.json`);
 
 const waitForSelectingMode = (page) =>
-  page.waitFor('.PatchWrapper-container.selecting');
+  page.waitForSelector('.PatchWrapper-container.selecting');
 const pinSelector = (nodeId, pinName) =>
   `#nodePinsOverlay_${nodeId} .PinOverlay[title=${pinName}]`;
 

@@ -1,6 +1,5 @@
 import * as R from 'ramda';
 import React from 'react';
-import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 import { PIN_TYPE } from 'sdp-project';
@@ -183,29 +182,36 @@ const containerStyle = {
   width: 200,
 };
 
-storiesOf('Inspector', module)
-  .addDecorator((story) => <div style={containerStyle}>{story()}</div>)
-  .add('no selection', () => <Inspector {...baseProps} />)
-  .add('selected link', () => (
-    <Inspector {...baseProps} selection={singleLinkSelection} />
-  ))
-  .add('selected node', () => (
-    <Inspector {...baseProps} selection={singleNodeSelection} />
-  ))
-  .add('selected node with specializations', () => {
-    const sel = R.compose(
-      R.of,
-      R.assocPath(
-        ['data', 'specializations'],
-        [
-          'xod/core/somenode',
-          'xod/core/somenode(number)',
-          'xod/core/somenode(string)',
-        ]
-      )
-    )(nodeSelection);
-    return <Inspector {...baseProps} selection={sel} />;
-  })
-  .add('multi selection', () => (
-    <Inspector {...baseProps} selection={multipleSelection} />
-  ));
+export default {
+  title: 'Inspector',
+  decorators: [(Story) => <div style={containerStyle}><Story /></div>],
+};
+
+export const NoSelection = () => <Inspector {...baseProps} />;
+
+export const SelectedLink = () => (
+  <Inspector {...baseProps} selection={singleLinkSelection} />
+);
+
+export const SelectedNode = () => (
+  <Inspector {...baseProps} selection={singleNodeSelection} />
+);
+
+export const SelectedNodeWithSpecializations = () => {
+  const sel = R.compose(
+    R.of,
+    R.assocPath(
+      ['data', 'specializations'],
+      [
+        'xod/core/somenode',
+        'xod/core/somenode(number)',
+        'xod/core/somenode(string)',
+      ]
+    )
+  )(nodeSelection);
+  return <Inspector {...baseProps} selection={sel} />;
+};
+
+export const MultiSelection = () => (
+  <Inspector {...baseProps} selection={multipleSelection} />
+);

@@ -1,10 +1,11 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react';
 
 import '../src/core/styles/main.scss';
 import PatchGroupItem from '../src/projectBrowser/components/PatchGroupItem.jsx';
 
-storiesOf('PatchGroupItem', module).add('default', () => (
+export default { title: 'PatchGroupItem' };
+
+export const Default = () => (
   <div style={{ width: '200px', backgroundColor: 'tomato' }}>
     <PatchGroupItem label="Item 1" />
     <PatchGroupItem
@@ -14,4 +15,4 @@ storiesOf('PatchGroupItem', module).add('default', () => (
     <PatchGroupItem label="Item with moderately big label" />
     <PatchGroupItem label="Item with a really big label that definitely won't fit" />
   </div>
-));
+);

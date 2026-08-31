@@ -142,9 +142,7 @@ class TabtestCommand extends BaseCommand {
 }
 
 TabtestCommand.description = 'tabtest project';
-
 TabtestCommand.usage = 'tabtest [options] [entrypoint]';
-
 TabtestCommand.flags = {
   ...BaseCommand.flags,
   ...pick(['workspace'], myFlags),
@@ -163,7 +161,6 @@ TabtestCommand.flags = {
 };
 
 TabtestCommand.args = { entrypoint: commonArgs.entrypoint };
-
 TabtestCommand.examples = [
   `Build tabtests for project in current working directory\n` +
     `$ sdpc tabtest\n`,

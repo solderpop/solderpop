@@ -22,21 +22,21 @@ export default {
 
   PUBLISH_AUTH_FAILED: ({ username, status }) => ({
     title: 'Authentication failed',
-    note: `Can't authenticate user ${username} in XOD API: ${status}`,
+    note: `Can't authenticate user ${username} in SDP API: ${status}`,
     solution:
       'Most likely, the password is incorrect but also ensure the username is spelled correctly',
   }),
 
   PUBLISH_USER_NOT_EXIST: ({ username }) => ({
     title: `Unknown user`,
-    note: `User ${username} not found in XOD API`,
+    note: `User ${username} not found in SDP API`,
     solution: 'Double check the username spelling',
   }),
 
   PUBLISH_USER_OTHER_ERROR: ({ username, status }) => ({
     title: `Unexpected API failure`,
     note: `Can't get user ${username}: ${status}`,
-    solution: 'Possibly XOD API is temporary out of service. Try again later',
+    solution: 'Possibly SDP API is temporary out of service. Try again later',
   }),
 
   PUBLISH_ACCESS_DENIED: ({ username, lib, libOwner }) => ({
@@ -48,13 +48,13 @@ export default {
   PUBLISH_LIB_OTHER_ERROR: ({ lib, status }) => ({
     title: `Unexpected API failure`,
     note: `Can't access library ${lib}: ${status}`,
-    solution: 'Possibly XOD API is temporary out of service. Try again later',
+    solution: 'Possibly SDP API is temporary out of service. Try again later',
   }),
 
   PUBLISH_PUT_LIBRARY_OTHER_ERROR: ({ lib, status }) => ({
     title: `Unexpected API failure`,
     note: `Can't create library ${lib}: ${status}`,
-    solution: 'Possibly XOD API is temporary out of service. Try again later',
+    solution: 'Possibly SDP API is temporary out of service. Try again later',
   }),
 
   PUBLISH_LIBVERSION_EXISTS: ({ lib }) => ({
@@ -66,7 +66,7 @@ export default {
   PUBLISH_POST_LIBVERSION_OTHER_ERROR: ({ lib, status }) => ({
     title: `Unexpected API failure`,
     note: `Can't publish library version ${lib}: of ${status}`,
-    solution: 'Possibly XOD API is temporary out of service. Try again later',
+    solution: 'Possibly SDP API is temporary out of service. Try again later',
   }),
 
   TABTEST_PROCESS_NONZERO: ({ cmd, code }) => ({

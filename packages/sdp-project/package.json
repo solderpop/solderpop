@@ -18,7 +18,7 @@
     "dev:re": "pnpm run build:re -w",
     "dev": "pnpm run build:js --watch",
     "refmt": "rescript format -all",
-    "doc": "documentation build --format html --output doc --sort-order alpha src/",
+    "doc": "documentation build src/ --format html --output doc --sort-order alpha",
     "test": "mocha --require ../../tools/babel-register.js --color --timeout 10000 test/**/*.spec.js",
     "clean:dist": "rimraf ./dist ./lib ./src/**/*.bs.js",
     "test:watch": "pnpm run test --watch"
@@ -40,7 +40,7 @@
     "@babel/register": "^8.0.1",
     "rescript": "^12.3.0",
     "chai": "^4.1.2",
-    "documentation": "^4.0.0-beta12"
+    "documentation": "^14.0.3"
   },
   "files": [
     "dist",

@@ -9,7 +9,7 @@
     "build": "pnpm run build:tutorial-project && webpack --color --config webpack.config.cjs",
     "clean:dist": "rimraf ./dist ./tutorialProject.json",
     "benchmark": "node -r babel-register ./benchmark/index.js",
-    "test-func": "mocha --require ../../tools/babel-register.js --color --timeout 90000 --bail test-func/bootstrap.js test-func/**/*.spec.js",
+    "test-func": "mocha --color --timeout 90000 --bail test-func/bootstrap.js test-func/**/*.spec.js",
     "dev": "pnpm run build:tutorial-project && webpack-dev-server --watch --color --hot --config webpack.config.dev.cjs"
   },
   "dependencies": {
@@ -41,6 +41,7 @@
     "node-static": "^0.7.10",
     "postcss": "^8.5.26",
     "postcss-loader": "^8.2.1",
+    "puppeteer": "^25.9.0",
     "sass-loader": "^17.0.0",
     "source-map-loader": "^5.0.0",
     "style-loader": "^4.0.0",

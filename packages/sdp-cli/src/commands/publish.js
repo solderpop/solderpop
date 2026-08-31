@@ -206,9 +206,7 @@ class PublishCommand extends BaseCommand {
 }
 
 PublishCommand.description = 'publish a library';
-
 PublishCommand.usage = 'publish [options] [project]';
-
 PublishCommand.flags = {
   ...BaseCommand.flags,
   ...pick(['api', 'password', 'username'], myFlags),
@@ -216,7 +214,6 @@ PublishCommand.flags = {
 };
 
 PublishCommand.args = { project: commonArgs.project };
-
 PublishCommand.examples = [
   'Publish the current project with the version defined in `project.xod`\n' +
     '$ sdpc publish\n',

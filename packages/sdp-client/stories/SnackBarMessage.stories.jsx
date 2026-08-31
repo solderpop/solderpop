@@ -1,5 +1,4 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 import '../src/core/styles/main.scss';
@@ -71,42 +70,47 @@ const notificationWithButton = {
   type: MESSAGE_TYPE.CONFIRMATION,
 };
 
-storiesOf('SnackBarMessage', module)
-  .addDecorator((story) => <div>{story()}</div>)
-  .add('error', () => <SnackBarMessage message={errMsg} />)
-  .add('confirmation', () => <SnackBarMessage message={confirmationMsg} />)
-  .add('notification', () => <SnackBarMessage message={notificationMsg} />)
-  .add('notification with buttons', () => (
+export default {
+  title: 'SnackBarMessage',
+  decorators: [(Story) => <div><Story /></div>],
+};
+
+export const Error_ = () => <SnackBarMessage message={errMsg} />;
+export const Confirmation = () => <SnackBarMessage message={confirmationMsg} />;
+export const Notification = () => <SnackBarMessage message={notificationMsg} />;
+
+export const NotificationWithButtons = () => (
+  <SnackBarMessage
+    message={notificationWithButton}
+    onClickMessageButton={action('OnButton')}
+  />
+);
+
+export const MultipleMessages = () => (
+  <ul className="SnackBarList">
+    <SnackBarMessage
+      message={errMsg}
+      onClickMessageButton={action('OnButton')}
+    />
+    <SnackBarMessage
+      message={errMsgWithButton}
+      onClickMessageButton={action('OnButton')}
+    />
+    <SnackBarMessage
+      message={confirmationMsg}
+      onClickMessageButton={action('OnButton')}
+    />
+    <SnackBarMessage
+      message={confirmationMsgWithButton}
+      onClickMessageButton={action('OnButton')}
+    />
+    <SnackBarMessage
+      message={notificationMsg}
+      onClickMessageButton={action('OnButton')}
+    />
     <SnackBarMessage
       message={notificationWithButton}
       onClickMessageButton={action('OnButton')}
     />
-  ))
-  .add('multiple messages', () => (
-    <ul className="SnackBarList">
-      <SnackBarMessage
-        message={errMsg}
-        onClickMessageButton={action('OnButton')}
-      />
-      <SnackBarMessage
-        message={errMsgWithButton}
-        onClickMessageButton={action('OnButton')}
-      />
-      <SnackBarMessage
-        message={confirmationMsg}
-        onClickMessageButton={action('OnButton')}
-      />
-      <SnackBarMessage
-        message={confirmationMsgWithButton}
-        onClickMessageButton={action('OnButton')}
-      />
-      <SnackBarMessage
-        message={notificationMsg}
-        onClickMessageButton={action('OnButton')}
-      />
-      <SnackBarMessage
-        message={notificationWithButton}
-        onClickMessageButton={action('OnButton')}
-      />
-    </ul>
-  ));
+  </ul>
+);
