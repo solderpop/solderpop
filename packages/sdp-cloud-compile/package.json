@@ -22,9 +22,9 @@
     "node-fetch": "^2.3.0",
     "ramda": "^0.24.1",
     "string-to-arraybuffer": "^1.0.2",
-    "sdp-cli": "^0.38.0",
-    "sdp-func-tools": "^0.34.0",
-    "sdp-tabtest": "^0.38.0"
+    "sdp-cli": "workspace:*",
+    "sdp-func-tools": "workspace:*",
+    "sdp-tabtest": "workspace:*"
   },
   "devDependencies": {
     "@babel/cli": "^8.0.4",
@@ -33,7 +33,7 @@
     "@babel/register": "^8.0.1",
     "babel-plugin-inline-import": "^3.0.0",
     "chai": "^4.1.2",
-    "sdp-fs": "^0.38.0"
+    "sdp-fs": "workspace:*"
   },
   "files": [
     "dist",

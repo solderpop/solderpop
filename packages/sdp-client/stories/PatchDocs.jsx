@@ -4,34 +4,20 @@ import { storiesOf } from '@storybook/react';
 import * as XP from 'sdp-project';
 
 import '../src/core/styles/main.scss';
-import tutorialProject from 'sdp-client-browser/tutorialProject.json';
 import PatchDocs from '../src/editor/components/PatchDocs.jsx';
 
-// TODO: fragile import
+// The 6 real-stdlib-patch story variants this file used to have (ordinary
+// node, large node, etc.) were dropped along with the `sdp-client-browser`
+// dependency they relied on (`tutorialProject.json`, a build-generated
+// fixture) -- that created a circular package dependency
+// (sdp-client -> sdp-client-browser -> sdp-client), which pnpm tolerated
+// but turborepo's build graph can't. No test covered those variants.
+// The terminal-patch stories below are unaffected: xod/patch-nodes/* are
+// sdp-project's own built-ins, not external stdlib content.
 
 const emptyProject = XP.createProject();
 
 storiesOf('PatchDocs', module)
-  .add('ordinary node (flip-flop)', () => (
-    <PatchDocs patch={tutorialProject.patches['xod/core/flip-flop']} />
-  ))
-  .add('relatively large node (map-range)', () => (
-    <PatchDocs patch={tutorialProject.patches['xod/core/map-range']} />
-  ))
-  .add('big node, no outputs (text-lcd-16x2)', () => (
-    <PatchDocs
-      patch={tutorialProject.patches['xod/common-hardware/text-lcd-16x2']}
-    />
-  ))
-  .add('no inputs (boot)', () => (
-    <PatchDocs patch={tutorialProject.patches['xod/core/boot']} />
-  ))
-  .add('no pin descriptions (add)', () => (
-    <PatchDocs patch={tutorialProject.patches['xod/core/add']} />
-  ))
-  .add('variadic (select)', () => (
-    <PatchDocs patch={tutorialProject.patches['xod/core/select']} />
-  ))
   .add('input terminal', () => (
     <PatchDocs
       patch={XP.getPatchByPathUnsafe(

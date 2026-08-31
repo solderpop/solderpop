@@ -13,6 +13,9 @@ packages/*/dist/
 coverage/
 .nyc_output/
 
+# turborepo local cache — machine/run-specific, never commit
+.turbo/
+
 # bucklescript stuff
 packages/*/lib/
 *.bs.js

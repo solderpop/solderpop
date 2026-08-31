@@ -13,23 +13,23 @@
     "build:re": "rescript build",
     "build:built-in-patches": "node ./tools/loadBuiltinPatches.cjs",
     "build:dummy-built-in-patches": "node ./tools/makeDummyBuiltinPatches.cjs",
-    "build": "yarn build:dummy-built-in-patches && yarn build:re && yarn build:js && yarn build:built-in-patches",
-    "dev:re": "yarn run build:re -w",
-    "dev": "yarn run build:js --watch",
+    "build": "pnpm run build:dummy-built-in-patches && pnpm run build:re && pnpm run build:js && pnpm run build:built-in-patches",
+    "dev:re": "pnpm run build:re -w",
+    "dev": "pnpm run build:js --watch",
     "refmt": "rescript format -all",
     "doc": "documentation build --format html --output doc --sort-order alpha src/",
     "test": "mocha --require ../../tools/babel-register.js --color --timeout 10000 test/**/*.spec.js",
     "clean:dist": "rimraf ./dist ./lib ./src/**/*.bs.js",
-    "test:watch": "yarn run test --watch"
+    "test:watch": "pnpm run test --watch"
   },
   "dependencies": {
-    "belt-holes": "^0.34.0",
+    "belt-holes": "workspace:*",
     "hm-def": "^0.3.2",
     "ramda": "^0.24.1",
     "ramda-fantasy": "^0.8.0",
     "sanctuary-def": "^0.14.0",
     "shortid": "^2.2.6",
-    "sdp-func-tools": "^0.34.0"
+    "sdp-func-tools": "workspace:*"
   },
   "devDependencies": {
     "@babel/cli": "^8.0.4",

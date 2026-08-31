@@ -11,9 +11,9 @@
     "doc": "documentation build --format html --output doc --sort-order alpha src/",
     "build:js": "babel src/ -d dist/ --source-maps",
     "build:re": "rescript build",
-    "build": "yarn build:re && yarn build:js",
+    "build": "pnpm run build:re && pnpm run build:js",
     "clean:dist": "rimraf ./dist ./lib ./src/**/*.bs.js",
-    "dev": "yarn run build --watch",
+    "dev": "pnpm run build --watch",
     "test": "mocha --require ../../tools/babel-register.js --color test/**/*.spec.js"
   },
   "dependencies": {

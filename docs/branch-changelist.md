@@ -1,5 +1,166 @@
 # Branch changelist — feature/general-improvements
 
+## 2026-08-31 — yarn/lerna → pnpm/turborepo migration
+
+**Context:** `.turbo/cache/*` (66 files, ~13MB) had been accidentally
+committed under a misleading message ("Refactor code structure for
+improved readability and maintainability") with no actual `turbo.json` or
+committed `pnpm-workspace.yaml` — the migration hadn't really started in
+git despite two commits sounding like it had. Untracked `.turbo/` and
+added it to `.gitignore` first (new commit, history not rewritten since
+the original was already pushed).
+
+**pnpm workspace setup:**
+- `pnpm-workspace.yaml` (new): `packages: [packages/*]`, plus `overrides`
+  (converted from the old yarn `resolutions` field — pnpm v11+ doesn't
+  read `package.json`'s `pnpm` field at all anymore, this file is the only
+  place these settings live now) and `allowBuilds` for every dependency
+  pnpm's supply-chain gate flagged. Every entry decided by actually
+  reading that package's `scripts` block, not guessed — e.g.
+  `electron-chromedriver`/`puppeteer`/`spectron`/`bs-platform`/
+  `@serialport/bindings-cpp`/`electron-winstaller` are real, functionally
+  load-bearing install scripts (chromedriver/Chromium downloads, the
+  actual ReScript compiler binary, native serial port bindings, Windows
+  installer tooling); `core-js`/`core-js-pure`/`es5-ext`/`highlight.js`/
+  `command-join`/`uglifyjs-webpack-plugin` have no real install step or a
+  defensive no-op; `@scarf/scarf` is telemetry, blocked deliberately;
+  `@parcel/watcher`/`tree-sitter*` left blocked (optional native bindings,
+  unclear which actual dependency exercises them — safer default).
+- Root `package.json`: added `"packageManager": "pnpm@11.24.0"`, removed
+  the yarn-only `"workspaces"` field, removed `"resolutions"` (moved to
+  pnpm-workspace.yaml above), added `"turbo": "^2.10.12"` devDependency.
+
+**xodio/menu (rc-menu) fork — vendored, not git-installed:**
+`packages/sdp-client/package.json`'s `"rc-menu": "git+https://github.com/
+xodio/menu.git#npm"` turned into a real installation blocker: pnpm shells
+out to a genuine `npm install` in a temp dir to "prepare" any git-hosted
+dependency, reading that package's `package.json` straight off disk. Its
+`"prepublish": "rc-tools run guard"` (a legacy pre-publish safety check,
+not the real build — `lib/` is already committed, `main` points straight
+at it) hard-fails under modern Node: old `graceful-fs` + the `natives`
+package reference `primordials`, removed from Node's internal `fs.js`.
+Tried `.pnpmfile.cjs`'s `readPackage` hook to strip the broken script —
+doesn't intercept this step, pnpm's git-dependency "prepare" phase reads
+the raw on-disk manifest, bypassing pnpm's own manifest-mutation hooks
+entirely. Fix that actually worked: vendored the exact pinned commit at
+`vendor/rc-menu/` with just that one script line removed (verified against
+the real fetched tarball — same code, zero behavior change), pointed
+`sdp-client`'s dependency at `"file:../../vendor/rc-menu"`. No external
+repo/mirror needed.
+
+**Circular workspace dependency (blocked turborepo's build graph):**
+`sdp-client` had a **devDependency** on `sdp-client-browser` (Storybook
+only) purely so one story (`stories/PatchDocs.jsx`) could import
+`sdp-client-browser/tutorialProject.json`, a build-generated (gitignored)
+fixture — while `sdp-client-browser` has a real, load-bearing dependency
+on `sdp-client` the other way. pnpm tolerated the cycle; turborepo's build
+graph can't (needs a true DAG). The story file even had its own
+`// TODO: fragile import` comment already flagging this. Confirmed no
+test covers the 6 story variants that used real stdlib patches from that
+fixture (`flip-flop`, `map-range`, etc.) — removed those 6, kept the 4
+that already work standalone via `sdp-project`'s own built-in
+`xod/patch-nodes/*` patches (no external data needed), removed the
+`sdp-client-browser` devDependency entirely.
+
+**Internal cross-package dependencies → `workspace:*` protocol:** yarn
+classic silently resolves `"sdp-fs": "^0.38.0"`-style ranges to the local
+workspace copy regardless of registry publication; pnpm tries to fetch
+from the real npm registry and 404s (`sdp-fs`, `sdp-project`, etc. were
+never published there). Converted all 53 internal cross-dependency
+declarations across every `packages/*/package.json` to `"workspace:*"`.
+
+**Every internal `yarn`/`yarn run` invocation → `pnpm run`:** with
+`packageManager` pinned in root `package.json`, corepack refuses to run a
+different package manager from inside the workspace — every package
+script that called `yarn build:re && yarn build:js`-style sibling scripts
+internally needed the same swap. Found and fixed 26 occurrences across 15
+package.json files (`sed 's/yarn run /pnpm run /g'` then
+`'s/yarn \([a-zA-Z:_-]\)/pnpm run \1/g'`, in that order so `yarn run X`
+doesn't become `pnpm run run X`).
+
+**`turbo.json` (new):** pipeline for `build` (`dependsOn: ["^build"]`,
+caches `dist/lib/bundle/src-babel`), `test`/`test-func`/`test-cpp`
+(`dependsOn: ["^build", "build"]`), `dev`/`start`/`storybook`
+(`persistent: true`, uncached), `clean:dist`/`doc`. Turbo silently skips
+any package missing a given task, same as lerna did.
+
+**Root `package.json` scripts:** every `lerna run X [--scope Y
+--include-filtered-dependencies]` → `turbo run X [--filter=Y...]` (`...`
+suffix = package + its dependencies, turbo's equivalent of lerna's
+`--include-filtered-dependencies`). `bootstrap` (`lerna bootstrap`, no
+real pnpm equivalent needed) → `pnpm install`. Left `"lerna": "lerna"` and
+the `lerna` devDependency in place — lerna's own version/publish workflow
+(`lerna publish --canary` in CI) is a separate, explicitly deferred
+decision, not replaced by this pass.
+
+**Real, unrelated ReScript bug found and fixed along the way:**
+`sdp-tethering-inet/src/AtInternet.resi` declared `create: (string =>
+unit, string) => unit` (flat 2-arg), but the actual implementation and its
+one real caller (a test) both use the curried 1-arg-returning-a-function
+shape (`create(handler)` returns a `string => unit` sender). Both files
+were last touched by the same squashed "Complete modernization" commit
+that isn't mine. Fixed the `.resi` to match the working implementation
+and its real usage, not the other way around. This was genuinely blocking
+`pnpm run build` (turborepo runs every package's build, unlike ad-hoc
+lerna scoping that might not have hit it).
+
+**Verified for real:** `pnpm run build` — 18/18 packages, exit 0
+(ReScript compiles, webpack bundles for both electron and browser
+targets, turbo caching confirmed working — reruns show cache hits for
+unchanged packages). `pnpm run test` — 22/32 passing; the 10 not passing
+are `belt-holes`/`sdp-tethering-inet`'s tasks (see below), not new
+breakage -- everything else that has a test suite passes.
+
+**Known pre-existing gap, investigated at length, NOT fixed — flagging
+clearly rather than leaving it ambiguously "in progress":**
+`belt-holes`/`sdp-tethering-inet` are the only two packages using Jest
+(everything else uses mocha). Their pinned `babel-jest@24.9.0` +
+`@babel/core@^8.0.1` combination crashes
+(`ScriptTransformer._getCacheKey` calls `@babel/core`'s `loadPartialConfig`
+synchronously; Babel 8 requires `loadPartialConfigSync` explicitly) — and
+this is **jest core's own** integration, not babel-jest's: bumping
+babel-jest to its latest release (30.5.0) didn't help, it still hard-codes
+the old sync call. Spent substantial effort on this specifically because
+it was blocking `pnpm run test` cleanly:
+- Pinning `@babel/core`/`@babel/preset-env` back to `^7.29.x` locally for
+  just these two packages (the same locally-scoped-devDependency pattern
+  the "Complete modernization" commit itself used for its gradual
+  per-package Babel rollout) avoids the crash, but then the `.bs.js` files
+  ReScript compiles to (real ES modules — `bsconfig.json`'s
+  `package-specs` intentionally targets `"esmodule"`, production code
+  consumes them that way too) can't be `require()`'d at all without a
+  transform, defeating the point of removing the transform.
+- Tried disabling the transform entirely (`"transform": {}`) plus every
+  documented native-ESM invocation of Jest 30 (`node
+  --experimental-vm-modules node_modules/jest/bin/jest.js`, `NODE_OPTIONS`
+  env-var form, `--runInBand` to rule out worker-process flag
+  inheritance, dynamic `import()` inside `beforeAll` instead of top-level
+  `import`). A **minimal, dependency-free** ESM test file reproduces
+  correctly in an isolated `/tmp` directory with this exact setup, but
+  fails identically inside `packages/belt-holes` even with the identical
+  config passed via `--config` on the CLI (which should ignore
+  package.json entirely) and with `babel.config.js` physically removed
+  from the repo root during the test (ruling that out explicitly). The
+  differentiator is genuinely just "is this file inside this monorepo's
+  directory tree," not any config value, babel config presence, rootDir
+  setting, or worker-process flag propagation I could find — not
+  root-caused.
+- **Reverted** all test-file and package.json changes for these two
+  packages back to their last-committed state (`git checkout`) rather
+  than leave a half-working experimental state in place. Confirmed via a
+  full rebuild+retest afterward that this restored exactly the original,
+  pre-existing failure (same two packages, same failure mode) — nothing
+  worse than before, nothing silently left broken.
+- **Recommendation for whoever picks this up:** switch these two packages
+  from Jest to mocha, matching literally every other package in this
+  monorepo (proven working with ReScript's ESM output + `tools/babel-
+  register.js` for several packages already, confirmed via this session's
+  real test runs). Far more likely to actually work than continuing to
+  fight Jest's ESM detection, but it means rewriting Jest's
+  `expect(x).toBe(y)`/`toEqual`/`toHaveLength` assertions to chai's
+  `assert`/`expect` API across 7 test files (~35 assertions) — a real,
+  properly-scoped task of its own, not a one-line fix.
+
 ## 2026-08-25 — CLI rename: `xodc` → `sdpc` (tier 3, item 12)
 
 **User decision:** asked explicitly (this is a breaking CLI-command-name

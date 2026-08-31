@@ -7,7 +7,7 @@
   "scripts": {
     "build": "babel src/ -d dist/ --source-maps",
     "clean:dist": "rimraf ./dist",
-    "dev": "yarn run build --watch",
+    "dev": "pnpm run build --watch",
     "test": "mocha --require ../../tools/babel-register.js --color --timeout 30000 test/**/*.spec.js"
   },
   "author": "SolderPop <dev@solderpop.io>",
@@ -20,8 +20,8 @@
     "recursive-copy": "^2.0.6",
     "recursive-readdir": "^2.1.0",
     "sanctuary-def": "^0.14.0",
-    "sdp-func-tools": "^0.34.0",
-    "sdp-project": "^0.38.0"
+    "sdp-func-tools": "workspace:*",
+    "sdp-project": "workspace:*"
   },
   "devDependencies": {
     "@babel/cli": "^8.0.4",

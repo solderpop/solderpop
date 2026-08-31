@@ -1,0 +1,47 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", "lib/**", "bundle/**", "src-babel/**"]
+    },
+    "test": {
+      "dependsOn": ["^build", "build"],
+      "outputs": []
+    },
+    "test-func": {
+      "dependsOn": ["^build", "build"],
+      "outputs": []
+    },
+    "test-cpp": {
+      "dependsOn": ["^build", "build"],
+      "outputs": []
+    },
+    "clean:dist": {
+      "cache": false
+    },
+    "dev": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    },
+    "start": {
+      "dependsOn": ["^build", "build"],
+      "cache": false,
+      "persistent": true
+    },
+    "storybook": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    },
+    "doc": {
+      "dependsOn": ["^build"],
+      "outputs": ["docs/**"]
+    },
+    "benchmark": {
+      "dependsOn": ["^build", "build"],
+      "cache": false
+    }
+  }
+}

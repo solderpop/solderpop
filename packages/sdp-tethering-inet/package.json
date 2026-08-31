@@ -5,7 +5,7 @@
   "scripts": {
     "refmt": "rescript format -all",
     "build:re": "rescript build",
-    "build": "yarn build:re",
+    "build": "pnpm run build:re",
     "clean:dist": "rimraf ./lib ./src/**/*.bs.js",
     "dev": "rescript build -w",
     "test": "jest"
@@ -18,7 +18,7 @@
   "main": "src/AtInternet.bs.js",
   "dependencies": {
     "address": "^1.1.2",
-    "belt-holes": "^0.34.0",
+    "belt-holes": "workspace:*",
     "internet-available": "^1.0.0",
     "tcp-ping": "^0.1.1"
   },
