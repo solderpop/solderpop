@@ -11,6 +11,7 @@
     "build:browser": "turbo run build --filter=sdp-client-browser...",
     "build:cli": "turbo run build --filter=sdp-cli...",
     "build:electron": "turbo run build --filter=sdp-client-electron...",
+    "watch": "CHOKIDAR_USEPOLLING=1 turbo watch build",
     "clean": "pnpm run clean:dist && pnpm run clean:node_modules",
     "clean:dist": "turbo run clean:dist",
     "clean:node_modules": "rimraf node_modules packages/*/node_modules",
