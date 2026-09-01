@@ -1,7 +1,8 @@
 # React 16 → 19 migration plan
 
-Status: not started. Written 2026-09-01 after `docs/roadmap.md`'s "React 16 ->
-19" entry turned out to significantly undersell the real scope -- that entry
+Status: phase 1 of 8 done (see below). Written 2026-09-01 after
+`docs/roadmap.md`'s "React 16 -> 19" entry turned out to significantly
+undersell the real scope -- that entry
 listed 4 blockers (`ReactDOM.render`, `react-redux`, `react-codemirror`,
 `react-skylight`) found by grepping for the well-known React-18-removal
 landmines. A full pass over `sdp-client`'s actual dependency list turned up a
@@ -103,8 +104,25 @@ Ordered by dependency (later phases assume earlier ones landed) and by
 risk (mechanical-and-verifiable first, runtime-behavior-only-verifiable
 last):
 
-1. **Legacy Context API removal** (3 files) -- independent prerequisite,
-   React 19 hard-fails without it regardless of anything else.
+1. **DONE (2026-09-01). Legacy Context API removal** (3 files) --
+   independent prerequisite, React 19 hard-fails without it regardless of
+   anything else. `nodeHoverContextType.js` now exports a real
+   `React.createContext(...)` instead of a bare PropTypes shape. The two
+   consumers (`Node.jsx`, `NodePinsOverlay.jsx`) use
+   `static contextType = NodeHoverContext` -- a clean 1:1 swap since both
+   only ever consumed this one context (`this.context.nodeHover.x` ->
+   `this.context.x`, dropping the namespacing `contextType` doesn't need).
+   The provider (`Patch/index.jsx`) turned out to also read the redux
+   store straight out of legacy context (`this.context.store.getState()`
+   -- react-redux v4/v5's own internal store-provisioning mechanism, not
+   something we put there) alongside its own `nodeHover` context -- fixed
+   by adding `project: ProjectSelectors.getProject` to the container's
+   existing `mapStateToProps` instead of reaching into context, which
+   also removes a dependency on react-redux's legacy internals ahead of
+   the phase-4 version bump. `getChildContext()` became a
+   `<NodeHoverContext.Provider value={...}>` wrapped around the existing
+   render output. Verified: full build (18/18), lint clean, `sdp-client`
+   unit suite (104/104).
 2. **`react-event-listener` + `recompose` removal** (9 files combined) --
    small, mechanical, hooks-based replacements, good warm-up for the rest.
 3. **Deprecated lifecycle methods + string refs** (11 files combined) --

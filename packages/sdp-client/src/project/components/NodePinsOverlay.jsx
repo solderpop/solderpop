@@ -6,9 +6,11 @@ import PinOverlay from './PinOverlay.jsx';
 import { noop } from '../../utils/ramda.js';
 import { isPinSelected } from '../../editor/utils.js';
 
-import nodeHoverContextType from '../../editor/nodeHoverContextType.js';
+import NodeHoverContext from '../../editor/nodeHoverContextType.js';
 
 class NodePinsOverlay extends React.Component {
+  static contextType = NodeHoverContext;
+
   constructor(props) {
     super(props);
 
@@ -45,8 +47,8 @@ class NodePinsOverlay extends React.Component {
         {...size}
         className="NodePinsOverlay"
         viewBox={`0 0 ${size.width} ${size.height}`}
-        onMouseOver={() => this.context.nodeHover.onMouseOver(id)}
-        onMouseLeave={() => this.context.nodeHover.onMouseLeave()}
+        onMouseOver={() => this.context.onMouseOver(id)}
+        onMouseLeave={() => this.context.onMouseLeave()}
         data-label={nodeLabel} // for func tests
       >
         <g className="pins">
@@ -68,10 +70,6 @@ class NodePinsOverlay extends React.Component {
     );
   }
 }
-
-NodePinsOverlay.contextTypes = {
-  nodeHover: nodeHoverContextType,
-};
 
 NodePinsOverlay.propTypes = {
   id: PropTypes.string.isRequired,

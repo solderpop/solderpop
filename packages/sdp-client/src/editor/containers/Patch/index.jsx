@@ -45,7 +45,7 @@ import debuggingMode from './modes/debugging.jsx';
 import marqueeSelectingMode from './modes/marqueeSelecting.jsx';
 import changingArityLevelMode from './modes/changingArityLevel.jsx';
 
-import nodeHoverContextType from '../../nodeHoverContextType.js';
+import NodeHoverContext from '../../nodeHoverContextType.js';
 
 import {
   pixelPositionToSlots,
@@ -115,15 +115,11 @@ class Patch extends React.Component {
     this.resizeWorkarea = debounce(200, this.resizeWorkarea.bind(this));
   }
 
-  getChildContext() {
-    // We're creating context here only for handle hovering of the Node.
-    // Don't be tempted to use context for other tasks if you can solve them differently.
+  getNodeHoverContextValue() {
     return {
-      nodeHover: {
-        nodeId: this.state.hoveredNodeId,
-        onMouseOver: (nodeId) => this.setState({ hoveredNodeId: nodeId }),
-        onMouseLeave: () => this.setState({ hoveredNodeId: null }),
-      },
+      nodeId: this.state.hoveredNodeId,
+      onMouseOver: (nodeId) => this.setState({ hoveredNodeId: nodeId }),
+      onMouseLeave: () => this.setState({ hoveredNodeId: null }),
     };
   }
 
@@ -281,37 +277,37 @@ class Patch extends React.Component {
      * excessive updates and renders, but get it right from
      * context and pass into render function of Modes.
      */
-    const project = ProjectSelectors.getProject(this.context.store.getState());
-    return this.props.connectDropTarget(
-      <div
-        className={cn('PatchWrapper-container', currentMode)}
-        ref={(r) => {
-          this.dropTargetRootRef = r;
-        }}
-        onWheel={this.handleScroll}
-      >
-        <ReactResizeDetector
-          handleWidth
-          handleHeight
-          onResize={this.resizeWorkarea}
-        />
-        {MODE_HANDLERS[currentMode].render(this.getApi(currentMode), project)}
-      </div>
+    const { project } = this.props;
+    return (
+      <NodeHoverContext.Provider value={this.getNodeHoverContextValue()}>
+        {this.props.connectDropTarget(
+          <div
+            className={cn('PatchWrapper-container', currentMode)}
+            ref={(r) => {
+              this.dropTargetRootRef = r;
+            }}
+            onWheel={this.handleScroll}
+          >
+            <ReactResizeDetector
+              handleWidth
+              handleHeight
+              onResize={this.resizeWorkarea}
+            />
+            {MODE_HANDLERS[currentMode].render(
+              this.getApi(currentMode),
+              project
+            )}
+          </div>
+        )}
+      </NodeHoverContext.Provider>
     );
   }
 }
 
-Patch.contextTypes = {
-  store: PropTypes.object,
-};
-
-Patch.childContextTypes = {
-  nodeHover: nodeHoverContextType,
-};
-
 Patch.propTypes = {
   /* eslint-disable react/no-unused-prop-types */
   size: PropTypes.any.isRequired,
+  project: PropTypes.any.isRequired,
   actions: PropTypes.objectOf(PropTypes.func),
   nodes: sanctuaryPropType($.StrMap(RenderableNode)),
   links: sanctuaryPropType($.StrMap(RenderableLink)),
@@ -335,6 +331,7 @@ Patch.propTypes = {
 };
 
 const mapStateToProps = R.applySpec({
+  project: ProjectSelectors.getProject,
   nodes: ProjectSelectors.getRenderableNodes,
   links: ProjectSelectors.getRenderableLinks,
   comments: ProjectSelectors.getRenderableComments,
