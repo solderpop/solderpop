@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { HotKeys } from 'react-hotkeys';
-import EventListener from 'react-event-listener';
 import { ipcRenderer, shell } from 'electron';
 import * as remoteElectron from '@electron/remote';
 
@@ -229,6 +228,8 @@ class App extends client.App {
   componentDidMount() {
     super.componentDidMount();
 
+    window.addEventListener('resize', this.onResize);
+    window.addEventListener('keydown', this.constructor.onKeyDown);
     applyTheme(this.props.themeColors);
     // Reactions on messages from Main Process
     ipcRenderer.on(EVENTS.PROJECT_PATH_CHANGED, (event, projectPath) =>
@@ -321,6 +322,8 @@ class App extends client.App {
 
   componentWillUnmount() {
     super.componentWillUnmount();
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('keydown', this.constructor.onKeyDown);
     clearInterval(this.autosaveIntervalId);
     // Unsubscribe from all ipc events
     R.map(
@@ -1114,11 +1117,6 @@ class App extends client.App {
         handlers={this.hotkeyHandlers}
         id="App"
       >
-        <EventListener
-          target={window}
-          onResize={this.onResize}
-          onKeyDown={this.constructor.onKeyDown}
-        />
         <TitleBar projectPath={this.state.projectPath} />
         <client.Editor
           size={this.state.size}

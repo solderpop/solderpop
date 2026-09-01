@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import $ from 'sanctuary-def';
 import { $Maybe, foldMaybe, noop } from 'sdp-func-tools';
 import Icon from '../../core/components/Icon.jsx';
-import { shouldUpdate } from 'recompose';
 
 import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
 import Breadcrumbs from './Breadcrumbs.jsx';
@@ -66,14 +65,12 @@ DebuggerTopPane.defaultProps = {
   stopDebuggerSession: noop,
 };
 
-export default shouldUpdate(
-  R.compose(
-    R.not,
-    R.eqBy(
-      R.evolve({
-        currentTab: foldMaybe(null, R.identity),
-        stopDebuggerSession: () => null,
-      })
-    )
+export default React.memo(
+  DebuggerTopPane,
+  R.eqBy(
+    R.evolve({
+      currentTab: foldMaybe(null, R.identity),
+      stopDebuggerSession: () => null,
+    })
   )
-)(DebuggerTopPane);
+);

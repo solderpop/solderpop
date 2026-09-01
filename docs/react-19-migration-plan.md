@@ -1,6 +1,6 @@
 # React 16 → 19 migration plan
 
-Status: phase 1 of 8 done (see below). Written 2026-09-01 after
+Status: phases 1-2 of 8 done (see below). Written 2026-09-01 after
 `docs/roadmap.md`'s "React 16 -> 19" entry turned out to significantly
 undersell the real scope -- that entry
 listed 4 blockers (`ReactDOM.render`, `react-redux`, `react-codemirror`,
@@ -123,8 +123,32 @@ last):
    `<NodeHoverContext.Provider value={...}>` wrapped around the existing
    render output. Verified: full build (18/18), lint clean, `sdp-client`
    unit suite (104/104).
-2. **`react-event-listener` + `recompose` removal** (9 files combined) --
-   small, mechanical, hooks-based replacements, good warm-up for the rest.
+2. **DONE (2026-09-01). `react-event-listener` + `recompose` removal**
+   (9 files combined). `react-event-listener`'s 6 sites: the 3 simple
+   function-component popups (`PopupAlert`/`PopupForm`/`PopupConfirm`)
+   moved their single `document` `keydown` listener into a `useEffect`;
+   the class-based `PopupPrompt` moved it into
+   `componentDidMount`/`componentWillUnmount`; the two app shells
+   (`sdp-client-browser` and `sdp-client-electron`'s `App.jsx`, both
+   already class components with existing `componentDidMount`/
+   `componentWillUnmount` pairs) got their `window` `resize`/`keydown`
+   (and, browser-only, `beforeunload`) listeners folded into those same
+   methods instead of a separate `<EventListener>` element. `recompose`'s
+   3 sites: `shouldUpdate(test)` -> `React.memo(Component, (a, b) =>
+   !test(a, b))` (memo's comparator is inverted from recompose's --
+   "props equal, skip re-render" vs. recompose's "props differ, do
+   re-render") in `pureDeepEqual.js` (a HOC factory, so this fix alone
+   covers its own 5 downstream consumers unchanged) and
+   `DebuggerTopPane.jsx`; `StringPinWidget.jsx`'s
+   `compose(withState, withState, withState, withState, lifecycle,
+   withHandlers)` chain rewritten as a plain function component with
+   `useState`/`useRef`/`useEffect` (the `inputRef` piece changed from
+   `withState` to `useRef`, which doesn't trigger a re-render on ref
+   attach the way the old state-based version did -- strictly more
+   correct, not a behavior change worth preserving). Verified: full
+   build (18/18), lint clean, `sdp-client` unit suite (104/104), and a
+   `grep` confirming zero remaining references to either package before
+   removing them from all 3 package.jsons and reinstalling.
 3. **Deprecated lifecycle methods + string refs** (11 files combined) --
    still just warnings under 19 today, but blocking for whatever comes
    after 19; do it in the same pass while touching these files anyway.

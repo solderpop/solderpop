@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import urlParse from 'url-parse';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import EventListener from 'react-event-listener';
 import { HotKeys } from 'react-hotkeys';
 
 import * as XP from 'sdp-project';
@@ -81,6 +80,9 @@ class App extends client.App {
   componentDidMount() {
     super.componentDidMount();
     document.addEventListener('click', this.onDocumentClick);
+    window.addEventListener('resize', this.onResize);
+    window.addEventListener('keydown', this.constructor.onKeyDown);
+    window.addEventListener('beforeunload', this.onCloseApp);
     applyTheme(this.props.themeColors);
   }
 
@@ -93,6 +95,9 @@ class App extends client.App {
   componentWillUnmount() {
     super.componentWillUnmount();
     document.removeEventListener('click', this.onDocumentClick);
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('keydown', this.constructor.onKeyDown);
+    window.removeEventListener('beforeunload', this.onCloseApp);
   }
 
   onFirstRun() {
@@ -400,12 +405,6 @@ class App extends client.App {
         keyMap={client.menu.getOsSpecificHotkeys()}
         handlers={this.hotkeyHandlers}
       >
-        <EventListener
-          target={window}
-          onResize={this.onResize}
-          onKeyDown={this.constructor.onKeyDown}
-          onBeforeUnload={this.onCloseApp}
-        />
         <client.Toolbar menuBarItems={this.getMenuBarItems()} />
         <client.Editor
           size={this.state.size}
