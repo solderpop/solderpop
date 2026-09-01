@@ -2,7 +2,6 @@ import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
-import storeShape from 'react-redux/src/utils/storeShape.js';
 import Icon from '../components/Icon.jsx';
 import cls from 'classnames';
 
@@ -181,7 +180,11 @@ class Catcher extends React.Component {
 }
 
 Catcher.propTypes = {
-  store: storeShape,
+  store: PropTypes.shape({
+    getState: PropTypes.func.isRequired,
+    subscribe: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
+  }).isRequired,
   children: PropTypes.element.isRequired,
 };
 

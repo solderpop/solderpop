@@ -6,7 +6,6 @@ import cn from 'classnames';
 import $ from 'sanctuary-def';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import ReactResizeDetector from 'react-resize-detector';
 import normalizeWheel from 'normalize-wheel';
 
 import * as EditorActions from '../../actions.js';
@@ -113,6 +112,11 @@ class Patch extends React.Component {
 
     this.addNode = this.addNode.bind(this);
     this.resizeWorkarea = debounce(200, this.resizeWorkarea.bind(this));
+
+    this.resizeObserver = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect;
+      this.resizeWorkarea(width, height);
+    });
   }
 
   getNodeHoverContextValue() {
@@ -121,6 +125,14 @@ class Patch extends React.Component {
       onMouseOver: (nodeId) => this.setState({ hoveredNodeId: nodeId }),
       onMouseLeave: () => this.setState({ hoveredNodeId: null }),
     };
+  }
+
+  componentDidMount() {
+    this.resizeObserver.observe(this.dropTargetRootRef);
+  }
+
+  componentWillUnmount() {
+    this.resizeObserver.disconnect();
   }
 
   componentDidUpdate(prevProps) {
@@ -289,11 +301,6 @@ class Patch extends React.Component {
             }}
             onWheel={this.handleScroll}
           >
-            <ReactResizeDetector
-              handleWidth
-              handleHeight
-              onResize={this.resizeWorkarea}
-            />
             {MODE_HANDLERS[currentMode].render(
               this.getApi(currentMode),
               project
@@ -390,6 +397,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default R.compose(
-  connect(mapStateToProps, mapDispatchToProps, undefined, { withRef: true }),
+  connect(mapStateToProps, mapDispatchToProps, undefined, {
+    forwardRef: true,
+  }),
   dropTarget
 )(Patch);

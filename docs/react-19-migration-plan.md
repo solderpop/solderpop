@@ -1,6 +1,6 @@
 # React 16 → 19 migration plan
 
-Status: phases 1-3 of 8 done (see below). Written 2026-09-01 after
+Status: phases 1-4 of 8 done (see below). Written 2026-09-01 after
 `docs/roadmap.md`'s "React 16 -> 19" entry turned out to significantly
 undersell the real scope -- that entry
 listed 4 blockers (`ReactDOM.render`, `react-redux`, `react-codemirror`,
@@ -50,9 +50,14 @@ so its migration gates both.
   `react: '>=16'` with no ceiling -- probably fine, but "probably" isn't
   "verified"; it's old and simple enough that a real runtime check
   (`TabtestEditor.jsx`, `TableLog.jsx`) shouldn't take long.
-- `react-collapsible`, `react-highlight-words`, `react-resize-detector`,
-  `react-reflex` -- current majors already declare `react: ^19.0.0` support.
-  Straightforward bumps.
+- `react-collapsible`, `react-highlight-words`, `react-reflex` -- current
+  majors already declare `react: ^19.0.0` support. Straightforward bumps
+  (done in phase 4, see below).
+- ~~`react-resize-detector`~~ -- turned out **not** to be a safe bump, see
+  phase 4: the current major dropped its component export entirely
+  (hook-only now), which the "likely fine" assessment missed by only
+  checking peer-dep support, not the actual API surface across an
+  8-major jump. Rewritten onto native `ResizeObserver` instead (phase 4).
 - Vendored/forked packages already living in this repo:
   `rc-menu` (`vendor/rc-menu`), `react-autosuggest` and `react-custom-scroll`
   (both `xodio/*` git forks, 2 and 3 files respectively) -- being
@@ -188,12 +193,86 @@ last):
      `componentDidUpdate` phase 1 already added there.
    Verified: full build (18/18), lint clean, `sdp-client` unit suite
    (104/104).
-4. **`react`/`react-dom`/`react-redux`/`redux`/`redux-thunk`/`reselect` bump
-   + `createRoot`** -- the actual version flip. Everything above should
-   land first so this isn't compiling against a pile of known-broken code
-   simultaneously. This is also the point where every library in the
-   "likely just needs a bump" table gets its real verification, and where
-   the redux subscription-model behavior change becomes checkable.
+4. **DONE (2026-09-01). `react`/`react-dom`/`react-redux`/`redux`/
+   `redux-thunk`/`reselect` bump + `createRoot`.** react 16.2 -> 19.2.8,
+   react-dom same, react-redux 4.x -> 9.3.0, redux 3.0.5 -> 5.0.1,
+   redux-thunk 2.1.0 -> 3.1.0, reselect 2.5.4 -> 5.3.0, across all 3 GUI
+   packages. `ReactDOM.render` -> `createRoot(...).render` in both entry
+   points as planned. Real fallout, beyond what the plan anticipated:
+
+   - **`redux-thunk@3` dropped its default export** (`thunk` is now a
+     named export only). One real site (`sdp-client/src/core/
+     middlewares.js`) plus three test files
+     (`test/project.spec.js`, `test/reducers/editor.spec.js`,
+     `test/hinting.spec.js`) all had the same
+     `typeof thunkModule === 'function' ? thunkModule : thunkModule.default`
+     interop shim -- a defensive pattern from some earlier CJS/ESM
+     transition that never actually needed to survive this far. Replaced
+     with a plain `import { thunk } from 'redux-thunk'` everywhere and
+     deleted the shim.
+   - **`react-redux/src/utils/storeShape.js` doesn't exist any more**
+     (`Catcher.jsx` imported this internal file directly -- never part of
+     react-redux's public API to begin with, and v9's `exports` field
+     blocks deep imports like this entirely). Replaced with an explicit
+     `PropTypes.shape({ getState, subscribe, dispatch })`.
+   - **`connect()`'s `withRef: true` option was renamed `forwardRef: true`**
+     in react-redux v6 (3 sites: `Patch/index.jsx`,
+     `sdp-client-browser` and `sdp-client-electron`'s `App.jsx`). No
+     `.getWrappedInstance()` call sites existed to go with it (the old
+     v4/v5 way of reading the ref), so this was a clean rename with
+     nothing downstream to fix.
+   - **`react-resize-detector` needed a full rewrite, not a bump** --
+     the plan's "likely just needs a bump" table was wrong about this
+     one specifically (didn't check the version-jump *magnitude*, only
+     that the peer dep claimed React 19 support). Checked the actual
+     package contents: v12 exports `useResizeDetector` only, no default
+     component export at all -- the existing `<ReactResizeDetector
+     handleWidth handleHeight onResize={fn} />` render pattern (2 sites:
+     `TabsContainer.jsx`, `Patch/index.jsx`, both class components that
+     can't call a hook directly) would have resolved to `undefined` as a
+     component and crashed immediately. Replaced both with a native
+     `ResizeObserver` set up in `componentDidMount`/disconnected in
+     `componentWillUnmount`, observing the same DOM node the old
+     component implicitly watched. Dropped the dependency entirely.
+   - **`react-reflex` (2.2.9 -> 6.0.2, four majors) and
+     `react-highlight-words` (0.8.1 -> 0.21.0) bumped and build-verified**
+     -- component names/props for both still match what's actually used
+     (`ReflexContainer`/`ReflexElement`/`ReflexSplitter` with the same
+     prop shapes; `Highlighter`'s `className`/`searchWords`/
+     `textToHighlight` API has been stable across its whole history) --
+     but a version jump that size deserves real UI verification before
+     calling it done, not just a clean build. Flagging both for the
+     manual-verification pass along with everything in phase 7-8's
+     territory. `react-collapsible` (2.0.3 -> 2.10.0) and `react-datasheet`
+     (1.3.10 -> 1.4.12) are same-major, lower-risk bumps.
+   - **Confirmed, reproducible, real**: `rc-trigger` (a dependency of the
+     vendored `rc-menu` fork) calls `ReactDOM.findDOMNode`, fully removed
+     in React 19. Webpack only warns at build time (doesn't fail the
+     build), but this **will throw at runtime** the moment a submenu
+     actually opens. This is exactly the vendored-fork territory phase 8
+     already reserved -- now scoped concretely instead of "patch what
+     breaks, TBD": patch `rc-trigger` itself (external, not the vendored
+     package) or replace the `findDOMNode`-dependent positioning logic.
+
+   Verified: full build (18/18, only the known `rc-trigger` warnings
+   above), lint clean. `sdp-client` unit suite: 103/104 -- the 1 failure
+   (`Editor reducer > working with tabs > should add new tab`) is
+   pre-existing and unrelated: `createTabsStore` in that test file only
+   combines `{ editor: editorReducer }`, but the `switchPatch` action it
+   dispatches reads `state.project` -- `state.project` is `undefined`
+   regardless of redux version, confirmed by reading the test setup
+   directly (not something a redux-version bump could have caused).
+   Both the test file and the action have been untouched since the base
+   `e39bc6f4` modernization commit, matching the pattern of the other
+   pre-existing failures found earlier this branch (`sdp-project`,
+   `sdp-patch-search`). `sdp-client-electron`'s `electron-mocha` suite
+   still fails with the same pre-existing headless-sandbox error as
+   before (confirmed unchanged, not a new React-19 issue) -- this
+   sandbox genuinely cannot verify GUI behavior; every item flagged
+   above (`react-reflex`, `react-highlight-words`, the `ResizeObserver`
+   rewrites, `createRoot`, `forwardRef`, the whole redux subscription
+   timing change) needs a human running the actual app before this
+   phase can be called fully verified, not just build-clean.
 5. **`react-codemirror` -> `@uiw/react-codemirror`** (2 files, 1 of them a
    real tokenizer port) -- self-contained (C++ implementation editor only),
    can happen in parallel with phase 4 once React itself is on 19.
@@ -208,7 +287,12 @@ last):
 8. **Vendored/forked packages**: `rc-menu`, `react-autosuggest`,
    `react-custom-scroll` -- patch whatever breaks, same treatment as
    `react-skylight`. Left last because they can't be scoped until the app
-   actually runs on React 19 far enough to exercise them.
+   actually runs on React 19 far enough to exercise them. One is no
+   longer speculative as of phase 4: `rc-menu`'s own dependency
+   `rc-trigger` calls `ReactDOM.findDOMNode` (fully removed in React 19)
+   for submenu positioning -- confirmed via a real build warning, will
+   throw at runtime the first time a submenu opens. Needs either patching
+   `rc-trigger` itself or replacing its positioning logic.
 
 ## Verification strategy
 

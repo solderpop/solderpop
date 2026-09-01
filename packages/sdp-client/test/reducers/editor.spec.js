@@ -1,6 +1,6 @@
 import R from 'ramda';
 import chai from 'chai';
-import thunkModule from 'redux-thunk';
+import { thunk } from 'redux-thunk';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import configureStoreModule from 'redux-mock-store';
 
@@ -17,9 +17,6 @@ import {
 } from '../../src/editor/constants.js';
 
 const { assert } = chai;
-
-const thunk =
-  typeof thunkModule === 'function' ? thunkModule : thunkModule.default;
 
 const configureStore =
   typeof configureStoreModule === 'function'
