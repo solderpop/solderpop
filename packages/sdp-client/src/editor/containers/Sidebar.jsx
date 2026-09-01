@@ -81,9 +81,9 @@ class Sidebar extends React.Component {
     this.resizePanelsAction = debounce(300, this.props.actions.resizePanels);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.panels !== nextProps.panels && !this.state.sizes) {
-      this.setState(R.assoc('sizes', getSizes(nextProps)));
+  componentDidUpdate(prevProps) {
+    if (prevProps.panels !== this.props.panels && !this.state.sizes) {
+      this.setState(R.assoc('sizes', getSizes(this.props)));
     }
   }
 

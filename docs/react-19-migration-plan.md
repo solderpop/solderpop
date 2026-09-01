@@ -1,6 +1,6 @@
 # React 16 → 19 migration plan
 
-Status: phases 1-2 of 8 done (see below). Written 2026-09-01 after
+Status: phases 1-3 of 8 done (see below). Written 2026-09-01 after
 `docs/roadmap.md`'s "React 16 -> 19" entry turned out to significantly
 undersell the real scope -- that entry
 listed 4 blockers (`ReactDOM.render`, `react-redux`, `react-codemirror`,
@@ -92,8 +92,8 @@ stricter future major). 3 files, independent of any library choice above:
   `Autoscroll.jsx`, `PopupShowCode.jsx`, `PopupProjectPreferences.jsx`,
   `ColorPicker/index.jsx`, `SnackBar.jsx`, `Sidebar.jsx`,
   `ThemeSettingsPopup.jsx`, `Patch/index.jsx`, `PopupInstallApp.jsx`.
-- 2 files on string refs (`ref="name"` instead of a ref object/callback):
-  `Catcher.jsx`, `sdp-client-electron/src/view/containers/App.jsx`.
+- ~~2 files on string refs~~ -- false alarm, see phase 3 below: the
+  original grep matched `href="..."` substrings, not `ref="..."`.
 - No `ReactDOM.findDOMNode` call sites found anywhere in this codebase's own
   source -- one less thing to worry about, though some of the libraries
   above may use it internally.
@@ -149,9 +149,45 @@ last):
    build (18/18), lint clean, `sdp-client` unit suite (104/104), and a
    `grep` confirming zero remaining references to either package before
    removing them from all 3 package.jsons and reinstalling.
-3. **Deprecated lifecycle methods + string refs** (11 files combined) --
-   still just warnings under 19 today, but blocking for whatever comes
-   after 19; do it in the same pass while touching these files anyway.
+3. **DONE (2026-09-01). Deprecated lifecycle methods + string refs.**
+   String refs turned out to be a false alarm -- the original grep
+   (`ref="`) matched `href="..."` substrings; a stricter pass (`grep '
+   ref="[a-zA-Z]'` plus a check for `this.refs.`) found zero real ones.
+   Lifecycle methods, 9 files: `Autoscroll.jsx`'s `componentWillUpdate`
+   was the one genuine `getSnapshotBeforeUpdate` case in the whole set --
+   it reads `scrollHeight` from the DOM right before the update, which is
+   exactly what that lifecycle method exists for (its return value now
+   flows into `componentDidUpdate`'s third `snapshot` argument instead of
+   an instance field). The other 8 were all `componentWillReceiveProps`
+   -> `componentDidUpdate`, mostly a mechanical `nextProps` -> `this.props`
+   / `this.props` -> `prevProps` swap, except two real gotchas worth
+   remembering for the rest of this migration:
+   - `PopupProjectPreferences.jsx` called `setState` **unconditionally**
+     on every `componentWillReceiveProps`. That's safe there (still
+     inside the same pre-commit update cycle) but becomes an infinite
+     loop in `componentDidUpdate` (`setState` there triggers a whole new
+     render -> `componentDidUpdate` -> `setState` -> ...). Added the
+     `prevProps.project !== this.props.project` guard the original never
+     needed.
+   - `SnackBar.jsx`'s `addMessages` doesn't call `setState` at all -- it
+     mutates a plain instance field (`this.messages`) that `render()`
+     reads directly, relying on `componentWillReceiveProps` running
+     *before* the commit so the same render sees the mutation.
+     `componentDidUpdate` runs *after* the commit, so a newly-added
+     message wouldn't appear until some unrelated re-render happened to
+     fire later. Fixed with an explicit `this.forceUpdate()`, gated on
+     whether `addMessages` actually added anything (it's idempotent --
+     already-tracked ids are skipped -- so this can't loop either).
+   - `ColorPicker/index.jsx`'s original condition compared **state**
+     against the incoming prop (`this.state.color` vs `nextProps.color`),
+     not old-prop against new-prop -- worth a second look on anything
+     using `this.state` inside `componentWillReceiveProps`, since a
+     blind `prevProps`/`this.props` swap silently changes the comparison
+     basis on those. Also touched `Patch/index.jsx` (`sdp-client`) again,
+     merging its `componentWillReceiveProps` logic into the
+     `componentDidUpdate` phase 1 already added there.
+   Verified: full build (18/18), lint clean, `sdp-client` unit suite
+   (104/104).
 4. **`react`/`react-dom`/`react-redux`/`redux`/`redux-thunk`/`reselect` bump
    + `createRoot`** -- the actual version flip. Everything above should
    land first so this isn't compiling against a pile of known-broken code

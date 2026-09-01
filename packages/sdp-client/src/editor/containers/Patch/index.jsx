@@ -123,25 +123,26 @@ class Patch extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (
-      !R.equals(nextProps.offset, this.state.offset) &&
-      !R.equals(nextProps.offset, this.props.offset)
-    ) {
-      this.setState({ offset: slotPositionToPixels(nextProps.offset) });
-    }
-    if (
-      !R.equals(nextProps.zoom, this.state.zoom) &&
-      !R.equals(nextProps.zoom, this.props.zoom)
-    ) {
-      this.setState({ zoom: nextProps.zoom });
-    }
-    if (nextProps.tabType != null && this.props.tabType !== nextProps.tabType) {
-      this.goToMode(DEFAULT_MODES[nextProps.tabType]);
-    }
-  }
-
   componentDidUpdate(prevProps) {
+    if (
+      !R.equals(this.props.offset, this.state.offset) &&
+      !R.equals(this.props.offset, prevProps.offset)
+    ) {
+      this.setState({ offset: slotPositionToPixels(this.props.offset) });
+    }
+    if (
+      !R.equals(this.props.zoom, this.state.zoom) &&
+      !R.equals(this.props.zoom, prevProps.zoom)
+    ) {
+      this.setState({ zoom: this.props.zoom });
+    }
+    if (
+      this.props.tabType != null &&
+      prevProps.tabType !== this.props.tabType
+    ) {
+      this.goToMode(DEFAULT_MODES[this.props.tabType]);
+    }
+
     if (
       this.props.focusedArea !== prevProps.focusedArea &&
       this.props.focusedArea === FOCUS_AREAS.WORKAREA

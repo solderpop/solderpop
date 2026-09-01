@@ -28,23 +28,21 @@ class Autoscroll extends React.PureComponent {
     super(props);
     this._isScrolledDown = true; /* whether the user has scrolled down */
     this._el = null;
-    this._scrollHeight = null;
   }
 
   componentDidMount() {
     this.scrollDownIfNeeded();
   }
 
-  componentWillUpdate() {
-    this._scrollHeight = this._el.scrollHeight;
+  getSnapshotBeforeUpdate() {
+    return this._el.scrollHeight;
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState, snapshot) {
     /* if the list is scrolled all the way up and new items are added, preserve the current scroll position */
-    if (isScrolledUp(this._el) && this._scrollHeight !== null) {
+    if (isScrolledUp(this._el) && snapshot !== null) {
       /* the scroll height increased by this much during the update */
-      const difference = this._el.scrollHeight - this._scrollHeight;
-      this._scrollHeight = null;
+      const difference = this._el.scrollHeight - snapshot;
       scrollDownBy(difference, this._el);
     } else this.scrollDownIfNeeded();
   }
