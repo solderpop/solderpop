@@ -1,4 +1,7 @@
 export const WORKSPACE_FILENAME = '.sdp-workspace';
+// Pre-rename marker name; isWorkspaceValid auto-migrates a workspace that
+// still only has this to WORKSPACE_FILENAME.
+export const LEGACY_WORKSPACE_FILENAME = '.xodworkspace';
 export const DEFAULT_WORKSPACE_PATH = '~/xod';
 export const DEFAULT_PROJECT_NAME = 'welcome-to-xod';
 export const LIBS_DIRNAME = '__lib__';

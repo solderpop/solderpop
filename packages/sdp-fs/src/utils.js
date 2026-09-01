@@ -18,6 +18,7 @@ import {
   DEFAULT_PROJECT_NAME,
   LIBS_DIRNAME,
   WORKSPACE_FILENAME,
+  LEGACY_WORKSPACE_FILENAME,
 } from './constants.js';
 
 import * as ERROR_CODES from './errorCodes.js';
@@ -201,11 +202,24 @@ export const ensureWorkspacePath = R.ifElse(
   () => resolvePath(DEFAULT_WORKSPACE_PATH)
 );
 
+// One-time upgrade: a workspace created before the .xodworkspace ->
+// .sdp-workspace rename only has the old marker. Write the new one
+// alongside it so such workspaces don't look invalid forever.
+const migrateLegacyWorkspaceFile = (workspacePath) => {
+  const hasLegacyMarker = fs.existsSync(
+    path.resolve(workspacePath, LEGACY_WORKSPACE_FILENAME)
+  );
+  if (hasLegacyMarker) {
+    fs.writeFileSync(path.resolve(workspacePath, WORKSPACE_FILENAME), '');
+  }
+  return hasLegacyMarker;
+};
+
 const doesWorkspaceFileExist = def(
   'doesWorkspaceFileExist :: Path -> Boolean',
-  R.compose(doesFileExist, (workspacePath) =>
-    path.resolve(workspacePath, WORKSPACE_FILENAME)
-  )
+  (workspacePath) =>
+    doesFileExist(path.resolve(workspacePath, WORKSPACE_FILENAME)) ||
+    migrateLegacyWorkspaceFile(workspacePath)
 );
 const isWorkspaceDirEmptyOrNotExist = def(
   'isWorkspaceDirEmptyOrNotExist :: Path -> Boolean',
