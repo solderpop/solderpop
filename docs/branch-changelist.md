@@ -1,5 +1,76 @@
 # Branch changelist — feature/general-improvements
 
+## 2026-09-01 — Security: 9 -> 1 `pnpm audit --prod` vulnerabilities
+
+Also checked whether `feature-rebrand-continuation` (the `xodc`->`sdpc`,
+"SolderPop IDE" title, `PopupAbout` branch) had anything left to bring
+over first -- dry-ran the merge, then cherry-picked its actual rebrand
+commit (`56b5f665`) to check. Turned out to be a no-op: every piece of it
+is already present on this branch, done independently. Aborted cleanly
+(`git reset --merge HEAD`), nothing to commit. That branch's only
+remaining unique value is its own parallel ReScript 12 / webpack 5 /
+mocha 11 migration -- a full reconciliation, not attempted here.
+
+**`cpx` -> `cpx2`** (`sdp-cli`, `sdp-client-electron`, `sdp-deploy-bin`,
+`sdp-deploy`): the original `cpx` was abandoned at 1.5.0 on an ancient
+`chokidar` that pulled in vulnerable `micromatch`/`braces`/
+`decode-uri-component` transitively (moderate ReDoS + high resource-
+exhaustion). `cpx2` is the maintained fork, same CLI binary name (`cpx`)
+and same flags, so no script changes needed -- verified with a full
+`pnpm run build` (18/18) after the swap.
+
+**`sdp-deploy`'s dependencies**, all years-stale:
+- `ws` (^3.1.0) was a dead direct dependency -- grepped the whole package,
+  not referenced anywhere except as a substring of a `wss://` URL
+  constant. Deleted outright; removes 2 high-severity DoS CVEs for free.
+- `node-fetch` ^1.7.2 -> ^2.7.0 (patches a secure-header-forwarding leak).
+  Usage is a bare `fetch(url).then(res => res.body.pipe(...))`, stable
+  across that range -- no code change needed.
+- `extract-zip` had an unpatched symlink path-traversal CVE
+  (GHSA-jmr9-qjv8-65gv, "Patched versions: None" even at its latest
+  2.0.1) -- and its one call site (`unzip.js`, used by `libraryManager.js`
+  to unpack downloaded Arduino libraries) is real attacker-reachable
+  surface, not theoretical: a malicious library zip is exactly the kind
+  of input this code processes. Replaced with a small hand-written
+  extractor on top of `yauzl` (extract-zip's own zip-reading engine,
+  still maintained) that rejects any entry resolving outside the target
+  directory and rejects symlink entries outright rather than following
+  them. Verified against 3 hand-built zips: a normal nested-directory
+  archive (extracts correctly, root dir name still detected the same
+  way), a `../../pwned.txt` path-traversal entry (rejected -- caught by
+  `yauzl` itself before even reaching this code's own directory check),
+  and a crafted symlink entry via Python's `zipfile` module with a
+  synthetic Unix `external_attr` (rejected by this code's own symlink
+  check). Also ran the real `test-func/libraryManager.spec.js` suite
+  (3/3) to confirm the actual download-and-unzip flow still works
+  end-to-end.
+
+**pnpm overrides** (`pnpm-workspace.yaml`) for two vulnerabilities with no
+direct dependent worth touching:
+- `cross-spawn` -> `^7.0.6` (ReDoS fix), pulled in via `sdp-deploy`'s
+  `child-process-promise`, itself capped at its latest release.
+- `node-fetch` -> `^2.7.0` again, this time for the transitive chain
+  through `sdp-client`/`sdp-client-browser`'s `react-event-listener` and
+  `recompose` (both actively used, both long-abandoned React HOC-era
+  libraries -- replacing them outright is real work that belongs with
+  the upcoming React 16->19 migration, not bundled in here).
+
+**Left as accepted risk, 1 remaining**: `ip`'s SSRF-classification bug in
+`isPublic()` (GHSA-2p57-rm9w-gvfp), pulled in via `sdp-tethering-inet` ->
+`internet-available` -> `dns-socket` -> `dns-packet`. No patched version
+exists at all (confirmed `ip@2.0.1` is latest and still flagged). Checked
+the actual call site: `internet-available` is invoked as a bare
+connectivity check with no attacker-influenced IP input anywhere in this
+codebase's usage, so the vulnerable code path isn't reachable here.
+Documenting rather than forcing a replacement of `internet-available`
+(itself a single-purpose, single-version package) for an unreachable bug.
+
+**Verified**: `pnpm audit --prod` before/after: 9 vulnerabilities (7
+high, 2 moderate) -> 1 (high, accepted-risk only). Full repo `pnpm run
+build` (18/18) and `pnpm run lint` clean. `sdp-client` (104/104), `sdp-fs`
+(52/52), and `sdp-deploy`'s `test-func/libraryManager.spec.js` (3/3) all
+still pass.
+
 ## 2026-09-01 — Default workspace directory `~/xod` → `~/sdp`
 
 Left out of the file-format rename above deliberately (it's a directory

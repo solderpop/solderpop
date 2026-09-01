@@ -10,6 +10,11 @@ overrides:
   spdy: 'file:./tools/spdy-shim'
   # bundled ^0.3.9 can't resolve "exports"-only packages (e.g. @oclif/core)
   eslint-import-resolver-node: '^0.4.0'
+  # security: ReDoS fix, no direct dependent needs pinning below this
+  cross-spawn: '^7.0.6'
+  # security: secure-header-forwarding fix; direct users already on ^2.7.0,
+  # this covers the transitive react-event-listener/recompose->fbjs chain
+  node-fetch: '^2.7.0'
 
 # Packages with an install/postinstall script that pnpm blocks by default
 # (supply-chain hardening — see https://pnpm.io/settings/build#allowbuilds).

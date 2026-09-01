@@ -24,7 +24,7 @@
     "babel-polyfill": "^6.16.0",
     "rescript": "^12.3.0",
     "classnames": "^2.2.5",
-    "cpx": "^1.5.0",
+    "cpx2": "^9.0.0",
     "electron-context-menu": "^2.3.0",
     "electron-log": "^4.2.4",
     "electron-settings": "^4.0.2",
