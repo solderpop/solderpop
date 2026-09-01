@@ -43,7 +43,7 @@
     "@eslint/js": "^9.39.5",
     "@google-cloud/storage": "^1.1.0",
     "docopt": "^0.6.2",
-    "documentation": "^4.0.0-beta12",
+    "documentation": "^14.0.3",
     "electron": "43.4.0",
     "eslint": "^9.39.0",
     "eslint-config-airbnb": "^19.0.4",
