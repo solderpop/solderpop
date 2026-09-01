@@ -117,10 +117,10 @@ describe('IDE', () => {
             eventsSequence.push({ eventName, data });
           },
           (newPath) => {
-            // notice that 'project.xod' at the end is gone
+            // notice that 'project.sdp' at the end is gone
             assert.equal(newPath, fixture('./multifileProject'));
           },
-          () => Maybe.Just(fixture('./multifileProject/project.xod')),
+          () => Maybe.Just(fixture('./multifileProject/project.sdp')),
           loadMock(''),
           saveMock(homedirWorkspace)
         ).then(() => {
@@ -131,7 +131,7 @@ describe('IDE', () => {
           assertOpenedProjectName(eventsSequence, 'multi-file-test');
         });
       });
-      it('opens a xodball if it is specified as an argument', () => {
+      it('opens a solderball if it is specified as an argument', () => {
         const eventsSequence = [];
 
         return WA.onIDELaunch(
@@ -139,9 +139,9 @@ describe('IDE', () => {
             eventsSequence.push({ eventName, data });
           },
           (newPath) => {
-            assert.equal(newPath, fixture('./singleFile.xodball'));
+            assert.equal(newPath, fixture('./singleFile.solderball'));
           },
-          () => Maybe.Just(fixture('./singleFile.xodball')),
+          () => Maybe.Just(fixture('./singleFile.solderball')),
           loadMock(''),
           saveMock(homedirWorkspace)
         ).then(() => {
@@ -184,10 +184,10 @@ describe('IDE', () => {
             eventsSequence.push({ eventName, data });
           },
           (newPath) => {
-            // notice that 'project.xod' at the end is gone
+            // notice that 'project.sdp' at the end is gone
             assert.equal(newPath, fixture('./multifileProject'));
           },
-          () => Maybe.Just(fixture('./multifileProject/project.xod')),
+          () => Maybe.Just(fixture('./multifileProject/project.sdp')),
           loadMock(fixture('./validWorkspace')),
           saveMock(fixture('./validWorkspace'))
         ).then(() => {
@@ -198,7 +198,7 @@ describe('IDE', () => {
           assertOpenedProjectName(eventsSequence, 'multi-file-test');
         });
       });
-      it('opens a xodball if it is specified as an argument', () => {
+      it('opens a solderball if it is specified as an argument', () => {
         const eventsSequence = [];
 
         return WA.onIDELaunch(
@@ -206,9 +206,9 @@ describe('IDE', () => {
             eventsSequence.push({ eventName, data });
           },
           (newPath) => {
-            assert.equal(newPath, fixture('./singleFile.xodball'));
+            assert.equal(newPath, fixture('./singleFile.solderball'));
           },
-          () => Maybe.Just(fixture('./singleFile.xodball')),
+          () => Maybe.Just(fixture('./singleFile.solderball')),
           loadMock(fixture('./validWorkspace')),
           saveMock(fixture('./validWorkspace'))
         ).then(() => {
@@ -268,7 +268,7 @@ describe('IDE', () => {
   });
 
   describe('when User confirms creating of new workspace', () => {
-    it('if directory is empty or does not exist, spawns .xodworkspace, stdlib, default project, save path in settings, and requests to open default project', () =>
+    it('if directory is empty or does not exist, spawns .sdp-workspace, stdlib, default project, save path in settings, and requests to open default project', () =>
       WA.onCreateWorkspace(
         (eventName, updatedWorspacePath) => {
           assert.equal(eventName, EVENTS.UPDATE_WORKSPACE);

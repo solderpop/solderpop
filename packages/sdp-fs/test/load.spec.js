@@ -103,15 +103,15 @@ describe('Loader', () => {
         'xod/core/pot',
       ]);
 
-    it('loads Project by provided path to project.xod file', () =>
+    it('loads Project by provided path to project.sdp file', () =>
       Loader.loadProject(
         [workspace],
-        path.resolve(workspace, projectPath, 'project.xod')
+        path.resolve(workspace, projectPath, 'project.sdp')
       ).then(assertPatchPaths));
-    it('loads Project by provided path to patch.xodp file', () =>
+    it('loads Project by provided path to patch.sdpp file', () =>
       Loader.loadProject(
         [workspace],
-        path.resolve(workspace, projectPath, 'qux/patch.xodp')
+        path.resolve(workspace, projectPath, 'qux/patch.sdpp')
       ).then(assertPatchPaths));
     it('loads Project by provided path to XOD project directory', () =>
       Loader.loadProject(
@@ -123,10 +123,10 @@ describe('Loader', () => {
         [workspace],
         path.resolve(workspace, projectPath, 'qux')
       ).then(assertPatchPaths));
-    it('loads Project by provided path to some.xodball file', () =>
+    it('loads Project by provided path to some.solderball file', () =>
       Loader.loadProject(
         [workspace],
-        path.resolve(workspace, '../some.xodball')
+        path.resolve(workspace, '../some.solderball')
       ).then(assertPatchPaths));
   });
 });

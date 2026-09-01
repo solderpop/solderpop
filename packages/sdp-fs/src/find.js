@@ -25,8 +25,8 @@ function getParentDirectories(path) {
 
 export function isWorkspaceDir(path) {
   try {
-    const xodworkspace = resolve(process.cwd(), path, '.xodworkspace');
-    return statSync(xodworkspace).isFile();
+    const sdpWorkspace = resolve(process.cwd(), path, '.sdp-workspace');
+    return statSync(sdpWorkspace).isFile();
   } catch (error) {
     return false;
   }
@@ -34,8 +34,8 @@ export function isWorkspaceDir(path) {
 
 function isProjectDir(path) {
   try {
-    const projectXod = resolve(process.cwd(), path, 'project.xod');
-    return statSync(projectXod).isFile();
+    const projectSdp = resolve(process.cwd(), path, 'project.sdp');
+    return statSync(projectSdp).isFile();
   } catch (error) {
     return false;
   }
@@ -47,7 +47,7 @@ export function findClosestWorkspaceDir(path) {
     if (closestWorkspaceDir) return resolve$(closestWorkspaceDir);
     return reject(
       new Error(
-        `could not find workspace directory around "${path}". Workspace directory must contain ".xodworkspace" file.`
+        `could not find workspace directory around "${path}". Workspace directory must contain ".sdp-workspace" file.`
       )
     );
   });
@@ -59,24 +59,24 @@ export function findClosestProjectDir(path) {
     if (closestProjectDir) return resolve$(closestProjectDir);
     return reject(
       new Error(
-        `could not find project directory around "${path}". Project directory must contain "project.xod" file.`
+        `could not find project directory around "${path}". Project directory must contain "project.sdp" file.`
       )
     );
   });
 }
 
 // :: Path -> Promise Path Error
-export const getPathToXodProject = R.composeP(
+export const getPathToSdpProject = R.composeP(
   R.cond([
-    [isBasename('project.xod'), dirname],
-    [isExtname('.xodball'), R.identity],
-    [R.either(isBasename('patch.xodp'), isDirectory), findClosestProjectDir],
+    [isBasename('project.sdp'), dirname],
+    [isExtname('.solderball'), R.identity],
+    [R.either(isBasename('patch.sdpp'), isDirectory), findClosestProjectDir],
     [
       R.T,
       (filePath) =>
         rejectWithCode(
-          ERROR_CODES.TRIED_TO_OPEN_NOT_XOD_FILE,
-          new Error(`Tried to open not a xod file: ${filePath}`)
+          ERROR_CODES.TRIED_TO_OPEN_NOT_SDP_FILE,
+          new Error(`Tried to open not a SolderPop file: ${filePath}`)
         ),
     ],
   ]),

@@ -46,6 +46,6 @@
     "dist",
     "src",
     "bsconfig.json",
-    "built-in-patches.xodball"
+    "built-in-patches.solderball"
   ]
 }

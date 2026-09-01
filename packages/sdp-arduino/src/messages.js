@@ -21,7 +21,7 @@ export default {
         title: 'Value for the literal is missing',
         note: `The program uses the \`=${key}\` literal, but XOD does not know the value for this literal.`,
         solution:
-          'Report the bug on the forum and attach the xodball if possible',
+          'Report the bug on the forum and attach the solderball if possible',
       },
     };
 

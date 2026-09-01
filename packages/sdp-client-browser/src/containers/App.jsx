@@ -150,16 +150,16 @@ class App extends client.App {
   onSave() {
     const { project } = this.props;
 
-    const xodballJSON = XP.toXodball(project);
-    const xodballName = XP.getProjectName(project) || 'my-project';
+    const solderballJSON = XP.toSolderball(project);
+    const solderballName = XP.getProjectName(project) || 'my-project';
     const link = document ? document.createElement('a') : null;
     const url = `data:application/xod;charset=utf8,${encodeURIComponent(
-      xodballJSON
+      solderballJSON
     )}`;
 
     if (link && link.download !== undefined) {
       link.href = url;
-      link.setAttribute('download', `${xodballName}.xodball`);
+      link.setAttribute('download', `${solderballName}.solderball`);
 
       document.body.appendChild(link);
       link.click();
@@ -209,7 +209,7 @@ class App extends client.App {
     foldEither(
       this.props.actions.addError,
       this.props.actions.importProject,
-      XP.fromXodball(jsonString)
+      XP.fromSolderball(jsonString)
     );
   }
 
@@ -250,7 +250,7 @@ class App extends client.App {
         <label key="import" className="load-button" htmlFor="openProjectButton">
           <input
             type="file"
-            accept=".xodball"
+            accept=".solderball"
             onChange={this.onLoadChange}
             id="openProjectButton"
             ref={(input) => {

@@ -138,28 +138,28 @@ describe('Save project and libraries', () => {
     path.resolve(resolveLibPath(tempDir), ...extraPath);
 
   const firstLocalExpectedFiles = [
-    path.resolve(tempProjectDir, 'same/patch.xodp'),
-    path.resolve(tempProjectDir, 'edited/patch.xodp'),
-    path.resolve(tempProjectDir, 'deleted/patch.xodp'),
-    path.resolve(tempProjectDir, 'project.xod'),
+    path.resolve(tempProjectDir, 'same/patch.sdpp'),
+    path.resolve(tempProjectDir, 'edited/patch.sdpp'),
+    path.resolve(tempProjectDir, 'deleted/patch.sdpp'),
+    path.resolve(tempProjectDir, 'project.sdp'),
   ];
   const firstLibExpectedFiles = [
-    libPath('xod/core/project.xod'),
-    libPath('xod/core/same/patch.xodp'),
-    libPath('xod/core/edited/patch.xodp'),
-    libPath('xod/core/deleted/patch.xodp'),
+    libPath('xod/core/project.sdp'),
+    libPath('xod/core/same/patch.sdpp'),
+    libPath('xod/core/edited/patch.sdpp'),
+    libPath('xod/core/deleted/patch.sdpp'),
   ];
   const secondLocalExpectedFiles = [
-    path.resolve(tempProjectDir, 'same/patch.xodp'),
-    path.resolve(tempProjectDir, 'edited/patch.xodp'),
-    path.resolve(tempProjectDir, 'added/patch.xodp'),
-    path.resolve(tempProjectDir, 'project.xod'),
+    path.resolve(tempProjectDir, 'same/patch.sdpp'),
+    path.resolve(tempProjectDir, 'edited/patch.sdpp'),
+    path.resolve(tempProjectDir, 'added/patch.sdpp'),
+    path.resolve(tempProjectDir, 'project.sdp'),
   ];
   const secondLibExpectedFiles = [
-    libPath('xod/core/project.xod'),
-    libPath('xod/core/same/patch.xodp'),
-    libPath('xod/core/edited/patch.xodp'),
-    libPath('xod/core/added/patch.xodp'),
+    libPath('xod/core/project.sdp'),
+    libPath('xod/core/same/patch.sdpp'),
+    libPath('xod/core/edited/patch.sdpp'),
+    libPath('xod/core/added/patch.sdpp'),
   ];
 
   describe('saveProject', () => {
@@ -185,7 +185,7 @@ describe('Save project and libraries', () => {
         .then(() =>
           Promise.all(R.map(assertPathExists, secondLibExpectedFiles))
         )
-        .then(() => readJson(libPath('xod/core/edited/patch.xodp'), 'utf8'))
+        .then(() => readJson(libPath('xod/core/edited/patch.sdpp'), 'utf8'))
         .then((content) =>
           assert.deepEqual(content, {
             nodes: [

@@ -143,7 +143,7 @@ const resizingNodeMode = {
     )(resizedNode);
 
     // In case that User resized Node to it's default size — just drop it to
-    // zero values. In this case it will be omitted from xodball
+    // zero values. In this case it will be omitted from solderball
     const sizeToSet = R.equals(originalSizeInSlots, newSize)
       ? { width: 0, height: 0 }
       : newSize;

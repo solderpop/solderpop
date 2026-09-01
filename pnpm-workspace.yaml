@@ -69,6 +69,9 @@ allowBuilds:
   # binary for the platform) — pulled in by the jest@30 bump, needed for
   # its own module resolution to work.
   unrs-resolver: true
+  # Standard postinstall (install.js) that selects the correct prebuilt
+  # native binary for the platform -- pulled in by Storybook's toolchain.
+  esbuild: true
 
 # rc-menu (was git+https://github.com/xodio/menu.git#npm, a xodio-org
 # fork) is vendored at vendor/rc-menu instead — see that directory and

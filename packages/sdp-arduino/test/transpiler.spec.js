@@ -109,7 +109,7 @@ describe('sdp-arduino transpiler', () => {
       [wsPath()],
       path.resolve(
         __dirname,
-        './fixtures/ensure-custom-types-are-defined.xodball'
+        './fixtures/ensure-custom-types-are-defined.solderball'
       )
     )
       .then(transformProject(R.__, '@/main', LIVENESS.NONE))
@@ -129,12 +129,12 @@ describe('sdp-arduino transpiler', () => {
       }));
 
   it('correctly sorts construction patches', () => {
-    const xodball = path.resolve(
+    const solderball = path.resolve(
       __dirname,
-      './fixtures/dependent-types.xodball'
+      './fixtures/dependent-types.solderball'
     );
 
-    return loadProject([wsPath()], xodball)
+    return loadProject([wsPath()], solderball)
       .then(transformProject(R.__, '@/main', LIVENESS.NONE))
       .then(explodeEither)
       .then((tProject) => {

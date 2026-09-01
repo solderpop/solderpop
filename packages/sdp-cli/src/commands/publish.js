@@ -24,13 +24,13 @@ const packLibVersion = async (projectDir) => {
   const projectWithoutLibs = await xodFs.loadProjectWithoutLibs(
     await xodFs.findClosestProjectDir(projectDir)
   );
-  const xodball = await xodFs.pack(projectWithoutLibs, {});
+  const solderball = await xodFs.pack(projectWithoutLibs, {});
   return {
-    libname: getProjectName(xodball),
+    libname: getProjectName(solderball),
     version: {
-      description: getProjectDescription(xodball),
-      folder: { 'xodball.json': JSON.stringify(xodball) },
-      semver: `v${getProjectVersion(xodball)}`,
+      description: getProjectDescription(solderball),
+      folder: { 'solderball.json': JSON.stringify(solderball) },
+      semver: `v${getProjectVersion(solderball)}`,
     },
   };
 };
@@ -215,9 +215,9 @@ PublishCommand.flags = {
 
 PublishCommand.args = { project: commonArgs.project };
 PublishCommand.examples = [
-  'Publish the current project with the version defined in `project.xod`\n' +
+  'Publish the current project with the version defined in `project.sdp`\n' +
     '$ sdpc publish\n',
-  'Publish a project saved as xodball\n$ sdpc publish foo.xodball',
+  'Publish a project saved as solderball\n$ sdpc publish foo.solderball',
 ];
 
 PublishCommand.strict = false;

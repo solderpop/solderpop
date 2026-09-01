@@ -21,7 +21,7 @@ const scanLibsFolder = (libs, libsDir) =>
   Promise.all(
     libs.map((lib) =>
       readDir(path.resolve(libsDir, lib))
-        .then(R.filter(hasExt('.xodp')))
+        .then(R.filter(hasExt('.sdpp')))
         .catch((err) => {
           throw Object.assign(err, {
             path: path.resolve(libsDir, lib),

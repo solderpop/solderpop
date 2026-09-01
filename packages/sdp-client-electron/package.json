@@ -134,15 +134,15 @@
     },
     "fileAssociations": [
       {
-        "ext": "xod",
+        "ext": "sdp",
         "description": "SolderPop Project Manifest"
       },
       {
-        "ext": "xodp",
+        "ext": "sdpp",
         "description": "SolderPop Patch"
       },
       {
-        "ext": "xodball",
+        "ext": "solderball",
         "description": "SolderPop Packed Project"
       }
     ],

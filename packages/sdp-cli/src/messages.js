@@ -13,11 +13,11 @@ export default {
       'The error was not properly handled or formatted. This is a bug. Report it to SolderPop developers.',
   }),
 
-  TRIED_TO_OPEN_NOT_XOD_FILE: ({ path }) => ({
+  TRIED_TO_OPEN_NOT_SDP_FILE: ({ path }) => ({
     title: 'Invalid file path',
     note: `File ${path} does not exist`,
     solution:
-      'Provide a valid path to either patch, project directory, or xodball',
+      'Provide a valid path to either patch, project directory, or solderball',
   }),
 
   PUBLISH_AUTH_FAILED: ({ username, status }) => ({

@@ -86,8 +86,8 @@ TranspileCommand.examples = [
     '$ sdpc transpile\n',
   'Transpile the current project with `main` patch as entry point, save the output in `x.cpp`\n' +
     '$ sdpc transpile main -o x.cpp\n',
-  'Transpile a project in the xodball with `main` patch as entry point\n' +
-    '$ sdpc transpile foo.xodball main',
+  'Transpile a project in the solderball with `main` patch as entry point\n' +
+    '$ sdpc transpile foo.solderball main',
 ];
 
 TranspileCommand.strict = false;

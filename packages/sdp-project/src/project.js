@@ -45,7 +45,7 @@ const { Either, Maybe } = RamdaFantasy;
 
 /**
  * Archived project state
- * @typedef {Object} Xodball
+ * @typedef {Object} Solderball
  */
 
 /**

@@ -179,7 +179,7 @@ const saveProjectMeta = def(
   (projectDir, project) =>
     saveArrangedFiles(projectDir, [
       {
-        path: path.join('.', 'project.xod'),
+        path: path.join('.', 'project.sdp'),
         content: R.compose(
           omitDefaultOptionsFromProjectFileContents,
           convertProjectToProjectFileContents
@@ -188,18 +188,18 @@ const saveProjectMeta = def(
     ]).then(R.always(projectDir))
 );
 
-export const saveProjectAsXodball = def(
-  'saveProjectAsXodball :: Path -> Project -> Promise', // Promise Path Error
+export const saveProjectAsSolderball = def(
+  'saveProjectAsSolderball :: Path -> Project -> Promise', // Promise Path Error
   (projectPath, project) => {
     const projectDir = path.dirname(projectPath);
     return R.composeP(
       R.always(projectPath),
-      (virtualXodball) => saveVirtualFile(projectDir, virtualXodball),
+      (virtualSolderball) => saveVirtualFile(projectDir, virtualSolderball),
       (content) => ({
         path: path.basename(projectPath),
         content,
       }),
-      XP.toXodball,
+      XP.toSolderball,
       Promise.resolve.bind(Promise)
     )(project);
   }
@@ -208,8 +208,8 @@ export const saveProjectAsXodball = def(
 export const saveProject = def(
   'saveProject :: Path -> [AnyPatchChange] -> Project -> Promise', // Promise Path Error
   (projectPath, changes, project) => {
-    if (/(.xodball)$/.test(projectPath)) {
-      return saveProjectAsXodball(projectPath, project);
+    if (/(.solderball)$/.test(projectPath)) {
+      return saveProjectAsSolderball(projectPath, project);
     }
 
     if (!doesDirectoryExist(projectPath)) {

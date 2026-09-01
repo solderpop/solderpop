@@ -58,12 +58,12 @@ export const isExtname = def(
 
 export const isProjectFile = def(
   'isProjectFile :: AnyXodFile -> Boolean',
-  R.pipe(R.prop('path'), isBasename('project.xod'))
+  R.pipe(R.prop('path'), isBasename('project.sdp'))
 );
 
 export const isPatchFile = def(
   'isProjectFile :: AnyXodFile -> Boolean',
-  R.pipe(R.prop('path'), isBasename('patch.xodp'))
+  R.pipe(R.prop('path'), isBasename('patch.sdpp'))
 );
 
 export const getFilePath = def(
@@ -134,7 +134,7 @@ export const beginsWithDot = def(
 
 export const resolveProjectFile = def(
   'resolveProjectFile :: Path -> Path',
-  (dir) => path.resolve(dir, 'project.xod')
+  (dir) => path.resolve(dir, 'project.sdp')
 );
 
 export const hasProjectFile = def(
