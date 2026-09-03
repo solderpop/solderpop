@@ -1,5 +1,63 @@
 # Branch changelist — feature/general-improvements
 
+## 2026-09-03 — React 19: fixed every crash found by actually running the app
+
+The React 16->19 migration (`docs/react-19-migration-plan.md`, phases 1-6)
+had been verified by build/lint/test alone, since this sandbox can't run
+Electron's GUI. Running the built app surfaced a chain of real, sequential
+hard crashes the automated checks couldn't catch -- fixed one at a time,
+each verified, each pulling forward the corresponding not-yet-started
+phase-7 item since no partial fix was possible:
+
+- `react-dnd` 2.5.1 -> 16.0.1 (HOC API removed; the app's legacy-context
+  manager lookup was fully removed in React 19) -- plus a stale
+  `this.appRef.refs.wrappedInstance` in `Catcher.jsx` this crash was
+  masking.
+- `react-sortable-hoc` -> removed, replaced with `@dnd-kit` (`Tabs.jsx`
+  only) -- `ReactDOM.findDOMNode`, removed in React 19.
+- `react-hotkeys` -> removed, replaced with `react-hotkeys-hook` + a new
+  shared `HotkeysScope` component (14 files across `sdp-client` and both
+  platform packages) -- same `findDOMNode` removal.
+- A `React.memo`-drops-`defaultProps` bug (not React-19-specific, just
+  never hit until the above crashes stopped blocking render) in
+  `NodesLayer.jsx`/`CommentsLayer.jsx`/`DebuggerTopPane.jsx`.
+- Deprecated-lifecycle and `element.ref` console warnings in vendored
+  `rc-menu`, `react-remarkable`, and `react-skylight` (renamed to their
+  `UNSAFE_`-prefixed equivalents; the latter two via `pnpm patch`).
+- reselect v5's new dev-only input-stability check flagging this
+  codebase's routine `ramda-fantasy` `Maybe`/`Either` selector outputs
+  (never referentially stable by design) -- disabled via reselect's own
+  `setGlobalDevModeChecks`.
+- A real CSS specificity bug (not a JS/reducer bug, despite looking like
+  one for several rounds of remote debugging): react-reflex's own
+  stylesheet has `.reflex-container .reflex-element > div { display:
+  block; ... }`, which is more specific than `.AttachmentEditors.hidden
+  { display: none; }` alone (2 classes + 1 type selector beats 2
+  classes), so the "hidden" attachment-editor panel stayed visible and
+  reserved layout space whenever a patch tab had none open. Fixed with
+  `!important` (an existing pattern elsewhere in this codebase for
+  exactly this "must always win" case), plus made the panel's visibility
+  derive directly from the same tab data used to render its content
+  instead of a separately-computed flag.
+- Also hit and fixed along the way: `sdp-client`'s `index.js` exports
+  both a set of named re-exports and a separately-hand-assembled default
+  object that both platform packages actually consume (`import client
+  from 'sdp-client'`) -- `HotkeysScope` was only added to the former,
+  so `client.HotkeysScope` was `undefined` (a hard crash rendering
+  `<App>`) until added to both.
+- A `.turbo` cache (921MB, accumulated across this session's many
+  rebuilds) silently served a stale `bundle.js` to `pnpm start` even
+  after full app restarts and confirming the fix was correct on disk --
+  `turbo`'s `start` task depends on `build`, and a cache hit skips
+  rebuilding entirely. Cleared it and rebuilt clean once the pattern was
+  identified; worth remembering if "I rebuilt and restarted but it's
+  still old" ever recurs.
+
+Full technical detail (root causes, exact fixes, verification) for each of
+these is in `docs/react-19-migration-plan.md`'s phase 7 write-up, not
+duplicated here. Remaining on that plan: `react-contextmenu` replacement
+(7 files) and phase-8 vendored-package warnings.
+
 ## 2026-09-01 — Security: 9 -> 1 `pnpm audit --prod` vulnerabilities
 
 Also checked whether `feature-rebrand-continuation` (the `xodc`->`sdpc`,

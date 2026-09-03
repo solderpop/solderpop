@@ -707,6 +707,49 @@ last):
    unrelated failure). Confirmed via grepping both the electron and
    browser `bundle.js` output directly for the renamed methods, not just
    a clean build log.
+
+   **DONE (2026-09-03). The "AttachmentEditor panel stays visible/takes
+   up half the workspace" bug**, reported once the app was running well
+   enough for the user to actually click around. Not a React 19 issue at
+   all -- took several rounds of remote debugging (a red herring
+   `HotkeysScope` default-export miss that turned out unrelated, a real
+   `.turbo` staleness problem below that masked whether fixes were even
+   being tested) before the user found the actual cause directly in
+   devtools: react-reflex's own stylesheet has `.reflex-container
+   .reflex-element > div { display: block; width: 100%; }`.
+   `Editor.jsx`'s `.AttachmentEditors` div is a direct child of the
+   Workarea `ReflexElement`, so it matches that selector too -- and
+   `.reflex-container .reflex-element > div` (2 classes + 1 type
+   selector) is *more specific* than `.AttachmentEditors.hidden` (2
+   classes, no type selector) alone, so react-reflex's `display: block`
+   won regardless of the `hidden` class being correctly present on the
+   element the whole time. Fixed with `display: none !important` (an
+   existing pattern elsewhere in this codebase, e.g. `Node.scss`, for
+   exactly this "must always win over ancestor/library CSS" case) on
+   `.AttachmentEditors.hidden`. Separately, also made the panel's
+   `hidden` class derive directly from whether `attachmentEditorTabs`
+   has an entry for the current tab, instead of a separately-computed
+   `currentTab.editedAttachment` check -- the two should always agree,
+   but deriving visibility from the same data that decides content
+   removes a category of drift risk regardless.
+
+   Also surfaced and fixed along the way: a `.turbo` build cache (921MB,
+   accumulated across many rebuilds this session) was silently serving a
+   stale `bundle.js` to `pnpm start` -- `turbo`'s `start` task depends on
+   `build`, and a cache hit skips rebuilding, so even a full Electron
+   quit-and-relaunch kept loading old code. This is what made the actual
+   CSS bug look unfixable for several rounds: verifying a fix by
+   rebuilding and grepping the bundle in one terminal doesn't guarantee a
+   *separate* `pnpm start` invocation rebuilds too, if turbo believes its
+   cache is still valid. Cleared `.turbo` and rebuilt clean (`0 cached`)
+   once identified.
+
+   Verified: full build (18/18), lint clean, `sdp-client` unit suite
+   105/106 (same 1 pre-existing unrelated failure). Confirmed via
+   grepping the actual rebuilt `bundle.js` for the compiled
+   `!important` rule, not just a clean build log -- given the `.turbo`
+   staleness issue just found, treating "the build succeeded" as proof
+   of anything stopped being good enough this session.
 8. **Vendored/forked packages**: `rc-menu`, `react-autosuggest`,
    `react-custom-scroll` -- patch whatever breaks, same treatment as
    `react-skylight`. Left last because they can't be scoped until the app
