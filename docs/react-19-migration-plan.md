@@ -1,6 +1,8 @@
 # React 16 → 19 migration plan
 
-Status: phases 1-6 of 8 done (see below). Written 2026-09-01 after
+Status: phases 1-6 of 8 done, plus react-dnd from phase 7 pulled forward
+out of necessity (see below -- it turned out to be a hard crash, not
+deferrable). Written 2026-09-01 after
 `docs/roadmap.md`'s "React 16 -> 19" entry turned out to significantly
 undersell the real scope -- that entry
 listed 4 blockers (`ReactDOM.render`, `react-redux`, `react-codemirror`,
@@ -374,12 +376,104 @@ last):
    `SkyLight` mounted and updated with exactly the expected
    `componentWillUpdate` deprecation warning and nothing else. No code
    changes needed for this phase.
-7. **The real rewrites**: `react-dnd` (4 files, decorator->hooks), then
-   `react-contextmenu` replacement (7 files), `react-hotkeys` major-version
-   verification or replacement (13 files, includes the entire Patch editor
-   mode system), `react-sortable-hoc` verification or replacement
-   (1 file). Do these last and one at a time -- each is its own scoped
+7. **The real rewrites.** `react-dnd` done out of order (2026-09-01, see
+   below) -- it turned out to be a hard crash, not deferrable. Remaining:
+   `react-contextmenu` replacement (7 files), `react-hotkeys`
+   major-version verification or replacement (13 files, includes the
+   entire Patch editor mode system), `react-sortable-hoc` verification or
+   replacement (1 file). Do these one at a time -- each is its own scoped
    effort with its own risk, not a batch.
+
+   **DONE (2026-09-01, pulled forward). `react-dnd` 2.5.1 -> 16.0.1.**
+   Wasn't a "whenever we get to it" item -- actually running the app under
+   the phase-4 React 19 bump crashed hard:
+   `DragDropContext`/`DragLayer`/`DropTarget`/`DragSource`'s legacy
+   `childContextTypes`/`contextTypes`-based manager propagation is fully
+   removed in React 19 (not deprecated), so `CustomDragLayer` couldn't
+   find the drag-and-drop manager at all and threw on mount, which then
+   exposed a second, independent bug (see below). No partial fix exists --
+   the context mechanism is shared across all 4 files simultaneously, so
+   this became phase 7's react-dnd item done now instead of later.
+
+   v16 dropped the `DropTarget`/`DragSource`/`DragLayer`/`DragDropContext`
+   HOC-factory API entirely (hooks only: `useDrag`/`useDrop`/
+   `useDragLayer`/`DndProvider`) -- confirmed by checking the actual
+   package's `dist/index.d.ts`, not assuming from memory. But the
+   connector functions returned by the new hooks (`connectDropTarget`
+   etc.) still accept being called with a JSX element the same way the
+   old HOC's collect-function connectors did (confirmed by reading
+   `wrapConnectorHooks.js` in the installed package: "If passed a
+   ReactElement, clone it and attach this function as a ref") -- so
+   `Patch/index.jsx`'s and the rewritten `PatchGroupItem.jsx`'s render()
+   methods needed zero changes to their existing
+   `connectDropTarget(<div>...)` / `connectDragSource(<div>...)` JSX.
+
+   `Editor.jsx`: `DragDropContext(HTML5Backend)(Editor)` -> wrapped the
+   class's own render() output in `<DndProvider backend={HTML5Backend}>`
+   instead (`HTML5Backend` also changed from a default to a named
+   export). `DragLayer.jsx`: converted `CustomDragLayer` fully to a
+   function component using `useDragLayer` -- clean, no wrapper needed,
+   it was already a simple presentational component.
+   `PatchGroupItem.jsx`: also converted fully to a function component
+   (`useDrag` + `useEffect` for the old `componentDidMount`'s drag-preview
+   setup + `React.memo` for the old `shouldComponentUpdate`) -- small and
+   self-contained enough that a full conversion was cleaner than a
+   wrapper. `Patch` itself could not follow suit (400+ lines, deeply
+   stateful, depended on by the mode-handler code for its instance
+   methods) -- `dropTarget.jsx` (renamed from `.js`, now contains JSX)
+   instead wraps it in a thin `forwardRef` function component that calls
+   `useDrop` and keeps a `ref` to the real `Patch` instance, so `drop`/
+   `hover` can still reach `dropTargetRootRef`/`addNode`/
+   `goToDefaultMode`/`setModeStateThrottled` the same way the old HOC's
+   `component` spec argument used to -- just via a ref instead of a
+   direct argument.
+
+   **A second, independent bug surfaced by the same crash**:
+   `Catcher.jsx`'s `componentDidMount` called
+   `this.appRef.refs.wrappedInstance.onFirstRun()` -- v4/v5 react-redux's
+   `withRef: true` access pattern, stale since phase 4 renamed that
+   option to `forwardRef: true` on the wrapped `App` (which makes the ref
+   resolve directly to the instance, no `.refs.wrappedInstance`
+   indirection needed). Missed updating this one consumer when phase 4
+   did the rename elsewhere. Fixed to `this.appRef.onFirstRun()`; grepped
+   the whole tree for `refs.wrappedInstance`/`getWrappedInstance` to
+   confirm no other stale sites exist.
+
+   **Verified, not just built clean**: this area had zero test coverage
+   before (grepped -- confirmed), so build-passes-and-doesn't-crash
+   wasn't enough on its own. Added a real regression test
+   (`test/reactDnd.spec.js`) that mounts a real `useDrag` source and the
+   actual `withDropTarget`-wrapped component (a minimal stand-in for
+   `Patch`, since the real class is too large to instantiate in
+   isolation) under `react-dnd-test-backend`, then *simulates an actual
+   drag-hover-drop sequence* end to end and asserts `addNode`/
+   `goToDefaultMode` were reached on the stand-in instance through the
+   forwarded ref -- not just that nothing threw. Getting this test
+   working surfaced two more real API details worth remembering: (1)
+   `TestBackend`'s `simulateBeginDrag` requires an explicit
+   `getSourceClientOffset` function in its options whenever a
+   `clientOffset` is also given (`dnd-core`'s own `beginDrag` action
+   throws `"getSourceClientOffset must be defined"` otherwise); (2)
+   there's no registry method to enumerate all registered target ids up
+   front (only a monitor-scoped `getTargetIds()` that's only meaningful
+   *during* an active drag) -- the standard, idiomatic fix was adding
+   `dropTargetHandlerId: monitor.getHandlerId()` to `withDropTarget`'s own
+   `collect` function and forwarding it as a prop, which is also just a
+   reasonable thing to have in the production code (react-dnd's own docs
+   recommend exactly this pattern for exposing a handler id).
+   Also: mocha's default recursive test discovery is `.js`-extension only
+   (no `.mocharc` override in this repo) -- a `.jsx`-named version of the
+   same test silently never ran at all under the real `pnpm test` script,
+   caught by checking the passing count against expectations rather than
+   trusting a green run.
+
+   Verified: full build (18/18, same known `rc-trigger` warnings, no
+   new ones), lint clean, `sdp-client` unit suite 104/104 (added 1, same
+   1 pre-existing unrelated failure as every other phase). Still
+   genuinely unverified: real mouse-driven dragging in the actual running
+   app (node dragging from the sidebar, live drag-layer preview,
+   drop-position snapping) -- the automated test proves the wiring is
+   correct, not that it feels right at 60fps with a real pointer.
 8. **Vendored/forked packages**: `rc-menu`, `react-autosuggest`,
    `react-custom-scroll` -- patch whatever breaks, same treatment as
    `react-skylight`. Left last because they can't be scoped until the app

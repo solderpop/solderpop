@@ -48,7 +48,9 @@ class Catcher extends React.Component {
 
   componentDidMount() {
     // Open initial project on the startup
-    this.appRef.refs.wrappedInstance.onFirstRun();
+    // react-redux v6+'s `forwardRef: true` gives the wrapped instance
+    // directly -- v4/v5's `withRef: true` needed `.refs.wrappedInstance`.
+    this.appRef.onFirstRun();
   }
 
   componentWillUnmount() {

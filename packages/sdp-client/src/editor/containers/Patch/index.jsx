@@ -23,7 +23,7 @@ import {
 } from '../../../types.js';
 import sanctuaryPropType from '../../../utils/sanctuaryPropType.js';
 
-import dropTarget from './dropTarget.js';
+import withDropTarget from './dropTarget.jsx';
 
 import {
   EDITOR_MODE,
@@ -400,5 +400,5 @@ export default R.compose(
   connect(mapStateToProps, mapDispatchToProps, undefined, {
     forwardRef: true,
   }),
-  dropTarget
+  withDropTarget
 )(Patch);

@@ -4,8 +4,8 @@ import $ from 'sanctuary-def';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { $Maybe, explodeMaybe, foldMaybe, notEquals } from 'sdp-func-tools';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FocusTrap } from 'react-hotkeys';
@@ -286,47 +286,49 @@ class Editor extends React.Component {
     )(this.props.panelsSettings);
 
     return (
-      <div
-        className={cn('Editor', {
-          leftSidebarMaximized: areSidebarsMaximized[SIDEBAR_IDS.LEFT],
-          rightSidebarMaximized: areSidebarsMaximized[SIDEBAR_IDS.RIGHT],
-        })}
-        id="Editor"
-      >
-        <Sidebar id={SIDEBAR_IDS.LEFT} windowSize={this.props.size} />
-        {suggester}
-        {libSuggester}
-        <FocusTrap className="Workarea" onFocus={this.onWorkareaFocus}>
-          <Tabs />
-          <DebuggerTopPane
-            currentTab={this.props.currentTab}
-            isDebugSessionRunning={this.props.isDebugSessionRunning}
-            isDebugSessionOutdated={this.props.isDebugSessionOutdated}
-            stopDebuggerSession={this.props.stopDebuggerSession}
+      <DndProvider backend={HTML5Backend}>
+        <div
+          className={cn('Editor', {
+            leftSidebarMaximized: areSidebarsMaximized[SIDEBAR_IDS.LEFT],
+            rightSidebarMaximized: areSidebarsMaximized[SIDEBAR_IDS.RIGHT],
+          })}
+          id="Editor"
+        >
+          <Sidebar id={SIDEBAR_IDS.LEFT} windowSize={this.props.size} />
+          {suggester}
+          {libSuggester}
+          <FocusTrap className="Workarea" onFocus={this.onWorkareaFocus}>
+            <Tabs />
+            <DebuggerTopPane
+              currentTab={this.props.currentTab}
+              isDebugSessionRunning={this.props.isDebugSessionRunning}
+              isDebugSessionOutdated={this.props.isDebugSessionOutdated}
+              stopDebuggerSession={this.props.stopDebuggerSession}
+            />
+            <Workarea
+              stopDebuggerSession={this.props.stopDebuggerSession}
+              onUploadClick={this.props.onUploadClick}
+              onUploadAndDebugClick={this.props.onUploadAndDebugClick}
+              onRunSimulationClick={this.props.onRunSimulationClick}
+              windowSize={this.props.size}
+            >
+              {this.renderOpenedPatchTab()}
+              {this.renderOpenedAttachmentEditorTabs()}
+              {this.renderTableLogTab()}
+              <SnackBar />
+            </Workarea>
+          </FocusTrap>
+          <Sidebar id={SIDEBAR_IDS.RIGHT} windowSize={this.props.size} />
+          <DragLayer />
+          {this.props.isHelpboxVisible && <Helpbox />}
+          <PanelContextMenu
+            onMinimizeClick={this.props.actions.minimizePanel}
+            onSwitchSideClick={this.props.actions.movePanel}
+            onAutohideClick={this.props.actions.togglePanelAutohide}
           />
-          <Workarea
-            stopDebuggerSession={this.props.stopDebuggerSession}
-            onUploadClick={this.props.onUploadClick}
-            onUploadAndDebugClick={this.props.onUploadAndDebugClick}
-            onRunSimulationClick={this.props.onRunSimulationClick}
-            windowSize={this.props.size}
-          >
-            {this.renderOpenedPatchTab()}
-            {this.renderOpenedAttachmentEditorTabs()}
-            {this.renderTableLogTab()}
-            <SnackBar />
-          </Workarea>
-        </FocusTrap>
-        <Sidebar id={SIDEBAR_IDS.RIGHT} windowSize={this.props.size} />
-        <DragLayer />
-        {this.props.isHelpboxVisible && <Helpbox />}
-        <PanelContextMenu
-          onMinimizeClick={this.props.actions.minimizePanel}
-          onSwitchSideClick={this.props.actions.movePanel}
-          onAutohideClick={this.props.actions.togglePanelAutohide}
-        />
-        <Tooltip />
-      </div>
+          <Tooltip />
+        </div>
+      </DndProvider>
     );
   }
 }
@@ -419,7 +421,4 @@ const mapDispatchToProps = (dispatch) => ({
   ),
 });
 
-export default R.compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  DragDropContext(HTML5Backend) // eslint-disable-line new-cap
-)(Editor);
+export default connect(mapStateToProps, mapDispatchToProps)(Editor);
