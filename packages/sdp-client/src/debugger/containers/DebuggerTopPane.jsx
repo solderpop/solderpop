@@ -11,13 +11,18 @@ import TooltipHOC from '../../tooltip/components/TooltipHOC.jsx';
 
 import { DEBUGGER_TAB_ID } from '../../editor/constants.js';
 
-function DebuggerTopPane(props) {
+function DebuggerTopPane({
+  currentTab,
+  isDebugSessionRunning = false,
+  isDebugSessionOutdated = false,
+  stopDebuggerSession = noop,
+}) {
   return foldMaybe(
     null,
     (tab) =>
-      tab.id === DEBUGGER_TAB_ID && props.isDebugSessionRunning ? (
+      tab.id === DEBUGGER_TAB_ID && isDebugSessionRunning ? (
         <Breadcrumbs>
-          {props.isDebugSessionOutdated ? (
+          {isDebugSessionOutdated ? (
             <TooltipHOC
               content={
                 <div>
@@ -42,13 +47,13 @@ function DebuggerTopPane(props) {
           ) : null}
           <button
             className="breadcrumbs-button Button Button--light"
-            onClick={props.stopDebuggerSession}
+            onClick={stopDebuggerSession}
           >
             <Icon name="stop" /> Stop
           </button>
         </Breadcrumbs>
       ) : null,
-    props.currentTab
+    currentTab
   );
 }
 
@@ -57,12 +62,6 @@ DebuggerTopPane.propTypes = {
   isDebugSessionRunning: PropTypes.bool,
   isDebugSessionOutdated: PropTypes.bool,
   stopDebuggerSession: PropTypes.func,
-};
-
-DebuggerTopPane.defaultProps = {
-  isDebugSessionRunning: false,
-  isDebugSessionOutdated: false,
-  stopDebuggerSession: noop,
 };
 
 export default React.memo(

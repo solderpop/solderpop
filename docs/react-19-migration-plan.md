@@ -646,6 +646,51 @@ last):
    throw at runtime the first time a submenu opens. Needs either patching
    `rc-trigger` itself or replacing its positioning logic.
 
+## A separate, unrelated bug class found along the way: `React.memo` silently drops `defaultProps`
+
+**FIXED (2026-09-03) for the 3 instances that had a live crash/behavior
+risk.** Not a React 19 regression -- verified this is true under React
+19.2.8 too, but would have behaved identically under React 16: when a
+function component sets `Component.defaultProps = {...}` and is then
+exported as `React.memo(Component, ...)` (this codebase's `pureDeepEqual`
+helper does exactly this), React never applies the defaults, because they
+live on the pre-memo function object, not on the `React.memo()` wrapper
+object that actually gets used as the JSX `type`. Confirmed empirically
+with a minimal repro (`React.memo(Foo, ...)` where `Foo.defaultProps =
+{value: 'DEFAULT'}` renders `undefined`, not `'DEFAULT'`) before assuming
+this was a new React 19 break -- it is not; plain function components
+(unwrapped) still fully support `defaultProps` in React 19.2.8, also
+confirmed empirically.
+
+Surfaced as a real crash once the react-hotkeys fix let the app render
+far enough to reach it: `NodesLayer.jsx` (wrapped in `pureDeepEqual`) had
+`defaultProps = { nodeValues: {} }`, and `selecting.jsx`'s `<Layers.Nodes>`
+call never passes `nodeValues` -- so it was `undefined`, not `{}`, and
+`R.prop(node.id, nodeValues)` threw `Cannot read properties of undefined
+(reading '<nodeId>')`.
+
+Grepped the whole `sdp-client` src for every `.defaultProps =` assignment
+(40 files) and cross-referenced against `React.memo`/`pureDeepEqual`
+wrapping to find which ones are actually silently broken (most of the 40
+are plain function or class components, unaffected). Found and fixed 3:
+`NodesLayer.jsx` (the crash above), `CommentsLayer.jsx` (`areDragged`
+defaulting to `undefined` instead of `false` -- no crash, just a
+prop-type/behavior nuance), and `debugger/containers/DebuggerTopPane.jsx`
+(defaulted props never actually exercised by its one caller, which always
+passes all of them explicitly -- fixed anyway as dead-but-wrong code found
+in the same sweep). All three fixed the same way: moved the defaults from
+`Component.defaultProps` into JS default parameters on the destructured
+function signature, which works regardless of any later `memo`/HOC
+wrapping since it's resolved by the JS call itself, not by React's
+element-creation-time prop merging.
+
+Verified: full build (18/18, same known warnings, no new ones), lint
+clean, `sdp-client` unit suite 105/106 (same 1 pre-existing unrelated
+failure as every other phase -- none of these 3 components had prior test
+coverage exercising the missing-prop path). Not otherwise touched: the
+other 37 files with `.defaultProps` -- confirmed not wrapped in
+`memo`/`pureDeepEqual`, so their defaults apply correctly as-is.
+
 ## Verification strategy
 
 Same discipline as every other migration this branch: build + lint clean
