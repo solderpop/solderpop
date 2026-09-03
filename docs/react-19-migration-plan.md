@@ -1,8 +1,8 @@
 # React 16 → 19 migration plan
 
-Status: phases 1-6 of 8 done, plus react-dnd from phase 7 pulled forward
-out of necessity (see below -- it turned out to be a hard crash, not
-deferrable). Written 2026-09-01 after
+Status: phases 1-6 of 8 done, plus react-dnd and react-sortable-hoc from
+phase 7 pulled forward out of necessity (see below -- both turned out to be
+hard crashes, not deferrable). Written 2026-09-01 after
 `docs/roadmap.md`'s "React 16 -> 19" entry turned out to significantly
 undersell the real scope -- that entry
 listed 4 blockers (`ReactDOM.render`, `react-redux`, `react-codemirror`,
@@ -376,12 +376,14 @@ last):
    `SkyLight` mounted and updated with exactly the expected
    `componentWillUpdate` deprecation warning and nothing else. No code
    changes needed for this phase.
-7. **The real rewrites.** `react-dnd` done out of order (2026-09-01, see
-   below) -- it turned out to be a hard crash, not deferrable. Remaining:
-   `react-contextmenu` replacement (7 files), `react-hotkeys`
-   major-version verification or replacement (13 files, includes the
-   entire Patch editor mode system), `react-sortable-hoc` verification or
-   replacement (1 file). Do these one at a time -- each is its own scoped
+7. **The real rewrites.** `react-dnd` and `react-sortable-hoc` both done
+   out of order (2026-09-01, see below) -- both turned out to be hard
+   crashes, not deferrable. Remaining: `react-contextmenu` replacement (7
+   files), `react-hotkeys` replacement (13 files, includes the entire
+   Patch editor mode system -- confirmed a hard `findDOMNode` crash the
+   same day, not just a peer-dep risk; no React-19-compatible version
+   exists, v2.0.0 is abandoned since 2022 and still effectively
+   React-16-only). Do these one at a time -- each is its own scoped
    effort with its own risk, not a batch.
 
    **DONE (2026-09-01, pulled forward). `react-dnd` 2.5.1 -> 16.0.1.**
@@ -474,6 +476,54 @@ last):
    app (node dragging from the sidebar, live drag-layer preview,
    drop-position snapping) -- the automated test proves the wiring is
    correct, not that it feels right at 60fps with a real pointer.
+
+   **DONE (2026-09-03, pulled forward). `react-sortable-hoc` 1.6.1 ->
+   removed, replaced with `@dnd-kit/core` + `@dnd-kit/sortable` +
+   `@dnd-kit/utilities` + `@dnd-kit/modifiers`.** Also not a "whenever we
+   get to it" item -- running the app surfaced a second hard crash
+   alongside `react-hotkeys`'s (see below): `WithSortableElement`/
+   `WithSortableContainer` call `ReactDOM.findDOMNode` internally, which
+   React 19 removed outright. `react-sortable-hoc` itself is unmaintained
+   (no release since the HOC-era API), so there's no version bump that
+   fixes this -- a real replacement was the only option, same situation
+   `react-dnd` was in. `Tabs.jsx` is the only consumer (confirmed by
+   grep).
+
+   Rewrote `Tabs.jsx` from a class (`sortableContainer`/`sortableElement`
+   HOCs, `this.shouldComponentUpdate = deepSCU.bind(this)`) to a function
+   component: `<DndContext sensors={...} collisionDetection={closestCenter}
+   modifiers={[restrictToHorizontalAxis, restrictToParentElement]}
+   onDragEnd={...}>` wrapping `<SortableContext items={...}
+   strategy={horizontalListSortingStrategy}>`, with each tab a
+   `useSortable({id: value.id})` consumer. `PointerSensor`'s
+   `activationConstraint: {distance: 10}` matches the original's
+   `distance={10}` (a plain click shouldn't register as a drag);
+   `restrictToHorizontalAxis`/`restrictToParentElement` match
+   `lockAxis="x"`/`lockToContainerEdges`. `onSortEnd`'s exact Ramda
+   reindexing pipeline (`sortTabs`/`indexById`/`assocIndexes`/`R.insert`/
+   `R.remove`) carried over unchanged, now driven off `active.id`/`over.id`
+   instead of `oldIndex`/`newIndex`. `deepSCU`'s props-and-state deep-equal
+   semantics don't map 1:1 onto a function component (there's no separate
+   "state" to gate the way `shouldComponentUpdate` does -- `useState`
+   updates always need to re-render), so the redux-facing half of it
+   (skip re-render when connected props are unchanged) was replicated with
+   `React.memo(Tabs, R.equals)` on the inner component, same pattern as
+   phase 2's `pureDeepEqual` conversions.
+
+   One layout bug caught before it shipped: `dnd-kit`'s `useSortable`
+   wants its ref/attributes/listeners/style on the actual sortable
+   element. Wrapping `<TabsItem>` in an extra `<div>` to hold them broke
+   the tab bar's layout (`.TabsItem` is `display: inline-block`, a block
+   `<div>` around it forces every tab onto its own line) -- fixed by
+   threading `dndRef`/`style`/`dndAttributes`/`dndListeners`/`isSorting`
+   through as props and applying them directly to `TabsItem`'s own `<li>`,
+   no wrapper element.
+
+   Verified: full build (18/18, same known warnings, no new ones), lint
+   clean, `sdp-client` unit suite 104/105 (same 1 pre-existing unrelated
+   failure as every other phase -- this area has no test coverage before
+   or after, unlike react-dnd's). Still genuinely unverified: real
+   mouse-driven tab reordering in the running app.
 8. **Vendored/forked packages**: `rc-menu`, `react-autosuggest`,
    `react-custom-scroll` -- patch whatever breaks, same treatment as
    `react-skylight`. Left last because they can't be scoped until the app

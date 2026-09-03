@@ -1,172 +1,193 @@
 import R from 'ramda';
-import React from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
-import Icon from '../../core/components/Icon.jsx';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { sortableContainer, sortableElement } from 'react-sortable-hoc';
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  horizontalListSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import {
+  restrictToHorizontalAxis,
+  restrictToParentElement,
+} from '@dnd-kit/modifiers';
 
+import Icon from '../../core/components/Icon.jsx';
 import * as Actions from '../actions.js';
 import * as Selectors from '../selectors.js';
 import * as UserSelectors from '../../user/selectors.js';
 import { assocIndexes, indexById } from '../../utils/array.js';
-import deepSCU from '../../utils/deepSCU.js';
 import TabsContainer from '../components/TabsContainer.jsx';
 import TabsItem from '../components/TabsItem.jsx';
 import SidebarSwitches from '../components/SidebarSwitches.jsx';
 
 import { SIDEBAR_IDS } from '../constants.js';
 
-const SortableItem = sortableElement(({ value }) => (
-  <TabsItem
-    key={value.id}
-    data={value}
-    onClick={value.onClick}
-    onClose={value.onClose}
-  />
-));
+function SortableTabItem({ value, onClick, onClose }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: value.id });
 
-const SortableList = sortableContainer(
-  ({ items, onClick, onClose, forwardedRef, onOverflowChange }) => (
-    <TabsContainer
-      forwardedRef={forwardedRef}
-      onOverflowChange={onOverflowChange}
-    >
-      {items.map((value, index) => {
-        const item = R.merge(value, {
-          onClick,
-          onClose,
-        });
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
 
-        return (
-          <SortableItem
-            key={`item-${value.id}`}
-            index={index}
-            value={item}
-            onClick={onClick}
-            onClose={onClose}
-          />
-        );
-      })}
-    </TabsContainer>
-  )
-);
+  return (
+    <TabsItem
+      data={value}
+      onClick={onClick}
+      onClose={onClose}
+      dndRef={setNodeRef}
+      style={style}
+      dndAttributes={attributes}
+      dndListeners={listeners}
+      isSorting={isDragging}
+    />
+  );
+}
 
-class Tabs extends React.Component {
-  constructor(props) {
-    super(props);
+SortableTabItem.propTypes = {
+  value: PropTypes.object.isRequired,
+  onClick: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
 
-    this.onTabClick = this.onTabClick.bind(this);
-    this.onCloseTab = this.onCloseTab.bind(this);
-    this.onSortEnd = this.onSortEnd.bind(this);
+function Tabs({ tabs, panels, userAuthorised, actions }) {
+  const [isTabsListOverflown, setIsTabsListOverflown] = useState(false);
+  const tabsListRef = useRef(null);
+  const setTabsRef = useCallback((el) => {
+    tabsListRef.current = el;
+  }, []);
 
-    this.tabsListRef = null;
-    this.state = { isTabsListOverflown: false };
-    this.setTabsRef = this.setTabsRef.bind(this);
-    this.onTabsListOverflowChange = this.onTabsListOverflowChange.bind(this);
-    this.scrollTabsLeft = this.scrollTabsLeft.bind(this);
-    this.scrollTabsRight = this.scrollTabsRight.bind(this);
+  // Same 10px activation distance react-sortable-hoc's `distance` prop
+  // gave: a plain click on a tab shouldn't be mistaken for a drag.
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
+  );
 
-    this.shouldComponentUpdate = deepSCU.bind(this);
-  }
+  const sortedTabs = R.sortBy(R.prop('index'))(R.values(tabs));
 
-  onTabClick(tabId, event) {
-    if (event.button === 1) {
-      this.onCloseTab(tabId);
-    } else {
-      // a little hack to correctly handle onBlur etc events
-      setTimeout(() => this.props.actions.switchTab(tabId), 0);
-    }
-  }
+  const onCloseTab = useCallback(
+    (tabId) => {
+      // a little hack to correctly handle onBlur etc events, same as in onTabClick
+      setTimeout(() => actions.closeTab(tabId), 0);
+    },
+    [actions]
+  );
 
-  onCloseTab(tabId) {
-    // a little hack to correctly handle onBlur etc events, same as in onTabClick
-    setTimeout(() => this.props.actions.closeTab(tabId), 0);
-  }
+  const onTabClick = useCallback(
+    (tabId, event) => {
+      if (event.button === 1) {
+        onCloseTab(tabId);
+      } else {
+        // a little hack to correctly handle onBlur etc events
+        setTimeout(() => actions.switchTab(tabId), 0);
+      }
+    },
+    [actions, onCloseTab]
+  );
 
-  onSortEnd({ oldIndex, newIndex }) {
-    const tabs = this.getTabs();
-    return R.compose(
-      this.props.actions.sortTabs,
-      indexById,
-      assocIndexes,
-      R.insert(newIndex, tabs[oldIndex]),
-      R.remove(oldIndex, 1)
-    )(tabs);
-  }
+  const onDragEnd = useCallback(
+    ({ active, over }) => {
+      if (!over || active.id === over.id) return;
 
-  onTabsListOverflowChange(isTabsListOverflown) {
-    this.setState({ isTabsListOverflown });
-  }
+      const oldIndex = sortedTabs.findIndex((tab) => tab.id === active.id);
+      const newIndex = sortedTabs.findIndex((tab) => tab.id === over.id);
+      if (oldIndex === -1 || newIndex === -1) return;
 
-  setTabsRef(ref) {
-    this.tabsListRef = ref;
-  }
+      R.compose(
+        actions.sortTabs,
+        indexById,
+        assocIndexes,
+        R.insert(newIndex, sortedTabs[oldIndex]),
+        R.remove(oldIndex, 1)
+      )(sortedTabs);
+    },
+    [sortedTabs, actions]
+  );
 
-  getTabs() {
-    return R.sortBy(R.prop('index'))(R.values(this.props.tabs));
-  }
+  const scrollTabsLeft = useCallback(() => {
+    if (tabsListRef.current) tabsListRef.current.scrollLeft -= 100;
+  }, []);
 
-  scrollTabsLeft() {
-    this.tabsListRef.scrollLeft -= 100;
-  }
+  const scrollTabsRight = useCallback(() => {
+    if (tabsListRef.current) tabsListRef.current.scrollLeft += 100;
+  }, []);
 
-  scrollTabsRight() {
-    this.tabsListRef.scrollLeft += 100;
-  }
-
-  render() {
-    const { isTabsListOverflown } = this.state;
-    const tabs = this.getTabs();
-    return (
-      <div className="Tabs">
-        <SidebarSwitches
-          id={SIDEBAR_IDS.LEFT}
-          isMinimized
-          panels={this.props.panels}
-          onTogglePanel={this.props.actions.togglePanel}
-          isLoggedIn={this.props.userAuthorised}
+  return (
+    <div className="Tabs">
+      <SidebarSwitches
+        id={SIDEBAR_IDS.LEFT}
+        isMinimized
+        panels={panels}
+        onTogglePanel={actions.togglePanel}
+        isLoggedIn={userAuthorised}
+      />
+      {isTabsListOverflown ? (
+        <Icon
+          Component="button"
+          className="ScrollTabs"
+          name="angle-left"
+          onClickCapture={scrollTabsLeft}
         />
-        {isTabsListOverflown ? (
-          <Icon
-            Component="button"
-            className="ScrollTabs"
-            name="angle-left"
-            onClickCapture={this.scrollTabsLeft}
-          />
-        ) : null}
-        <SortableList
-          items={tabs}
-          onSortEnd={this.onSortEnd}
-          axis="x"
-          lockAxis="x"
-          lockToContainerEdges
-          lockOffset="-5%"
-          helperClass="is-sorting"
-          distance={10}
-          onClick={this.onTabClick}
-          onClose={this.onCloseTab}
-          forwardedRef={this.setTabsRef}
-          onOverflowChange={this.onTabsListOverflowChange}
+      ) : null}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        modifiers={[restrictToHorizontalAxis, restrictToParentElement]}
+        onDragEnd={onDragEnd}
+      >
+        <SortableContext
+          items={sortedTabs.map((tab) => tab.id)}
+          strategy={horizontalListSortingStrategy}
+        >
+          <TabsContainer
+            forwardedRef={setTabsRef}
+            onOverflowChange={setIsTabsListOverflown}
+          >
+            {sortedTabs.map((value) => (
+              <SortableTabItem
+                key={value.id}
+                value={R.merge(value, { onClick: onTabClick, onClose: onCloseTab })}
+                onClick={onTabClick}
+                onClose={onCloseTab}
+              />
+            ))}
+          </TabsContainer>
+        </SortableContext>
+      </DndContext>
+      {isTabsListOverflown ? (
+        <Icon
+          Component="button"
+          className="ScrollTabs"
+          name="angle-right"
+          onClickCapture={scrollTabsRight}
         />
-        {isTabsListOverflown ? (
-          <Icon
-            Component="button"
-            className="ScrollTabs"
-            name="angle-right"
-            onClickCapture={this.scrollTabsRight}
-          />
-        ) : null}
-        <SidebarSwitches
-          id={SIDEBAR_IDS.RIGHT}
-          isMinimized
-          panels={this.props.panels}
-          onTogglePanel={this.props.actions.togglePanel}
-          isLoggedIn={this.props.userAuthorised}
-        />
-      </div>
-    );
-  }
+      ) : null}
+      <SidebarSwitches
+        id={SIDEBAR_IDS.RIGHT}
+        isMinimized
+        panels={panels}
+        onTogglePanel={actions.togglePanel}
+        isLoggedIn={userAuthorised}
+      />
+    </div>
+  );
 }
 
 Tabs.propTypes = {
@@ -183,6 +204,8 @@ Tabs.propTypes = {
   ),
   userAuthorised: PropTypes.bool.isRequired,
 };
+
+const MemoizedTabs = React.memo(Tabs, R.equals);
 
 const mapStateToProps = R.applySpec({
   tabs: Selectors.getPreparedTabs,
@@ -202,4 +225,4 @@ const mapDispatchToprops = (dispatch) => ({
   ),
 });
 
-export default connect(mapStateToProps, mapDispatchToprops)(Tabs);
+export default connect(mapStateToProps, mapDispatchToprops)(MemoizedTabs);
