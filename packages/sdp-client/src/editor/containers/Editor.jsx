@@ -8,7 +8,6 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { FocusTrap } from 'react-hotkeys';
 import * as XP from 'sdp-project';
 import debounce from 'throttle-debounce/debounce.js';
 
@@ -297,7 +296,11 @@ class Editor extends React.Component {
           <Sidebar id={SIDEBAR_IDS.LEFT} windowSize={this.props.size} />
           {suggester}
           {libSuggester}
-          <FocusTrap className="Workarea" onFocus={this.onWorkareaFocus}>
+          <div
+            className="Workarea"
+            tabIndex={-1}
+            onFocus={this.onWorkareaFocus}
+          >
             <Tabs />
             <DebuggerTopPane
               currentTab={this.props.currentTab}
@@ -317,7 +320,7 @@ class Editor extends React.Component {
               {this.renderTableLogTab()}
               <SnackBar />
             </Workarea>
-          </FocusTrap>
+          </div>
           <Sidebar id={SIDEBAR_IDS.RIGHT} windowSize={this.props.size} />
           <DragLayer />
           {this.props.isHelpboxVisible && <Helpbox />}

@@ -1,8 +1,9 @@
 # React 16 → 19 migration plan
 
-Status: phases 1-6 of 8 done, plus react-dnd and react-sortable-hoc from
-phase 7 pulled forward out of necessity (see below -- both turned out to be
-hard crashes, not deferrable). Written 2026-09-01 after
+Status: phases 1-6 of 8 done, plus react-dnd, react-sortable-hoc, and
+react-hotkeys from phase 7 pulled forward out of necessity (see below --
+all three turned out to be hard crashes, not deferrable). Written
+2026-09-01 after
 `docs/roadmap.md`'s "React 16 -> 19" entry turned out to significantly
 undersell the real scope -- that entry
 listed 4 blockers (`ReactDOM.render`, `react-redux`, `react-codemirror`,
@@ -376,15 +377,11 @@ last):
    `SkyLight` mounted and updated with exactly the expected
    `componentWillUpdate` deprecation warning and nothing else. No code
    changes needed for this phase.
-7. **The real rewrites.** `react-dnd` and `react-sortable-hoc` both done
-   out of order (2026-09-01, see below) -- both turned out to be hard
-   crashes, not deferrable. Remaining: `react-contextmenu` replacement (7
-   files), `react-hotkeys` replacement (13 files, includes the entire
-   Patch editor mode system -- confirmed a hard `findDOMNode` crash the
-   same day, not just a peer-dep risk; no React-19-compatible version
-   exists, v2.0.0 is abandoned since 2022 and still effectively
-   React-16-only). Do these one at a time -- each is its own scoped
-   effort with its own risk, not a batch.
+7. **The real rewrites.** `react-dnd`, `react-sortable-hoc`, and
+   `react-hotkeys` all done out of order (2026-09-01/03, see below) --
+   all three turned out to be hard crashes, not deferrable. Remaining:
+   `react-contextmenu` replacement (7 files). Do these one at a time --
+   each is its own scoped effort with its own risk, not a batch.
 
    **DONE (2026-09-01, pulled forward). `react-dnd` 2.5.1 -> 16.0.1.**
    Wasn't a "whenever we get to it" item -- actually running the app under
@@ -524,6 +521,121 @@ last):
    failure as every other phase -- this area has no test coverage before
    or after, unlike react-dnd's). Still genuinely unverified: real
    mouse-driven tab reordering in the running app.
+
+   **DONE (2026-09-03, pulled forward). `react-hotkeys` 1.1.4 -> removed,
+   replaced with `react-hotkeys-hook` 5.3.3 + a new shared
+   `HotkeysScope` component.** Third crash from the same running-the-app
+   session as the other two: `HotKeys.componentDidMount` calls
+   `ReactDOM.findDOMNode` directly, gone in React 19. react-hotkeys is
+   abandoned (last release 2022); its own v2 is still effectively
+   React-16-only despite a loosely-permissive peer dep, so -- same as the
+   other two -- no version bump exists, only a real replacement. Scope
+   turned out to be 14 files, not the plan's original estimate of 13:
+   besides the 12 in `sdp-client` (`Editor.jsx`, `Sidebar.jsx`,
+   `ProjectBrowser.jsx`, 9 Patch mode files), the root `<HotKeys
+   keyMap={...}>` wrapping the *entire* app lives one level up, once each
+   in `sdp-client-browser/containers/App.jsx` and
+   `sdp-client-electron/view/containers/App.jsx` -- confirmed by matching
+   the crash's own stack trace (`App.jsx:1115`) directly to the electron
+   file.
+
+   The real complexity wasn't the library swap itself, it was the
+   app's existing keyboard-shortcut architecture: a `COMMAND` enum
+   decoupled from actual key combos (`HOTKEY[COMMAND.X]`, Mousetrap
+   syntax), consumed three different ways -- (1) most Patch mode files
+   pass `handlers={{}}` and only ever used `<HotKeys>` as a focusable
+   `<div tabIndex="-1">` wrapper (confirmed by reading react-hotkeys'
+   own source: `HotKeys` renders `FocusTrap`, which renders exactly
+   that div) -- these 6 files plus `Editor.jsx`/`Sidebar.jsx`'s bare
+   `FocusTrap` usages needed nothing but a mechanical div swap, no new
+   library at all; (2) 4 Patch mode files (`selecting`, inherited by
+   `debugging`, `linking`, `marqueeSelecting`) and `ProjectBrowser.jsx`
+   have real per-mode `handlers`, scoped to their own DOM subtree, mirror
+   -ing react-hotkeys' per-instance Mousetrap-on-a-div binding; (3) both
+   platform root `App.jsx` files merge a shared cross-platform
+   `defaultHotkeyHandlers` (defined once in `sdp-client`'s base `App`
+   class) with their own platform-specific additions, and Electron
+   additionally filters out any command already bound to a native menu
+   accelerator (except `SELECT_ALL`, deliberately double-bound) via a
+   `getKeyMap()` static method.
+
+   Also discovered along the way: the mode objects' `render(api)` methods
+   are plain functions called directly from `Patch`'s own class
+   `render()` (`MODE_HANDLERS[currentMode].render(api, project)`) -- not
+   components themselves, so hooks (including `useHotkeys`) can't be
+   called inside them at all. Same hooks-vs-plain-render-prop conflict
+   `withDropTarget` solved for react-dnd, solved the same way here:
+   `HotkeysScope` (`src/utils/components/HotkeysScope.jsx`, exported from
+   `sdp-client`'s index as `HotkeysScope` for the two platform packages
+   to consume) is itself a real function component wrapping a `<div>`,
+   so it -- not the mode object -- is what actually calls the hooks.
+
+   `HotkeysScope` preserves the app's exact `{ [COMMAND.X]: handler }`
+   API and `HOTKEY`-driven combo resolution: it calls `useHotkeys` once
+   per entry in the *entire* `COMMAND` enum (not just the active
+   `handlers`), every render, unconditionally, gating each individually
+   via its own `enabled` option. This isn't a hack -- `COMMAND` is a
+   static import that never changes shape, so it's always the same
+   fixed-length, fixed-order set of hook calls across renders of a given
+   `HotkeysScope` instance, which is exactly what Rules of Hooks
+   requires (it forbids a call count/order that *varies* between
+   renders, not a `.map()` over a structurally-static array). Element
+   scoping is preserved by merging every hook's returned ref callback
+   onto the wrapper `<div>`. A `disabledCommands` prop lets Electron's
+   `App.jsx` keep its native-menu-accelerator filtering (renamed
+   `getKeyMap()` -> `getDisabledCommands()`, same underlying Ramda
+   pipeline, just returning the filtered-out list directly instead of
+   `R.omit`-ing it from a keyMap).
+
+   Two translation/behavior details, found by reading actual sources
+   rather than assuming: (1) `HOTKEY`'s Mousetrap-flavored combo syntax
+   needed exactly two token translations for react-hotkeys-hook's own
+   vocabulary -- `'CmdOrCtrl'` -> `'mod'` (its own cross-platform
+   Cmd-or-Ctrl modifier, which made the app's separate manual
+   `isMacOS()`-based OS branching in `utils/menu.js` unnecessary for this
+   path) and `'del'` -> `'delete'`; single keys, `'ctrl'`/`'shift'`/
+   `'alt'`, and array-of-alternatives all pass through unchanged. (2)
+   react-hotkeys-hook's element-scoped mode additionally requires the
+   *focused* element to be the scoped element or a descendant of it (not
+   just that the keydown bubbled through it) -- reading its source
+   turned up the exact check (`!a.contains(e.activeElement)`). This
+   isn't actually a behavior change from Mousetrap's per-instance
+   binding: native keydown bubbling only ever reaches an ancestor
+   listener when the focused element is inside that ancestor's subtree
+   in the first place, so the two are equivalent -- confirmed by the
+   regression test needing an explicit `.focus()` call to pass, which
+   simply mirrors focus management the real app already does elsewhere
+   (e.g. `Patch` focusing its work area).
+
+   One pre-existing bug found, not fixed silently: `ProjectBrowser.jsx`'s
+   `getHotkeyHandlers()` had a `[COMMAND.ESCAPE]` entry, but `COMMAND` has
+   no `ESCAPE` key -- it evaluated to `handlers.undefined`, which never
+   matched any real key and so never fired, under react-hotkeys either.
+   Dropped rather than guessing which real command/key was intended, and
+   left noted in the code.
+
+   **Verified, not just built clean**: this area also had zero test
+   coverage before (grepped -- confirmed), so a new regression test
+   (`test/hotkeysScope.spec.js`) mounts a real `HotkeysScope`, focuses
+   it, and dispatches actual `KeyboardEvent`s matching a bound command's
+   real resolved combo, asserting the handler fires -- and that a
+   command listed in `disabledCommands` never fires despite having both
+   a handler and a real combo. Writing it surfaced one more real
+   detail: react-hotkeys-hook's focus-containment check references the
+   bare globals `Document`/`ShadowRoot` (true ambient globals in a real
+   browser), not `window.Document` -- jsdom only puts them on `window`,
+   so the test environment needs `global.Document`/`global.ShadowRoot`
+   shimmed explicitly; production code needs no such shim since real
+   browsers already have them.
+
+   Verified: full build (18/18, same known warnings, no new ones), lint
+   clean, `sdp-client` unit suite 105/106 (added 1, same 1 pre-existing
+   unrelated failure as every other phase). Still genuinely unverified:
+   every actual keyboard shortcut in the running app (undo/redo, delete,
+   select-all, the Patch mode shortcuts, ProjectBrowser's add/rename/
+   delete) -- the automated test proves one real combo resolves and
+   fires correctly end to end, not that all ~20 of them feel right under
+   a real keyboard.
 8. **Vendored/forked packages**: `rc-menu`, `react-autosuggest`,
    `react-custom-scroll` -- patch whatever breaks, same treatment as
    `react-skylight`. Left last because they can't be scoped until the app

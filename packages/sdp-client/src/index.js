@@ -144,6 +144,7 @@ export { default as PopupConfirm } from './utils/components/PopupConfirm.jsx';
 export { default as PopupPrompt } from './utils/components/PopupPrompt.jsx';
 export { default as PopupForm } from './utils/components/PopupForm.jsx';
 export { default as Toolbar } from './utils/components/Toolbar.jsx';
+export { default as HotkeysScope } from './utils/components/HotkeysScope.jsx';
 export { default as SolderpopLogo } from './utils/components/SolderpopLogo.jsx';
 export { default as SolderpopLockup } from './utils/components/SolderpopLockup.jsx';
 export { default as PopupProjectPreferences } from './project/components/PopupProjectPreferences.jsx';

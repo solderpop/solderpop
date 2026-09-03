@@ -1,6 +1,5 @@
 import R from 'ramda';
 import React from 'react';
-import { HotKeys } from 'react-hotkeys';
 
 import * as XP from 'sdp-project';
 
@@ -163,7 +162,7 @@ const movingMode = {
     };
 
     return (
-      <HotKeys className="PatchWrapper" handlers={{}}>
+      <div className="PatchWrapper" tabIndex={-1}>
         <PatchSVG
           onMouseMove={bindApi(api, this.onMouseMove)}
           onMouseUp={bindApi(api, this.onMouseUp)}
@@ -227,7 +226,7 @@ const movingMode = {
             </g>
           </g>
         </PatchSVG>
-      </HotKeys>
+      </div>
     );
   },
 };

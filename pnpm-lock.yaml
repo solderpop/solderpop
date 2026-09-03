@@ -435,9 +435,9 @@ importers:
       react-highlight-words:
         specifier: ^0.21.0
         version: 0.21.0(react@19.2.8)
-      react-hotkeys:
-        specifier: ^1.1.4
-        version: 1.1.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      react-hotkeys-hook:
+        specifier: ^5.3.3
+        version: 5.3.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react-redux:
         specifier: ^9.3.0
         version: 9.3.0(react@19.2.8)(redux@5.0.1)
@@ -604,9 +604,6 @@ importers:
       react-dom:
         specifier: ^19.2.8
         version: 19.2.8(react@19.2.8)
-      react-hotkeys:
-        specifier: ^1.1.4
-        version: 1.1.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react-redux:
         specifier: ^9.3.0
         version: 9.3.0(react@19.2.8)(redux@5.0.1)
@@ -752,9 +749,6 @@ importers:
       react-dom:
         specifier: ^19.2.8
         version: 19.2.8(react@19.2.8)
-      react-hotkeys:
-        specifier: ^1.1.4
-        version: 1.1.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react-redux:
         specifier: ^9.3.0
         version: 9.3.0(react@19.2.8)(redux@5.0.1)
@@ -8314,9 +8308,6 @@ packages:
   lodash.flatten@4.4.0:
     resolution: {integrity: sha512-C5N2Z3DgnnKr0LOpv/hKCgKdb7ZZwafIrsesve6lmzvZIRZRGaZ/l6Q8+2W7NaT+ZwO3fFlSCzCzrDCFdJfZ4g==}
 
-  lodash.isboolean@3.0.3:
-    resolution: {integrity: sha512-Bz5mupy2SVbPHURB98VAcw+aHh4vRV5IPNhILUCsOzRmsTmSQ17jIuqopAentWoehktxGd9e/hbIXq980/1QJg==}
-
   lodash.isequal@4.5.0:
     resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
     deprecated: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
@@ -8821,9 +8812,6 @@ packages:
 
   moo@0.5.3:
     resolution: {integrity: sha512-m2fmM2dDm7GZQsY7KK2cme8agi+AAljILjQnof7p1ZMDe6dQ4bdnSMx0cPppudoeNv5hEFQirN6u+O4fDE0IWA==}
-
-  mousetrap@1.6.5:
-    resolution: {integrity: sha512-QNo4kEepaIBwiT8CDhP98umTetp+JNfQYBWvC1pc6/OAibuXtRcxZ58Qz8skvEHYvURne/7R8T5VoOI7rDsEUA==}
 
   mri@1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
@@ -9899,11 +9887,11 @@ packages:
     peerDependencies:
       react: ^0.14.0 || ^15.0.0 || ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0 || ^19.0.0-0
 
-  react-hotkeys@1.1.4:
-    resolution: {integrity: sha512-TI7YEZXl3ChOfq9MO5LohWA809hxs4pbLAPodPdFrvunLa7uk9TlMKpftnChMlAcbiqDrOGAhnGWZCMbNnd65A==}
+  react-hotkeys-hook@5.3.3:
+    resolution: {integrity: sha512-aswgyWUnE25hmhzHTfKDmKzsaSE5DJ4LKaU/o6rQSXkDd/1Bh9TfAFQbHkf6fLy11HvlYkp+cDDarGdhmCDhoQ==}
     peerDependencies:
-      react: '>= 0.14.0'
-      react-dom: '>= 0.14.0'
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
@@ -21112,8 +21100,6 @@ snapshots:
 
   lodash.flatten@4.4.0: {}
 
-  lodash.isboolean@3.0.3: {}
-
   lodash.isequal@4.5.0: {}
 
   lodash.isobject@3.0.2: {}
@@ -21858,8 +21844,6 @@ snapshots:
   modify-filename@1.1.0: {}
 
   moo@0.5.3: {}
-
-  mousetrap@1.6.5: {}
 
   mri@1.2.0: {}
 
@@ -23180,13 +23164,8 @@ snapshots:
       memoize-one: 4.0.3
       react: 19.2.8
 
-  react-hotkeys@1.1.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  react-hotkeys-hook@5.3.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
-      lodash.isboolean: 3.0.3
-      lodash.isequal: 4.5.0
-      lodash.isobject: 3.0.2
-      mousetrap: 1.6.5
-      prop-types: 15.8.1
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
 

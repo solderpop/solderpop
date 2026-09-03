@@ -1,6 +1,5 @@
 import R from 'ramda';
 import React from 'react';
-import { HotKeys } from 'react-hotkeys';
 
 import { EDITOR_MODE } from '../../../constants.js';
 
@@ -112,7 +111,7 @@ const resizingCommentMode = {
     )(resizedComments);
 
     return (
-      <HotKeys className="PatchWrapper" handlers={{}}>
+      <div className="PatchWrapper" tabIndex={-1}>
         <PatchSVG
           onMouseMove={bindApi(api, this.onMouseMove)}
           onMouseUp={bindApi(api, this.onMouseUp)}
@@ -162,7 +161,7 @@ const resizingCommentMode = {
             />
           </g>
         </PatchSVG>
-      </HotKeys>
+      </div>
     );
   },
 };

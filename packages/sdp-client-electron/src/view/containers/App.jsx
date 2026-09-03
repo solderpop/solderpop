@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { HotKeys } from 'react-hotkeys';
 import { ipcRenderer, shell } from 'electron';
 import * as remoteElectron from '@electron/remote';
 
@@ -825,8 +824,11 @@ class App extends client.App {
     ];
   }
 
-  static getKeyMap() {
-    const commandsBoundToNativeMenu = R.compose(
+  // Commands already bound to a native Electron menu accelerator don't also
+  // need a JS-level hotkey binding -- SELECT_ALL is the one exception kept
+  // listening at both levels (see the comment at its usage below).
+  static getDisabledCommands() {
+    return R.compose(
       R.reject(
         R.anyPass([
           R.isNil,
@@ -840,11 +842,6 @@ class App extends client.App {
       R.map(R.prop('command')),
       R.values
     )(client.menu.items);
-
-    return R.omit(
-      commandsBoundToNativeMenu,
-      client.menu.getOsSpecificHotkeys()
-    );
   }
 
   static getSelectedBoard() {
@@ -1112,9 +1109,9 @@ class App extends client.App {
 
   render() {
     return (
-      <HotKeys
-        keyMap={this.constructor.getKeyMap()}
+      <client.HotkeysScope
         handlers={this.hotkeyHandlers}
+        disabledCommands={this.constructor.getDisabledCommands()}
         id="App"
       >
         <TitleBar projectPath={this.state.projectPath} />
@@ -1201,7 +1198,7 @@ class App extends client.App {
           </client.PopupAlert>
         ) : null}
         <SaveProgressBar progress={this.getSaveProgress()} />
-      </HotKeys>
+      </client.HotkeysScope>
     );
   }
 }

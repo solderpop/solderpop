@@ -38,7 +38,6 @@
     "rc-progress": "^2.1.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-hotkeys": "^1.1.4",
     "react-redux": "^9.3.0",
     "react-skylight": "git+https://github.com/xodio/react-skylight.git#6dc266edc5198d0d1a6feb57f329826e782ec967",
     "redux": "^5.0.1",

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import urlParse from 'url-parse';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { HotKeys } from 'react-hotkeys';
 
 import * as XP from 'sdp-project';
 import client, { ThemeSettingsPopup } from 'sdp-client';
@@ -400,11 +399,7 @@ class App extends client.App {
 
   render() {
     return (
-      <HotKeys
-        id="App"
-        keyMap={client.menu.getOsSpecificHotkeys()}
-        handlers={this.hotkeyHandlers}
-      >
+      <client.HotkeysScope id="App" handlers={this.hotkeyHandlers}>
         <client.Toolbar menuBarItems={this.getMenuBarItems()} />
         <client.Editor
           size={this.state.size}
@@ -426,7 +421,7 @@ class App extends client.App {
           isVisible={this.state.themeSettingsPopup}
           onClose={this.hideThemeSettingsPopup}
         />
-      </HotKeys>
+      </client.HotkeysScope>
     );
   }
 }

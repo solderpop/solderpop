@@ -1,6 +1,5 @@
 import React from 'react';
 import * as R from 'ramda';
-import { HotKeys } from 'react-hotkeys';
 
 import { TAB_TYPES } from '../../../constants.js';
 
@@ -107,10 +106,10 @@ const panningMode = {
     const nodeValues = api.state.isDebugSession ? api.props.nodeValues : {};
 
     return (
-      <HotKeys
+      <div
         className="PatchWrapper"
+        tabIndex={-1}
         onKeyUp={bindApi(api, this.onKeyUp)}
-        handlers={{}}
       >
         <PatchSVG
           onMouseDown={bindApi(api, this.onMouseDown)}
@@ -167,7 +166,7 @@ const panningMode = {
             stroke="none"
           />
         </PatchSVG>
-      </HotKeys>
+      </div>
     );
   },
 };
