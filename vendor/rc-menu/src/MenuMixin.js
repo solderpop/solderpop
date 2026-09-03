@@ -87,7 +87,7 @@ const MenuMixin = {
     };
   },
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     let props;
     if ('activeKey' in nextProps) {
       props = {
@@ -196,7 +196,7 @@ const MenuMixin = {
       index: i,
       parentMenu: this,
       ref: childProps.disabled ? undefined :
-        createChainedFunction(child.ref, saveRef.bind(this, i, subIndex)),
+        createChainedFunction(child.props.ref, saveRef.bind(this, i, subIndex)),
       eventKey: key,
       active: !childProps.disabled && isActive,
       multiple: props.multiple,

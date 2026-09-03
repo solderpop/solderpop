@@ -636,6 +636,77 @@ last):
    delete) -- the automated test proves one real combo resolves and
    fires correctly end to end, not that all ~20 of them feel right under
    a real keyboard.
+
+   **DONE (2026-09-03). Deprecated-lifecycle and `element.ref` console
+   warnings, once the app was running crash-free enough to see all of
+   them clearly.** Not crashes -- React 19 still calls these old
+   lifecycle names, just logs once per component type -- but asked for
+   by name once the bigger crashes were fixed, and cheap/safe to clear
+   since each is a mechanical, behavior-preserving rename. None are our
+   own `sdp-client` source (grepped -- confirmed zero hits); all three
+   live in dependencies:
+   - `rc-menu` (vendored at `vendor/rc-menu`, fully owned): `Menu.jsx`/
+     `MenuMixin.js`'s `createReactClass()` objects used
+     `componentWillReceiveProps` -- confirmed `create-react-class@15.7.0`
+     (the actual installed version) recognizes the `UNSAFE_` prefix
+     before renaming, per its own `factory.js`. Renamed in `src`, and in
+     the pre-built `es`/`lib` output that's actually what package.json's
+     `main`/`module` point to (this vendored package ships build output
+     checked into the repo, not rebuilt from `src` on install). Also
+     found and fixed, same file: `MenuMixin.js` read `child.ref` directly
+     off a cloned element to chain it with its own ref callback -- the
+     exact pattern React 19's "Accessing element.ref was removed" warning
+     targets. Changed to `child.props.ref` (ref is a regular prop now),
+     confirmed correct since the warning itself says the old accessor
+     still returns the right value today, just deprecated.
+   - `react-remarkable` (plain npm dependency): `componentWillUpdate` in
+     its compiled `dist/index.js`. Fixed via `pnpm patch` (`patches/
+     react-remarkable@1.1.3.patch`) so the fix survives a fresh install
+     rather than editing `node_modules` directly.
+   - `react-skylight` (git-hosted fork, pinned commit): same
+     `componentWillUpdate`, in both `lib/skylight.js` (what `main`
+     resolves to) and `src/skylight.jsx`. Also fixed via `pnpm patch`
+     (`patches/react-skylight@0.4.2.patch`) -- a git dependency still
+     resolves to a real version pnpm can patch, same mechanism as the
+     npm one.
+
+   One real gotcha hit verifying the `rc-menu` fix: `pnpm run build`
+   kept showing the *old*, unrenamed code even after multiple rebuilds
+   (`--force` included) -- traced to pnpm having copied `vendor/rc-menu`
+   into its content-addressable store at the last install rather than
+   symlinking it, so edits to the vendored files directly didn't
+   propagate until a real `pnpm install` re-synced the copy. Confirmed
+   fixed by grepping the actual built `bundle.js` for the new code
+   (`UNSAFE_componentWillReceiveProps`, `child.props.ref`) after
+   reinstalling, not just trusting a clean build log -- the exact kind of
+   "verify by reading the artifact, not by assuming" discipline used
+   throughout this plan. (That reinstall separately surfaced an unrelated
+   `fsevents` build-script-approval prompt pnpm auto-inserted into
+   `pnpm-workspace.yaml` as a placeholder; resolved the same way
+   `@parcel/watcher` already was in that file -- `false`, since it's a
+   macOS-only optional native accelerator with a standard JS fallback,
+   irrelevant on this Linux dev machine.)
+
+   Separately, not a lifecycle warning: reselect v5 (bumped in this
+   migration's react-redux phase) added a dev-only "input stability
+   check" that calls each `createSelector`'s input selectors twice and
+   warns if they return different references -- and much of this
+   codebase's selectors return fresh `ramda-fantasy` `Maybe`/`Either`
+   wrapper instances by design (e.g. `getCurrentTabId`), which are never
+   referentially stable even when the underlying value hasn't changed.
+   Rather than refactor every such selector (real scope creep for a
+   dev-only console message with zero production effect), called
+   reselect's own documented escape hatch once, in `Root.jsx` before the
+   store/any selector is ever used: `setGlobalDevModeChecks({
+   inputStabilityCheck: 'never' })`.
+
+   Verified: full build (18/18, same known warnings, no new ones -- the
+   one remaining `rc-trigger` `findDOMNode` warning is the *other*,
+   still-open rc-menu issue below, unrelated to what was fixed here),
+   lint clean, `sdp-client` unit suite 105/106 (same 1 pre-existing
+   unrelated failure). Confirmed via grepping both the electron and
+   browser `bundle.js` output directly for the renamed methods, not just
+   a clean build log.
 8. **Vendored/forked packages**: `rc-menu`, `react-autosuggest`,
    `react-custom-scroll` -- patch whatever breaks, same treatment as
    `react-skylight`. Left last because they can't be scoped until the app

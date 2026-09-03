@@ -14,6 +14,10 @@ overrides:
   '@codemirror/state': ^6.7.2
   '@codemirror/view': ^6.43.10
 
+patchedDependencies:
+  react-remarkable@1.1.3: a0c60bf70392643f2999ca09349fc787f681ba4ab321374f89f0af162732e715
+  react-skylight@0.4.2: a210faa3929faa4c792297af2f6f2e12f1d0a2d3b5a378b81b05bdf2ff6c8145
+
 importers:
 
   .:
@@ -446,10 +450,10 @@ importers:
         version: 6.0.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react-remarkable:
         specifier: ^1.1.3
-        version: 1.1.3
+        version: 1.1.3(patch_hash=a0c60bf70392643f2999ca09349fc787f681ba4ab321374f89f0af162732e715)
       react-skylight:
         specifier: git+https://github.com/xodio/react-skylight.git#6dc266edc5198d0d1a6feb57f329826e782ec967
-        version: https://codeload.github.com/xodio/react-skylight/tar.gz/6dc266edc5198d0d1a6feb57f329826e782ec967(react@19.2.8)
+        version: https://codeload.github.com/xodio/react-skylight/tar.gz/6dc266edc5198d0d1a6feb57f329826e782ec967(patch_hash=a210faa3929faa4c792297af2f6f2e12f1d0a2d3b5a378b81b05bdf2ff6c8145)(react@19.2.8)
       redux:
         specifier: ^5.0.1
         version: 5.0.1
@@ -609,7 +613,7 @@ importers:
         version: 9.3.0(react@19.2.8)(redux@5.0.1)
       react-skylight:
         specifier: git+https://github.com/xodio/react-skylight.git#6dc266edc5198d0d1a6feb57f329826e782ec967
-        version: https://codeload.github.com/xodio/react-skylight/tar.gz/6dc266edc5198d0d1a6feb57f329826e782ec967(react@19.2.8)
+        version: https://codeload.github.com/xodio/react-skylight/tar.gz/6dc266edc5198d0d1a6feb57f329826e782ec967(patch_hash=a210faa3929faa4c792297af2f6f2e12f1d0a2d3b5a378b81b05bdf2ff6c8145)(react@19.2.8)
       redux:
         specifier: ^5.0.1
         version: 5.0.1
@@ -754,7 +758,7 @@ importers:
         version: 9.3.0(react@19.2.8)(redux@5.0.1)
       react-skylight:
         specifier: git+https://github.com/xodio/react-skylight.git#6dc266edc5198d0d1a6feb57f329826e782ec967
-        version: https://codeload.github.com/xodio/react-skylight/tar.gz/6dc266edc5198d0d1a6feb57f329826e782ec967(react@19.2.8)
+        version: https://codeload.github.com/xodio/react-skylight/tar.gz/6dc266edc5198d0d1a6feb57f329826e782ec967(patch_hash=a210faa3929faa4c792297af2f6f2e12f1d0a2d3b5a378b81b05bdf2ff6c8145)(react@19.2.8)
       redux:
         specifier: ^5.0.1
         version: 5.0.1
@@ -23188,11 +23192,11 @@ snapshots:
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
 
-  react-remarkable@1.1.3:
+  react-remarkable@1.1.3(patch_hash=a0c60bf70392643f2999ca09349fc787f681ba4ab321374f89f0af162732e715):
     dependencies:
       remarkable: 1.7.4
 
-  react-skylight@https://codeload.github.com/xodio/react-skylight/tar.gz/6dc266edc5198d0d1a6feb57f329826e782ec967(react@19.2.8):
+  react-skylight@https://codeload.github.com/xodio/react-skylight/tar.gz/6dc266edc5198d0d1a6feb57f329826e782ec967(patch_hash=a210faa3929faa4c792297af2f6f2e12f1d0a2d3b5a378b81b05bdf2ff6c8145)(react@19.2.8):
     dependencies:
       prop-types: 15.8.1
       react: 19.2.8
