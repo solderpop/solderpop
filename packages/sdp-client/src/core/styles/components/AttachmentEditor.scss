@@ -35,13 +35,17 @@
     flex-grow: 1;
     position: relative;
 
-    .ReactCodeMirror {
+    .cpp-editor-codemirror {
       @include scrollable-attachment(0, hidden);
+
+      .cm-editor {
+        height: 100%;
+      }
     }
-    .CodeMirror-line, .CodeMirror-line * {
+    .cm-line, .cm-line * {
       cursor: text;
     }
-    .CodeMirror-linenumber {
+    .cm-gutterElement {
       cursor: default;
     }
   }

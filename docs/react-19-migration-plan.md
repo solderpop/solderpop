@@ -1,6 +1,6 @@
 # React 16 → 19 migration plan
 
-Status: phases 1-4 of 8 done (see below). Written 2026-09-01 after
+Status: phases 1-5 of 8 done (see below). Written 2026-09-01 after
 `docs/roadmap.md`'s "React 16 -> 19" entry turned out to significantly
 undersell the real scope -- that entry
 listed 4 blockers (`ReactDOM.render`, `react-redux`, `react-codemirror`,
@@ -273,9 +273,78 @@ last):
    rewrites, `createRoot`, `forwardRef`, the whole redux subscription
    timing change) needs a human running the actual app before this
    phase can be called fully verified, not just build-clean.
-5. **`react-codemirror` -> `@uiw/react-codemirror`** (2 files, 1 of them a
-   real tokenizer port) -- self-contained (C++ implementation editor only),
-   can happen in parallel with phase 4 once React itself is on 19.
+5. **DONE (2026-09-01). `react-codemirror` -> `@uiw/react-codemirror`.**
+   Bigger than the plan's "2 files" estimate once actually attempted --
+   the CM5 `.scss` theme (480+ lines, entirely built on CM5's DOM
+   structure and CSS class scheme like `.CodeMirror-gutters`/`cm-keyword`/
+   `cm-variable-2`) doesn't apply to CM6 at all, which themes via
+   `EditorView.theme()` plus a Lezer-tag-based `HighlightStyle` --
+   deleted the whole file and ported the actual XOD color values (pulled
+   from `abstracts/colors.scss`) into JS.
+
+   The tokenizer port (`codemirrorXodMode.js`): CM5's
+   `CodeMirror.simpleMode`+`CodeMirror.overlayMode(cpp)` pair has no CM6
+   equivalent -- CM6 has no overlay-mode concept at all. Rebuilt as one
+   `StreamLanguage.define()`-based tokenizer that tries the XOD regex
+   rules first (now gated on an actual word-boundary check the CM5
+   original didn't have -- see below) and falls through to
+   `@codemirror/legacy-modes/mode/clike`'s `cpp` parser for everything
+   else. Two real bugs caught only by *running* the result, not by
+   reading it:
+
+   - `HighlightStyle.define`'s tag API isn't a property path
+     (`t.variableName.function` -- what a first pass used) but a
+     function-call composition (`t.function(t.variableName)`). Crashed
+     immediately (`Cannot read properties of undefined (reading 'id')`)
+     the first time anything tried to render. Found the *correct*
+     mapping for the legacy `'builtin'` token-name string
+     (`variableName.standard`, i.e. `t.standard(t.variableName)`, not
+     the guessed `t.standard(t.name)`) by reading
+     `@codemirror/language`'s own source for its CM5-compat token table
+     rather than guessing twice -- confirmed empirically afterward via
+     `highlightTree` against real source strings (`digitalWrite`,
+     `getValue`, `node`, `input_a`, etc.), not just "it doesn't throw."
+   - **Two duplicate package instances**: `@codemirror/state` (6.7.1 vs
+     6.7.2) and `@codemirror/view` (6.43.9 vs 6.43.10) both had two
+     copies installed simultaneously -- `@uiw/react-codemirror`'s own
+     dependency tree resolved a slightly older patch than this package's
+     direct pin. CM6 breaks with "Unrecognized extension value" if two
+     instances of these packages load at once (its extension system
+     relies on `instanceof` checks). Caught by a direct Node script
+     trying to actually build an `EditorState`, not by the build (pnpm
+     had silently installed both side by side; webpack would have
+     bundled whichever one resolved per import site with no error).
+     Fixed with two `pnpm-workspace.yaml` overrides forcing one instance
+     of each.
+
+   Editor behavior (Tab/Shift-Tab/Enter/comment-toggle) needed the same
+   direct-execution discipline. `@codemirror/commands`' `insertTab`
+   command unconditionally inserts a literal `"\t"` -- CM6 has no
+   unit-aware "soft tab" command at all, unlike CM5's `insertSoftTab`
+   that the original code relied on by default (this codebase never sets
+   `indentWithTabs`). Missing this would have silently inserted hard tabs
+   everywhere the original inserted 4 spaces. Fixed by reading the
+   `indentUnit` facet (now explicitly set to 4 spaces -- `@uiw`'s own
+   `basicSetup.tabSize` option only controls cosmetic tab-rendering
+   width, a different facet, not indent behavior) and inserting that
+   string directly. `EditorView` itself can't run in this repo's headless
+   test environment (needs DOM Selection/ResizeObserver APIs older
+   `jsdom` doesn't implement), so the keymap's `run` functions are
+   exported unwrapped (`xodKeyBindings`) specifically so they can be
+   exercised against a DOM-free fake view backed by real
+   `EditorState.update()` calls -- verified all four bindings
+   (full-line-selection indent, cursor-only soft-tab insert, blank-lines-
+   above-cursor clearing on Enter, and `Mod-/` comment toggling) produce
+   exactly the documents expected, not just "doesn't throw."
+
+   Verified: full build (18/18, same pre-existing `rc-trigger` warnings
+   as phase 4, no new ones), lint clean, `sdp-client` unit suite 103/104
+   (same pre-existing failure, unrelated). Tag resolution verified via
+   `highlightTree` against real source text; all 4 keymap bindings
+   verified via direct `EditorState.update()` round-trips. Still
+   genuinely unverified: the *rendered, visual* result -- font, exact
+   colors on screen, cursor behavior, scrolling -- needs a human actually
+   opening the C++ implementation editor in the running app.
 6. **`react-skylight` fork patch** (7 call sites, 1 vendored fork to patch)
    -- likely small once attempted, but unknown until attempted.
 7. **The real rewrites**: `react-dnd` (4 files, decorator->hooks), then
