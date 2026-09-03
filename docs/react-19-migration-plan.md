@@ -1,6 +1,6 @@
 # React 16 → 19 migration plan
 
-Status: phases 1-5 of 8 done (see below). Written 2026-09-01 after
+Status: phases 1-6 of 8 done (see below). Written 2026-09-01 after
 `docs/roadmap.md`'s "React 16 -> 19" entry turned out to significantly
 undersell the real scope -- that entry
 listed 4 blockers (`ReactDOM.render`, `react-redux`, `react-codemirror`,
@@ -345,8 +345,35 @@ last):
    genuinely unverified: the *rendered, visual* result -- font, exact
    colors on screen, cursor behavior, scrolling -- needs a human actually
    opening the C++ implementation editor in the running app.
-6. **`react-skylight` fork patch** (7 call sites, 1 vendored fork to patch)
-   -- likely small once attempted, but unknown until attempted.
+6. **DONE (2026-09-01). `react-skylight` fork -- turned out to need no
+   patch at all.** Read the fork's actual `lib/` source (what's really
+   consumed, not just `src/`) for React-19-removed APIs first: no
+   `findDOMNode`, no string refs, no legacy Context API. The one hit --
+   `componentWillUpdate` in the stateful `SkyLight` class (`lib/
+   skylight.js`; the other 4 of 6 call sites use `SkyLightStateless`,
+   which has none of this) -- is still functional in React 19, just
+   deprecated, per React's own docs.
+
+   Didn't stop at reading the source, though: this package has never
+   been touched by this repo's test suite (grepped for it -- zero
+   hits), so "no removed APIs in the source" wasn't enough to call it
+   done on its own. Verified by actually mounting and updating both
+   components for real: `react-dom/server`'s `renderToStaticMarkup`
+   first (catches import/construction errors, no DOM needed), then a
+   real `createRoot` + jsdom mount-then-update cycle for each (catches
+   anything that only breaks during reconciliation, like the
+   `componentWillUpdate` path, which only fires on an update, not an
+   initial mount). Also caught a real interop gotcha along the way,
+   unrelated to React 19 itself: the package's CJS exports use
+   `Object.defineProperty(exports, name, { get: ... })`, which Node's
+   ESM `import` can't statically detect (`SkyLightStateless` resolved to
+   `undefined` when dynamic-`import()`-ed directly) -- but this repo
+   only ever consumes it through webpack or plain `require()`, both of
+   which resolve it correctly, so it's not a real bug in the shipped
+   app. `SkyLightStateless` mounted and updated with zero warnings;
+   `SkyLight` mounted and updated with exactly the expected
+   `componentWillUpdate` deprecation warning and nothing else. No code
+   changes needed for this phase.
 7. **The real rewrites**: `react-dnd` (4 files, decorator->hooks), then
    `react-contextmenu` replacement (7 files), `react-hotkeys` major-version
    verification or replacement (13 files, includes the entire Patch editor
