@@ -65,6 +65,7 @@ import SnackBar from './messages/index.js';
 import composeMessage from './messages/composeMessage.js';
 import * as MessageConstants from './messages/constants.js';
 import Toolbar from './utils/components/Toolbar.jsx';
+import HotkeysScope from './utils/components/HotkeysScope.jsx';
 import SolderpopLogo from './utils/components/SolderpopLogo.jsx';
 import SolderpopLockup from './utils/components/SolderpopLockup.jsx';
 import PopupShowCode from './utils/components/PopupShowCode.jsx';
@@ -186,6 +187,7 @@ export default {
   PopupForm,
   SnackBar,
   Toolbar,
+  HotkeysScope,
   menu: MenuUtils,
   sanctuaryPropType,
   initialState,
