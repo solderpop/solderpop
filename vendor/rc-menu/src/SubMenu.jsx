@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import Trigger from 'rc-trigger';
@@ -82,7 +81,10 @@ const SubMenu = createReactClass({
       if (!this.subMenuTitle || !this.menuInstance) {
         return;
       }
-      const popupMenu = ReactDOM.findDOMNode(this.menuInstance);
+      const popupMenu = this.menuInstance.rootDomNode;
+      if (!popupMenu) {
+        return;
+      }
       if (popupMenu.offsetWidth >= this.subMenuTitle.offsetWidth) {
         return;
       }
@@ -424,6 +426,12 @@ const SubMenu = createReactClass({
             prefixCls={prefixCls}
             popupClassName={`${prefixCls}-popup ${popupClassName}`}
             getPopupContainer={getPopupContainer}
+            // rc-trigger 5's own getRootDomNode() falls back to the real
+            // (React-19-removed) ReactDOM.findDOMNode whenever its
+            // internal triggerRef isn't set yet at call time -- this is
+            // its own documented escape hatch for exactly that case, and
+            // `title` below is always a plain DOM element already.
+            getTriggerDOMNode={node => node}
             builtinPlacements={Object.assign({}, placements, this.context.popupPlacements)}
             popupPlacement={popupPlacement}
             popupVisible={isOpen}

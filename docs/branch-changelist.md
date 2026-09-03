@@ -1,5 +1,39 @@
 # Branch changelist — feature/general-improvements
 
+## 2026-09-03 — React 19 migration: phases 7 and 8 finished (all 8 phases done)
+
+Continuation of the same day's crash-fixing work, on a new branch
+(`feature/migrate-to-react-19`, checkpointed off `feature/complete-rewrite`
+so that branch stays a known-working reference point). Closed out the two
+remaining phase-7 items and all of phase 8:
+
+- `react-contextmenu`: no rewrite needed. The plan's original "replace it"
+  call was based on its abandoned status and React-16-capped peer dep
+  alone, written before this branch's read-the-actual-source-first
+  discipline had been applied to it. Its Trigger/Menu components are
+  plain ES6 classes using a `ref` callback (not `findDOMNode`) and a
+  `window.dispatchEvent(CustomEvent)`/`addEventListener` pair for
+  cross-component communication -- no hooks, no Context, nothing React 19
+  removed. Confirmed with a real mount-and-open test
+  (`test/reactContextmenu.spec.js`), not just source-reading.
+- `rc-menu`'s `rc-trigger` dependency: 2.6.5 -> 5.3.4 (its confirmed
+  `findDOMNode` submenu-positioning crash), plus patching two *more*
+  `findDOMNode` calls already present in rc-menu's own code that a real
+  test (not just a clean build log) caught underneath the rc-trigger fix.
+- `react-autosuggest`: one deprecated-lifecycle warning, patched via
+  `pnpm patch`.
+- `react-custom-scroll`: three real `findDOMNode` crashes, patched via
+  `pnpm patch` (caught and fixed a mistake in the first attempt at this
+  patch by re-checking the edited file, not assuming a text substitution
+  was correct just because it applied cleanly).
+
+Full technical detail for each in `docs/react-19-migration-plan.md`'s
+phase 7/8 write-ups. Final state: full build 18/18 with zero warnings at
+all (confirmed by grepping a `.turbo`-cache-cleared rebuild directly),
+lint clean, `sdp-client` unit suite 108/109 (same 1 pre-existing
+unrelated failure tracked since the react-dnd work). The React 16 -> 19
+migration is complete.
+
 ## 2026-09-03 — React 19: fixed every crash found by actually running the app
 
 The React 16->19 migration (`docs/react-19-migration-plan.md`, phases 1-6)

@@ -1,9 +1,12 @@
 # React 16 → 19 migration plan
 
-Status: phases 1-6 of 8 done, plus react-dnd, react-sortable-hoc, and
-react-hotkeys from phase 7 pulled forward out of necessity (see below --
-all three turned out to be hard crashes, not deferrable). Written
-2026-09-01 after
+Status: all 8 phases done (2026-09-03). Phase 7's real rewrites
+(react-dnd, react-sortable-hoc, react-hotkeys) were pulled forward out
+of necessity, ahead of phases 5-6 -- all three turned out to be hard
+crashes, not deferrable; react-contextmenu (also phase 7) turned out to
+need no rewrite at all once actually tested. Phase 8's vendored/forked
+packages (rc-menu's rc-trigger dependency, react-autosuggest,
+react-custom-scroll) are patched and verified. Written 2026-09-01 after
 `docs/roadmap.md`'s "React 16 -> 19" entry turned out to significantly
 undersell the real scope -- that entry
 listed 4 blockers (`ReactDOM.render`, `react-redux`, `react-codemirror`,
@@ -379,9 +382,9 @@ last):
    changes needed for this phase.
 7. **The real rewrites.** `react-dnd`, `react-sortable-hoc`, and
    `react-hotkeys` all done out of order (2026-09-01/03, see below) --
-   all three turned out to be hard crashes, not deferrable. Remaining:
-   `react-contextmenu` replacement (7 files). Do these one at a time --
-   each is its own scoped effort with its own risk, not a batch.
+   all three turned out to be hard crashes, not deferrable.
+   `react-contextmenu` turned out not to need a rewrite at all -- see
+   below.
 
    **DONE (2026-09-01, pulled forward). `react-dnd` 2.5.1 -> 16.0.1.**
    Wasn't a "whenever we get to it" item -- actually running the app under
@@ -750,15 +753,145 @@ last):
    `!important` rule, not just a clean build log -- given the `.turbo`
    staleness issue just found, treating "the build succeeded" as proof
    of anything stopped being good enough this session.
+   **DONE (2026-09-03, no rewrite needed). `react-contextmenu` 2.14.0,
+   verified compatible with React 19 as-is.** The plan's original
+   estimate (7 files, replace it) was written from its abandoned status
+   and React-16-capped peer dep alone, before this branch's "verify
+   empirically, don't assume" discipline had actually been applied to it.
+   Reading its real source first: its `Trigger`/`Menu`/`MenuItem`
+   components are plain ES6 classes (no hooks, so the separate `react@16`
+   peer instance pnpm resolves for it -- visible in its own
+   `node_modules/.pnpm` folder name -- can't cause an "Invalid hook call"
+   cross-version bug; webpack's own `resolve.alias.react` forces every
+   `import React` in the whole bundle to the same real instance anyway,
+   regardless of what any package's peer dep claims), a `ref` callback
+   for popup positioning (not `findDOMNode`), and Trigger<->Menu
+   communication via a plain `window.dispatchEvent(new CustomEvent(...))`
+   / `addEventListener` pair -- entirely React-version-agnostic, no
+   Context involved at all. Grepped its `es6` build for every
+   React-19-removed/deprecated API name -- zero hits.
+
+   Verified, not just inferred: `test/reactContextmenu.spec.js` mounts a
+   real `ContextMenuTrigger`/`ContextMenu`/`MenuItem` set under React 19
+   and fires an actual native `contextmenu` DOM event on the trigger,
+   asserting the popup's `nav[role="menu"]` gains the
+   `react-contextmenu--visible` class and that clicking the rendered
+   `MenuItem` fires its `onClick`. Two real gotchas surfaced writing it:
+   its CJS build uses the same getter-based named-export pattern already
+   hit with `react-skylight` (`import { ContextMenu } from
+   'react-contextmenu'` doesn't statically resolve; default-import the
+   module object and destructure at runtime instead); and its
+   `globalEventListener` module is a singleton
+   (`export default new GlobalEventListener()`) that binds
+   `window.addEventListener` as an import-time side effect, so the usual
+   "set `global.window` inside the test body" pattern doesn't work here
+   -- needed a dynamic `import()` inside a `before()` hook, deferred
+   until after the jsdom globals are set, instead of a static top-level
+   import.
+
+   Verified: full build (18/18), lint clean, `sdp-client` unit suite
+   107/108 (added 1, same 1 pre-existing unrelated failure as every other
+   phase). No source changes at all for this item -- the fix was
+   recognizing a fix wasn't needed.
 8. **Vendored/forked packages**: `rc-menu`, `react-autosuggest`,
-   `react-custom-scroll` -- patch whatever breaks, same treatment as
-   `react-skylight`. Left last because they can't be scoped until the app
-   actually runs on React 19 far enough to exercise them. One is no
-   longer speculative as of phase 4: `rc-menu`'s own dependency
-   `rc-trigger` calls `ReactDOM.findDOMNode` (fully removed in React 19)
-   for submenu positioning -- confirmed via a real build warning, will
-   throw at runtime the first time a submenu opens. Needs either patching
-   `rc-trigger` itself or replacing its positioning logic.
+   `react-custom-scroll`.
+
+   **DONE (2026-09-03). `rc-menu`'s `rc-trigger` dependency: 2.6.5 ->
+   5.3.4, plus patching two of rc-menu's own `findDOMNode` calls
+   underneath it.** The confirmed-since-phase-4 build warning
+   (`rc-trigger`'s submenu-positioning code calling the removed
+   `ReactDOM.findDOMNode`) turned out to need two layers of fixing, both
+   found by writing a real test rather than trusting a clean build log:
+
+   First, rc-trigger itself: bumped from 2.6.5 (rc-menu's original pin)
+   to the latest 5.3.4 (peer dep `react: >=16.9.0`, and its `TriggerProps`
+   type still has every prop rc-menu's `SubMenu.jsx` passes -- confirmed
+   by reading the actual `.d.ts`, not assumed). This made the build
+   warning disappear, but a real mount-and-open test still crashed at
+   runtime: rc-trigger 5's own `getRootDomNode()` falls back to the real
+   `ReactDOM.findDOMNode` whenever its internal `triggerRef` isn't set
+   yet at call time (a timing edge case on first open) -- fixed by
+   passing its own documented escape hatch, `getTriggerDOMNode={node =>
+   node}`, in `SubMenu.jsx` (`title`, the element it wraps, is always a
+   plain DOM node already).
+
+   That surfaced a *second*, unrelated `findDOMNode` call already
+   present in rc-menu's own code (not rc-trigger's): `SubMenu.jsx`'s
+   `componentDidUpdate` used `ReactDOM.findDOMNode(this.menuInstance)`
+   for a min-width layout adjustment, and `MenuMixin.js`'s `onKeyDown`
+   used it twice more (`findDOMNode(activeItem)`, `findDOMNode(this)`)
+   for scroll-into-view on arrow-key navigation. Fixed by adding a
+   `domRef` prop to `DOMWrap` (rc-menu's internal `<ul>`/`<div>` wrapper,
+   itself a class component that can't forward a bare `ref` the way a
+   function component could) so `MenuMixin.renderRoot` can save
+   `this.rootDomNode` directly, and a plain `ref` callback on
+   `MenuItem`'s own `<li>` saving `this.rootDomNode` the same way --
+   replacing every `findDOMNode(instance)` call with
+   `instance.rootDomNode`, the pattern already used for `withDropTarget`
+   (react-dnd) and `TabsItem` (react-sortable-hoc) earlier in this plan.
+   Edited in all three of rc-menu's shipped forms (`src`, the `es`/`lib`
+   builds `package.json` actually points at) since this vendored package
+   ships pre-built output rather than rebuilding from `src` on install.
+
+   Verified: `test/rcMenuSubmenu.spec.js` mounts a real horizontal
+   `Menu`+`SubMenu` (matching `Menubar.jsx`'s actual usage) and opens the
+   submenu via a real native `mouseover` event (React's synthetic
+   `onMouseEnter` is implemented on top of the bubbling `mouseover`
+   event, not the non-bubbling `mouseenter` -- dispatching the latter
+   silently does nothing, an easy mistake caught by the assertion still
+   failing after the real fix was in). Confirms the popup's `MenuItem`
+   content actually renders, not just that nothing throws. Writing it
+   also surfaced one more test-environment-only gap: `rc-align` (used by
+   rc-trigger for popup positioning) checks `instanceof Element` --
+   real ambient global in a browser, but jsdom only puts it on `window`
+   (same class of gap as `Document`/`ShadowRoot` in the `HotkeysScope`
+   test) -- needed `global.Element`/`HTMLElement`/`Node` set explicitly.
+
+   **DONE (2026-09-03). `react-autosuggest`: one deprecated-lifecycle
+   warning, patched.** `componentWillReceiveProps` in its compiled
+   `dist/Autosuggest.js` -- a warning only, not a crash, since React 19
+   still calls old-named lifecycle methods. Renamed to
+   `UNSAFE_componentWillReceiveProps` via `pnpm patch`
+   (`patches/react-autosuggest@9.3.2.patch`), same mechanism already used
+   for `react-skylight`/`react-remarkable` (a git-hosted dependency still
+   resolves to a real version pnpm can patch).
+
+   **DONE (2026-09-03). `react-custom-scroll`: three real
+   `ReactDOM.findDOMNode` calls, patched.** Unlike `react-autosuggest`'s
+   warning, this one crashes: `isMouseEventOnCustomScrollbar` and
+   `calculateNewScrollHandleTop` called `findDOMNode(this)` for the
+   component's own root element, and `isMouseEventOnScrollHandle` called
+   `findDOMNode(this.scrollHandle)` -- redundant even before React 19,
+   since `scrollHandle` is already a real DOM node (saved via the
+   component's own `setRefElement` ref helper, the same pattern already
+   used for `innerContainer`/`contentWrapper`). Read the package's own
+   readable `src/main/customScroll.js` (shipped alongside the minified
+   `dist/reactCustomScroll.js` that's actually consumed) to get the exact
+   semantics right before hand-editing the minified file: added
+   `ref={this.setRefElement('rootDomNode')}` to the component's own outer
+   `<div>` (reusing its existing ref helper, no new pattern needed) and
+   replaced all three `findDOMNode` calls with the already-saved
+   `this.rootDomNode` / `this.scrollHandle` directly. Patched via `pnpm
+   patch` (`patches/react-custom-scroll@3.2.2.patch`; a first sed-based
+   edit accidentally referenced a constructor-local variable (`o`) from
+   inside `render()`, where it doesn't exist -- caught before committing
+   the patch by re-grepping the edited file, not assumed correct just
+   because the substitution succeeded).
+
+   Verified: `test/reactCustomScroll.spec.js` mounts a real `CustomScroll`
+   with tall content and dispatches a real `mousedown` on its outer
+   container (jsdom computes no real layout, so `getBoundingClientRect`
+   needed stubbing -- same workaround as the react-dnd test) -- asserts
+   the handler completes without the synchronous crash the old code threw
+   immediately. This package's own UMD wrapper also reads `window` as a
+   module-load-time side effect, needing the same dynamic-`import()`-in-
+   `before()` pattern as `react-contextmenu`'s `globalEventListener`.
+
+   All three verified together: full build (18/18, **zero warnings at
+   all** -- confirmed by grepping the fresh, `.turbo`-cache-cleared build
+   log directly, not trusting a summary line), lint clean, `sdp-client`
+   unit suite 108/109 (added 2 more since the rc-menu test, same 1
+   pre-existing unrelated failure as every phase before it).
 
 ## A separate, unrelated bug class found along the way: `React.memo` silently drops `defaultProps`
 

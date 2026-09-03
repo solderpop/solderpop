@@ -14,10 +14,6 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactDom = require('react-dom');
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
 var _KeyCode = require('rc-util/lib/KeyCode');
 
 var _KeyCode2 = _interopRequireDefault(_KeyCode);
@@ -174,9 +170,11 @@ var MenuMixin = {
       this.setState({
         activeKey: activeItem.props.eventKey
       }, function () {
-        (0, _domScrollIntoView2['default'])(_reactDom2['default'].findDOMNode(activeItem), _reactDom2['default'].findDOMNode(_this), {
-          onlyScrollIfNeeded: true
-        });
+        if (activeItem.rootDomNode && _this.rootDomNode) {
+          (0, _domScrollIntoView2['default'])(activeItem.rootDomNode, _this.rootDomNode, {
+            onlyScrollIfNeeded: true
+          });
+        }
         // https://github.com/react-component/menu/commit/9899a9672f6f028ec3cdf773f1ecea5badd2d33e
         if (typeof callback === 'function') {
           callback(activeItem);
@@ -253,6 +251,7 @@ var MenuMixin = {
     return _react2['default'].cloneElement(child, newChildProps);
   },
   renderRoot: function renderRoot(props) {
+    var self = this;
     this.instanceArray = [];
     var className = (0, _classnames2['default'])(props.prefixCls, props.className, props.prefixCls + '-' + props.mode);
     var domProps = {
@@ -276,7 +275,8 @@ var MenuMixin = {
           style: props.style,
           tag: 'ul',
           hiddenClassName: props.prefixCls + '-hidden',
-          visible: props.visible
+          visible: props.visible,
+          domRef: function domRef(c) { self.rootDomNode = c; }
         }, domProps),
         _react2['default'].Children.map(props.children, this.renderMenuItem)
       )

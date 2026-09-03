@@ -9,6 +9,12 @@ const DOMWrap = createReactClass({
     tag: PropTypes.string,
     hiddenClassName: PropTypes.string,
     visible: PropTypes.bool,
+    // A plain ref callback for the rendered DOM tag, since DOMWrap itself
+    // is a class component and can't forward a `ref` prop to its own
+    // child the way a forwardRef function component could -- lets callers
+    // reach the real DOM node without ReactDOM.findDOMNode (removed in
+    // React 19).
+    domRef: PropTypes.func,
   },
 
   getDefaultProps() {
@@ -27,7 +33,9 @@ const DOMWrap = createReactClass({
     delete props.tag;
     delete props.hiddenClassName;
     delete props.visible;
-    return <Tag {...props} />;
+    const domRef = props.domRef;
+    delete props.domRef;
+    return <Tag ref={domRef} {...props} />;
   },
 });
 

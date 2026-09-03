@@ -15,6 +15,8 @@ overrides:
   '@codemirror/view': ^6.43.10
 
 patchedDependencies:
+  react-autosuggest@9.3.2: af4f9f8913dec55afdbb4fcd11bf99e8397837cd5d28ee76f4ddb8521aaa6625
+  react-custom-scroll@3.2.2: 988cddfaa6af3a0e59824fe08d431ce3b1baebb2a48d9427d0ea486176ee031f
   react-remarkable@1.1.3: a0c60bf70392643f2999ca09349fc787f681ba4ab321374f89f0af162732e715
   react-skylight@0.4.2: a210faa3929faa4c792297af2f6f2e12f1d0a2d3b5a378b81b05bdf2ff6c8145
 
@@ -414,7 +416,7 @@ importers:
         version: 19.2.8
       react-autosuggest:
         specifier: git+https://github.com/xodio/react-autosuggest.git#7850ec32e40ea9c4750269ac4f08aa0b051bb86c
-        version: https://codeload.github.com/xodio/react-autosuggest/tar.gz/7850ec32e40ea9c4750269ac4f08aa0b051bb86c(react@19.2.8)
+        version: https://codeload.github.com/xodio/react-autosuggest/tar.gz/7850ec32e40ea9c4750269ac4f08aa0b051bb86c(patch_hash=af4f9f8913dec55afdbb4fcd11bf99e8397837cd5d28ee76f4ddb8521aaa6625)(react@19.2.8)
       react-collapsible:
         specifier: ^2.10.0
         version: 2.10.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -423,7 +425,7 @@ importers:
         version: 2.14.0(prop-types@15.8.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react-custom-scroll:
         specifier: git+https://github.com/xodio/react-custom-scroll.git#aefa21e3fa3bcc173b969176b91044db05399a67
-        version: https://codeload.github.com/xodio/react-custom-scroll/tar.gz/aefa21e3fa3bcc173b969176b91044db05399a67(prop-types@15.8.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: https://codeload.github.com/xodio/react-custom-scroll/tar.gz/aefa21e3fa3bcc173b969176b91044db05399a67(patch_hash=988cddfaa6af3a0e59824fe08d431ce3b1baebb2a48d9427d0ea486176ee031f)(prop-types@15.8.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react-datasheet:
         specifier: ^1.4.12
         version: 1.4.12(prop-types@15.8.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -9791,8 +9793,11 @@ packages:
     resolution: {integrity: sha512-K5zQjDllxWkf7Z5xJdV0/B0WTNqx6vxG70zJE4N0kBs4LovmEYWJzQGxC9bS9RAKu3bgM40lrd5zoLJ12MQ5BA==}
     engines: {node: '>= 0.10'}
 
-  rc-align@2.4.5:
-    resolution: {integrity: sha512-nv9wYUYdfyfK+qskThf4BQUSIadeI/dCsfaMZfNEoxm9HwOIioQ+LyqmMK6jWHAZQgOzMLaqawhuBXlF63vgjw==}
+  rc-align@4.0.15:
+    resolution: {integrity: sha512-wqJtVH60pka/nOX7/IspElA8gjPNQKIx/ZqJ6heATCkXpe1Zg4cPVrMD2vC96wjsFFL8WsmhPbx9tdMo1qqlIA==}
+    peerDependencies:
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
 
   rc-animate@2.11.1:
     resolution: {integrity: sha512-1NyuCGFJG/0Y+9RKh5y/i/AalUCA51opyyS/jO2seELpgymZm2u9QV3xwODwEuzkmeQ1BDPxMLmYLcTJedPlkQ==}
@@ -9803,14 +9808,30 @@ packages:
   rc-menu@file:vendor/rc-menu:
     resolution: {directory: vendor/rc-menu, type: directory}
 
+  rc-motion@2.9.5:
+    resolution: {integrity: sha512-w+XTUrfh7ArbYEd2582uDrEhmBHwK1ZENJiSJVb7uRxdE7qJSYjbO2eksRXmndqyKqKoYPc9ClpPh5242mV1vA==}
+    peerDependencies:
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
+
   rc-progress@2.6.1:
     resolution: {integrity: sha512-GR+rWDv5b61VkGs7SxDvsaJo6vzTZ4j1Z1sX0C3kG4kPli9nUCXurx5jREJ2SllUKLrhesr914DuvBBtXOSr6g==}
 
-  rc-trigger@2.6.5:
-    resolution: {integrity: sha512-m6Cts9hLeZWsTvWnuMm7oElhf+03GOjOLfTuU0QmdB9ZrW7jR2IpI5rpNM7i9MvAAlMAmTx5Zr7g3uu/aMvZAw==}
+  rc-trigger@5.3.4:
+    resolution: {integrity: sha512-mQv+vas0TwKcjAO2izNPkqR4j86OemLRmvL2nOzdP9OWNWA1ivoTt5hzFqYNW9zACwmTezRiN8bttrC7cZzYSw==}
+    engines: {node: '>=8.x'}
+    peerDependencies:
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
 
   rc-util@4.21.1:
     resolution: {integrity: sha512-Z+vlkSQVc1l8O2UjR3WQ+XdWlhj5q9BMQNLk2iOBch75CqPfrJyGtcWMcnhRlNuDu0Ndtt4kLVO8JI8BrABobg==}
+
+  rc-util@5.44.4:
+    resolution: {integrity: sha512-resueRJzmHG9Q6rI/DfK6Kdv9/Lfls05vzMs1Sk3M2P+3cJa+MakaZyWY8IPfehVuhPJFKrIY1IK4GqbiaiY5w==}
+    peerDependencies:
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
 
   react-autosuggest@https://codeload.github.com/xodio/react-autosuggest/tar.gz/7850ec32e40ea9c4750269ac4f08aa0b051bb86c:
     resolution: {gitHosted: true, tarball: https://codeload.github.com/xodio/react-autosuggest/tar.gz/7850ec32e40ea9c4750269ac4f08aa0b051bb86c}
@@ -9902,6 +9923,9 @@ packages:
 
   react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
+
+  react-is@18.3.1:
+    resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
 
   react-lifecycles-compat@3.0.4:
     resolution: {integrity: sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==}
@@ -10171,6 +10195,9 @@ packages:
 
   reselect@5.3.0:
     resolution: {integrity: sha512-XGoLeRAVzUTcJ1qkxPQhDJyIZ5d6zzZD9nT7AEZOaaU9UbWclhycElmhO+VD5bFeLuzhPBaOV2oXC8uG35ZSpg==}
+
+  resize-observer-polyfill@1.5.1:
+    resolution: {integrity: sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==}
 
   resolve-alpn@1.2.1:
     resolution: {integrity: sha512-0a1F4l73/ZFZOakJnQ3FvkJ2+gSTQWz/r2KE5OdDY0TxPm5h4GkqkWWfM47T7HsbnOtcJVEF4epCVy6u7Q3K+g==}
@@ -23021,12 +23048,15 @@ snapshots:
       iconv-lite: 0.7.3
       unpipe: 1.0.0
 
-  rc-align@2.4.5:
+  rc-align@4.0.15(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
-      babel-runtime: 6.26.0
+      '@babel/runtime': 7.29.7
+      classnames: 2.5.1
       dom-align: 1.12.4
-      prop-types: 15.8.1
-      rc-util: 4.21.1
+      rc-util: 5.44.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
+      resize-observer-polyfill: 1.5.1
 
   rc-animate@2.11.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
@@ -23048,29 +23078,34 @@ snapshots:
       dom-scroll-into-view: 1.2.1
       prop-types: 15.8.1
       rc-animate: 2.11.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      rc-trigger: 2.6.5(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      rc-trigger: 5.3.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       rc-util: 4.21.1
     transitivePeerDependencies:
       - react
       - react-dom
+
+  rc-motion@2.9.5(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+    dependencies:
+      '@babel/runtime': 7.29.7
+      classnames: 2.5.1
+      rc-util: 5.44.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
 
   rc-progress@2.6.1:
     dependencies:
       babel-runtime: 6.26.0
       prop-types: 15.8.1
 
-  rc-trigger@2.6.5(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  rc-trigger@5.3.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
-      babel-runtime: 6.26.0
+      '@babel/runtime': 7.29.7
       classnames: 2.5.1
-      prop-types: 15.8.1
-      rc-align: 2.4.5
-      rc-animate: 2.11.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      rc-util: 4.21.1
-      react-lifecycles-compat: 3.0.4
-    transitivePeerDependencies:
-      - react
-      - react-dom
+      rc-align: 4.0.15(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      rc-motion: 2.9.5(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      rc-util: 5.44.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
 
   rc-util@4.21.1:
     dependencies:
@@ -23080,7 +23115,14 @@ snapshots:
       react-lifecycles-compat: 3.0.4
       shallowequal: 1.1.0
 
-  react-autosuggest@https://codeload.github.com/xodio/react-autosuggest/tar.gz/7850ec32e40ea9c4750269ac4f08aa0b051bb86c(react@19.2.8):
+  rc-util@5.44.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+    dependencies:
+      '@babel/runtime': 7.29.7
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
+      react-is: 18.3.1
+
+  react-autosuggest@https://codeload.github.com/xodio/react-autosuggest/tar.gz/7850ec32e40ea9c4750269ac4f08aa0b051bb86c(patch_hash=af4f9f8913dec55afdbb4fcd11bf99e8397837cd5d28ee76f4ddb8521aaa6625)(react@19.2.8):
     dependencies:
       prop-types: 15.8.1
       react: 19.2.8
@@ -23107,7 +23149,7 @@ snapshots:
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
 
-  react-custom-scroll@https://codeload.github.com/xodio/react-custom-scroll/tar.gz/aefa21e3fa3bcc173b969176b91044db05399a67(prop-types@15.8.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  react-custom-scroll@https://codeload.github.com/xodio/react-custom-scroll/tar.gz/aefa21e3fa3bcc173b969176b91044db05399a67(patch_hash=988cddfaa6af3a0e59824fe08d431ce3b1baebb2a48d9427d0ea486176ee031f)(prop-types@15.8.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
       prop-types: 15.8.1
       react: 19.2.8
@@ -23176,6 +23218,8 @@ snapshots:
   react-is@16.13.1: {}
 
   react-is@17.0.2: {}
+
+  react-is@18.3.1: {}
 
   react-lifecycles-compat@3.0.4: {}
 
@@ -23564,6 +23608,8 @@ snapshots:
       pe-library: 0.4.1
 
   reselect@5.3.0: {}
+
+  resize-observer-polyfill@1.5.1: {}
 
   resolve-alpn@1.2.1: {}
 

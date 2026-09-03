@@ -1,7 +1,6 @@
 import _extends from 'babel-runtime/helpers/extends';
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
 import KeyCode from 'rc-util/es/KeyCode';
 import createChainedFunction from 'rc-util/es/createChainedFunction';
 import classNames from 'classnames';
@@ -141,9 +140,11 @@ var MenuMixin = {
       this.setState({
         activeKey: activeItem.props.eventKey
       }, function () {
-        scrollIntoView(ReactDOM.findDOMNode(activeItem), ReactDOM.findDOMNode(_this), {
-          onlyScrollIfNeeded: true
-        });
+        if (activeItem.rootDomNode && _this.rootDomNode) {
+          scrollIntoView(activeItem.rootDomNode, _this.rootDomNode, {
+            onlyScrollIfNeeded: true
+          });
+        }
         // https://github.com/react-component/menu/commit/9899a9672f6f028ec3cdf773f1ecea5badd2d33e
         if (typeof callback === 'function') {
           callback(activeItem);
@@ -220,6 +221,7 @@ var MenuMixin = {
     return React.cloneElement(child, newChildProps);
   },
   renderRoot: function renderRoot(props) {
+    var self = this;
     this.instanceArray = [];
     var className = classNames(props.prefixCls, props.className, props.prefixCls + '-' + props.mode);
     var domProps = {
@@ -243,7 +245,8 @@ var MenuMixin = {
           style: props.style,
           tag: 'ul',
           hiddenClassName: props.prefixCls + '-hidden',
-          visible: props.visible
+          visible: props.visible,
+          domRef: function domRef(c) { self.rootDomNode = c; }
         }, domProps),
         React.Children.map(props.children, this.renderMenuItem)
       )
