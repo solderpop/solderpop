@@ -241,10 +241,14 @@ class Editor extends React.Component {
           }
         );
 
+        const hasActiveAttachmentTab = this.props.attachmentEditorTabs.some(
+          (tab) => tab.id === currentTab.id
+        );
+
         return (
           <div
             className={cn('AttachmentEditors', {
-              hidden: currentTab && !currentTab.editedAttachment,
+              hidden: !hasActiveAttachmentTab,
             })}
           >
             {tabs}
