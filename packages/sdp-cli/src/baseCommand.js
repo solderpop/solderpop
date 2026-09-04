@@ -7,7 +7,7 @@ import { Command, ux } from '@oclif/core';
 import chalk from 'chalk';
 import R from 'ramda';
 import {
-  getPathToXodProject,
+  getPathToSdpProject,
   isBasename,
   isWorkspaceValid,
   resolvePath,
@@ -46,7 +46,7 @@ const getPatchName = (projectPath, patchPath) =>
       T,
       compose(
         (name) => `@/${name}`,
-        when(isBasename('patch.xodp'), path.dirname)
+        when(isBasename('patch.sdpp'), path.dirname)
       ),
     ],
   ])(path.relative(projectPath, patchPath));
@@ -59,9 +59,9 @@ const getProjectPathPatchName = (somePath, patch = null) => {
     (p) => fs.pathExists(p),
     (exists) =>
       exists
-        ? getPathToXodProject(fullPath)
+        ? getPathToSdpProject(fullPath)
         : Promise.reject(
-            createError('TRIED_TO_OPEN_NOT_XOD_FILE', {
+            createError('TRIED_TO_OPEN_NOT_SDP_FILE', {
               path: fullPath,
             })
           ),
@@ -210,7 +210,7 @@ class BaseCommand extends Command {
   // prompt for username and password if needed and patch flags
   async getCredentials() {
     this.flags.username =
-      this.flags.username || (await ux.prompt('XOD API Username'));
+      this.flags.username || (await ux.prompt('SDP API Username'));
     this.flags.password =
       this.flags.password ||
       (await ux.prompt('SDP API Password', { type: 'hide' }));

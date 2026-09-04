@@ -1,5 +1,5 @@
 import R from 'ramda';
-import thunkModule from 'redux-thunk';
+import { thunk } from 'redux-thunk';
 import { createStore, applyMiddleware } from 'redux';
 import chai from 'chai';
 import RamdaFantasy from 'ramda-fantasy';
@@ -25,9 +25,6 @@ import {
   editComment,
   bulkDeleteNodesAndComments,
 } from '../src/project/actions.js';
-
-const thunk =
-  typeof thunkModule === 'function' ? thunkModule : thunkModule.default;
 
 const { assert } = chai;
 

@@ -1,4 +1,4 @@
 import R from 'ramda';
-import { shouldUpdate } from 'recompose';
+import React from 'react';
 
-export default shouldUpdate(R.complement(R.equals));
+export default (Component) => React.memo(Component, R.equals);

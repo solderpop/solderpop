@@ -58,13 +58,9 @@ class BoardsCommand extends BaseCommand {
 }
 
 BoardsCommand.description = 'show available boards';
-
 BoardsCommand.usage = 'boards [options]';
-
 BoardsCommand.flags = BaseCommand.flags;
-
 BoardsCommand.args = {};
-
 BoardsCommand.strict = false;
 
 export default BoardsCommand;

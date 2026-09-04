@@ -1,8 +1,8 @@
 import R from 'ramda';
 import React from 'react';
-import { HotKeys } from 'react-hotkeys';
 
 import * as XP from 'sdp-project';
+import HotkeysScope from '../../../../utils/components/HotkeysScope.jsx';
 
 import { EDITOR_MODE, SELECTION_ENTITY_TYPE } from '../../../constants.js';
 import { isEntitySelected } from '../../../utils.js';
@@ -276,7 +276,7 @@ const selectingMode = {
   },
   render(api) {
     return (
-      <HotKeys
+      <HotkeysScope
         handlers={this.getHotkeyHandlers(api)}
         className="PatchWrapper"
         onKeyDown={bindApi(api, this.onKeyDown)}
@@ -349,7 +349,7 @@ const selectingMode = {
             />
           </g>
         </PatchSVG>
-      </HotKeys>
+      </HotkeysScope>
     );
   },
 };

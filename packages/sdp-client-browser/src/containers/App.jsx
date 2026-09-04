@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import urlParse from 'url-parse';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import EventListener from 'react-event-listener';
-import { HotKeys } from 'react-hotkeys';
 
 import * as XP from 'sdp-project';
 import client, { ThemeSettingsPopup } from 'sdp-client';
@@ -81,6 +79,9 @@ class App extends client.App {
   componentDidMount() {
     super.componentDidMount();
     document.addEventListener('click', this.onDocumentClick);
+    window.addEventListener('resize', this.onResize);
+    window.addEventListener('keydown', this.constructor.onKeyDown);
+    window.addEventListener('beforeunload', this.onCloseApp);
     applyTheme(this.props.themeColors);
   }
 
@@ -93,6 +94,9 @@ class App extends client.App {
   componentWillUnmount() {
     super.componentWillUnmount();
     document.removeEventListener('click', this.onDocumentClick);
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('keydown', this.constructor.onKeyDown);
+    window.removeEventListener('beforeunload', this.onCloseApp);
   }
 
   onFirstRun() {
@@ -150,16 +154,16 @@ class App extends client.App {
   onSave() {
     const { project } = this.props;
 
-    const xodballJSON = XP.toXodball(project);
-    const xodballName = XP.getProjectName(project) || 'my-project';
+    const solderballJSON = XP.toSolderball(project);
+    const solderballName = XP.getProjectName(project) || 'my-project';
     const link = document ? document.createElement('a') : null;
     const url = `data:application/xod;charset=utf8,${encodeURIComponent(
-      xodballJSON
+      solderballJSON
     )}`;
 
     if (link && link.download !== undefined) {
       link.href = url;
-      link.setAttribute('download', `${xodballName}.xodball`);
+      link.setAttribute('download', `${solderballName}.solderball`);
 
       document.body.appendChild(link);
       link.click();
@@ -209,7 +213,7 @@ class App extends client.App {
     foldEither(
       this.props.actions.addError,
       this.props.actions.importProject,
-      XP.fromXodball(jsonString)
+      XP.fromSolderball(jsonString)
     );
   }
 
@@ -250,7 +254,7 @@ class App extends client.App {
         <label key="import" className="load-button" htmlFor="openProjectButton">
           <input
             type="file"
-            accept=".xodball"
+            accept=".solderball"
             onChange={this.onLoadChange}
             id="openProjectButton"
             ref={(input) => {
@@ -395,17 +399,7 @@ class App extends client.App {
 
   render() {
     return (
-      <HotKeys
-        id="App"
-        keyMap={client.menu.getOsSpecificHotkeys()}
-        handlers={this.hotkeyHandlers}
-      >
-        <EventListener
-          target={window}
-          onResize={this.onResize}
-          onKeyDown={this.constructor.onKeyDown}
-          onBeforeUnload={this.onCloseApp}
-        />
+      <client.HotkeysScope id="App" handlers={this.hotkeyHandlers}>
         <client.Toolbar menuBarItems={this.getMenuBarItems()} />
         <client.Editor
           size={this.state.size}
@@ -427,7 +421,7 @@ class App extends client.App {
           isVisible={this.state.themeSettingsPopup}
           onClose={this.hideThemeSettingsPopup}
         />
-      </HotKeys>
+      </client.HotkeysScope>
     );
   }
 }
@@ -475,5 +469,5 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps, null, {
-  withRef: true,
+  forwardRef: true,
 })(App);

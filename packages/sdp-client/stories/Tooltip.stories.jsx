@@ -1,5 +1,4 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react';
 
 import '../src/core/styles/main.scss';
 import HOC from '../src/tooltip/components/TooltipHOC.jsx';
@@ -15,7 +14,9 @@ const stylizeDiv = (top, left) => ({
   left,
 });
 
-storiesOf('Tooltip', module).add('basic', () => (
+export default { title: 'Tooltip' };
+
+export const Basic = () => (
   <div>
     <HOC
       content={<div>Hello, world</div>}
@@ -82,4 +83,4 @@ storiesOf('Tooltip', module).add('basic', () => (
     />
     <Tooltip />
   </div>
-));
+);

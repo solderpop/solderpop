@@ -31,7 +31,7 @@ const its = (wd, tabtestOutDir) => {
       { root }
     );
     assert.isOk(
-      await fs.pathExists(path.resolve(myWSPath, '.xodworkspace')),
+      await fs.pathExists(path.resolve(myWSPath, '.sdp-workspace')),
       'workspace should be created'
     );
     assert.equal(stdout, '', 'stdout must be empty');
@@ -115,7 +115,7 @@ const its = (wd, tabtestOutDir) => {
             'xod',
             'bits',
             'bcd-to-dec',
-            'patch.xodp'
+            'patch.sdpp'
           ),
         ],
         { root }

@@ -1,0 +1,18 @@
+diff --git a/dist/index.js b/dist/index.js
+index f87c5788ba405e1cec678109151c7b19c7898288..19bcc62d735a48e31f59b660344c3d2b3549295d 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -43,8 +43,8 @@ var Remarkable = (function (_React$Component) {
+       );
+     }
+   }, {
+-    key: 'componentWillUpdate',
+-    value: function componentWillUpdate(nextProps, nextState) {
++    key: 'UNSAFE_componentWillUpdate',
++    value: function UNSAFE_componentWillUpdate(nextProps, nextState) {
+       if (nextProps.options !== this.props.options) {
+         this.md = new _remarkable2['default'](nextProps.options);
+       }
+diff --git a/yarn.lock b/yarn.lock
+deleted file mode 100644
+index a71eaebd200e300a60e82ce3677694bea92fb22d..0000000000000000000000000000000000000000

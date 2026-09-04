@@ -38,8 +38,10 @@ class PopupProjectPreferences extends React.Component {
     this.shouldComponentUpdate = deepSCU.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ apiKey: XP.getApiKey(nextProps.project) });
+  componentDidUpdate(prevProps) {
+    if (prevProps.project !== this.props.project) {
+      this.setState({ apiKey: XP.getApiKey(this.props.project) });
+    }
   }
 
   onUpdateClicked() {

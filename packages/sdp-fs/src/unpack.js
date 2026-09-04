@@ -17,8 +17,8 @@ export const getPatchFolderName = def(
 
 const filePath = R.unapply(R.join(path.sep));
 
-const getXodpFile = def('getXodpFile :: Patch -> PatchFile', (patch) => ({
-  path: filePath(getPatchFolderName(patch), 'patch.xodp'),
+const getSdppFile = def('getSdppFile :: Patch -> PatchFile', (patch) => ({
+  path: filePath(getPatchFolderName(patch), 'patch.sdpp'),
   content: convertPatchToPatchFileContents(patch),
 }));
 
@@ -38,7 +38,7 @@ const getAttachmentFiles = def(
 export const arrangePatchByFiles = def(
   'arrangePatchByFiles :: Patch -> [AnyXodFile]',
   R.converge(R.unapply(R.unnest), [
-    R.compose(R.of, getXodpFile),
+    R.compose(R.of, getSdppFile),
     getAttachmentFiles,
   ])
 );
@@ -49,7 +49,7 @@ export const arrangeByFiles = def(
   (project) => {
     const mainFiles = [
       {
-        path: filePath('project.xod'),
+        path: filePath('project.sdp'),
         content: convertProjectToProjectFileContents(project),
       },
     ];

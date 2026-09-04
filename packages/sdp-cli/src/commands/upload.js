@@ -108,10 +108,8 @@ class UploadCommand extends BaseCommand {
   }
 }
 
-UploadCommand.description = 'uploads a XOD program to the board';
-
+UploadCommand.description = 'uploads a SDP program to the board';
 UploadCommand.usage = 'upload [options] [entrypoint]';
-
 UploadCommand.flags = {
   ...BaseCommand.flags,
   ...pick(['board', 'debug', 'workspace'], myFlags),
@@ -125,7 +123,6 @@ UploadCommand.flags = {
 };
 
 UploadCommand.args = { entrypoint: commonArgs.entrypoint };
-
 UploadCommand.examples = [
   'Compile a program using the current patch as entry point, upload to ttyACM1\n' +
     '$ sdpc upload -b arduino:avr:uno -p /dev/ttyACM1\n',

@@ -13,8 +13,8 @@ class PopupInstallApp extends React.PureComponent {
     this.hide = this.hide.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.isVisible && nextProps.isVisible) {
+  componentDidUpdate(prevProps) {
+    if (!prevProps.isVisible && this.props.isVisible) {
       this.show();
     }
   }

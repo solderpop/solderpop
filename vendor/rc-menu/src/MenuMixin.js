@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
 import KeyCode from 'rc-util/lib/KeyCode';
 import createChainedFunction from 'rc-util/lib/createChainedFunction';
 import classNames from 'classnames';
@@ -87,7 +86,7 @@ const MenuMixin = {
     };
   },
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     let props;
     if ('activeKey' in nextProps) {
       props = {
@@ -137,9 +136,11 @@ const MenuMixin = {
       this.setState({
         activeKey: activeItem.props.eventKey,
       }, () => {
-        scrollIntoView(ReactDOM.findDOMNode(activeItem), ReactDOM.findDOMNode(this), {
-          onlyScrollIfNeeded: true,
-        });
+        if (activeItem.rootDomNode && this.rootDomNode) {
+          scrollIntoView(activeItem.rootDomNode, this.rootDomNode, {
+            onlyScrollIfNeeded: true,
+          });
+        }
         // https://github.com/react-component/menu/commit/9899a9672f6f028ec3cdf773f1ecea5badd2d33e
         if (typeof callback === 'function') {
           callback(activeItem);
@@ -196,7 +197,7 @@ const MenuMixin = {
       index: i,
       parentMenu: this,
       ref: childProps.disabled ? undefined :
-        createChainedFunction(child.ref, saveRef.bind(this, i, subIndex)),
+        createChainedFunction(child.props.ref, saveRef.bind(this, i, subIndex)),
       eventKey: key,
       active: !childProps.disabled && isActive,
       multiple: props.multiple,
@@ -246,6 +247,7 @@ const MenuMixin = {
         tag="ul"
         hiddenClassName={`${props.prefixCls}-hidden`}
         visible={props.visible}
+        domRef={c => { this.rootDomNode = c; }}
         {...domProps}
       >
         {React.Children.map(props.children, this.renderMenuItem)}

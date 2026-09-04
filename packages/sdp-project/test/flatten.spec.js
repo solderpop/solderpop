@@ -389,9 +389,9 @@ describe('Flatten', () => {
         project.patches['@/foo'].nodes.c.boundLiterals
       );
     });
-    it('correct structure for blinking.xodball', () => {
-      const defaultizedBlinking = Helper.loadXodball(
-        './fixtures/blinking.xodball'
+    it('correct structure for blinking.solderball', () => {
+      const defaultizedBlinking = Helper.loadSolderball(
+        './fixtures/blinking.solderball'
       );
       const extracted = extractPatches(
         defaultizedBlinking,
@@ -744,9 +744,11 @@ describe('Flatten', () => {
       }, flatProject);
     });
 
-    it('should correctly flatten blinking.xodball', () => {
-      const blinking = Helper.loadXodball('./fixtures/blinking.xodball');
-      const expected = Helper.loadXodball('./fixtures/blinking.flat.xodball');
+    it('should correctly flatten blinking.solderball', () => {
+      const blinking = Helper.loadSolderball('./fixtures/blinking.solderball');
+      const expected = Helper.loadSolderball(
+        './fixtures/blinking.flat.solderball'
+      );
 
       const eitherFlatProject = flatten(blinking, '@/main');
 
@@ -756,12 +758,12 @@ describe('Flatten', () => {
       );
     });
 
-    it('should correctly flatten deeply-nested.xodball', () => {
-      const deeplyNestedProject = Helper.loadXodball(
-        './fixtures/deeply-nested.xodball'
+    it('should correctly flatten deeply-nested.solderball', () => {
+      const deeplyNestedProject = Helper.loadSolderball(
+        './fixtures/deeply-nested.solderball'
       );
-      const expected = Helper.loadXodball(
-        './fixtures/deeply-nested.flat.xodball'
+      const expected = Helper.loadSolderball(
+        './fixtures/deeply-nested.flat.solderball'
       );
       const eitherErrorOrFlat = flatten(deeplyNestedProject, '@/main');
 
@@ -1285,8 +1287,8 @@ describe('Flatten', () => {
       // To create cast nodes algorithm also needs auto resolving types
       // So this is not just pure test of `flatten` function, but a compose
       // of `flatten` and `autoresolveTypes` functions.
-      const project = Helper.loadXodball(
-        './fixtures/cast-custom-types.xodball'
+      const project = Helper.loadSolderball(
+        './fixtures/cast-custom-types.solderball'
       );
 
       const testCreatingCastNode = (
@@ -1525,11 +1527,11 @@ describe('Flatten', () => {
       //  +----------------+
       //
       it('should create a separate cast node for each casted output', () => {
-        const inputProject = Helper.loadXodball(
-          './fixtures/cast-multiple-outputs.xodball'
+        const inputProject = Helper.loadSolderball(
+          './fixtures/cast-multiple-outputs.solderball'
         );
-        const expectedProject = Helper.loadXodball(
-          './fixtures/cast-multiple-outputs.flat.xodball'
+        const expectedProject = Helper.loadSolderball(
+          './fixtures/cast-multiple-outputs.flat.solderball'
         );
         const eitherFlatProject = flatten(inputProject, '@/main');
 
@@ -1917,11 +1919,11 @@ describe('Flatten', () => {
     });
 
     it('should propagate bound values to nested patches', () => {
-      const project = Helper.loadXodball(
-        './fixtures/bound-input-values-propagation.xodball'
+      const project = Helper.loadSolderball(
+        './fixtures/bound-input-values-propagation.solderball'
       );
-      const expectedProject = Helper.loadXodball(
-        './fixtures/bound-input-values-propagation.flat.xodball'
+      const expectedProject = Helper.loadSolderball(
+        './fixtures/bound-input-values-propagation.flat.solderball'
       );
       const flatProject = flatten(project, '@/main');
 
@@ -1932,11 +1934,11 @@ describe('Flatten', () => {
     });
 
     it('should propagate bound values to DEEPLY nested patches', () => {
-      const inputProject = Helper.loadXodball(
-        './fixtures/deep-bound-values-propagation.xodball'
+      const inputProject = Helper.loadSolderball(
+        './fixtures/deep-bound-values-propagation.solderball'
       );
-      const expectedProject = Helper.loadXodball(
-        './fixtures/deep-bound-values-propagation.flat.xodball'
+      const expectedProject = Helper.loadSolderball(
+        './fixtures/deep-bound-values-propagation.flat.solderball'
       );
       const flatProject = flatten(inputProject, '@/main');
 
@@ -1946,11 +1948,11 @@ describe('Flatten', () => {
       );
     });
     it('should not override already bound outputs when propagating values upwards', () => {
-      const inputProject = Helper.loadXodball(
-        './fixtures/bound-values-propagation-to-busy-output.xodball'
+      const inputProject = Helper.loadSolderball(
+        './fixtures/bound-values-propagation-to-busy-output.solderball'
       );
-      const expectedProject = Helper.loadXodball(
-        './fixtures/bound-values-propagation-to-busy-output.flat.xodball'
+      const expectedProject = Helper.loadSolderball(
+        './fixtures/bound-values-propagation-to-busy-output.flat.solderball'
       );
       const flatProject = flatten(inputProject, '@/main');
 
@@ -1960,11 +1962,11 @@ describe('Flatten', () => {
       );
     });
     it('should allow constant node values to propagate down', () => {
-      const inputProject = Helper.loadXodball(
-        './fixtures/constant-propagation-through-bound-output.xodball'
+      const inputProject = Helper.loadSolderball(
+        './fixtures/constant-propagation-through-bound-output.solderball'
       );
-      const expectedProject = Helper.loadXodball(
-        './fixtures/constant-propagation-through-bound-output.flat.xodball'
+      const expectedProject = Helper.loadSolderball(
+        './fixtures/constant-propagation-through-bound-output.flat.solderball'
       );
       const flatProject = flatten(inputProject, '@/main');
 

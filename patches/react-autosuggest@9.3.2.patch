@@ -1,0 +1,15 @@
+diff --git a/dist/Autosuggest.js b/dist/Autosuggest.js
+index 88265339352f3aaef013baa70d2460728be1c4b0..b9710265ae229ebe174d32cc36642d89bbeeed51 100644
+--- a/dist/Autosuggest.js
++++ b/dist/Autosuggest.js
+@@ -151,8 +151,8 @@ var Autosuggest = (function(_Component) {
+       }
+     },
+     {
+-      key: 'componentWillReceiveProps',
+-      value: function componentWillReceiveProps(nextProps) {
++      key: 'UNSAFE_componentWillReceiveProps',
++      value: function UNSAFE_componentWillReceiveProps(nextProps) {
+         if (
+           nextProps.highlightedSuggestionIndex !==
+             this.props.highlightedSuggestionIndex &&

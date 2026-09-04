@@ -8,7 +8,7 @@
   "license": "AGPL-3.0",
   "main": "dist/index.js",
   "scripts": {
-    "doc": "documentation build --format html --output doc --sort-order alpha src/",
+    "doc": "documentation build src/ --format html --output doc --sort-order alpha",
     "build:js": "babel src/ -d dist/ --source-maps",
     "build:re": "rescript build",
     "build": "pnpm run build:re && pnpm run build:js",

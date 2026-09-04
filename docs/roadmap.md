@@ -60,34 +60,18 @@ fix.
 
 ## React 16 -> 19 (Electron needs nothing -- already on the latest, 43.4.0)
 
-Checked directly against npm: Electron is already current, nothing to do
-there. React is a different story -- 16.2 -> 19.2.8 is real, substantial
-work, not a version bump, with specific confirmed blockers:
-
-- `ReactDOM.render()` -- used in both `sdp-client-browser` and
-  `sdp-client-electron`'s entry points (`src/index.jsx`) -- is removed
-  entirely in React 18+, replaced by `createRoot()` from
-  `react-dom/client`. Both entry points need rewriting.
-- `react-redux@^4.x` (all three GUI packages) predates React's own
-  Context API entirely. A React-19-compatible version means
-  `react-redux@9`, its own multi-major jump (v4 -> 5 -> 6 -> 7 -> 8 -> 9)
-  with real breaking changes at nearly every step -- v6 in particular
-  rewrote the whole subscription model.
-- `react-codemirror@1.0.0` (the CodeMirror editor integration) has a
-  peer dependency capping it at `react: >=15.5 <16` and hasn't been
-  updated since -- confirmed via `npm view`. It's already technically
-  incompatible with the *current* React 16.2 (silently tolerated by
-  loose peer-dep enforcement). Nothing newer to bump to; needs replacing
-  outright (e.g. `@uiw/react-codemirror` or similar).
-- `react-skylight` is a git-pinned fork
-  (`xodio/react-skylight#6dc266e...`) this project itself maintains
-  against an abandoned upstream. Any React-19 compat fix has to be
-  hand-patched into that fork -- no upstream release to pull.
-- 9 files still use deprecated lifecycle methods (`componentWillMount`,
-  `componentWillReceiveProps`, `componentWillUpdate`); 3 use string refs
-  (`ref="..."`). Both still work with warnings today but need real code
-  changes, not just suppression -- React 19 tightens behavior around
-  both under Strict Mode.
+Full scope written up separately: `docs/react-19-migration-plan.md`. The
+short version -- this list (`ReactDOM.render`, `react-redux`,
+`react-codemirror`, `react-skylight`, lifecycle methods, string refs) was
+the first pass, found by grepping for the well-known React-18-removal
+landmines. A full pass over `sdp-client`'s dependency list turned up a much
+longer tail: `react-dnd` (decorator API, needs a hooks rewrite),
+`react-contextmenu` and `react-hotkeys` (both abandoned, capped at React
+16, need replacing or careful major-version verification), `react-sortable-hoc`,
+`react-event-listener`, `recompose`, plus 3 files still on the legacy
+Context API (`contextTypes`, fully removed in React 19, not just
+deprecated). Multi-week effort, not a single session -- see the plan doc
+for the phase order and per-library detail.
 
 Same shape of decision as the ESLint 9/Biome item below: a real, scoped
 effort of its own, not something to fold into shipping v0.0.1.

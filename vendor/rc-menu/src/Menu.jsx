@@ -76,7 +76,7 @@ const Menu = createReactClass({
     };
   },
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const props = {};
     if ('selectedKeys' in nextProps) {
       props.selectedKeys = nextProps.selectedKeys || [];

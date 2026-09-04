@@ -29,7 +29,7 @@ const its = (wd, outCppPath) => {
       { root }
     );
     assert.isOk(
-      await fs.pathExists(path.resolve(myWSPath, '.xodworkspace')),
+      await fs.pathExists(path.resolve(myWSPath, '.sdp-workspace')),
       'workspace should be created'
     );
     assert.equal(stdout, '', 'stdout must be empty');

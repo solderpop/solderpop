@@ -38,7 +38,7 @@ describe('Test FS things', () => {
   describe('opening and saving blink project to disk', () => {
     it('opens blink project', () =>
       ide.app.electron.ipcRenderer
-        .emit(TRIGGER_LOAD_PROJECT, bundledWsPath('blink/project.xod'))
+        .emit(TRIGGER_LOAD_PROJECT, bundledWsPath('blink/project.sdp'))
         .then(() => ide.page.assertProjectIsOpened('blink')));
 
     const compareSavedWithFixture = () =>
@@ -52,35 +52,35 @@ describe('Test FS things', () => {
         }
       );
 
-    const saveAsXodballAndCheck = () =>
+    const saveAsSolderballAndCheck = () =>
       ide.app.electron.ipcRenderer
-        .emit(TRIGGER_SAVE_AS, ide.wsPath('blink.xodball'))
+        .emit(TRIGGER_SAVE_AS, ide.wsPath('blink.solderball'))
         .then(ide.page.waitUntilProjectSaved)
         .then(() => {
-          const expectedXodball = fse.readFileSync(
+          const expectedSolderball = fse.readFileSync(
             path.join(
               __dirname,
-              '../src/workspace/blink/__fixtures__/blink.xodball'
+              '../src/workspace/blink/__fixtures__/blink.solderball'
             ),
             'utf8'
           );
-          const actualXodball = fse.readFileSync(
-            ide.wsPath('blink.xodball'),
+          const actualSolderball = fse.readFileSync(
+            ide.wsPath('blink.solderball'),
             'utf8'
           );
           assert.deepEqual(
-            JSON.parse(actualXodball),
-            JSON.parse(expectedXodball)
+            JSON.parse(actualSolderball),
+            JSON.parse(expectedSolderball)
           );
         });
 
     // !!! Ideally, we should simulate clicking 'file -> save',
     // check that a file dialog appears and enter desired path there.
     // But spectron can't handle file dialogs :(
-    it('saves blink project to disk as xodball', saveAsXodballAndCheck);
+    it('saves blink project to disk as solderball', saveAsSolderballAndCheck);
     it(
-      'saves blink project to disk as xodball again and it remains the same',
-      saveAsXodballAndCheck
+      'saves blink project to disk as solderball again and it remains the same',
+      saveAsSolderballAndCheck
     );
 
     it('saves blink project to disk', () =>
@@ -145,7 +145,7 @@ describe('Test FS things', () => {
     it('checks that library is on version 0.11.0', () =>
       assert.eventually.equal(
         fse
-          .readJSON(ide.libPath('xod/core', 'project.xod'))
+          .readJSON(ide.libPath('xod/core', 'project.sdp'))
           .then((proj) => proj.version),
         '0.11.0'
       ));
@@ -253,7 +253,7 @@ describe('Test FS things', () => {
     it('checks that saved only changes in the local project', () =>
       Promise.all([
         assert.eventually.isTrue(
-          fse.pathExists(ide.wsPath('blink/my-patch/patch.xodp')),
+          fse.pathExists(ide.wsPath('blink/my-patch/patch.sdpp')),
           'Expected to `my-patch` be saved in the `blink` project, actually did not.'
         ),
         assert.eventually.isTrue(
@@ -266,7 +266,7 @@ describe('Test FS things', () => {
       Promise.all([
         assert.eventually.sameMembers(
           fse
-            .readJson(ide.libPath('xod/core/clock/patch.xodp'))
+            .readJson(ide.libPath('xod/core/clock/patch.sdpp'))
             .then(extractListOfUsedNodeTypes),
           [
             'xod/patch-nodes/input-number',
@@ -287,7 +287,7 @@ describe('Test FS things', () => {
       Promise.all([
         assert.eventually.sameMembers(
           fse
-            .readJson(ide.libPath('xod/units/c-to-f/patch.xodp'))
+            .readJson(ide.libPath('xod/units/c-to-f/patch.sdpp'))
             .then(extractListOfUsedNodeTypes),
           [
             'xod/patch-nodes/input-number',
@@ -298,7 +298,7 @@ describe('Test FS things', () => {
           'Expected to find edited `xod/units/c-to-f`.'
         ),
         assert.eventually.isTrue(
-          fse.pathExists(ide.libPath('xod/units/project.xod')),
+          fse.pathExists(ide.libPath('xod/units/project.sdp')),
           'Expected to save entire library.'
         ),
       ]));
@@ -306,7 +306,7 @@ describe('Test FS things', () => {
     // Open project and make sure that libraries loaded from user workspace
     it('call Open Project', () =>
       ide.app.electron.ipcRenderer
-        .emit(TRIGGER_LOAD_PROJECT, bundledWsPath('blink/project.xod'))
+        .emit(TRIGGER_LOAD_PROJECT, bundledWsPath('blink/project.sdp'))
         .then(() => ide.page.assertProjectIsOpened('blink')));
     it('checks that `xod/core` loaded from User workspace by checking absense of `concat-4` patch', () =>
       ide.page

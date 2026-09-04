@@ -10,7 +10,7 @@
  * It generates tutorial with steps:
  * 1. Extracts comments' content to the RAM
  * 2. Remove all comments
- * 3. Save project without comments as `welcome-to-xod.xodball`
+ * 3. Save project without comments as `welcome-to-xod.solderball`
  * 4. Generate `README.md` for every patch in the project
  * 5. Generate a script for the screenshotter
  * 6. Run the screenshotter
@@ -31,11 +31,11 @@ const fs = require('fs').promises;
 const fse = require('fs-extra');
 const { exec } = require('child_process');
 const R = require('ramda');
-const { loadProject, saveProjectAsXodball } = require('sdp-fs');
+const { loadProject, saveProjectAsSolderball } = require('sdp-fs');
 
 // =============================================================================
 const PROJECT_NAME = 'welcome-to-xod';
-const XODBALL_FILE = `${PROJECT_NAME}.xodball`;
+const SOLDERBALL_FILE = `${PROJECT_NAME}.solderball`;
 const NO_SCREENSHOTS_FLAG = '--no-screenshots';
 
 const GENERATED_FILE_COMMENT = `
@@ -122,14 +122,14 @@ const getExerciseNumber = R.compose(R.head, R.match(/^(\d{3})/g));
 const getProjectPatchDirs = (projectPath) =>
   fs
     .readdir(projectPath)
-    .then(R.reject(R.anyPass([R.equals('project.xod'), R.equals('.DS_Store')])))
+    .then(R.reject(R.anyPass([R.equals('project.sdp'), R.equals('.DS_Store')])))
     .then(R.map((p) => path.join(projectPath, p)));
 
-// Saves a multifile project as Xodball
-const saveAsXodball = (source) => {
-  const output = path.resolve(options.output, XODBALL_FILE);
+// Saves a multifile project as Solderball
+const saveAsSolderball = (source) => {
+  const output = path.resolve(options.output, SOLDERBALL_FILE);
   const bundledWs = path.resolve(__dirname, '..', 'workspace');
-  return loadProject([bundledWs], source).then(saveProjectAsXodball(output));
+  return loadProject([bundledWs], source).then(saveProjectAsSolderball(output));
 };
 
 // :: PatchPath -> Boolean
@@ -138,13 +138,13 @@ const isIntroPart = R.test(/^\d00-/);
 // =============================================================================
 // Project converters & comment extractors
 // =============================================================================
-const extractCommentsFromPatch = (xodpPath) =>
+const extractCommentsFromPatch = (sdppPath) =>
   fs
-    .readFile(xodpPath)
+    .readFile(sdppPath)
     .then((str) => JSON.parse(str))
     .then(
       R.tap((content) => {
-        const patchName = path.basename(path.dirname(xodpPath));
+        const patchName = path.basename(path.dirname(sdppPath));
         comments[patchName] = R.compose(
           R.join('\n\n'),
           R.pluck('content'),
@@ -158,13 +158,13 @@ const extractCommentsFromPatch = (xodpPath) =>
     )
     .then(R.omit(['comments']))
     .then((content) => JSON.stringify(content, null, 2))
-    .then((content) => fs.writeFile(xodpPath, content));
+    .then((content) => fs.writeFile(sdppPath, content));
 
 const extractCommentsFromProject = (projectPath) =>
   getProjectPatchDirs(projectPath)
-    .then(R.map((p) => path.join(p, 'patch.xodp')))
-    .then((xodpFiles) =>
-      Promise.all(R.map(extractCommentsFromPatch, xodpFiles))
+    .then(R.map((p) => path.join(p, 'patch.sdpp')))
+    .then((sdppFiles) =>
+      Promise.all(R.map(extractCommentsFromPatch, sdppFiles))
     );
 
 // =============================================================================
@@ -173,7 +173,7 @@ const extractCommentsFromProject = (projectPath) =>
 
 // :: [PatchName] -> Promise.Resolve [PatchName]
 const storeNonEmptyPatchPaths = () =>
-  fse.readJSON(path.join(options.output, XODBALL_FILE)).then(
+  fse.readJSON(path.join(options.output, SOLDERBALL_FILE)).then(
     R.compose(
       (_nonEmptyPatchPaths) => {
         nonEmptyPatchPaths = _nonEmptyPatchPaths;
@@ -208,7 +208,7 @@ const generateScreenshotScript = () =>
     [
       '#!/bin/sh',
       '',
-      `SRC=${XODBALL_FILE}`,
+      `SRC=${SOLDERBALL_FILE}`,
       '',
       R.compose(
         R.join('\n\n'),
@@ -377,7 +377,7 @@ fs.mkdtemp(path.join(os.tmpdir(), 'tutorial-docs-')).then((tmpDir) => {
     .copy(options.input, CONVERTED_PROJECT)
     .then(() => extractCommentsFromProject(CONVERTED_PROJECT))
     .then(() => fse.ensureDir(options.output))
-    .then(() => saveAsXodball(CONVERTED_PROJECT))
+    .then(() => saveAsSolderball(CONVERTED_PROJECT))
     .then(() => storeNonEmptyPatchPaths())
     .then(() => generateScreenshotScript())
     .then(() => generateTutorials(CONVERTED_PROJECT))

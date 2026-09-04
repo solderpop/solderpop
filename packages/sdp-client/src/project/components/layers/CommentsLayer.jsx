@@ -11,7 +11,7 @@ import Comment from '../Comment.jsx';
 function CommentsLayer({
   comments,
   selection,
-  areDragged,
+  areDragged = false,
   onMouseDown,
   onMouseUp,
   onResizeHandleMouseDown,
@@ -43,10 +43,6 @@ function CommentsLayer({
     </g>
   );
 }
-
-CommentsLayer.defaultProps = {
-  areDragged: false,
-};
 
 CommentsLayer.propTypes = {
   comments: PropTypes.objectOf(PropTypes.object),

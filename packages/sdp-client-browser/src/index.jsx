@@ -1,7 +1,7 @@
 /* eslint-env browser */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Root } from 'sdp-client';
 
 import App from './containers/App.jsx';
@@ -14,9 +14,8 @@ if (process.env.WHY_DID_YOU_UPDATE) {
   });
 }
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
   <Root>
     <App tutorialProject={tutorialProject} />
-  </Root>,
-  document.getElementById('root')
+  </Root>
 );

@@ -3,7 +3,6 @@
 
 import R from 'ramda';
 import React from 'react';
-import { HotKeys } from 'react-hotkeys';
 import * as XP from 'sdp-project';
 
 import { EDITOR_MODE } from '../../../constants.js';
@@ -143,7 +142,7 @@ const resizingNodeMode = {
     )(resizedNode);
 
     // In case that User resized Node to it's default size — just drop it to
-    // zero values. In this case it will be omitted from xodball
+    // zero values. In this case it will be omitted from solderball
     const sizeToSet = R.equals(originalSizeInSlots, newSize)
       ? { width: 0, height: 0 }
       : newSize;
@@ -183,7 +182,7 @@ const resizingNodeMode = {
     )(resizedNodes);
 
     return (
-      <HotKeys className="PatchWrapper" handlers={{}}>
+      <div className="PatchWrapper" tabIndex={-1}>
         <PatchSVG
           onMouseMove={bindApi(api, this.onMouseMove)}
           onMouseUp={bindApi(api, this.onMouseUp)}
@@ -236,7 +235,7 @@ const resizingNodeMode = {
             />
           </g>
         </PatchSVG>
-      </HotKeys>
+      </div>
     );
   },
 };

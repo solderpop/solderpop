@@ -13,12 +13,12 @@ function NodesLayer({
   nodes,
   selection,
   linkingPin,
-  areDragged,
+  areDragged = false,
   onMouseDown,
   onMouseUp,
   onDoubleClick,
   isDebugSession,
-  nodeValues,
+  nodeValues = {},
   onVariadicHandleDown,
   onResizeHandleMouseDown,
   noNodeHovering,
@@ -68,12 +68,6 @@ function NodesLayer({
     </g>
   );
 }
-
-NodesLayer.defaultProps = {
-  areDragged: false,
-  nodeValues: {},
-  nodesAffectedByErrorRaisers: {},
-};
 
 NodesLayer.propTypes = {
   nodes: PropTypes.objectOf(PropTypes.object),

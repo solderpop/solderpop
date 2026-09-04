@@ -11,8 +11,8 @@ import { explodeEither } from 'sdp-func-tools';
 import * as XP from 'sdp-project';
 import { defaultizeProject } from 'sdp-project/test/helpers.js';
 
-import { loadProject, loadProjectFromXodball } from '../src/load.js';
-import { saveAll, saveProjectAsXodball } from '../src/save.js';
+import { loadProject, loadProjectFromSolderball } from '../src/load.js';
+import { saveAll, saveProjectAsSolderball } from '../src/save.js';
 
 const { assert } = chai;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -27,7 +27,10 @@ const formatDiffs = (comparison) =>
 
 describe('Load/Save roundtrip', () => {
   afterEach(() =>
-    Promise.all([fs.remove(fixture('new')), fs.remove(fixture('new.xodball'))])
+    Promise.all([
+      fs.remove(fixture('new')),
+      fs.remove(fixture('new.solderball')),
+    ])
   );
 
   it('preserves project files byte-by-byte', async () => {
@@ -62,51 +65,54 @@ describe('Load/Save roundtrip', () => {
       )
     );
   });
-  it('xodball -> multifile, multifile -> xodball', async () => {
+  it('solderball -> multifile, multifile -> solderball', async () => {
     const emptyProject = defaultizeProject({});
 
-    const projectFromXodball = await loadProjectFromXodball(
+    const projectFromSolderball = await loadProjectFromSolderball(
       [fixture('workspace')],
-      fixture('some.xodball')
+      fixture('some.solderball')
     );
     await saveAll(
       fixture('workspace'),
       fixture('new'),
       emptyProject,
-      projectFromXodball
+      projectFromSolderball
     );
 
     const projectFromMulti = await loadProject(
       [fixture('workspace')],
       fixture('new')
     );
-    await saveProjectAsXodball(fixture('new.xodball'), projectFromMulti);
+    await saveProjectAsSolderball(fixture('new.solderball'), projectFromMulti);
 
     const filesToCompare = await Promise.all([
-      fs.readFile(fixture('some.xodball'), 'utf8').then(JSON.parse),
-      fs.readFile(fixture('new.xodball'), 'utf8').then(JSON.parse),
+      fs.readFile(fixture('some.solderball'), 'utf8').then(JSON.parse),
+      fs.readFile(fixture('new.solderball'), 'utf8').then(JSON.parse),
     ]);
 
     assert.deepEqual(filesToCompare[0], filesToCompare[1]);
   });
-  it('multifile -> xodball, xodball -> multifile', async () => {
+  it('multifile -> solderball, solderball -> multifile', async () => {
     const emptyProject = defaultizeProject({});
 
     const projectFromMultifile = await loadProject(
       [fixture('workspace')],
       fixture('workspace/awesome-project')
     );
-    await saveProjectAsXodball(fixture('new.xodball'), projectFromMultifile);
+    await saveProjectAsSolderball(
+      fixture('new.solderball'),
+      projectFromMultifile
+    );
 
-    const projectFromXodball = await loadProject(
+    const projectFromSolderball = await loadProject(
       [fixture('workspace')],
-      fixture('new.xodball')
+      fixture('new.solderball')
     );
     await saveAll(
       fixture('workspace'),
       fixture('new'),
       emptyProject,
-      projectFromXodball
+      projectFromSolderball
     );
 
     // compare source and destination directory contents
@@ -143,54 +149,54 @@ describe('Load/Save roundtrip', () => {
     )(project)
   );
 
-  it('xodball -> move -> xodball -> counter-move -> xodball', async () => {
-    const projectFromXodball = await loadProjectFromXodball(
+  it('solderball -> move -> solderball -> counter-move -> solderball', async () => {
+    const projectFromSolderball = await loadProjectFromSolderball(
       [fixture('workspace')],
-      fixture('some.xodball')
+      fixture('some.solderball')
     );
 
     const originalNodePosition = R.compose(
       XP.getNodePosition,
       XP.getNodeByIdUnsafe('2c03e470-fefd-4f58-be6a-58d209d9158c'),
       XP.getPatchByPathUnsafe('@/main')
-    )(projectFromXodball);
+    )(projectFromSolderball);
 
     const changedProject = moveNode(
       { x: 4200, y: 4200 },
       '2c03e470-fefd-4f58-be6a-58d209d9158c',
       '@/main',
-      projectFromXodball
+      projectFromSolderball
     );
 
     await saveAll(
       fixture('workspace'),
-      fixture('new.xodball'),
-      projectFromXodball,
+      fixture('new.solderball'),
+      projectFromSolderball,
       changedProject
     );
 
-    const projectFromXodball2 = await loadProjectFromXodball(
+    const projectFromSolderball2 = await loadProjectFromSolderball(
       [fixture('workspace')],
-      fixture('new.xodball')
+      fixture('new.solderball')
     );
 
     const changedProject2 = moveNode(
       originalNodePosition,
       '2c03e470-fefd-4f58-be6a-58d209d9158c',
       '@/main',
-      projectFromXodball
+      projectFromSolderball
     );
 
     await saveAll(
       fixture('workspace'),
-      fixture('new.xodball'),
-      projectFromXodball2,
+      fixture('new.solderball'),
+      projectFromSolderball2,
       changedProject2
     );
 
     const filesToCompare = await Promise.all([
-      fs.readFile(fixture('some.xodball'), 'utf8').then(JSON.parse),
-      fs.readFile(fixture('new.xodball'), 'utf8').then(JSON.parse),
+      fs.readFile(fixture('some.solderball'), 'utf8').then(JSON.parse),
+      fs.readFile(fixture('new.solderball'), 'utf8').then(JSON.parse),
     ]);
 
     assert.deepEqual(filesToCompare[0], filesToCompare[1]);

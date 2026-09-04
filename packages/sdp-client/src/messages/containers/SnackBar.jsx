@@ -27,8 +27,16 @@ class SnackBar extends React.Component {
     this.onCloseMessage = this.onCloseMessage.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.addMessages(nextProps.errors);
+  componentDidUpdate() {
+    // addMessages only mutates this.messages (not React state), so if it
+    // picks up a new message after this render already committed, force
+    // one more render to actually show it. Idempotent (addMessages skips
+    // ids it already has), so this can't loop.
+    const countBefore = Object.keys(this.messages).length;
+    this.addMessages(this.props.errors);
+    if (Object.keys(this.messages).length !== countBefore) {
+      this.forceUpdate();
+    }
   }
 
   onMouseOver() {

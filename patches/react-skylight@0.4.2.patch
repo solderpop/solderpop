@@ -1,0 +1,28 @@
+diff --git a/lib/skylight.js b/lib/skylight.js
+index 18db048165a41ebfec1733833e700c260449d3f6..4a6ff4cdefa284adaef1156a9795545094193a6f 100644
+--- a/lib/skylight.js
++++ b/lib/skylight.js
+@@ -48,8 +48,8 @@ var SkyLight = function (_React$Component) {
+   }
+ 
+   _createClass(SkyLight, [{
+-    key: 'componentWillUpdate',
+-    value: function componentWillUpdate(nextProps, nextState) {
++    key: 'UNSAFE_componentWillUpdate',
++    value: function UNSAFE_componentWillUpdate(nextProps, nextState) {
+       if (isOpening(this.state, nextState) && this.props.beforeOpen) {
+         this.props.beforeOpen();
+       }
+diff --git a/src/skylight.jsx b/src/skylight.jsx
+index c68f6c3ff42abd91dec8b360dbd572c4a91aae64..95a2be7c55b0b37152f17d5d9bd4a405408877e1 100644
+--- a/src/skylight.jsx
++++ b/src/skylight.jsx
+@@ -12,7 +12,7 @@ export default class SkyLight extends React.Component {
+     this.state = { isVisible: false };
+   }
+ 
+-  componentWillUpdate(nextProps, nextState) {
++  UNSAFE_componentWillUpdate(nextProps, nextState) {
+     if (isOpening(this.state, nextState) && this.props.beforeOpen) {
+       this.props.beforeOpen();
+     }

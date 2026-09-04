@@ -12,7 +12,7 @@
     "build": "pnpm run build:nearley && pnpm run build:templates && pnpm run build:re && pnpm run build:js",
     "dev:re": "rescript build -w",
     "dev": "onchange \"src/**/*.js\" \"platform/**/*\" -- pnpm run build:templates && pnpm run build:js",
-    "doc": "documentation build --format html --output doc --sort-order alpha src/",
+    "doc": "documentation build src/ --format html --output doc --sort-order alpha",
     "refmt": "rescript format -all",
     "clean:dist": "rimraf ./dist ./lib ./src/**/*.bs.js ./platform/**/*.cpp.js ./platform/**/*.h.js",
     "pretest": "pnpm run build:templates",

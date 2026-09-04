@@ -2,7 +2,6 @@ import R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
-import storeShape from 'react-redux/src/utils/storeShape.js';
 import Icon from '../components/Icon.jsx';
 import cls from 'classnames';
 
@@ -49,7 +48,9 @@ class Catcher extends React.Component {
 
   componentDidMount() {
     // Open initial project on the startup
-    this.appRef.refs.wrappedInstance.onFirstRun();
+    // react-redux v6+'s `forwardRef: true` gives the wrapped instance
+    // directly -- v4/v5's `withRef: true` needed `.refs.wrappedInstance`.
+    this.appRef.onFirstRun();
   }
 
   componentWillUnmount() {
@@ -181,7 +182,11 @@ class Catcher extends React.Component {
 }
 
 Catcher.propTypes = {
-  store: storeShape,
+  store: PropTypes.shape({
+    getState: PropTypes.func.isRequired,
+    subscribe: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
+  }).isRequired,
   children: PropTypes.element.isRequired,
 };
 

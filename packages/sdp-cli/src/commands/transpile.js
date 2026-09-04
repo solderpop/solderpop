@@ -67,9 +67,7 @@ class TranspileCommand extends BaseCommand {
 }
 
 TranspileCommand.description = 'transpiles (generates C++) a XOD program';
-
 TranspileCommand.usage = 'transpile [options] [entrypoint]';
-
 TranspileCommand.flags = {
   ...BaseCommand.flags,
   ...pick(['debug', 'workspace'], myFlags),
@@ -83,14 +81,13 @@ TranspileCommand.flags = {
 };
 
 TranspileCommand.args = { entrypoint: commonArgs.entrypoint };
-
 TranspileCommand.examples = [
   'Transpile a program using the cwd patch as entry point, print to stdout\n' +
     '$ sdpc transpile\n',
   'Transpile the current project with `main` patch as entry point, save the output in `x.cpp`\n' +
     '$ sdpc transpile main -o x.cpp\n',
-  'Transpile a project in the xodball with `main` patch as entry point\n' +
-    '$ sdpc transpile foo.xodball main',
+  'Transpile a project in the solderball with `main` patch as entry point\n' +
+    '$ sdpc transpile foo.solderball main',
 ];
 
 TranspileCommand.strict = false;

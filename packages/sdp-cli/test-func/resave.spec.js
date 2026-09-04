@@ -29,7 +29,7 @@ const its = (wd) => {
       { root }
     );
     assert.isOk(
-      await fs.pathExists(path.resolve(myWSPath, '.xodworkspace')),
+      await fs.pathExists(path.resolve(myWSPath, '.sdp-workspace')),
       'workspace should be created'
     );
     assert.equal(stdout, '', 'stdout must be empty');
@@ -55,37 +55,37 @@ const its = (wd) => {
     assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
   });
 
-  it('prints xodball to stdout, messages to stderr and exit with 0', async () => {
+  it('prints solderball to stdout, messages to stderr and exit with 0', async () => {
     const { stdout, stderr, error } = await runCommand(
       ['resave', `--workspace=${myWSPath}`, resaveSrcPath],
       { root }
     );
-    const xodball = JSON.parse(stdout);
-    assert.equal(xodball.name, 'blink', 'stdout must be json');
+    const solderball = JSON.parse(stdout);
+    assert.equal(solderball.name, 'blink', 'stdout must be json');
     assert.notEqual(stderr, '', 'stderr must be with messages');
     assert.equal(error?.oclif?.exit, 0, 'exit code must be zero');
   });
 
-  it('save xodball to xodball, prints status messages to stderr, stdout is empty, exit with 0', async () => {
+  it('save solderball to solderball, prints status messages to stderr, stdout is empty, exit with 0', async () => {
     const { stdout, stderr, error } = await runCommand(
       [
         'resave',
         `--workspace=${myWSPath}`,
-        `--output=${path.resolve(wd, 'blink.xodball')}`,
+        `--output=${path.resolve(wd, 'blink.solderball')}`,
         resaveSrcPath,
       ],
       { root }
     );
     assert.isOk(
-      await fs.pathExists(path.resolve(wd, 'blink.xodball')),
-      'xodball should be created'
+      await fs.pathExists(path.resolve(wd, 'blink.solderball')),
+      'solderball should be created'
     );
     assert.notEqual(stderr, '', 'stderr must be full of messages');
     assert.equal(stdout, '', 'stdout must be empty');
     assert.equal(error?.oclif?.exit, 0, 'exit code must be zero');
   });
 
-  it('save xodball to directory, quiet flag (stderr is empty, stdout is empty), workspace and output flags from ENV, exit with 0', () =>
+  it('save solderball to directory, quiet flag (stderr is empty, stdout is empty), workspace and output flags from ENV, exit with 0', () =>
     withEnv(
       {
         XOD_WORKSPACE: myWSPath,
@@ -106,7 +106,7 @@ const its = (wd) => {
       }
     ));
 
-  it('fails on saving xodball to directory without write access, quiet flag (stderr is empty, stdout is empty), workspace and output flags from ENV, exit with non-zero', () =>
+  it('fails on saving solderball to directory without write access, quiet flag (stderr is empty, stdout is empty), workspace and output flags from ENV, exit with non-zero', () =>
     withEnv(
       {
         XOD_WORKSPACE: myWSPath,
