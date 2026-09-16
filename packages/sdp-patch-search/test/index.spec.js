@@ -105,7 +105,10 @@ describe('sdp-patch-search/index', () => {
     let indexData = [];
     let search = {};
     before(() =>
-      loadProject([workspace], fixture('abstract-and-specializations.xodball'))
+      loadProject(
+        [workspace],
+        fixture('abstract-and-specializations.solderball')
+      )
         .then(listPatches)
         .then(createIndexData)
         .then((iData) => {

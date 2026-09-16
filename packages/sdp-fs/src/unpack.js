@@ -3,6 +3,7 @@ import R from 'ramda';
 import * as XP from 'sdp-project';
 
 import { def } from './types.js';
+import { PROJECT_FILENAME, PATCH_FILENAME } from './constants.js';
 import {
   convertProjectToProjectFileContents,
   convertPatchToPatchFileContents,
@@ -17,8 +18,8 @@ export const getPatchFolderName = def(
 
 const filePath = R.unapply(R.join(path.sep));
 
-const getXodpFile = def('getXodpFile :: Patch -> PatchFile', (patch) => ({
-  path: filePath(getPatchFolderName(patch), 'patch.xodp'),
+const getPatchFile = def('getPatchFile :: Patch -> PatchFile', (patch) => ({
+  path: filePath(getPatchFolderName(patch), PATCH_FILENAME),
   content: convertPatchToPatchFileContents(patch),
 }));
 
@@ -38,7 +39,7 @@ const getAttachmentFiles = def(
 export const arrangePatchByFiles = def(
   'arrangePatchByFiles :: Patch -> [AnyXodFile]',
   R.converge(R.unapply(R.unnest), [
-    R.compose(R.of, getXodpFile),
+    R.compose(R.of, getPatchFile),
     getAttachmentFiles,
   ])
 );
@@ -49,7 +50,7 @@ export const arrangeByFiles = def(
   (project) => {
     const mainFiles = [
       {
-        path: filePath('project.xod'),
+        path: filePath(PROJECT_FILENAME),
         content: convertProjectToProjectFileContents(project),
       },
     ];

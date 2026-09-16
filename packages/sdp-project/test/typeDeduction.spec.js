@@ -16,7 +16,9 @@ const { assert } = chai;
 const { Either } = RamdaFantasy;
 
 describe('deducePinTypes', () => {
-  const project = Helper.loadXodball('./fixtures/pin-types-deduction.xodball');
+  const project = Helper.loadSolderball(
+    './fixtures/pin-types-deduction.solderball'
+  );
 
   it('deduces pin types from concrete nodes linked to generic inputs', () => {
     const deduced = deducePinTypes(
@@ -219,12 +221,12 @@ describe('deducePinTypes', () => {
 });
 
 describe('autoresolveTypes', () => {
-  const project = Helper.loadXodball(
-    './fixtures/abstract-nodes-resolution.xodball'
+  const project = Helper.loadSolderball(
+    './fixtures/abstract-nodes-resolution.solderball'
   );
   it('successfully resolves types for a valid project', () => {
-    const expectedResolvedProject = Helper.loadXodball(
-      './fixtures/abstract-nodes-resolution.resolved.xodball'
+    const expectedResolvedProject = Helper.loadSolderball(
+      './fixtures/abstract-nodes-resolution.resolved.solderball'
     );
 
     Helper.expectEitherRight(
@@ -260,8 +262,8 @@ describe('autoresolveTypes', () => {
     );
   });
   it('does not lose links from/to variadic patches', () => {
-    const expectedResolvedProject = Helper.loadXodball(
-      './fixtures/abstract-nodes-resolution.resolved-variadics.xodball'
+    const expectedResolvedProject = Helper.loadSolderball(
+      './fixtures/abstract-nodes-resolution.resolved-variadics.solderball'
     );
 
     Helper.expectEitherRight(
@@ -275,8 +277,8 @@ describe('autoresolveTypes', () => {
     );
   });
   it('does not lose values bound to non-generic pins', () => {
-    const expectedResolvedProject = Helper.loadXodball(
-      './fixtures/abstract-nodes-resolution.resolved-bound-nongenerics.xodball'
+    const expectedResolvedProject = Helper.loadSolderball(
+      './fixtures/abstract-nodes-resolution.resolved-bound-nongenerics.solderball'
     );
 
     Helper.expectEitherRight(
@@ -290,8 +292,8 @@ describe('autoresolveTypes', () => {
     );
   });
   it('resolves abstract nodes in patches that have no generic inputs', () => {
-    const expectedResolvedProject = Helper.loadXodball(
-      './fixtures/abstract-nodes-resolution.resolved-abstracts-inside-regular.xodball'
+    const expectedResolvedProject = Helper.loadSolderball(
+      './fixtures/abstract-nodes-resolution.resolved-abstracts-inside-regular.solderball'
     );
 
     Helper.expectEitherRight(
@@ -306,12 +308,12 @@ describe('autoresolveTypes', () => {
   });
 
   it('resolves custom types on generics', () => {
-    const projectWithCustomTypes = Helper.loadXodball(
-      './fixtures/custom-types.xodball'
+    const projectWithCustomTypes = Helper.loadSolderball(
+      './fixtures/custom-types.solderball'
     );
 
-    const expectedResolvedProject = Helper.loadXodball(
-      './fixtures/custom-types.resolved.xodball'
+    const expectedResolvedProject = Helper.loadSolderball(
+      './fixtures/custom-types.resolved.solderball'
     );
 
     Helper.expectEitherRight(

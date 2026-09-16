@@ -7,7 +7,7 @@ const packLibVersion = (project) => ({
   libname: XP.getProjectName(project),
   version: {
     description: XP.getProjectDescription(project),
-    folder: { 'xodball.json': XP.toXodball(project) },
+    folder: { 'solderball.json': XP.toSolderball(project) },
     semver: `v${XP.getProjectVersion(project)}`,
   },
 });

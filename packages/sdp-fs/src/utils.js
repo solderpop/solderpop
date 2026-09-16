@@ -18,6 +18,12 @@ import {
   DEFAULT_PROJECT_NAME,
   LIBS_DIRNAME,
   WORKSPACE_FILENAME,
+  PROJECT_FILENAME,
+  PATCH_FILENAME,
+  SOLDERBALL_EXTNAME,
+  LEGACY_PROJECT_FILENAMES,
+  LEGACY_PATCH_FILENAMES,
+  LEGACY_SOLDERBALL_EXTNAMES,
 } from './constants.js';
 
 import * as ERROR_CODES from './errorCodes.js';
@@ -56,14 +62,47 @@ export const isExtname = def(
   (extname, filePath) => R.compose(R.equals(extname), path.extname)(filePath)
 );
 
+// Matches project.sdp (current) or any legacy project filename
+// (project.xod) -- legacy names are read-only, never written back out
+// (see unpack.js / save.js).
+export const isProjectBasename = def(
+  'isProjectBasename :: String -> Boolean',
+  (basename) =>
+    basename === PROJECT_FILENAME ||
+    R.contains(basename, LEGACY_PROJECT_FILENAMES)
+);
+
 export const isProjectFile = def(
   'isProjectFile :: AnyXodFile -> Boolean',
-  R.pipe(R.prop('path'), isBasename('project.xod'))
+  R.pipe(R.prop('path'), path.basename, isProjectBasename)
+);
+
+// Matches patch.sdpp (current) or any legacy patch filename (patch.xodp) --
+// legacy names are read-only, never written back out (see unpack.js).
+export const isPatchBasename = def(
+  'isPatchBasename :: String -> Boolean',
+  (basename) =>
+    basename === PATCH_FILENAME || R.contains(basename, LEGACY_PATCH_FILENAMES)
 );
 
 export const isPatchFile = def(
   'isProjectFile :: AnyXodFile -> Boolean',
-  R.pipe(R.prop('path'), isBasename('patch.xodp'))
+  R.pipe(R.prop('path'), path.basename, isPatchBasename)
+);
+
+// Matches .solderball (current) or any legacy bundle extension
+// (.xodball) -- legacy extensions are read-only, never written back out
+// (see save.js).
+export const isSolderballExtname = def(
+  'isSolderballExtname :: String -> Boolean',
+  (extname) =>
+    extname === SOLDERBALL_EXTNAME ||
+    R.contains(extname, LEGACY_SOLDERBALL_EXTNAMES)
+);
+
+export const isSolderballPath = def(
+  'isSolderballPath :: Path -> Boolean',
+  R.pipe(path.extname, isSolderballExtname)
 );
 
 export const getFilePath = def(
@@ -132,9 +171,21 @@ export const beginsWithDot = def(
   R.compose(R.equals('.'), R.head)
 );
 
+// Resolves to whichever project file actually exists in `dir` --
+// canonical project.sdp if present, else a legacy project.xod, else the
+// (nonexistent) canonical path so downstream reads fail the same way
+// they always did for a truly missing project file.
 export const resolveProjectFile = def(
   'resolveProjectFile :: Path -> Path',
-  (dir) => path.resolve(dir, 'project.xod')
+  (dir) => {
+    const canonicalPath = path.resolve(dir, PROJECT_FILENAME);
+    if (doesFileExist(canonicalPath)) return canonicalPath;
+    const legacyPath = R.find(
+      doesFileExist,
+      LEGACY_PROJECT_FILENAMES.map((name) => path.resolve(dir, name))
+    );
+    return legacyPath || canonicalPath;
+  }
 );
 
 export const hasProjectFile = def(

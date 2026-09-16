@@ -7,8 +7,10 @@ packages/*/dist/
 *.orig
 *.log
 .dir-locals.el
+
+# No AI agent files
 .opencode
-.claude/
+.claude
 
 coverage/
 .nyc_output/

@@ -17,7 +17,7 @@ export default {
     title: 'Invalid file path',
     note: `File ${path} does not exist`,
     solution:
-      'Provide a valid path to either patch, project directory, or xodball',
+      'Provide a valid path to either patch, project directory, or solderball',
   }),
 
   PUBLISH_AUTH_FAILED: ({ username, status }) => ({

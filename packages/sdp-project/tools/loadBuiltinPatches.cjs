@@ -8,9 +8,12 @@ const { explodeEither } = require('sdp-func-tools');
 const XP = require('..');
 
 const targetPath = path.resolve(__dirname, '../dist/built-in-patches.json');
-const xodballPath = path.resolve(__dirname, '../built-in-patches.xodball');
+const solderballPath = path.resolve(
+  __dirname,
+  '../built-in-patches.solderball'
+);
 
-// Load xodball, convert to Map PatchPath Patch
+// Load solderball, convert to Map PatchPath Patch
 const patches = R.compose(
   R.indexBy(XP.getPatchPath),
   R.map(
@@ -21,15 +24,15 @@ const patches = R.compose(
   ),
   XP.listLocalPatches,
   explodeEither,
-  XP.fromXodball,
+  XP.fromSolderball,
   p => fs.readFileSync(p, 'utf8')
-)(xodballPath);
+)(solderballPath);
 
 // Verify the build-in-patches.json provides all terminals, they might be
 // generated automatically but it’s hard to create a good automatic
 // description
 R.unless(R.isEmpty, missing => {
-  const msg = `${xodballPath} misses some terminal patches: ${missing.join(
+  const msg = `${solderballPath} misses some terminal patches: ${missing.join(
     ', '
   )}`;
   console.error(msg);

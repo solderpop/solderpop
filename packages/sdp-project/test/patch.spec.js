@@ -1137,7 +1137,7 @@ describe('Patch', () => {
   });
 
   describe('validateBuses', () => {
-    const project = Helper.loadXodball('./fixtures/buses.xodball');
+    const project = Helper.loadSolderball('./fixtures/buses.solderball');
 
     it('detects "orphan" from-bus nodes', () => {
       const patch = Project.getPatchByPathUnsafe('@/1-no-to-bus-node', project);

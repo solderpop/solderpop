@@ -264,4 +264,4 @@ export const loadJSON = R.compose(
   (filePath) => resolve(__dirname, filePath)
 );
 
-export const loadXodball = R.compose(XP.fromXodballDataUnsafe, loadJSON);
+export const loadSolderball = R.compose(XP.fromSolderballDataUnsafe, loadJSON);

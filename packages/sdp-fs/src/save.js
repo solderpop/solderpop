@@ -21,7 +21,7 @@ import {
   omitDefaultOptionsFromProjectFileContents,
 } from './convertTypes.js';
 import * as ERROR_CODES from './errorCodes.js';
-import { CHANGE_TYPES } from './constants.js';
+import { CHANGE_TYPES, PROJECT_FILENAME } from './constants.js';
 import { calculateDiff } from './patchDiff.js';
 
 import { def } from './types.js';
@@ -53,7 +53,7 @@ export const saveArrangedFiles = R.curry((rootDir, virtualFile) => {
     }
 
     const dataToSave = R.when(R.complement(Array.isArray), R.of)(virtualFile);
-    const pathToTemp = path.resolve(os.tmpdir(), 'xod-temp');
+    const pathToTemp = path.resolve(os.tmpdir(), 'sdp-temp');
     const backup = new Backup(realRootDir, pathToTemp);
 
     return backup
@@ -179,7 +179,7 @@ const saveProjectMeta = def(
   (projectDir, project) =>
     saveArrangedFiles(projectDir, [
       {
-        path: path.join('.', 'project.xod'),
+        path: path.join('.', PROJECT_FILENAME),
         content: R.compose(
           omitDefaultOptionsFromProjectFileContents,
           convertProjectToProjectFileContents
@@ -188,18 +188,18 @@ const saveProjectMeta = def(
     ]).then(R.always(projectDir))
 );
 
-export const saveProjectAsXodball = def(
-  'saveProjectAsXodball :: Path -> Project -> Promise', // Promise Path Error
+export const saveProjectAsSolderball = def(
+  'saveProjectAsSolderball :: Path -> Project -> Promise', // Promise Path Error
   (projectPath, project) => {
     const projectDir = path.dirname(projectPath);
     return R.composeP(
       R.always(projectPath),
-      (virtualXodball) => saveVirtualFile(projectDir, virtualXodball),
+      (virtualSolderball) => saveVirtualFile(projectDir, virtualSolderball),
       (content) => ({
         path: path.basename(projectPath),
         content,
       }),
-      XP.toXodball,
+      XP.toSolderball,
       Promise.resolve.bind(Promise)
     )(project);
   }
@@ -208,8 +208,11 @@ export const saveProjectAsXodball = def(
 export const saveProject = def(
   'saveProject :: Path -> [AnyPatchChange] -> Project -> Promise', // Promise Path Error
   (projectPath, changes, project) => {
-    if (/(.xodball)$/.test(projectPath)) {
-      return saveProjectAsXodball(projectPath, project);
+    // Accepts either extension as an explicit request to write a single-
+    // file bundle -- the output keeps whatever extension the caller
+    // asked for, this only decides bundle-mode vs multi-file-dir mode.
+    if (/\.(solderball|xodball)$/.test(projectPath)) {
+      return saveProjectAsSolderball(projectPath, project);
     }
 
     if (!doesDirectoryExist(projectPath)) {

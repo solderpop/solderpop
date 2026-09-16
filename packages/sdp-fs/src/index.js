@@ -5,7 +5,7 @@ export { arrangeByFiles, fsSafeName } from './unpack.js';
 export {
   saveAll,
   saveArrangedFiles,
-  saveProjectAsXodball,
+  saveProjectAsSolderball,
   saveProjectEntirely,
   saveLibraryEntirely,
   saveAllLibrariesEntirely,

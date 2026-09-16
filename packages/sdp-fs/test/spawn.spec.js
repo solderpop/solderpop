@@ -26,7 +26,7 @@ describe('Spawn', () => {
     ).then(() => {
       assert.ok(doesDirectoryExist(fixture('./new-workspace/welcome-to-xod')));
       fs.readdir(fixture('./new-workspace/welcome-to-xod'), (err, files) => {
-        assert.includeMembers(files, ['project.xod', 'main', 'qux']);
+        assert.includeMembers(files, ['project.sdp', 'main', 'qux']);
       });
     });
   });

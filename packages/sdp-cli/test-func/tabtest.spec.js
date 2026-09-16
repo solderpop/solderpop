@@ -115,7 +115,7 @@ const its = (wd, tabtestOutDir) => {
             'xod',
             'bits',
             'bcd-to-dec',
-            'patch.xodp'
+            'patch.sdpp'
           ),
         ],
         { root }

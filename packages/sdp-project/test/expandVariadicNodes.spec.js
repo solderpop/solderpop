@@ -16,7 +16,7 @@ const calculateNodeIdForStructuralComparison = (node) => {
 
 describe('expandVariadicNodes', () => {
   it('expands a simple variadic patch', () => {
-    const project = H.loadXodball('./fixtures/expanding.xodball');
+    const project = H.loadSolderball('./fixtures/expanding.solderball');
     const expandedProject = XP.expandVariadicNodes('@/main', project);
 
     assert.deepEqual(
@@ -25,7 +25,9 @@ describe('expandVariadicNodes', () => {
       'expanded patch should not change'
     );
 
-    const expected = H.loadXodball('./fixtures/expanding.expected.xodball');
+    const expected = H.loadSolderball(
+      './fixtures/expanding.expected.solderball'
+    );
 
     assert.sameMembers(
       XP.listPatchPaths(expandedProject),

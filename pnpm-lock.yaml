@@ -162,6 +162,9 @@ importers:
       babel-jest:
         specifier: ^24.9.0
         version: 24.9.0(@babel/core@8.0.1)(supports-color@8.1.1)
+      jest:
+        specifier: ^24.5.0
+        version: 24.9.0(supports-color@8.1.1)
       rescript:
         specifier: ^12.3.0
         version: 12.3.1
@@ -1088,8 +1091,8 @@ importers:
   packages/sdp-patch-search:
     dependencies:
       fuse.js:
-        specifier: ^3.0.5
-        version: 3.6.1
+        specifier: 3.0.5
+        version: 3.0.5
       ramda:
         specifier: ^0.24.1
         version: 0.24.1
@@ -1272,6 +1275,9 @@ importers:
       babel-jest:
         specifier: ^24.9.0
         version: 24.9.0(@babel/core@8.0.1)(supports-color@8.1.1)
+      jest:
+        specifier: ^24.5.0
+        version: 24.9.0(supports-color@8.1.1)
       ramda:
         specifier: ^0.24.1
         version: 0.24.1
@@ -7055,6 +7061,9 @@ packages:
 
   functions-have-names@1.2.3:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
+
+  fuse.js@3.0.5:
+    resolution: {integrity: sha512-uvKInlnrHrLzsRnjKAJq9K0q1prdKMjV6wWP1Ju2Yizl1vbVa92tJzfOfDMayqIPnf6i9WoAMOpmFqTZz3tSZA==}
 
   fuse.js@3.6.1:
     resolution: {integrity: sha512-hT9yh/tiinkmirKrlv4KWOjztdoZo1mx9Qh4KvWqC7isoXwdUY3PNWUxceF4/qO9R6riA2C29jdTOeQOIROjgw==}
@@ -21004,6 +21013,8 @@ snapshots:
       is-document.all: 1.0.0
 
   functions-have-names@1.2.3: {}
+
+  fuse.js@3.0.5: {}
 
   fuse.js@3.6.1: {}
 

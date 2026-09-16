@@ -135,8 +135,8 @@ CompileCommand.examples = [
     '$ sdpc compile -b arduino:avr:uno\n',
   // 'Compile the current project with `main` patch as entry point, use cloud compilation\n' +
   //   '$ sdpc compile -b arduino:avr:uno --cloud main\n',
-  'Compile the patch `main` from the xodball project and save binaries in `bin/uno.hex`\n' +
-    '$ sdpc compile -b arduino:arv:uno foo.xodball main -o bin/uno.hex',
+  'Compile the patch `main` from the solderball project and save binaries in `bin/uno.hex`\n' +
+    '$ sdpc compile -b arduino:arv:uno foo.solderball main -o bin/uno.hex',
 ];
 
 CompileCommand.strict = false;

@@ -14,10 +14,10 @@ const { assert } = chai;
 
 describe('Optional fields utils', () => {
   const omittedOptionals = loadJSON(
-    './fixtures/with-omitted-optional-fields.xodball'
+    './fixtures/with-omitted-optional-fields.solderball'
   );
   const emptyOptionals = loadJSON(
-    './fixtures/with-empty-optional-fields.xodball'
+    './fixtures/with-empty-optional-fields.solderball'
   );
 
   describe('addMissingOptionalProjectFields', () => {

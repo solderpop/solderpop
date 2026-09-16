@@ -27,40 +27,41 @@ import { Project, def } from './types.js';
 
 const { Either } = RamdaFantasy;
 
-export const fromXodballData = def(
-  'fromXodballData :: Object -> Either Error Project',
+export const fromSolderballData = def(
+  'fromSolderballData :: Object -> Either Error Project',
   R.compose(
     R.map(injectProjectTypeHints),
-    foldEither(() => fail('INVALID_XODBALL_FORMAT', {}), Either.of),
+    foldEither(() => fail('INVALID_SOLDERBALL_FORMAT', {}), Either.of),
     validateSanctuaryType(Project),
-    // Type hints should never be present in on-disk data (toXodball always
-    // strips them before writing), but a file resaved by older code -- or
-    // hand-edited -- can carry stale ones. sanctuary-def trusts an existing
-    // `@@type` tag rather than re-validating structurally, so a stale tag
-    // (e.g. from before the xod-project -> sdp-project rename) fails
-    // validation outright instead of just being ignored. Stripping here
-    // mirrors the same protection sdp-fs's patch-file loader already has.
+    // Type hints should never be present in on-disk data (toSolderball
+    // always strips them before writing), but a file resaved by older
+    // code -- or hand-edited -- can carry stale ones. sanctuary-def
+    // trusts an existing `@@type` tag rather than re-validating
+    // structurally, so a stale tag (e.g. from before the xod-project ->
+    // sdp-project rename) fails validation outright instead of just
+    // being ignored. Stripping here mirrors the same protection sdp-fs's
+    // patch-file loader already has.
     omitTypeHints,
     migrateProjectDimensionsToSlots,
     addMissingOptionalProjectFields
   )
 );
 
-export const fromXodballDataUnsafe = def(
-  'fromXodballDataUnsafe :: Object -> Project',
-  R.compose(explodeEither, fromXodballData)
+export const fromSolderballDataUnsafe = def(
+  'fromSolderballDataUnsafe :: Object -> Project',
+  R.compose(explodeEither, fromSolderballData)
 );
 
-export const fromXodball = def(
-  'fromXodball :: String -> Either Error Project',
+export const fromSolderball = def(
+  'fromSolderball :: String -> Either Error Project',
   (jsonString) =>
     R.tryCatch(R.pipe(JSON.parse, Either.of), (input) =>
       fail('NOT_A_JSON', { input })
-    )(jsonString).chain(fromXodballData)
+    )(jsonString).chain(fromSolderballData)
 );
 
-export const toXodball = def(
-  'toXodball :: Project -> String',
+export const toSolderball = def(
+  'toSolderball :: Project -> String',
   R.compose(
     (p) => JSON.stringify(p, null, 2),
     R.evolve({ patches: R.map(addPositionAndSizeUnitsToPatchEntities) }),

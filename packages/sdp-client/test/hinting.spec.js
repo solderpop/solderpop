@@ -6,7 +6,7 @@ import thunkModule from 'redux-thunk';
 import { createStore, applyMiddleware } from 'redux';
 import * as XP from 'sdp-project';
 
-import { loadXodball } from 'sdp-project/test/helpers.js';
+import { loadSolderball } from 'sdp-project/test/helpers.js';
 
 import initialState from '../src/core/state.js';
 import generateReducers from '../src/core/reducer.js';
@@ -135,8 +135,8 @@ describe('Hinting', () => {
     });
 
     it('validates all patches on open a new project', () => {
-      // Path to xodball resolves from `sdp-project/test`
-      const proj = loadXodball('./fixtures/broken-project.xodball');
+      // Path to solderball resolves from `sdp-project/test`
+      const proj = loadSolderball('./fixtures/broken-project.solderball');
       store.dispatch(openProject(proj));
       const project = getProject(store.getState());
       assertPolicyEquals(POLICY.OVERWRITE, dispatchedActions[1]);
@@ -183,7 +183,7 @@ describe('Hinting', () => {
 
     describe('node property update', () => {
       beforeEach(() => {
-        const proj = loadXodball('./fixtures/blinking.xodball');
+        const proj = loadSolderball('./fixtures/blinking.solderball');
         store.dispatch(openProject(proj));
         store.dispatch(switchPatchUnsafe('@/main'));
         dispatchedActions = []; // clear actions history
@@ -232,7 +232,7 @@ describe('Hinting', () => {
 
     describe('move nodes', () => {
       beforeEach(() => {
-        const proj = loadXodball('./fixtures/variadics.xodball');
+        const proj = loadSolderball('./fixtures/variadics.solderball');
         store.dispatch(openProject(proj));
         dispatchedActions = []; // clear actions history
       });
@@ -331,10 +331,10 @@ describe('Hinting', () => {
     });
 
     it('updates all hinting branches on load project with errors', () => {
-      const proj = loadXodball(
+      const proj = loadSolderball(
         path.resolve(
           __dirname,
-          './fixtures/broken-project-with-custom-types.xodball'
+          './fixtures/broken-project-with-custom-types.solderball'
         )
       );
       store.dispatch(openProject(proj));

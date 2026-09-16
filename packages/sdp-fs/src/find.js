@@ -1,9 +1,15 @@
 import R from 'ramda';
 import { statSync } from 'fs';
-import { resolve, dirname } from 'path';
+import { resolve, dirname, basename } from 'path';
 import { rejectWithCode } from 'sdp-func-tools';
 
-import { isBasename, isExtname, isDirectory } from './utils.js';
+import {
+  isDirectory,
+  isProjectBasename,
+  isPatchBasename,
+  isSolderballPath,
+} from './utils.js';
+import { PROJECT_FILENAME, LEGACY_PROJECT_FILENAMES } from './constants.js';
 import * as ERROR_CODES from './errorCodes.js';
 
 function getParentDirectories(path) {
@@ -33,12 +39,13 @@ export function isWorkspaceDir(path) {
 }
 
 function isProjectDir(path) {
-  try {
-    const projectXod = resolve(process.cwd(), path, 'project.xod');
-    return statSync(projectXod).isFile();
-  } catch (error) {
-    return false;
-  }
+  return [PROJECT_FILENAME, ...LEGACY_PROJECT_FILENAMES].some((filename) => {
+    try {
+      return statSync(resolve(process.cwd(), path, filename)).isFile();
+    } catch (error) {
+      return false;
+    }
+  });
 }
 
 export function findClosestWorkspaceDir(path) {
@@ -59,7 +66,7 @@ export function findClosestProjectDir(path) {
     if (closestProjectDir) return resolve$(closestProjectDir);
     return reject(
       new Error(
-        `could not find project directory around "${path}". Project directory must contain "project.xod" file.`
+        `could not find project directory around "${path}". Project directory must contain a "${PROJECT_FILENAME}" file.`
       )
     );
   });
@@ -68,15 +75,18 @@ export function findClosestProjectDir(path) {
 // :: Path -> Promise Path Error
 export const getPathToXodProject = R.composeP(
   R.cond([
-    [isBasename('project.xod'), dirname],
-    [isExtname('.xodball'), R.identity],
-    [R.either(isBasename('patch.xodp'), isDirectory), findClosestProjectDir],
+    [(filePath) => isProjectBasename(basename(filePath)), dirname],
+    [isSolderballPath, R.identity],
+    [
+      R.either((filePath) => isPatchBasename(basename(filePath)), isDirectory),
+      findClosestProjectDir,
+    ],
     [
       R.T,
       (filePath) =>
         rejectWithCode(
           ERROR_CODES.TRIED_TO_OPEN_NOT_XOD_FILE,
-          new Error(`Tried to open not a xod file: ${filePath}`)
+          new Error(`Tried to open not a sdp file: ${filePath}`)
         ),
     ],
   ]),
