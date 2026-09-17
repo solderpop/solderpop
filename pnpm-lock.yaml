@@ -168,10 +168,10 @@ importers:
         version: 12.3.1
       babel-jest:
         specifier: ^24.9.0
-        version: 24.9.0(@babel/core@8.0.1)(supports-color@8.1.1)
+        version: 24.9.0(@babel/core@8.0.1)(supports-color@9.4.0)
       jest:
         specifier: ^24.5.0
-        version: 24.9.0(supports-color@8.1.1)
+        version: 24.9.0(supports-color@9.4.0)
       rescript:
         specifier: ^12.3.0
         version: 12.3.1
@@ -1302,10 +1302,10 @@ importers:
         version: 12.3.1
       babel-jest:
         specifier: ^24.9.0
-        version: 24.9.0(@babel/core@8.0.1)(supports-color@8.1.1)
+        version: 24.9.0(@babel/core@8.0.1)(supports-color@9.4.0)
       jest:
         specifier: ^24.5.0
-        version: 24.9.0(supports-color@8.1.1)
+        version: 24.9.0(supports-color@9.4.0)
       ramda:
         specifier: ^0.24.1
         version: 0.24.1
@@ -7009,10 +7009,6 @@ packages:
   fuse.js@3.0.5:
     resolution: {integrity: sha512-uvKInlnrHrLzsRnjKAJq9K0q1prdKMjV6wWP1Ju2Yizl1vbVa92tJzfOfDMayqIPnf6i9WoAMOpmFqTZz3tSZA==}
 
-  fuse.js@3.6.1:
-    resolution: {integrity: sha512-hT9yh/tiinkmirKrlv4KWOjztdoZo1mx9Qh4KvWqC7isoXwdUY3PNWUxceF4/qO9R6riA2C29jdTOeQOIROjgw==}
-    engines: {node: '>=6'}
-
   gaxios@1.8.4:
     resolution: {integrity: sha512-BoENMnu1Gav18HcpV9IleMPZ9exM+AvUjrAOV4Mzs/vfz2Lu/ABv451iEXByKiMPn2M140uul1txXCg83sAENw==}
 
@@ -12162,7 +12158,7 @@ snapshots:
       '@babel/types': 7.29.8
       '@jridgewell/remapping': 2.3.5
       convert-source-map: 2.0.0
-      debug: 4.4.3(supports-color@8.1.1)
+      debug: 4.4.3(supports-color@9.4.0)
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -14274,7 +14270,7 @@ snapshots:
   '@jest/core@24.9.0(supports-color@9.4.0)':
     dependencies:
       '@jest/console': 24.9.0
-      '@jest/reporters': 24.9.0(supports-color@8.1.1)
+      '@jest/reporters': 24.9.0(supports-color@9.4.0)
       '@jest/test-result': 24.9.0
       '@jest/transform': 24.9.0(supports-color@9.4.0)
       '@jest/types': 24.9.0
@@ -14315,14 +14311,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@jest/fake-timers@24.9.0(supports-color@8.1.1)':
-    dependencies:
-      '@jest/types': 24.9.0
-      jest-message-util: 24.9.0(supports-color@8.1.1)
-      jest-mock: 24.9.0
-    transitivePeerDependencies:
-      - supports-color
-
   '@jest/fake-timers@24.9.0(supports-color@9.4.0)':
     dependencies:
       '@jest/types': 24.9.0
@@ -14331,7 +14319,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@jest/reporters@24.9.0(supports-color@8.1.1)':
+  '@jest/reporters@24.9.0(supports-color@9.4.0)':
     dependencies:
       '@jest/environment': 24.9.0(supports-color@9.4.0)
       '@jest/test-result': 24.9.0
@@ -14343,7 +14331,7 @@ snapshots:
       istanbul-lib-coverage: 2.0.5
       istanbul-lib-instrument: 3.3.0(supports-color@9.4.0)
       istanbul-lib-report: 2.0.8
-      istanbul-lib-source-maps: 3.0.6(supports-color@8.1.1)
+      istanbul-lib-source-maps: 3.0.6(supports-color@9.4.0)
       istanbul-reports: 2.2.7
       jest-haste-map: 24.9.0(supports-color@9.4.0)
       jest-resolve: 24.9.0
@@ -14381,27 +14369,6 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
-
-  '@jest/transform@24.9.0(supports-color@8.1.1)':
-    dependencies:
-      '@babel/core': 7.29.7(supports-color@8.1.1)
-      '@jest/types': 24.9.0
-      babel-plugin-istanbul: 5.2.0(supports-color@8.1.1)
-      chalk: 2.4.2
-      convert-source-map: 1.9.0
-      fast-json-stable-stringify: 2.1.0
-      graceful-fs: 4.2.11
-      jest-haste-map: 24.9.0(supports-color@8.1.1)
-      jest-regex-util: 24.9.0
-      jest-util: 24.9.0(supports-color@8.1.1)
-      micromatch: 3.1.10(supports-color@8.1.1)
-      pirates: 4.0.7
-      realpath-native: 1.1.0
-      slash: 2.0.0
-      source-map: 0.6.1
-      write-file-atomic: 2.4.1
-    transitivePeerDependencies:
-      - supports-color
 
   '@jest/transform@24.9.0(supports-color@9.4.0)':
     dependencies:
@@ -16476,13 +16443,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  anymatch@2.0.0(supports-color@8.1.1):
-    dependencies:
-      micromatch: 3.1.10(supports-color@8.1.1)
-      normalize-path: 2.1.1
-    transitivePeerDependencies:
-      - supports-color
-
   anymatch@2.0.0(supports-color@9.4.0):
     dependencies:
       micromatch: 3.1.10(supports-color@9.4.0)
@@ -16825,19 +16785,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  babel-jest@24.9.0(@babel/core@8.0.1)(supports-color@8.1.1):
-    dependencies:
-      '@babel/core': 8.0.1
-      '@jest/transform': 24.9.0(supports-color@8.1.1)
-      '@jest/types': 24.9.0
-      '@types/babel__core': 7.20.5
-      babel-plugin-istanbul: 5.2.0(supports-color@8.1.1)
-      babel-preset-jest: 24.9.0(@babel/core@8.0.1)
-      chalk: 2.4.2
-      slash: 2.0.0
-    transitivePeerDependencies:
-      - supports-color
-
   babel-jest@24.9.0(@babel/core@8.0.1)(supports-color@9.4.0):
     dependencies:
       '@babel/core': 8.0.1
@@ -16861,15 +16808,6 @@ snapshots:
   babel-plugin-inline-import@3.0.0:
     dependencies:
       require-resolve: 0.0.2
-
-  babel-plugin-istanbul@5.2.0(supports-color@8.1.1):
-    dependencies:
-      '@babel/helper-plugin-utils': 7.29.7
-      find-up: 3.0.0
-      istanbul-lib-instrument: 3.3.0(supports-color@8.1.1)
-      test-exclude: 5.2.3
-    transitivePeerDependencies:
-      - supports-color
 
   babel-plugin-istanbul@5.2.0(supports-color@9.4.0):
     dependencies:
@@ -19400,8 +19338,6 @@ snapshots:
 
   fuse.js@3.0.5: {}
 
-  fuse.js@3.6.1: {}
-
   gaxios@1.8.4(encoding@0.1.13)(supports-color@8.1.1):
     dependencies:
       abort-controller: 3.0.0
@@ -20388,18 +20324,6 @@ snapshots:
 
   istanbul-lib-coverage@2.0.5: {}
 
-  istanbul-lib-instrument@3.3.0(supports-color@8.1.1):
-    dependencies:
-      '@babel/generator': 7.29.8
-      '@babel/parser': 7.29.8
-      '@babel/template': 7.29.7
-      '@babel/traverse': 7.29.8(supports-color@8.1.1)
-      '@babel/types': 7.29.8
-      istanbul-lib-coverage: 2.0.5
-      semver: 6.3.1
-    transitivePeerDependencies:
-      - supports-color
-
   istanbul-lib-instrument@3.3.0(supports-color@9.4.0):
     dependencies:
       '@babel/generator': 7.29.8
@@ -20418,9 +20342,9 @@ snapshots:
       make-dir: 2.1.0
       supports-color: 6.1.0
 
-  istanbul-lib-source-maps@3.0.6(supports-color@8.1.1):
+  istanbul-lib-source-maps@3.0.6(supports-color@9.4.0):
     dependencies:
-      debug: 4.4.3(supports-color@8.1.1)
+      debug: 4.4.3(supports-color@9.4.0)
       istanbul-lib-coverage: 2.0.5
       make-dir: 2.1.0
       rimraf: 2.7.1
@@ -20549,24 +20473,6 @@ snapshots:
 
   jest-get-type@24.9.0: {}
 
-  jest-haste-map@24.9.0(supports-color@8.1.1):
-    dependencies:
-      '@jest/types': 24.9.0
-      anymatch: 2.0.0(supports-color@8.1.1)
-      fb-watchman: 2.0.2
-      graceful-fs: 4.2.11
-      invariant: 2.2.4
-      jest-serializer: 24.9.0
-      jest-util: 24.9.0(supports-color@8.1.1)
-      jest-worker: 24.9.0
-      micromatch: 3.1.10(supports-color@8.1.1)
-      sane: 4.1.0(supports-color@8.1.1)
-      walker: 1.0.8
-    optionalDependencies:
-      fsevents: 1.2.13
-    transitivePeerDependencies:
-      - supports-color
-
   jest-haste-map@24.9.0(supports-color@9.4.0):
     dependencies:
       '@jest/types': 24.9.0
@@ -20619,19 +20525,6 @@ snapshots:
       jest-diff: 24.9.0
       jest-get-type: 24.9.0
       pretty-format: 24.9.0
-
-  jest-message-util@24.9.0(supports-color@8.1.1):
-    dependencies:
-      '@babel/code-frame': 7.29.7
-      '@jest/test-result': 24.9.0
-      '@jest/types': 24.9.0
-      '@types/stack-utils': 1.0.1
-      chalk: 2.4.2
-      micromatch: 3.1.10(supports-color@8.1.1)
-      slash: 2.0.0
-      stack-utils: 1.0.5
-    transitivePeerDependencies:
-      - supports-color
 
   jest-message-util@24.9.0(supports-color@9.4.0):
     dependencies:
@@ -20745,23 +20638,6 @@ snapshots:
       natural-compare: 1.4.0
       pretty-format: 24.9.0
       semver: 6.3.1
-    transitivePeerDependencies:
-      - supports-color
-
-  jest-util@24.9.0(supports-color@8.1.1):
-    dependencies:
-      '@jest/console': 24.9.0
-      '@jest/fake-timers': 24.9.0(supports-color@8.1.1)
-      '@jest/source-map': 24.9.0
-      '@jest/test-result': 24.9.0
-      '@jest/types': 24.9.0
-      callsites: 3.1.0
-      chalk: 2.4.2
-      graceful-fs: 4.2.11
-      is-ci: 2.0.0
-      mkdirp: 0.5.6
-      slash: 2.0.0
-      source-map: 0.6.1
     transitivePeerDependencies:
       - supports-color
 
@@ -23796,20 +23672,6 @@ snapshots:
   sanctuary-type-identifiers@1.0.0: {}
 
   sanctuary-type-identifiers@2.0.1: {}
-
-  sane@4.1.0(supports-color@8.1.1):
-    dependencies:
-      '@cnakazawa/watch': 1.0.4
-      anymatch: 2.0.0(supports-color@8.1.1)
-      capture-exit: 2.0.0
-      exec-sh: 0.3.6
-      execa: 1.0.0
-      fb-watchman: 2.0.2
-      micromatch: 3.1.10(supports-color@8.1.1)
-      minimist: 1.2.8
-      walker: 1.0.8
-    transitivePeerDependencies:
-      - supports-color
 
   sane@4.1.0(supports-color@9.4.0):
     dependencies:
