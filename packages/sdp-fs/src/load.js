@@ -6,7 +6,7 @@ import * as XF from 'sdp-func-tools';
 import * as XP from 'sdp-project';
 
 import pack from './pack.js';
-import { getPathToXodProject } from './find.js';
+import { getPathToSdpProject } from './find.js';
 import { loadLibs } from './loadLibs.js';
 import { readDir, readJSON } from './read.js';
 import * as ERROR_CODES from './errorCodes.js';
@@ -255,10 +255,10 @@ export const loadProjectFromSolderball = R.curry(
 );
 
 /**
- * Loads XOD Project if correct path providen.
+ * Loads a SolderPop Project if correct path providen.
  *
  * It accepts list of paths to workspaces (to load libs) and
- * path to one of XOD files or XOD Project directory:
+ * path to one of SDP files or SDP Project directory:
  * - project.sdp (or legacy project.xod)
  * - patch.sdpp (or legacy patch.xodp)
  * - *.solderball (or legacy *.xodball)
@@ -276,7 +276,7 @@ export const loadProject = R.uncurryN(2, (workspaceDirs) =>
       loadProjectFromSolderball(workspaceDirs),
       loadProjectFromDir(workspaceDirs)
     ),
-    getPathToXodProject
+    getPathToSdpProject
   )
 );
 

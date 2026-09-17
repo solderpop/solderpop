@@ -31,8 +31,8 @@ function getParentDirectories(path) {
 
 export function isWorkspaceDir(path) {
   try {
-    const xodworkspace = resolve(process.cwd(), path, '.xodworkspace');
-    return statSync(xodworkspace).isFile();
+    const sdpWorkspace = resolve(process.cwd(), path, '.sdp-workspace');
+    return statSync(sdpWorkspace).isFile();
   } catch (error) {
     return false;
   }
@@ -54,7 +54,7 @@ export function findClosestWorkspaceDir(path) {
     if (closestWorkspaceDir) return resolve$(closestWorkspaceDir);
     return reject(
       new Error(
-        `could not find workspace directory around "${path}". Workspace directory must contain ".xodworkspace" file.`
+        `could not find workspace directory around "${path}". Workspace directory must contain ".sdp-workspace" file.`
       )
     );
   });
@@ -73,7 +73,7 @@ export function findClosestProjectDir(path) {
 }
 
 // :: Path -> Promise Path Error
-export const getPathToXodProject = R.composeP(
+export const getPathToSdpProject = R.composeP(
   R.cond([
     [(filePath) => isProjectBasename(basename(filePath)), dirname],
     [isSolderballPath, R.identity],
@@ -85,7 +85,7 @@ export const getPathToXodProject = R.composeP(
       R.T,
       (filePath) =>
         rejectWithCode(
-          ERROR_CODES.TRIED_TO_OPEN_NOT_XOD_FILE,
+          ERROR_CODES.TRIED_TO_OPEN_NOT_SDP_FILE,
           new Error(`Tried to open not a sdp file: ${filePath}`)
         ),
     ],

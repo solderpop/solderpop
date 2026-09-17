@@ -9,7 +9,7 @@ export const version = Flags.version({
 });
 
 export const api = Flags.string({
-  description: 'XOD API hostname',
+  description: 'SDP API hostname',
   env: 'XOD_API',
   default: 'solderpop.io',
   helpValue: 'hostname',
@@ -36,7 +36,7 @@ export const onBehalf = Flags.string({
 });
 
 export const password = Flags.string({
-  description: 'XOD API password',
+  description: 'SDP API password',
   env: 'XOD_PASSWORD',
   helpValue: 'password',
 });
@@ -48,7 +48,7 @@ export const quiet = Flags.boolean({
 });
 
 export const username = Flags.string({
-  description: 'XOD API username',
+  description: 'SDP API username',
   env: 'XOD_USERNAME',
   helpValue: 'username',
 });

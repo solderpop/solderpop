@@ -1,8 +1,8 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 
 import '../src/core/styles/main.scss';
-import PinLabel from '../src/project/components/PinLabel.jsx';
+import Pin from '../src/project/components/Pin.jsx';
 // because filters are defined there
 import PatchSVG from '../src/project/components/PatchSVG.jsx';
 
@@ -10,16 +10,26 @@ const pinCenter = { x: 70, y: 70 };
 
 const baseProps = {
   keyName: "my pin's keyname",
-  label: 'PIN',
+  pinLabel: 'PIN',
+  type: 'string',
   direction: 'input',
   position: pinCenter,
+  onMouseUp: action('mouseUp'),
+  onMouseDown: action('mouseDown'),
+  isSelected: false,
+  isConnected: false,
 };
 
-storiesOf('PinLabel', module)
-  .addDecorator((story) => (
-    <PatchSVG>
-      <g>
-        <rect width={pinCenter.x * 2} height={pinCenter.y * 2} fill="#676767" />
+export default {
+  title: 'Pin',
+  decorators: [
+    (Story) => (
+      <PatchSVG>
+        <rect
+          width={pinCenter.x * 2}
+          height={pinCenter.y * 2}
+          fill="#676767"
+        />
         <line
           x1={pinCenter.x}
           y1="0"
@@ -42,9 +52,12 @@ storiesOf('PinLabel', module)
             position passed to pin
           </tspan>
         </text>
-        {story()}
-      </g>
-    </PatchSVG>
-  ))
-  .add('input', () => <PinLabel {...baseProps} direction="input" />)
-  .add('output', () => <PinLabel {...baseProps} direction="output" />);
+        <Story />
+      </PatchSVG>
+    ),
+  ],
+};
+
+export const Default = () => <Pin {...baseProps} />;
+export const Selected = () => <Pin {...baseProps} isSelected />;
+export const Connected = () => <Pin {...baseProps} isConnected />;

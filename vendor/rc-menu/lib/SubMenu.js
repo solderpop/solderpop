@@ -10,10 +10,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = require('react-dom');
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
 var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
@@ -121,7 +117,10 @@ var SubMenu = (0, _createReactClass2['default'])({
       if (!_this.subMenuTitle || !_this.menuInstance) {
         return;
       }
-      var popupMenu = _reactDom2['default'].findDOMNode(_this.menuInstance);
+      var popupMenu = _this.menuInstance.rootDomNode;
+      if (!popupMenu) {
+        return;
+      }
       if (popupMenu.offsetWidth >= _this.subMenuTitle.offsetWidth) {
         return;
       }
@@ -453,6 +452,7 @@ var SubMenu = (0, _createReactClass2['default'])({
           prefixCls: prefixCls,
           popupClassName: prefixCls + '-popup ' + popupClassName,
           getPopupContainer: getPopupContainer,
+          getTriggerDOMNode: function getTriggerDOMNode(node) { return node; },
           builtinPlacements: (0, _extends3['default'])({}, _placements2['default'], this.context.popupPlacements),
           popupPlacement: popupPlacement,
           popupVisible: isOpen,

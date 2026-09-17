@@ -103,7 +103,7 @@ export const searchLibraries = R.curry((swaggerUrl, libQuery) => {
 export const fetchLibrary = R.curry((swaggerUrl, libQuery) => {
   const fetchFn = (swagger, params) => {
     const tryFn = () =>
-      swagger.apis.Version.getLibVersionXodball({
+      swagger.apis.Version.getLibVersionSolderball({
         libname: params.libname,
         orgname: params.owner,
         semver_or_latest: params.version,

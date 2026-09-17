@@ -1,6 +1,5 @@
 import _extends from 'babel-runtime/helpers/extends';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import Trigger from 'rc-trigger';
@@ -85,7 +84,10 @@ var SubMenu = createReactClass({
       if (!_this.subMenuTitle || !_this.menuInstance) {
         return;
       }
-      var popupMenu = ReactDOM.findDOMNode(_this.menuInstance);
+      var popupMenu = _this.menuInstance.rootDomNode;
+      if (!popupMenu) {
+        return;
+      }
       if (popupMenu.offsetWidth >= _this.subMenuTitle.offsetWidth) {
         return;
       }
@@ -417,6 +419,7 @@ var SubMenu = createReactClass({
           prefixCls: prefixCls,
           popupClassName: prefixCls + '-popup ' + popupClassName,
           getPopupContainer: getPopupContainer,
+          getTriggerDOMNode: function getTriggerDOMNode(node) { return node; },
           builtinPlacements: _extends({}, placements, this.context.popupPlacements),
           popupPlacement: popupPlacement,
           popupVisible: isOpen,

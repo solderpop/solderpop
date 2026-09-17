@@ -175,7 +175,7 @@ var MenuItem = (0, _createReactClass2['default'])({
     }
     return _react2['default'].createElement(
       'li',
-      (0, _extends3['default'])({}, attrs, mouseEvent, {
+      (0, _extends3['default'])({ ref: function (c) { this.rootDomNode = c; }.bind(this) }, attrs, mouseEvent, {
         style: style
       }),
       props.children

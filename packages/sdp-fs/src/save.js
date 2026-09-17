@@ -208,9 +208,6 @@ export const saveProjectAsSolderball = def(
 export const saveProject = def(
   'saveProject :: Path -> [AnyPatchChange] -> Project -> Promise', // Promise Path Error
   (projectPath, changes, project) => {
-    // Accepts either extension as an explicit request to write a single-
-    // file bundle -- the output keeps whatever extension the caller
-    // asked for, this only decides bundle-mode vs multi-file-dir mode.
     if (/\.(solderball|xodball)$/.test(projectPath)) {
       return saveProjectAsSolderball(projectPath, project);
     }

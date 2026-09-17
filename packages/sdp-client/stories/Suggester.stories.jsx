@@ -1,5 +1,4 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react';
 
 import { createPatchSearcher } from 'sdp-patch-search';
 
@@ -58,27 +57,32 @@ const indexData = [
   },
 ];
 
-storiesOf('Suggester', module)
-  .addDecorator((story) => (
-    <div
-      style={{
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        right: 0,
-        bottom: 0,
-        background: '#676767',
-      }}
-    >
-      {story()}
-    </div>
-  ))
-  .add('basic', () => (
-    <Suggester
-      searchPatches={createPatchSearcher()(indexData)}
-      onAddNode={(val) => {
-        // eslint-disable-next-line
-        alert(`Node "${val}" will be placed!`);
-      }}
-    />
-  ));
+export default {
+  title: 'Suggester',
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          right: 0,
+          bottom: 0,
+          background: '#676767',
+        }}
+      >
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+export const Basic = () => (
+  <Suggester
+    searchPatches={createPatchSearcher()(indexData)}
+    onAddNode={(val) => {
+      // eslint-disable-next-line
+      alert(`Node "${val}" will be placed!`);
+    }}
+  />
+);

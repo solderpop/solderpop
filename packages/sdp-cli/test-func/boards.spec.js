@@ -29,7 +29,7 @@ const its = (wd) => {
       { root }
     );
     assert.isOk(
-      await fs.pathExists(path.resolve(myWSPath, '.xodworkspace')),
+      await fs.pathExists(path.resolve(myWSPath, '.sdp-workspace')),
       'workspace should be created'
     );
     assert.include(stdout, 'Board Name', 'stdout must contain table');
@@ -50,7 +50,7 @@ const its = (wd) => {
         root,
       });
       assert.isOk(
-        await fs.pathExists(path.resolve(myWSPath, '.xodworkspace')),
+        await fs.pathExists(path.resolve(myWSPath, '.sdp-workspace')),
         'workspace should be created'
       );
       assert.notInclude(

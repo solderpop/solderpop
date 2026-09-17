@@ -9,7 +9,8 @@ var DOMWrap = createReactClass({
   propTypes: {
     tag: PropTypes.string,
     hiddenClassName: PropTypes.string,
-    visible: PropTypes.bool
+    visible: PropTypes.bool,
+    domRef: PropTypes.func
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -27,7 +28,9 @@ var DOMWrap = createReactClass({
     delete props.tag;
     delete props.hiddenClassName;
     delete props.visible;
-    return React.createElement(Tag, props);
+    var domRef = props.domRef;
+    delete props.domRef;
+    return React.createElement(Tag, _extends({ ref: domRef }, props));
   }
 });
 

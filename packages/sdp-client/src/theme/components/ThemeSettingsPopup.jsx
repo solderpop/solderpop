@@ -182,15 +182,15 @@ class ThemeSettingsPopup extends React.PureComponent {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.isVisible && nextProps.isVisible) {
+  componentDidUpdate(prevProps) {
+    if (!prevProps.isVisible && this.props.isVisible) {
       this.setState({
         position: null,
         hexDrafts: {},
         showColorCustomization: false,
       });
     }
-    if (!R.equals(this.props.currentTheme, nextProps.currentTheme)) {
+    if (!R.equals(prevProps.currentTheme, this.props.currentTheme)) {
       this.setState({ hexDrafts: {} });
     }
   }

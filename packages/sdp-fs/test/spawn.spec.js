@@ -14,7 +14,7 @@ describe('Spawn', () => {
     after(() => fs.remove(fixture('./new-workspace')));
     return spawnWorkspaceFile(fixture('./new-workspace')).then((p) => {
       assert.equal(p, fixture('./new-workspace'));
-      assert.ok(doesFileExist(fixture('./new-workspace/.xodworkspace')));
+      assert.ok(doesFileExist(fixture('./new-workspace/.sdp-workspace')));
     });
   });
 

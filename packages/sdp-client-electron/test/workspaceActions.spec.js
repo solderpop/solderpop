@@ -269,7 +269,7 @@ describe('IDE', () => {
   });
 
   describe('when User confirms creating of new workspace', () => {
-    it('if directory is empty or does not exist, spawns .xodworkspace, stdlib, default project, save path in settings, and requests to open default project', () =>
+    it('if directory is empty or does not exist, spawns .sdp-workspace, stdlib, default project, save path in settings, and requests to open default project', () =>
       WA.onCreateWorkspace(
         (eventName, updatedWorspacePath) => {
           assert.equal(eventName, EVENTS.UPDATE_WORKSPACE);

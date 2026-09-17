@@ -151,7 +151,7 @@ var MenuItem = createReactClass({
     }
     return React.createElement(
       'li',
-      _extends({}, attrs, mouseEvent, {
+      _extends({ ref: function ref(c) { this.rootDomNode = c; }.bind(this) }, attrs, mouseEvent, {
         style: style
       }),
       props.children

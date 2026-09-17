@@ -1,5 +1,4 @@
 import React from 'react';
-import { HotKeys } from 'react-hotkeys';
 
 import PatchSVG from '../../../../project/components/PatchSVG.jsx';
 import * as Layers from '../../../../project/components/layers/index.js';
@@ -24,7 +23,7 @@ const acceptingDraggedPatchMode = {
       : [];
 
     return (
-      <HotKeys className="PatchWrapper" handlers={{}}>
+      <div className="PatchWrapper" tabIndex={-1}>
         <PatchSVG>
           <Layers.Background
             width={api.props.size.width}
@@ -61,7 +60,7 @@ const acceptingDraggedPatchMode = {
             <Layers.SnappingPreview previews={snappedPreviews} />
           </g>
         </PatchSVG>
-      </HotKeys>
+      </div>
     );
   },
 };

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Icon from '../../core/components/Icon.jsx';
-import { HotKeys } from 'react-hotkeys';
+import HotkeysScope from '../../utils/components/HotkeysScope.jsx';
 import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu';
 
 import $ from 'sanctuary-def';
@@ -118,7 +118,9 @@ class ProjectBrowser extends React.Component {
       [COMMAND.ADD_PATCH]: this.props.actions.requestCreatePatch,
       [COMMAND.RENAME]: this.onRenameHotkey,
       [COMMAND.DELETE]: this.onDeleteHotkey,
-      [COMMAND.ESCAPE]: this.props.actions.removeSelection,
+      // `COMMAND.ESCAPE` doesn't exist (no such key on COMMAND) -- this
+      // never fired under react-hotkeys either, dropped rather than
+      // guessing which real command/key was intended.
     };
   }
 
@@ -331,7 +333,7 @@ class ProjectBrowser extends React.Component {
 
   render() {
     return (
-      <HotKeys
+      <HotkeysScope
         handlers={this.getHotkeyHandlers()}
         id="ProjectBrowser"
         className="ProjectBrowser"
@@ -375,7 +377,7 @@ class ProjectBrowser extends React.Component {
             Utility nodes
           </MenuItem>
         </ContextMenu>
-      </HotKeys>
+      </HotkeysScope>
     );
   }
 }

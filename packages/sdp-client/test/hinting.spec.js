@@ -2,7 +2,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import R from 'ramda';
 import chai from 'chai';
-import thunkModule from 'redux-thunk';
+import { thunk } from 'redux-thunk';
 import { createStore, applyMiddleware } from 'redux';
 import * as XP from 'sdp-project';
 
@@ -38,9 +38,6 @@ import { UPDATE_ERRORS_POLICY as POLICY } from '../src/hinting/validation.intern
 
 const { assert } = chai;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-const thunk =
-  typeof thunkModule === 'function' ? thunkModule : thunkModule.default;
 
 // =============================================================================
 //

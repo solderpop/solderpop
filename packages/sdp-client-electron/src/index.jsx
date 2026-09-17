@@ -1,6 +1,6 @@
 /* eslint-env browser */
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Root, initialState } from 'sdp-client';
 import App from './view/containers/App.jsx';
 
@@ -30,13 +30,12 @@ const extraMiddlewares = [
   tetheringInetMiddleware,
 ];
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
   <Root
     extraReducers={extraReducers}
     extraMiddlewares={extraMiddlewares}
     initialState={initialState} // TODO: Remove project and opened patch when possible
   >
     <App />
-  </Root>,
-  document.getElementById('root')
+  </Root>
 );

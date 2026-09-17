@@ -92,7 +92,7 @@ var Menu = (0, _createReactClass2['default'])({
       popupPlacements: this.props.popupPlacements
     };
   },
-  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps: function UNSAFE_componentWillReceiveProps(nextProps) {
     var props = {};
     if ('selectedKeys' in nextProps) {
       props.selectedKeys = nextProps.selectedKeys || [];

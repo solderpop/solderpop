@@ -1,10 +1,8 @@
 /* global browser */
 
-/* eslint-disable import/no-extraneous-dependencies */
 import puppeteer from 'puppeteer';
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
-/* eslint-enable import/no-extraneous-dependencies */
 
 import chai from 'chai';
 import R from 'ramda';
@@ -19,17 +17,15 @@ const globalVariables = R.pick(['browser', 'assert'], global);
 const startServer = () =>
   new Promise((resolve, reject) => {
     const compiler = webpack(config);
-    const server = new WebpackDevServer(compiler);
-    // Replace the next line with `compiler.hooks.done.tap('onDone', ...`
-    // after upgrading webpack to version >4
-    compiler.plugin('done', () => {
+    const server = new WebpackDevServer(
+      { port: PORT, host: 'localhost' },
+      compiler
+    );
+    compiler.hooks.done.tap('onDone', () => {
       resolve(server);
     });
-    server.listen(PORT, 'localhost', (err) => {
-      if (err) {
-        console.error(err); // eslint-disable-line no-console
-        reject(err);
-      }
+    server.start().catch((err) => {
+      reject(err);
     });
   });
 
@@ -46,9 +42,9 @@ before(async () => {
   });
 });
 
-after(() => {
-  browser.close();
-  global.server.close(() => {});
+after(async () => {
+  await browser.close();
+  await global.server.stop();
 
   global.browser = globalVariables.browser;
   global.assert = globalVariables.assert;

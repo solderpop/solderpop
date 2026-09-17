@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import $ from 'sanctuary-def';
 import { $Maybe, foldMaybe, noop } from 'sdp-func-tools';
 import Icon from '../../core/components/Icon.jsx';
-import { shouldUpdate } from 'recompose';
 
 import sanctuaryPropType from '../../utils/sanctuaryPropType.js';
 import Breadcrumbs from './Breadcrumbs.jsx';
@@ -12,13 +11,18 @@ import TooltipHOC from '../../tooltip/components/TooltipHOC.jsx';
 
 import { DEBUGGER_TAB_ID } from '../../editor/constants.js';
 
-function DebuggerTopPane(props) {
+function DebuggerTopPane({
+  currentTab,
+  isDebugSessionRunning = false,
+  isDebugSessionOutdated = false,
+  stopDebuggerSession = noop,
+}) {
   return foldMaybe(
     null,
     (tab) =>
-      tab.id === DEBUGGER_TAB_ID && props.isDebugSessionRunning ? (
+      tab.id === DEBUGGER_TAB_ID && isDebugSessionRunning ? (
         <Breadcrumbs>
-          {props.isDebugSessionOutdated ? (
+          {isDebugSessionOutdated ? (
             <TooltipHOC
               content={
                 <div>
@@ -43,13 +47,13 @@ function DebuggerTopPane(props) {
           ) : null}
           <button
             className="breadcrumbs-button Button Button--light"
-            onClick={props.stopDebuggerSession}
+            onClick={stopDebuggerSession}
           >
             <Icon name="stop" /> Stop
           </button>
         </Breadcrumbs>
       ) : null,
-    props.currentTab
+    currentTab
   );
 }
 
@@ -60,20 +64,12 @@ DebuggerTopPane.propTypes = {
   stopDebuggerSession: PropTypes.func,
 };
 
-DebuggerTopPane.defaultProps = {
-  isDebugSessionRunning: false,
-  isDebugSessionOutdated: false,
-  stopDebuggerSession: noop,
-};
-
-export default shouldUpdate(
-  R.compose(
-    R.not,
-    R.eqBy(
-      R.evolve({
-        currentTab: foldMaybe(null, R.identity),
-        stopDebuggerSession: () => null,
-      })
-    )
+export default React.memo(
+  DebuggerTopPane,
+  R.eqBy(
+    R.evolve({
+      currentTab: foldMaybe(null, R.identity),
+      stopDebuggerSession: () => null,
+    })
   )
-)(DebuggerTopPane);
+);

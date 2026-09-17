@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { SkyLightStateless } from 'react-skylight';
-import EventListener from 'react-event-listener';
 
 import { noop } from '../ramda.js';
 import { KEYCODE } from '../constants.js';
@@ -27,6 +26,14 @@ class PopupPrompt extends React.Component {
     this.shouldComponentUpdate = deepSCU.bind(this);
 
     this.isInputValid = this.isInputValid.bind(this);
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.onDocumentKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onDocumentKeyDown);
   }
 
   onCloseClicked() {
@@ -92,7 +99,6 @@ class PopupPrompt extends React.Component {
 
     return (
       <div className={wrapperClassNames}>
-        <EventListener target={document} onKeyDown={this.onDocumentKeyDown} />
         <SkyLightStateless
           isVisible={isVisible}
           title={title}

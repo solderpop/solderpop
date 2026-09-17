@@ -22,7 +22,7 @@ Try to narrow down your scenario to a minimal working/failing example. That is, 
 2.  Press that
 3.  Click here and there
 
-Attach the test program `.xodball` if it is not trivial to replicate. You’ll have to zip the file as GitHub does not accept file attachments with custom extensions.
+Attach the test program `.solderball` if it is not trivial to replicate. You’ll have to zip the file as GitHub does not accept file attachments with custom extensions.
 
 ### Expected behavior
 

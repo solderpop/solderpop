@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { SkyLightStateless } from 'react-skylight';
-import EventListener from 'react-event-listener';
 
 import { noop } from '../ramda.js';
 import { KEYCODE } from '../constants.js';
@@ -19,18 +18,21 @@ function PopupAlert({
   const wrapperClassNames = classNames('PopupAlert', className);
   const onCloseClicked = isClosable ? onClose : noop;
 
-  const onKeyDown = (event) => {
-    if (!isVisible) return;
+  useEffect(() => {
+    const onKeyDown = (event) => {
+      if (!isVisible) return;
 
-    const keycode = event.keycode || event.which;
-    if (keycode === KEYCODE.ESCAPE) {
-      onCloseClicked();
-    }
-  };
+      const keycode = event.keycode || event.which;
+      if (keycode === KEYCODE.ESCAPE) {
+        onCloseClicked();
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [isVisible, onCloseClicked]);
 
   return (
     <div className={wrapperClassNames}>
-      <EventListener target={document} onKeyDown={onKeyDown} />
       <SkyLightStateless
         isVisible={isVisible}
         title={title}

@@ -1,6 +1,5 @@
 import R from 'ramda';
 import React from 'react';
-import { HotKeys } from 'react-hotkeys';
 import className from 'classnames';
 
 import { COMMAND } from '../../../../utils/constants.js';
@@ -8,6 +7,7 @@ import { getNewSelection } from '../../../utils.js';
 
 import PatchSVG from '../../../../project/components/PatchSVG.jsx';
 import * as Layers from '../../../../project/components/layers/index.js';
+import HotkeysScope from '../../../../utils/components/HotkeysScope.jsx';
 
 import { bindApi, getMousePosition, getOffsetMatrix } from '../modeUtils.js';
 
@@ -167,7 +167,7 @@ const marqueeSelectingMode = {
   },
   render(api) {
     return (
-      <HotKeys
+      <HotkeysScope
         handlers={this.getHotkeyHandlers(api)}
         className="PatchWrapper"
         onKeyDown={bindApi(api, this.onKeyDownOrKeyUp)}
@@ -212,7 +212,7 @@ const marqueeSelectingMode = {
           </g>
           {this.renderBlockingLayer(api)}
         </PatchSVG>
-      </HotKeys>
+      </HotkeysScope>
     );
   },
 };

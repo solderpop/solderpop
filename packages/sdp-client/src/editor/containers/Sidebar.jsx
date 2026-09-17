@@ -5,7 +5,6 @@ import $ from 'sanctuary-def';
 import cls from 'classnames';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { FocusTrap } from 'react-hotkeys';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import * as XP from 'sdp-project';
 import { $Maybe, mapIndexed, notEquals } from 'sdp-func-tools';
@@ -81,9 +80,9 @@ class Sidebar extends React.Component {
     this.resizePanelsAction = debounce(300, this.props.actions.resizePanels);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.panels !== nextProps.panels && !this.state.sizes) {
-      this.setState(R.assoc('sizes', getSizes(nextProps)));
+  componentDidUpdate(prevProps) {
+    if (prevProps.panels !== this.props.panels && !this.state.sizes) {
+      this.setState(R.assoc('sizes', getSizes(this.props)));
     }
   }
 
@@ -129,24 +128,26 @@ class Sidebar extends React.Component {
 
   renderProjectBrowser(settings) {
     return (
-      <FocusTrap
+      <div
         key={PANEL_IDS.PROJECT_BROWSER}
         className="ProjectBrowser-container"
+        tabIndex={-1}
         onFocus={this.onProjectBrowserFocus}
       >
         <ProjectBrowser
           sidebarId={settings.sidebar}
           autohide={settings.autohide}
         />
-      </FocusTrap>
+      </div>
     );
   }
 
   renderInspector(settings) {
     return (
-      <FocusTrap
+      <div
         key={PANEL_IDS.INSPECTOR}
         className="Inspector-container"
+        tabIndex={-1}
         onFocus={this.onInspectorFocus}
       >
         <Inspector
@@ -162,7 +163,7 @@ class Sidebar extends React.Component {
           onSendTweakPulse={this.props.actions.sendTweakPulse}
           isDebugSession={this.props.isDebugSession}
         />
-      </FocusTrap>
+      </div>
     );
   }
 

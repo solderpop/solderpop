@@ -40,9 +40,7 @@ class InstallArchCommand extends BaseCommand {
 }
 
 InstallArchCommand.description = 'install toolchains';
-
 InstallArchCommand.usage = 'install:arch [fqbn]';
-
 InstallArchCommand.flags = BaseCommand.flags;
 
 InstallArchCommand.args = {

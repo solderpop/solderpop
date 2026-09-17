@@ -65,6 +65,7 @@ import SnackBar from './messages/index.js';
 import composeMessage from './messages/composeMessage.js';
 import * as MessageConstants from './messages/constants.js';
 import Toolbar from './utils/components/Toolbar.jsx';
+import HotkeysScope from './utils/components/HotkeysScope.jsx';
 import SolderpopLogo from './utils/components/SolderpopLogo.jsx';
 import SolderpopLockup from './utils/components/SolderpopLockup.jsx';
 import PopupShowCode from './utils/components/PopupShowCode.jsx';
@@ -144,6 +145,7 @@ export { default as PopupConfirm } from './utils/components/PopupConfirm.jsx';
 export { default as PopupPrompt } from './utils/components/PopupPrompt.jsx';
 export { default as PopupForm } from './utils/components/PopupForm.jsx';
 export { default as Toolbar } from './utils/components/Toolbar.jsx';
+export { default as HotkeysScope } from './utils/components/HotkeysScope.jsx';
 export { default as SolderpopLogo } from './utils/components/SolderpopLogo.jsx';
 export { default as SolderpopLockup } from './utils/components/SolderpopLockup.jsx';
 export { default as PopupProjectPreferences } from './project/components/PopupProjectPreferences.jsx';
@@ -185,6 +187,7 @@ export default {
   PopupForm,
   SnackBar,
   Toolbar,
+  HotkeysScope,
   menu: MenuUtils,
   sanctuaryPropType,
   initialState,

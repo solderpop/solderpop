@@ -100,8 +100,8 @@ ARGUMENTS
       be a XOD patch path. If either is omitted, it is inferred from the current
       working directory or another argument. Examples:
 
-         * ./path/to/proj.xodball main      # xodball + patch name
-         * ./path/to/proj/main/patch.xodp   # just full path to a patch
+         * ./path/to/proj.solderball main      # solderball + patch name
+         * ./path/to/proj/main/patch.sdpp   # just full path to a patch
          * main                             # a patch in the current project
 
 OPTIONS
@@ -122,8 +122,8 @@ EXAMPLES
   Compile a program using the current patch as entry point
   $ sdpc compile -b arduino:avr:uno
 
-  Compile the patch `main` from the xodball project and save binaries in `bin/uno.hex`
-  $ sdpc compile -b arduino:arv:uno foo.xodball main -o bin/uno.hex
+  Compile the patch `main` from the solderball project and save binaries in `bin/uno.hex`
+  $ sdpc compile -b arduino:arv:uno foo.solderball main -o bin/uno.hex
 ```
 
 _See code: [src/commands/compile.js](https://github.com/solderpop/solderpop/blob/main/packages/sdp-cli/src/commands/compile.js)_
@@ -179,7 +179,7 @@ ARGUMENTS
       on file system. If omitted, it is inferred from the current working
       directory. Examples:
 
-         * ./path/to/proj.xodball           # xodball
+         * ./path/to/proj.solderball           # solderball
          * ./path/to/proj                   # just full path to a project
 
 OPTIONS
@@ -193,11 +193,11 @@ OPTIONS
   --username=username   XOD API username
 
 EXAMPLES
-  Publish the current project with the version defined in `project.xod`
+  Publish the current project with the version defined in `project.sdp`
   $ sdpc publish
 
-  Publish a project saved as xodball
-  $ sdpc publish foo.xodball
+  Publish a project saved as solderball
+  $ sdpc publish foo.solderball
 ```
 
 _See code: [src/commands/publish.js](https://github.com/solderpop/solderpop/blob/main/packages/sdp-cli/src/commands/publish.js)_
@@ -216,28 +216,28 @@ ARGUMENTS
       on file system. If omitted, it is inferred from the current working
       directory. Examples:
 
-         * ./path/to/proj.xodball           # xodball
+         * ./path/to/proj.solderball           # solderball
          * ./path/to/proj                   # just full path to a project
 
 OPTIONS
   -V, --version         show CLI version
   -h, --help            show CLI help
-  -o, --output=path     xodball or multifile directory output path, defaults to stdout
+  -o, --output=path     solderball or multifile directory output path, defaults to stdout
   -q, --quiet           do not log messages other than errors
   -w, --workspace=path  [default: ~/xod] use the workspace specified, defaults to $HOME/xod
 
 EXAMPLES
-  Exports the current multifile project to a xodball
-  $ sdpc resave . -o ~/foo.xodball
+  Exports the current multifile project to a solderball
+  $ sdpc resave . -o ~/foo.solderball
 
-  Outputs the current multifile project as a xodball to stdout
+  Outputs the current multifile project as a solderball to stdout
   $ sdpc resave
 
-  Resaves one xodball into another (useful for applying migrations)
-  $ sdpc resave foo.xodball -o bar.xodball
+  Resaves one solderball into another (useful for applying migrations)
+  $ sdpc resave foo.solderball -o bar.solderball
 
-  Converts a xodball to a multifile project
-  $ sdpc resave foo.xodball -o /some/new/dir
+  Converts a solderball to a multifile project
+  $ sdpc resave foo.solderball -o /some/new/dir
 ```
 
 _See code: [src/commands/resave.js](https://github.com/solderpop/solderpop/blob/main/packages/sdp-cli/src/commands/resave.js)_
@@ -257,8 +257,8 @@ ARGUMENTS
       be a XOD patch path. If either is omitted, it is inferred from the current
       working directory or another argument. Examples:
 
-         * ./path/to/proj.xodball main      # xodball + patch name
-         * ./path/to/proj/main/patch.xodp   # just full path to a patch
+         * ./path/to/proj.solderball main      # solderball + patch name
+         * ./path/to/proj/main/patch.sdpp   # just full path to a patch
          * main                             # a patch in the current project
 
 OPTIONS
@@ -294,8 +294,8 @@ ARGUMENTS
       be a XOD patch path. If either is omitted, it is inferred from the current
       working directory or another argument. Examples:
 
-         * ./path/to/proj.xodball main      # xodball + patch name
-         * ./path/to/proj/main/patch.xodp   # just full path to a patch
+         * ./path/to/proj.solderball main      # solderball + patch name
+         * ./path/to/proj/main/patch.sdpp   # just full path to a patch
          * main                             # a patch in the current project
 
 OPTIONS
@@ -313,8 +313,8 @@ EXAMPLES
   Transpile the current project with `main` patch as entry point, save the output in `x.cpp`
   $ sdpc transpile main -o x.cpp
 
-  Transpile a project in the xodball with `main` patch as entry point
-  $ sdpc transpile foo.xodball main
+  Transpile a project in the solderball with `main` patch as entry point
+  $ sdpc transpile foo.solderball main
 ```
 
 _See code: [src/commands/transpile.js](https://github.com/solderpop/solderpop/blob/main/packages/sdp-cli/src/commands/transpile.js)_
@@ -334,8 +334,8 @@ ARGUMENTS
       be a XOD patch path. If either is omitted, it is inferred from the current
       working directory or another argument. Examples:
 
-         * ./path/to/proj.xodball main      # xodball + patch name
-         * ./path/to/proj/main/patch.xodp   # just full path to a patch
+         * ./path/to/proj.solderball main      # solderball + patch name
+         * ./path/to/proj/main/patch.sdpp   # just full path to a patch
          * main                             # a patch in the current project
 
 OPTIONS

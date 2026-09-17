@@ -26,7 +26,8 @@ var DOMWrap = (0, _createReactClass2['default'])({
   propTypes: {
     tag: _propTypes2['default'].string,
     hiddenClassName: _propTypes2['default'].string,
-    visible: _propTypes2['default'].bool
+    visible: _propTypes2['default'].bool,
+    domRef: _propTypes2['default'].func
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -44,7 +45,9 @@ var DOMWrap = (0, _createReactClass2['default'])({
     delete props.tag;
     delete props.hiddenClassName;
     delete props.visible;
-    return _react2['default'].createElement(Tag, props);
+    var domRef = props.domRef;
+    delete props.domRef;
+    return _react2['default'].createElement(Tag, (0, _extends3['default'])({ ref: domRef }, props));
   }
 });
 

@@ -138,13 +138,13 @@ const isIntroPart = R.test(/^\d00-/);
 // =============================================================================
 // Project converters & comment extractors
 // =============================================================================
-const extractCommentsFromPatch = (xodpPath) =>
+const extractCommentsFromPatch = (sdppPath) =>
   fs
-    .readFile(xodpPath)
+    .readFile(sdppPath)
     .then((str) => JSON.parse(str))
     .then(
       R.tap((content) => {
-        const patchName = path.basename(path.dirname(xodpPath));
+        const patchName = path.basename(path.dirname(sdppPath));
         comments[patchName] = R.compose(
           R.join('\n\n'),
           R.pluck('content'),
@@ -158,13 +158,13 @@ const extractCommentsFromPatch = (xodpPath) =>
     )
     .then(R.omit(['comments']))
     .then((content) => JSON.stringify(content, null, 2))
-    .then((content) => fs.writeFile(xodpPath, content));
+    .then((content) => fs.writeFile(sdppPath, content));
 
 const extractCommentsFromProject = (projectPath) =>
   getProjectPatchDirs(projectPath)
     .then(R.map((p) => path.join(p, 'patch.sdpp')))
-    .then((xodpFiles) =>
-      Promise.all(R.map(extractCommentsFromPatch, xodpFiles))
+    .then((sdppFiles) =>
+      Promise.all(R.map(extractCommentsFromPatch, sdppFiles))
     );
 
 // =============================================================================

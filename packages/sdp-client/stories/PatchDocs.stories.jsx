@@ -1,5 +1,4 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react';
 
 import * as XP from 'sdp-project';
 
@@ -17,30 +16,31 @@ import PatchDocs from '../src/editor/components/PatchDocs.jsx';
 
 const emptyProject = XP.createProject();
 
-storiesOf('PatchDocs', module)
-  .add('input terminal', () => (
-    <PatchDocs
-      patch={XP.getPatchByPathUnsafe(
-        'xod/patch-nodes/input-pulse',
-        emptyProject
-      )}
-    />
-  ))
-  .add('output terminal', () => (
-    <PatchDocs
-      patch={XP.getPatchByPathUnsafe(
-        'xod/patch-nodes/output-number',
-        emptyProject
-      )}
-    />
-  ))
-  .add('to-bus', () => (
-    <PatchDocs
-      patch={XP.getPatchByPathUnsafe('xod/patch-nodes/to-bus', emptyProject)}
-    />
-  ))
-  .add('from-bus', () => (
-    <PatchDocs
-      patch={XP.getPatchByPathUnsafe('xod/patch-nodes/from-bus', emptyProject)}
-    />
-  ));
+export default { title: 'PatchDocs' };
+
+export const InputTerminal = () => (
+  <PatchDocs
+    patch={XP.getPatchByPathUnsafe('xod/patch-nodes/input-pulse', emptyProject)}
+  />
+);
+
+export const OutputTerminal = () => (
+  <PatchDocs
+    patch={XP.getPatchByPathUnsafe(
+      'xod/patch-nodes/output-number',
+      emptyProject
+    )}
+  />
+);
+
+export const ToBus = () => (
+  <PatchDocs
+    patch={XP.getPatchByPathUnsafe('xod/patch-nodes/to-bus', emptyProject)}
+  />
+);
+
+export const FromBus = () => (
+  <PatchDocs
+    patch={XP.getPatchByPathUnsafe('xod/patch-nodes/from-bus', emptyProject)}
+  />
+);

@@ -150,6 +150,7 @@ const MenuItem = createReactClass({
     }
     return (
       <li
+        ref={(c) => { this.rootDomNode = c; }}
         {...attrs}
         {...mouseEvent}
         style={style}

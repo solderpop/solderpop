@@ -1,26 +1,14 @@
 import R from 'ramda';
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
-import { DragSource } from 'react-dnd';
+import { useDrag } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import Icon from '../../core/components/Icon.jsx';
 import { ContextMenuTrigger } from 'react-contextmenu';
 
 import { PATCH_GROUP_CONTEXT_MENU_ID } from '../constants.js';
 import { DRAGGED_ENTITY_TYPE } from '../../editor/constants.js';
-
-const dragSource = {
-  beginDrag(props) {
-    props.onBeginDrag(props.patchPath);
-    return { patchPath: props.patchPath };
-  },
-};
-
-const collect = (connect) => ({
-  connectDragSource: connect.dragSource(),
-  connectDragPreview: connect.dragPreview(),
-});
 
 const deadIcon = (
   <Icon
@@ -37,82 +25,72 @@ const utilityIcon = (
   <span className="utility-patch-icon" title="Utility patch" />
 );
 
-class PatchGroupItem extends React.Component {
-  componentDidMount() {
+function PatchGroupItem({
+  label,
+  patchPath,
+  isSelected,
+  isOpen,
+  dead,
+  isDeprecated,
+  isUtility,
+  className,
+  hoverButtons,
+  onClick,
+  onDoubleClick,
+  onBeginDrag,
+  collectPropsFn,
+  ...restProps
+}) {
+  const [, connectDragSource, connectDragPreview] = useDrag(
+    () => ({
+      type: DRAGGED_ENTITY_TYPE.PATCH,
+      item: () => {
+        onBeginDrag(patchPath);
+        return { patchPath };
+      },
+    }),
+    [patchPath, onBeginDrag]
+  );
+
+  useEffect(() => {
     // Use empty image as a drag preview so browsers don't draw it
     // and we can draw whatever we want on the custom drag layer instead.
-    this.props.connectDragPreview(getEmptyImage());
-  }
+    connectDragPreview(getEmptyImage());
+  }, [connectDragPreview]);
 
-  shouldComponentUpdate(nextProps) {
-    return !R.eqBy(
-      R.pick([
-        'label',
-        'patchPath',
-        'dead',
-        'isSelected',
-        'isOpen',
-        'className',
-      ]),
-      nextProps,
-      this.props
-    );
-  }
+  const classNames = cn('PatchGroupItem', className, {
+    isSelected,
+    isOpen,
+  });
 
-  render() {
-    const {
-      label,
-      isSelected,
-      isOpen,
-      dead,
-      isDeprecated,
-      isUtility,
-      className,
-      hoverButtons,
-      onClick,
-      onDoubleClick,
-      connectDragSource,
-      collectPropsFn,
-      ...restProps
-    } = this.props;
-
-    const classNames = cn('PatchGroupItem', className, {
-      isSelected,
-      isOpen,
-    });
-
-    return connectDragSource(
-      <div // eslint-disable-line jsx-a11y/no-static-element-interactions
-        role="button"
-        data-id={label}
-        className={classNames}
-        onClick={onClick}
-        onContextMenuCapture={onClick}
-        {...R.omit(
-          ['patchPath', 'onBeginDrag', 'connectDragPreview', 'dead'],
-          restProps
-        )}
+  return connectDragSource(
+    <div // eslint-disable-line jsx-a11y/no-static-element-interactions
+      role="button"
+      data-id={label}
+      className={classNames}
+      onClick={onClick}
+      onContextMenuCapture={onClick}
+      {...R.omit(['dead'], restProps)}
+    >
+      <ContextMenuTrigger
+        id={PATCH_GROUP_CONTEXT_MENU_ID}
+        holdToDisplay={-1}
+        collect={collectPropsFn}
       >
-        <ContextMenuTrigger
-          id={PATCH_GROUP_CONTEXT_MENU_ID}
-          holdToDisplay={-1}
-          collect={collectPropsFn}
+        <div // eslint-disable-line jsx-a11y/no-static-element-interactions
+          className="PatchGroupItem__label"
+          onDoubleClick={onDoubleClick}
+          role="button"
         >
-          <div // eslint-disable-line jsx-a11y/no-static-element-interactions
-            className="PatchGroupItem__label"
-            onDoubleClick={onDoubleClick}
-            role="button"
-          >
-            {dead ? deadIcon : null}
-            {isDeprecated ? deprecatedIcon : null}
-            {isUtility ? utilityIcon : null}
-            {label}
-          </div>
-        </ContextMenuTrigger>
-        <div className="PatchGroupItem__hover-buttons">{hoverButtons}</div>
-      </div>
-    );
-  }
+          {dead ? deadIcon : null}
+          {isDeprecated ? deprecatedIcon : null}
+          {isUtility ? utilityIcon : null}
+          {label}
+        </div>
+      </ContextMenuTrigger>
+      <div className="PatchGroupItem__hover-buttons">{hoverButtons}</div>
+    </div>
+  );
 }
 
 PatchGroupItem.propTypes = {
@@ -127,15 +105,13 @@ PatchGroupItem.propTypes = {
   hoverButtons: PropTypes.array,
   onClick: PropTypes.func,
   onDoubleClick: PropTypes.func,
-  connectDragSource: PropTypes.func.isRequired,
-  connectDragPreview: PropTypes.func.isRequired,
   onBeginDrag: PropTypes.func.isRequired,
   collectPropsFn: PropTypes.func.isRequired,
 };
 
-// eslint-disable-next-line new-cap
-export default DragSource(
-  DRAGGED_ENTITY_TYPE.PATCH,
-  dragSource,
-  collect
-)(PatchGroupItem);
+export default React.memo(
+  PatchGroupItem,
+  R.eqBy(
+    R.pick(['label', 'patchPath', 'dead', 'isSelected', 'isOpen', 'className'])
+  )
+);

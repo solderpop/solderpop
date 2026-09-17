@@ -1,11 +1,11 @@
 import React from 'react';
-import { HotKeys } from 'react-hotkeys';
 import * as XP from 'sdp-project';
 
 import { COMMAND } from '../../../../utils/constants.js';
 
 import PatchSVG from '../../../../project/components/PatchSVG.jsx';
 import * as Layers from '../../../../project/components/layers/index.js';
+import HotkeysScope from '../../../../utils/components/HotkeysScope.jsx';
 
 import {
   snapPositionToSlots,
@@ -143,7 +143,10 @@ const linkingMode = {
   },
   render(api) {
     return (
-      <HotKeys handlers={this.getHotkeyHandlers(api)} className="PatchWrapper">
+      <HotkeysScope
+        handlers={this.getHotkeyHandlers(api)}
+        className="PatchWrapper"
+      >
         <PatchSVG
           onMouseMove={bindApi(api, this.onMouseMove)}
           svgRef={(svg) => {
@@ -190,7 +193,7 @@ const linkingMode = {
             />
           </g>
         </PatchSVG>
-      </HotKeys>
+      </HotkeysScope>
     );
   },
 };
