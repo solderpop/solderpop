@@ -85,7 +85,7 @@ export const getPathToSdpProject = R.composeP(
       R.T,
       (filePath) =>
         rejectWithCode(
-          ERROR_CODES.TRIED_TO_OPEN_NOT_XOD_FILE,
+          ERROR_CODES.TRIED_TO_OPEN_NOT_SDP_FILE,
           new Error(`Tried to open not a sdp file: ${filePath}`)
         ),
     ],
