@@ -8,7 +8,7 @@ import chalk from 'chalk';
 import R from 'ramda';
 import {
   getPathToSdpProject,
-  isBasename,
+  isPatchBasename,
   isWorkspaceValid,
   resolvePath,
   spawnWorkspaceFile,
@@ -46,7 +46,7 @@ const getPatchName = (projectPath, patchPath) =>
       T,
       compose(
         (name) => `@/${name}`,
-        when(isBasename('patch.sdpp'), path.dirname)
+        when((p) => isPatchBasename(path.basename(p)), path.dirname)
       ),
     ],
   ])(path.relative(projectPath, patchPath));

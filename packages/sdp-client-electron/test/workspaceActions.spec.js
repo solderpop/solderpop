@@ -105,6 +105,7 @@ describe('IDE', () => {
           assertEventNames(eventsSequence, [
             EVENTS.UPDATE_WORKSPACE,
             EVENTS.REQUEST_SHOW_PROJECT,
+            EVENTS.FIRST_LAUNCH,
           ]);
           assertOpenedProjectName(eventsSequence, 'welcome-to-xod');
         });

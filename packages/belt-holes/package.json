@@ -21,6 +21,7 @@
     "@babel/preset-env": "^8.0.2",
     "@rescript/runtime": "^12.3.0",
     "babel-jest": "^24.9.0",
+    "jest": "^24.5.0",
     "rescript": "^12.3.0"
   },
   "jest": {

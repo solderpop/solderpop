@@ -254,7 +254,7 @@ class App extends client.App {
         <label key="import" className="load-button" htmlFor="openProjectButton">
           <input
             type="file"
-            accept=".solderball"
+            accept=".solderball,.xodball"
             onChange={this.onLoadChange}
             id="openProjectButton"
             ref={(input) => {

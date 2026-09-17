@@ -221,6 +221,12 @@ module.exports = [
     languageOptions: {
       globals: globals.jest,
     },
+    rules: {
+      // A mocha-specific rule; these are jest files, `test.skip` is jest's
+      // normal (visible-in-output) way to mark a test pending, not a
+      // silent rot risk the way it is in mocha.
+      'mocha/no-skipped-tests': 'off',
+    },
   },
   {
     // These test files bind ReScript's own compiled module names

@@ -356,7 +356,7 @@ ${GENERATED_FILE_COMMENT}
 
 # Tutorial
 
-- [Installing and running XOD](./install/)
+- [Installing and running SDP IDE](./install/)
 - [Required hardware](./required-hardware/)
 
 ${patchIndex}

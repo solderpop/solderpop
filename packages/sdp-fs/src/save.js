@@ -21,7 +21,7 @@ import {
   omitDefaultOptionsFromProjectFileContents,
 } from './convertTypes.js';
 import * as ERROR_CODES from './errorCodes.js';
-import { CHANGE_TYPES } from './constants.js';
+import { CHANGE_TYPES, PROJECT_FILENAME } from './constants.js';
 import { calculateDiff } from './patchDiff.js';
 
 import { def } from './types.js';
@@ -53,7 +53,7 @@ export const saveArrangedFiles = R.curry((rootDir, virtualFile) => {
     }
 
     const dataToSave = R.when(R.complement(Array.isArray), R.of)(virtualFile);
-    const pathToTemp = path.resolve(os.tmpdir(), 'xod-temp');
+    const pathToTemp = path.resolve(os.tmpdir(), 'sdp-temp');
     const backup = new Backup(realRootDir, pathToTemp);
 
     return backup
@@ -179,7 +179,7 @@ const saveProjectMeta = def(
   (projectDir, project) =>
     saveArrangedFiles(projectDir, [
       {
-        path: path.join('.', 'project.sdp'),
+        path: path.join('.', PROJECT_FILENAME),
         content: R.compose(
           omitDefaultOptionsFromProjectFileContents,
           convertProjectToProjectFileContents
@@ -208,7 +208,7 @@ export const saveProjectAsSolderball = def(
 export const saveProject = def(
   'saveProject :: Path -> [AnyPatchChange] -> Project -> Promise', // Promise Path Error
   (projectPath, changes, project) => {
-    if (/(.solderball)$/.test(projectPath)) {
+    if (/\.(solderball|xodball)$/.test(projectPath)) {
       return saveProjectAsSolderball(projectPath, project);
     }
 

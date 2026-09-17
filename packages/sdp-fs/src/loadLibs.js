@@ -7,7 +7,7 @@ import { uniqLists } from 'sdp-func-tools';
 import { readDir, readJSON } from './read.js';
 import {
   getPatchName,
-  hasExt,
+  isPatchBasename,
   rejectOnInvalidPatchFileContents,
   resolveLibPath,
 } from './utils.js';
@@ -21,7 +21,7 @@ const scanLibsFolder = (libs, libsDir) =>
   Promise.all(
     libs.map((lib) =>
       readDir(path.resolve(libsDir, lib))
-        .then(R.filter(hasExt('.sdpp')))
+        .then(R.filter(R.pipe(path.basename, isPatchBasename)))
         .catch((err) => {
           throw Object.assign(err, {
             path: path.resolve(libsDir, lib),

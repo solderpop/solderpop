@@ -1,9 +1,15 @@
 import R from 'ramda';
 import { statSync } from 'fs';
-import { resolve, dirname } from 'path';
+import { resolve, dirname, basename } from 'path';
 import { rejectWithCode } from 'sdp-func-tools';
 
-import { isBasename, isExtname, isDirectory } from './utils.js';
+import {
+  isDirectory,
+  isProjectBasename,
+  isPatchBasename,
+  isSolderballPath,
+} from './utils.js';
+import { PROJECT_FILENAME, LEGACY_PROJECT_FILENAMES } from './constants.js';
 import * as ERROR_CODES from './errorCodes.js';
 
 function getParentDirectories(path) {
@@ -33,12 +39,13 @@ export function isWorkspaceDir(path) {
 }
 
 function isProjectDir(path) {
-  try {
-    const projectSdp = resolve(process.cwd(), path, 'project.sdp');
-    return statSync(projectSdp).isFile();
-  } catch (error) {
-    return false;
-  }
+  return [PROJECT_FILENAME, ...LEGACY_PROJECT_FILENAMES].some((filename) => {
+    try {
+      return statSync(resolve(process.cwd(), path, filename)).isFile();
+    } catch (error) {
+      return false;
+    }
+  });
 }
 
 export function findClosestWorkspaceDir(path) {
@@ -59,7 +66,7 @@ export function findClosestProjectDir(path) {
     if (closestProjectDir) return resolve$(closestProjectDir);
     return reject(
       new Error(
-        `could not find project directory around "${path}". Project directory must contain "project.sdp" file.`
+        `could not find project directory around "${path}". Project directory must contain a "${PROJECT_FILENAME}" file.`
       )
     );
   });
@@ -68,15 +75,18 @@ export function findClosestProjectDir(path) {
 // :: Path -> Promise Path Error
 export const getPathToSdpProject = R.composeP(
   R.cond([
-    [isBasename('project.sdp'), dirname],
-    [isExtname('.solderball'), R.identity],
-    [R.either(isBasename('patch.sdpp'), isDirectory), findClosestProjectDir],
+    [(filePath) => isProjectBasename(basename(filePath)), dirname],
+    [isSolderballPath, R.identity],
+    [
+      R.either((filePath) => isPatchBasename(basename(filePath)), isDirectory),
+      findClosestProjectDir,
+    ],
     [
       R.T,
       (filePath) =>
         rejectWithCode(
-          ERROR_CODES.TRIED_TO_OPEN_NOT_SDP_FILE,
-          new Error(`Tried to open not a SolderPop file: ${filePath}`)
+          ERROR_CODES.TRIED_TO_OPEN_NOT_XOD_FILE,
+          new Error(`Tried to open not a sdp file: ${filePath}`)
         ),
     ],
   ]),

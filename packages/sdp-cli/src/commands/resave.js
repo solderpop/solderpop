@@ -40,7 +40,7 @@ class ResaveCommand extends BaseCommand {
       title: 'Saving...',
       skip: (ctx) => !(ctx.project && output),
       task: (ctx) =>
-        (path.extname(output) === '.solderball'
+        (['.solderball', '.xodball'].includes(path.extname(output))
           ? saveProjectAsSolderball(output, ctx.project)
           : saveProjectEntirely(output, ctx.project)
         ).then(() => {
