@@ -21,7 +21,7 @@ import JumperNodeBody from './nodeParts/JumperNodeBody.jsx';
 
 import TooltipHOC from '../../tooltip/components/TooltipHOC.jsx';
 
-import nodeHoverContextType from '../../editor/nodeHoverContextType.js';
+import NodeHoverContext from '../../editor/nodeHoverContextType.js';
 import formatErrorMessage from '../../core/formatErrorMessage.js';
 
 const isBusNodeType = R.either(
@@ -57,6 +57,8 @@ const renderTooltipContent = (nodeType, nodeLabel, isDeprecated, errText) =>
   ]);
 
 class Node extends React.Component {
+  static contextType = NodeHoverContext;
+
   constructor(props) {
     super(props);
     this.onMouseDown = this.onMouseDown.bind(this);
@@ -89,23 +91,15 @@ class Node extends React.Component {
   }
 
   onMouseOver(...args) {
-    return R.pathOr(
-      noop,
-      ['context', 'nodeHover', 'onMouseOver'],
-      this
-    )(...args);
+    return R.pathOr(noop, ['context', 'onMouseOver'], this)(...args);
   }
 
   onMouseLeave(...args) {
-    return R.pathOr(
-      noop,
-      ['context', 'nodeHover', 'onMouseLeave'],
-      this
-    )(...args);
+    return R.pathOr(noop, ['context', 'onMouseLeave'], this)(...args);
   }
 
   getHoveredNodeId() {
-    return R.pathOr(null, ['context', 'nodeHover', 'nodeId'], this);
+    return R.pathOr(null, ['context', 'nodeId'], this);
   }
 
   isNodeHovered() {
@@ -250,10 +244,6 @@ class Node extends React.Component {
     );
   }
 }
-
-Node.contextTypes = {
-  nodeHover: nodeHoverContextType,
-};
 
 Node.propTypes = {
   id: PropTypes.string.isRequired,

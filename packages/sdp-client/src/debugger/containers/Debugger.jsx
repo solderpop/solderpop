@@ -5,7 +5,7 @@ import cn from 'classnames';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu';
-import { Icon } from 'react-fa';
+import Icon from '../../core/components/Icon.jsx';
 import { foldMaybe } from 'sdp-func-tools';
 import RamdaFantasy from 'ramda-fantasy';
 

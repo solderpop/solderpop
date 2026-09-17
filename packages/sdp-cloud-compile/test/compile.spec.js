@@ -7,8 +7,9 @@ import btoa from 'btoa';
 // CommonJS require(), not the native ESM `import()` mocha uses to load
 // this "type": "module" package's test files, so it can't intercept and
 // transform that import on the fly -- hitting src/ directly fails with
-// ERR_UNKNOWN_FILE_EXTENSION on the raw .h file. Matches how `yarn verify`
-// already sequences things (build always runs before test).
+// ERR_UNKNOWN_FILE_EXTENSION on the raw .h file. Matches how `pnpm run verify`
+// (and Turborepo's `test` -> `build` task dependency) already sequences
+// things (build always runs before test).
 import { compile, compileTabtest, compileSimulation } from '../dist/compile.js';
 import * as EC from '../dist/errorCodes.js';
 
@@ -34,7 +35,7 @@ const fakeFetch = ({ ok, status, json, body }) => {
   return fetchImpl;
 };
 
-const rejects = async promise => {
+const rejects = async (promise) => {
   try {
     await promise;
   } catch (err) {
@@ -53,7 +54,7 @@ describe('compile', () => {
       { 'sketch.ino': 'void setup(){}' },
       { fqbn: 'wasm:simulation', options: {} },
       fetchImpl
-    ).then(result => {
+    ).then((result) => {
       assert.deepEqual(result, { ok: true });
     });
   });

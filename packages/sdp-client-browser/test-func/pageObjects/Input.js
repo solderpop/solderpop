@@ -7,7 +7,6 @@ class Input extends BasePageObject {
 
   async focus() {
     await this.evaluate((input) => {
-      // eslint-disable-next-line no-param-reassign
       input.focus();
     });
   }

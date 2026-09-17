@@ -8,7 +8,7 @@ import { setNodeId } from '../src/node.js';
 const { assert } = chai;
 
 describe('traversing', () => {
-  const project = H.loadXodball('./fixtures/traversing.xodball');
+  const project = H.loadSolderball('./fixtures/traversing.solderball');
   const bottomPatch = XP.getPatchByPathUnsafe('@/bottom', project);
   const startPin = XP.getPinByKeyUnsafe('startPin', bottomPatch);
   const topPatch = XP.getPatchByPathUnsafe('@/top', project);

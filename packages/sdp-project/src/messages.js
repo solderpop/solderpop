@@ -361,8 +361,8 @@ export default {
   }),
 
   // Load project
-  INVALID_XODBALL_FORMAT: () => ({
-    title: 'Invalid xodball format',
+  INVALID_SOLDERBALL_FORMAT: () => ({
+    title: 'Invalid solderball format',
     note: 'File that you try to load is corrupted and has a wrong structure',
   }),
   NOT_A_JSON: () => ({

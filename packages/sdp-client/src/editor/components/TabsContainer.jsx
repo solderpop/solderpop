@@ -2,14 +2,13 @@ import React from 'react';
 import normalizeWheel from 'normalize-wheel';
 import PropTypes from 'prop-types';
 
-import ReactResizeDetector from 'react-resize-detector';
-
 class TabsContainer extends React.Component {
   constructor(props) {
     super(props);
 
     this.isOverflowed = false;
     this.domElement = null;
+    this.resizeObserver = null;
 
     this.setRef = this.setRef.bind(this);
     this.checkOverflow = this.checkOverflow.bind(this);
@@ -18,10 +17,16 @@ class TabsContainer extends React.Component {
 
   componentDidMount() {
     this.checkOverflow();
+    this.resizeObserver = new ResizeObserver(this.checkOverflow);
+    if (this.domElement) this.resizeObserver.observe(this.domElement);
   }
 
   componentDidUpdate() {
     this.checkOverflow();
+  }
+
+  componentWillUnmount() {
+    if (this.resizeObserver) this.resizeObserver.disconnect();
   }
 
   setRef(domElement) {
@@ -57,11 +62,6 @@ class TabsContainer extends React.Component {
         onWheel={this.handleScroll}
       >
         {this.props.children}
-        <ReactResizeDetector
-          handleWidth
-          handleHeight
-          onResize={this.checkOverflow}
-        />
       </ul>
     );
   }

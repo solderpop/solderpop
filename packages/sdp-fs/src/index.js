@@ -5,7 +5,7 @@ export { arrangeByFiles, fsSafeName } from './unpack.js';
 export {
   saveAll,
   saveArrangedFiles,
-  saveProjectAsXodball,
+  saveProjectAsSolderball,
   saveProjectEntirely,
   saveLibraryEntirely,
   saveAllLibrariesEntirely,
@@ -26,7 +26,7 @@ export {
   findClosestProjectDir,
   findClosestWorkspaceDir,
   isWorkspaceDir,
-  getPathToXodProject,
+  getPathToSdpProject,
 } from './find.js';
 export { default as messages } from './messages.js';
 

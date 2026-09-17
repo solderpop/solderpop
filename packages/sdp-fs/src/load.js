@@ -6,21 +6,28 @@ import * as XF from 'sdp-func-tools';
 import * as XP from 'sdp-project';
 
 import pack from './pack.js';
-import { getPathToXodProject } from './find.js';
+import { getPathToSdpProject } from './find.js';
 import { loadLibs } from './loadLibs.js';
 import { readDir, readJSON } from './read.js';
 import * as ERROR_CODES from './errorCodes.js';
 import {
-  isExtname,
   resolvePath,
   resolveLibPath,
   resolveProjectFile,
   isLocalProjectDirectory,
-  basenameEquals,
   basenameAmong,
+  isProjectBasename,
+  isPatchBasename,
+  isSolderballPath,
   getPatchName,
   rejectOnInvalidPatchFileContents,
 } from './utils.js';
+import {
+  PROJECT_FILENAME,
+  LEGACY_PROJECT_FILENAMES,
+  PATCH_FILENAME,
+  LEGACY_PATCH_FILENAMES,
+} from './constants.js';
 import { ProjectFileContents } from './types.js';
 import { loadAttachments } from './attachments.js';
 import {
@@ -113,30 +120,30 @@ export const getProjects = (workspacePath) =>
   R.composeP(
     XF.allPromises,
     R.map(readProjectMetaFile),
-    R.filter(basenameEquals('project.xod')),
+    R.filter(basenameAmong([PROJECT_FILENAME, ...LEGACY_PROJECT_FILENAMES])),
     readDir
   )(workspacePath).catch(
     XF.rejectWithCode(ERROR_CODES.CANT_ENUMERATE_PROJECTS)
   );
 
 // :: String -> String -> Promise { path :: String, content :: Object, id :: String }
-const readXodFile = (projectPath) => (xodfile) =>
-  readJSON(xodfile).then((data) => {
-    const { base, dir } = path.parse(xodfile);
+const readSdpFile = (projectPath) => (sdpfile) =>
+  readJSON(sdpfile).then((data) => {
+    const { base, dir } = path.parse(sdpfile);
 
     const projectFolder = path.resolve(projectPath, '..');
-    const filePath = path.relative(projectFolder, xodfile);
+    const filePath = path.relative(projectFolder, sdpfile);
 
     return R.composeP(
       XF.omitNilValues,
       (content) => ({ path: `./${filePath}`, content }),
       R.cond([
         [
-          () => base === 'patch.xodp',
+          () => isPatchBasename(base),
           (patch) =>
             R.composeP(
               loadAttachments(dir),
-              R.assoc('path', XP.getLocalPath(getPatchName(xodfile))),
+              R.assoc('path', XP.getLocalPath(getPatchName(sdpfile))),
               convertPatchFileContentsToPatch,
               rejectOnInvalidPatchFileContents(filePath),
               XP.migratePatchDimensionsToSlots,
@@ -144,7 +151,7 @@ const readXodFile = (projectPath) => (xodfile) =>
               Promise.resolve.bind(Promise)
             )(patch),
         ],
-        [() => base === 'project.xod', addMissingOptionsToProjectFileContents],
+        [() => isProjectBasename(base), addMissingOptionsToProjectFileContents],
         [R.T, R.identity],
       ]),
       Promise.resolve.bind(Promise)
@@ -155,8 +162,15 @@ const readXodFile = (projectPath) => (xodfile) =>
 export const loadProjectWithoutLibs = (projectPath) =>
   R.composeP(
     XF.allPromises,
-    R.map(readXodFile(projectPath)),
-    R.filter(basenameAmong(['project.xod', 'patch.xodp'])),
+    R.map(readSdpFile(projectPath)),
+    R.filter(
+      basenameAmong([
+        PROJECT_FILENAME,
+        ...LEGACY_PROJECT_FILENAMES,
+        PATCH_FILENAME,
+        ...LEGACY_PATCH_FILENAMES,
+      ])
+    ),
     readDir
   )(projectPath);
 
@@ -223,30 +237,31 @@ export const loadProjectFromDir = R.curry((workspaceDirs, projectPath) =>
 );
 
 // :: [Path] -> Path -> Promise Project Error
-export const loadProjectFromXodball = R.curry((workspaceDirs, xodballPath) =>
-  Promise.all([
-    fs.readFile(xodballPath, 'utf8').then(XP.fromXodball),
-    R.compose(
-      loadLibs,
-      R.map(R.compose(resolvePath, resolveLibPath))
-    )(workspaceDirs),
-  ])
-    .then(([eitherProject, libs]) =>
-      eitherProject.map(
-        R.compose(resoliveLibraryPatches, XP.mergePatchesList(R.values(libs)))
+export const loadProjectFromSolderball = R.curry(
+  (workspaceDirs, solderballPath) =>
+    Promise.all([
+      fs.readFile(solderballPath, 'utf8').then(XP.fromSolderball),
+      R.compose(
+        loadLibs,
+        R.map(R.compose(resolvePath, resolveLibPath))
+      )(workspaceDirs),
+    ])
+      .then(([eitherProject, libs]) =>
+        eitherProject.map(
+          R.compose(resoliveLibraryPatches, XP.mergePatchesList(R.values(libs)))
+        )
       )
-    )
-    .then(XF.eitherToPromise)
+      .then(XF.eitherToPromise)
 );
 
 /**
- * Loads XOD Project if correct path providen.
+ * Loads a SolderPop Project if correct path providen.
  *
  * It accepts list of paths to workspaces (to load libs) and
- * path to one of XOD files or XOD Project directory:
- * - project.xod
- * - patch.xodp
- * - *.xodball
+ * path to one of SDP files or SDP Project directory:
+ * - project.sdp (or legacy project.xod)
+ * - patch.sdpp (or legacy patch.xodp)
+ * - *.solderball (or legacy *.xodball)
  *
  * If other extension is passed into this function it will return
  * rejected Promise with Error. Otherwise, Promise Project.
@@ -257,11 +272,11 @@ export const loadProject = R.uncurryN(2, (workspaceDirs) =>
     validateLoadedProject,
     XP.migrateBoundValuesToBoundLiterals,
     R.ifElse(
-      isExtname('.xodball'),
-      loadProjectFromXodball(workspaceDirs),
+      isSolderballPath,
+      loadProjectFromSolderball(workspaceDirs),
       loadProjectFromDir(workspaceDirs)
     ),
-    getPathToXodProject
+    getPathToSdpProject
   )
 );
 

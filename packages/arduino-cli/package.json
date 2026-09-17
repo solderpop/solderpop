@@ -1,7 +1,8 @@
 {
   "name": "arduino-cli",
   "type": "module",
-  "version": "0.37.0",
+  "version": "0.1.0",
+  "private": true,
   "description": "JS-wrapper over arduino-cli",
   "main": "dist/index.js",
   "files": [
@@ -17,7 +18,7 @@
   "keywords": [
     "arduino-cli"
   ],
-  "author": "SolderPop <dev@solderpop.io>",
+  "author": "SolderPop <contact@solderpop.io>",
   "license": "AGPL-3.0",
   "dependencies": {
     "cross-spawn": "^7.0.1",

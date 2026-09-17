@@ -30,7 +30,6 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 const pkgpath = (pkgDir, subpath) => path.join(pkgDir, subpath);
 const assetsPath = fs.realpathSync(findup('node_modules/sdp-client/src/core/assets'));
-const fontAwesomePath = fs.realpathSync(findup('node_modules/font-awesome'));
 
 const IS_DEV = (
   !process.env.NODE_ENV ||
@@ -140,14 +139,6 @@ module.exports = pkgDir => ({
             const relativeDir = path.relative(assetsPath, path.dirname(pathData.filename));
             return `assets/${relativeDir ? `${relativeDir}/` : ''}[name].[hash:6][ext]`;
           },
-        },
-      },
-      {
-        include: fontAwesomePath,
-        test: /\.(jpe?g|png|gif|svg|ttf|eot|woff|woff2)(\?\S*)?$/,
-        type: 'asset/resource',
-        generator: {
-          filename: 'assets/font-awesome/[name].[hash:6][ext]',
         },
       },
     ],

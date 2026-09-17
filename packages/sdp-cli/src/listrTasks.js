@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import R from 'ramda';
 import { transformProject, transpile, LIVENESS } from 'sdp-arduino';
 import { loadProject } from 'sdp-fs';

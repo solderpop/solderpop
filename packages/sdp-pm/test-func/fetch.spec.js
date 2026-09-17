@@ -42,7 +42,7 @@ describe('fetching data', () => {
       ));
   });
   describe('fetchLibrary()', () => {
-    it('returns Promise with  xod/core xodball', () => {
+    it('returns Promise with  xod/core solderball', () => {
       const requiredKeys = [
         'description',
         'license',
@@ -69,9 +69,9 @@ describe('fetching data', () => {
           ERR_CODES.CANT_PARSE_LIBRARY_REQUEST
         )
       ));
-    it('returns rejected Promise with error code "CANT_GET_LIB_XODBALL" for unknown library', () =>
+    it('returns rejected Promise with error code "CANT_GET_LIB_SOLDERBALL" for unknown library', () =>
       F.fetchLibrary(PM_SWAGGER_URL, 'xod/nonexisting').catch((err) =>
-        assert.propertyVal(err, 'errorCode', ERR_CODES.CANT_GET_LIB_XODBALL)
+        assert.propertyVal(err, 'errorCode', ERR_CODES.CANT_GET_LIB_SOLDERBALL)
       ));
   });
 
@@ -110,13 +110,13 @@ describe('fetching data', () => {
           ERR_CODES.CANT_PARSE_LIBRARY_REQUEST
         )
       ));
-    it('returns rejected Promise with error code "CANT_GET_LIB_XODBALL" for unknown library', () =>
+    it('returns rejected Promise with error code "CANT_GET_LIB_SOLDERBALL" for unknown library', () =>
       F.fetchLibsWithDependencies(
         PM_SWAGGER_URL,
         [],
         ['xod/nonexisting']
       ).catch((err) =>
-        assert.propertyVal(err, 'errorCode', ERR_CODES.CANT_GET_LIB_XODBALL)
+        assert.propertyVal(err, 'errorCode', ERR_CODES.CANT_GET_LIB_SOLDERBALL)
       ));
   });
 });

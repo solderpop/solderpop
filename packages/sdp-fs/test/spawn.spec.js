@@ -14,7 +14,7 @@ describe('Spawn', () => {
     after(() => fs.remove(fixture('./new-workspace')));
     return spawnWorkspaceFile(fixture('./new-workspace')).then((p) => {
       assert.equal(p, fixture('./new-workspace'));
-      assert.ok(doesFileExist(fixture('./new-workspace/.xodworkspace')));
+      assert.ok(doesFileExist(fixture('./new-workspace/.sdp-workspace')));
     });
   });
 
@@ -26,7 +26,7 @@ describe('Spawn', () => {
     ).then(() => {
       assert.ok(doesDirectoryExist(fixture('./new-workspace/welcome-to-xod')));
       fs.readdir(fixture('./new-workspace/welcome-to-xod'), (err, files) => {
-        assert.includeMembers(files, ['project.xod', 'main', 'qux']);
+        assert.includeMembers(files, ['project.sdp', 'main', 'qux']);
       });
     });
   });

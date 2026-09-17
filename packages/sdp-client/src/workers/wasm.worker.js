@@ -10,9 +10,8 @@ var _self = (typeof self === 'undefined') ? {} : self;
 // It used only in Simulation, but to avoid creating similar
 // worker file for Tabtests it's here permanently.
 const Serial = {
-  // eslint-disable-next-line no-undef
   encoder: new TextEncoder('utf-8'),
-  // eslint-disable-next-line no-undef
+
   decoder: new TextDecoder('utf-8'),
   txBuffer: new Uint8Array(0),
   // Methods to be called from WASM

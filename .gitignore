@@ -7,11 +7,16 @@ packages/*/dist/
 *.orig
 *.log
 .dir-locals.el
+
+# No AI agent files
 .opencode
 .claude
 
 coverage/
 .nyc_output/
+
+# turborepo local cache — machine/run-specific, never commit
+.turbo/
 
 # bucklescript stuff
 packages/*/lib/

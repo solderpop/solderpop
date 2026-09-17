@@ -14,8 +14,8 @@ const transformDialogFileFilters = (filters) =>
     (fn) => fn(filters),
     R.cond([
       // We have to reverse an array for MacOS, cause it takes a first extension
-      // as a required extension to save a file, so if it is `xodball` — we could
-      // not save a Multifile Project.
+      // as a required extension to save a file, so if it is `solderball` — we
+      // could not save a Multifile Project.
       [R.equals('darwin'), () => R.reverse],
       // On Linux native dialog extensions does not added automatically into name,
       // as it done in Windows. So do it here:
@@ -26,12 +26,17 @@ const transformDialogFileFilters = (filters) =>
 
 export const getSaveDialogFileFilters = () =>
   transformDialogFileFilters([
-    { name: 'Packed SolderPop Project', extensions: ['xodball'] },
+    { name: 'Packed SolderPop Project', extensions: ['solderball'] },
     { name: 'Multifile SolderPop Project', extensions: [''] },
   ]);
 export const getOpenDialogFileFilters = () =>
   transformDialogFileFilters([
-    { name: 'Any SolderPop File', extensions: ['xodball', 'xod', 'xodp'] },
+    {
+      name: 'Any SolderPop File',
+      // Legacy extensions (xodball/xod/xodp) are read-only -- opening one
+      // still works, saving always writes the current names.
+      extensions: ['solderball', 'sdp', 'sdpp', 'xodball', 'xod', 'xodp'],
+    },
   ]);
 
 export const createSaveDialogOptions = (title, defaultPath, buttonLabel) => ({
@@ -40,7 +45,7 @@ export const createSaveDialogOptions = (title, defaultPath, buttonLabel) => ({
   buttonLabel,
   properties: ['createDirectory'],
   message: [
-    'To save as packed SolderPop project add ".xodball" extension,',
+    'To save as packed SolderPop project add ".solderball" extension,',
     'To save as multifile SolderPop project add no extension',
   ].join('\n'),
   filters: getSaveDialogFileFilters(),

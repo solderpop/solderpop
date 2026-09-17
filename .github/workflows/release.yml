@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # changesets diffs against baseBranch (main, see
+          # .changeset/config.json) to find what changed -- needs real
+          # history, not the default shallow clone.
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - name: Install Node modules
+        run: pnpm install
+
+      # No `publish:` input: every package in this monorepo is
+      # "private": true (see .changeset/config.json's privatePackages,
+      # and docs/branch-changelist.md for why) and none are ever meant to
+      # reach npm. Without a publish command, changesets/action only ever
+      # opens/updates a "Version Packages" PR when changesets are
+      # pending -- it never attempts an actual publish.
+      - name: Create/update Version Packages PR
+        uses: changesets/action@v1
+        with:
+          version: pnpm run version-packages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

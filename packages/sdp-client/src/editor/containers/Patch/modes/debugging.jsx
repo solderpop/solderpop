@@ -1,6 +1,5 @@
 import R from 'ramda';
 import React from 'react';
-import { HotKeys } from 'react-hotkeys';
 
 import * as XP from 'sdp-project';
 
@@ -8,6 +7,7 @@ import { SELECTION_ENTITY_TYPE } from '../../../constants.js';
 
 import PatchSVG from '../../../../project/components/PatchSVG.jsx';
 import * as Layers from '../../../../project/components/layers/index.js';
+import HotkeysScope from '../../../../utils/components/HotkeysScope.jsx';
 
 import selectingMode from './selecting.jsx';
 import { bindApi, getOffsetMatrix } from '../modeUtils.js';
@@ -42,7 +42,7 @@ const debuggingMode = R.merge(selectingMode, {
   },
   render(api) {
     return (
-      <HotKeys
+      <HotkeysScope
         handlers={this.getHotkeyHandlers(api)}
         className="PatchWrapper"
         onKeyDown={bindApi(api, this.onKeyDown)}
@@ -117,7 +117,7 @@ const debuggingMode = R.merge(selectingMode, {
             />
           </g>
         </PatchSVG>
-      </HotKeys>
+      </HotkeysScope>
     );
   },
 });

@@ -6,7 +6,7 @@ import {
   eitherToPromise,
   isAmong,
 } from 'sdp-func-tools';
-import { fromXodballData, listMissingLibraryNames } from 'sdp-project';
+import { fromSolderballData, listMissingLibraryNames } from 'sdp-project';
 
 import * as ERR_CODES from './errorCodes.js';
 import * as MSG from './messages.js';
@@ -103,7 +103,7 @@ export const searchLibraries = R.curry((swaggerUrl, libQuery) => {
 export const fetchLibrary = R.curry((swaggerUrl, libQuery) => {
   const fetchFn = (swagger, params) => {
     const tryFn = () =>
-      swagger.apis.Version.getLibVersionXodball({
+      swagger.apis.Version.getLibVersionSolderball({
         libname: params.libname,
         orgname: params.owner,
         semver_or_latest: params.version,
@@ -114,7 +114,7 @@ export const fetchLibrary = R.curry((swaggerUrl, libQuery) => {
         retryExceptAny400(
           rejectFetchResult({
             message: MSG.cantFindLibVersion(params),
-            errorCode: ERR_CODES.CANT_GET_LIB_XODBALL,
+            errorCode: ERR_CODES.CANT_GET_LIB_SOLDERBALL,
             request: libQuery,
             params,
           }),
@@ -122,11 +122,11 @@ export const fetchLibrary = R.curry((swaggerUrl, libQuery) => {
         )
       )
       .then(R.prop('obj'))
-      .then((xodball) =>
+      .then((solderball) =>
         R.compose(
           eitherToPromise,
-          fromXodballData
-        )(xodball).catch(rejectWithCode(ERR_CODES.INVALID_XODBALL))
+          fromSolderballData
+        )(solderball).catch(rejectWithCode(ERR_CODES.INVALID_SOLDERBALL))
       );
   };
 

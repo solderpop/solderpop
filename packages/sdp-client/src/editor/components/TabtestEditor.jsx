@@ -2,7 +2,7 @@ import React from 'react';
 import R from 'ramda';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
-import { Icon } from 'react-fa';
+import Icon from '../../core/components/Icon.jsx';
 import ReactDataSheet from 'react-datasheet';
 
 const trimGrid = R.compose(

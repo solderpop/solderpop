@@ -101,9 +101,9 @@ class WelcomeDialog extends React.Component {
             <p className="welcome-intro">
               SolderPop IDE lets you build and simulate circuits visually.
             </p>
-            <h3>Theme</h3>
+            <h3 className="textPrimary">Theme</h3>
             {this.renderThemeSelector()}
-            <div className="welcome-option">
+            <div className="welcome-option textPrimary">
               <label
                 className="welcome-checkbox"
                 htmlFor="welcome-simulation-checkbox"

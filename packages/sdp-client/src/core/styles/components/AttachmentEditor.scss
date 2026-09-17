@@ -15,7 +15,13 @@
   flex-grow: 1;
 
   &.hidden {
-    display: none;
+    // react-reflex's own stylesheet has `.reflex-container .reflex-element
+    // > div { display: block; width: 100%; }` -- this div is a direct
+    // child of the Workarea ReflexElement, and that selector (2 classes +
+    // 1 type) is more specific than `.AttachmentEditors.hidden` (2
+    // classes) alone, so it wins and keeps this panel visible. `hidden`
+    // must always win regardless of ancestor context.
+    display: none !important;
   }
 }
 
@@ -35,13 +41,17 @@
     flex-grow: 1;
     position: relative;
 
-    .ReactCodeMirror {
+    .cpp-editor-codemirror {
       @include scrollable-attachment(0, hidden);
+
+      .cm-editor {
+        height: 100%;
+      }
     }
-    .CodeMirror-line, .CodeMirror-line * {
+    .cm-line, .cm-line * {
       cursor: text;
     }
-    .CodeMirror-linenumber {
+    .cm-gutterElement {
       cursor: default;
     }
   }

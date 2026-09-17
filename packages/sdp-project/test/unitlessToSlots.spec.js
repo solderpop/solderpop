@@ -13,12 +13,14 @@ import * as Helper from './helpers.js';
 const { assert } = chai;
 
 describe('Migration: old dimensions to slots', () => {
-  const loadXodballWithoutMigrating = R.compose(
+  const loadSolderballWithoutMigrating = R.compose(
     Project.injectProjectTypeHints,
     addMissingOptionalProjectFields,
     Helper.loadJSON
   );
-  const project = loadXodballWithoutMigrating('./fixtures/blinking.xodball');
+  const project = loadSolderballWithoutMigrating(
+    './fixtures/blinking.solderball'
+  );
 
   // Getters
   const getActualNodePositions = R.compose(

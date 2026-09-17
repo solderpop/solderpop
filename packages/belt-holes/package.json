@@ -1,7 +1,8 @@
 {
   "name": "belt-holes",
   "type": "module",
-  "version": "0.34.0",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
     "refmt": "rescript format -all",
     "build": "rescript build",
@@ -20,6 +21,7 @@
     "@babel/preset-env": "^8.0.2",
     "@rescript/runtime": "^12.3.0",
     "babel-jest": "^24.9.0",
+    "jest": "^24.5.0",
     "rescript": "^12.3.0"
   },
   "jest": {

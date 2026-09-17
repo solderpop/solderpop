@@ -16,12 +16,12 @@ const calculateNodeIdForStructuralComparison = (node) => {
 describe('buses', () => {
   describe('linkifyPatchRecursively', () => {
     it('replaces bus nodes with links', () => {
-      const project = H.loadXodball('./fixtures/linkify.xodball');
+      const project = H.loadSolderball('./fixtures/linkify.solderball');
 
       const actualProject = XP.linkifyPatchRecursively('@/main', project);
 
-      const expectedProject = H.loadXodball(
-        './fixtures/linkify.expected.xodball'
+      const expectedProject = H.loadSolderball(
+        './fixtures/linkify.expected.solderball'
       );
 
       H.assertPatchesAreStructurallyEqual(
@@ -45,7 +45,9 @@ describe('buses', () => {
     };
 
     it('splits links with given ids to buses', () => {
-      const project = H.loadXodball('./fixtures/split-links-to-buses.xodball');
+      const project = H.loadSolderball(
+        './fixtures/split-links-to-buses.solderball'
+      );
 
       const allLinkIds = R.compose(
         R.map(XP.getLinkId),
@@ -60,8 +62,8 @@ describe('buses', () => {
         project
       );
 
-      const expectedProject = H.loadXodball(
-        './fixtures/split-links-to-buses.expected.xodball'
+      const expectedProject = H.loadSolderball(
+        './fixtures/split-links-to-buses.expected.solderball'
       );
 
       H.assertPatchesAreStructurallyEqual(

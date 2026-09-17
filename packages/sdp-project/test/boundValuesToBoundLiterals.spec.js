@@ -164,8 +164,8 @@ describe('Migration: bound values to bound literals', () => {
     // New Project should not contain any Node with old property
     // `boundValues`, instead of it all Nodes should have `boundLiterals`
     it('returns fully migrated Project', () => {
-      const blinking = Helper.loadXodball(
-        './fixtures/legacy-bound-values.xodball'
+      const blinking = Helper.loadSolderball(
+        './fixtures/legacy-bound-values.solderball'
       );
       const migrated = migrateBoundValuesToBoundLiterals(blinking);
       const isThereAnyBoundValues = R.compose(
@@ -176,8 +176,8 @@ describe('Migration: bound values to bound literals', () => {
       assert.isFalse(isThereAnyBoundValues);
     });
     it('returns partially migrated Project if it contains not installed libs', () => {
-      const blinking = Helper.loadXodball(
-        './fixtures/legacy-bound-values.no-installed-libs.xodball'
+      const blinking = Helper.loadSolderball(
+        './fixtures/legacy-bound-values.no-installed-libs.solderball'
       );
       const migrated = migrateBoundValuesToBoundLiterals(blinking);
       const nodes = R.pick([

@@ -386,7 +386,9 @@ describe('Project', () => {
       );
     });
     it('should be Either.Right for valid blink project', () => {
-      const blinkProject = Helper.loadXodball('./fixtures/blinking.xodball');
+      const blinkProject = Helper.loadSolderball(
+        './fixtures/blinking.solderball'
+      );
       const mainPatch = Project.getPatchByPathUnsafe('@/main', blinkProject);
       const result = Project.validatePatchContents(mainPatch, blinkProject);
       Helper.expectEitherRight(
@@ -740,8 +742,8 @@ describe('Project', () => {
       );
     });
     it('returns Either Error for patch with dead reference errors in entry patch', () => {
-      const brokenProject = Helper.loadXodball(
-        './fixtures/broken-project.xodball'
+      const brokenProject = Helper.loadSolderball(
+        './fixtures/broken-project.solderball'
       );
       const result = Project.validatePatchReqursively('@/main', brokenProject);
       Helper.expectEitherError(
@@ -750,8 +752,8 @@ describe('Project', () => {
       );
     });
     it('returns Either Error for patch with dead link deeply in patch tree', () => {
-      const brokenProject = Helper.loadXodball(
-        './fixtures/dead-link-deeply.xodball'
+      const brokenProject = Helper.loadSolderball(
+        './fixtures/dead-link-deeply.solderball'
       );
       const result = Project.validatePatchReqursively('@/main', brokenProject);
       Helper.expectEitherError(
@@ -1457,8 +1459,8 @@ describe('Project', () => {
   });
 
   describe('validateProject', () => {
-    const brokenProject = Helper.loadXodball(
-      './fixtures/broken-project.xodball'
+    const brokenProject = Helper.loadSolderball(
+      './fixtures/broken-project.solderball'
     );
     const project = addMissingOptionalProjectFields(brokenProject);
     const unfoldRight = (e) => Either.either(R.always(null), R.identity, e);
@@ -1491,15 +1493,17 @@ describe('Project', () => {
       assert.deepEqual(unfoldRight(res), validProject);
     });
     it('returns Either Project for valid blink project', () => {
-      const blinkProject = Helper.loadXodball('./fixtures/blinking.xodball');
+      const blinkProject = Helper.loadSolderball(
+        './fixtures/blinking.solderball'
+      );
       const res = Project.validateProject(blinkProject);
 
       assert.equal(res.isRight, true);
       assert.deepEqual(unfoldRight(res), blinkProject);
     });
     it('returns Either Project for valid variadic project', () => {
-      const variadicsProject = Helper.loadXodball(
-        './fixtures/variadics.xodball'
+      const variadicsProject = Helper.loadSolderball(
+        './fixtures/variadics.solderball'
       );
       const res = Project.validateProject(variadicsProject);
 
@@ -1509,8 +1513,8 @@ describe('Project', () => {
   });
 
   describe('project surviving', () => {
-    const brokenProject = Helper.loadXodball(
-      './fixtures/broken-project.xodball'
+    const brokenProject = Helper.loadSolderball(
+      './fixtures/broken-project.solderball'
     );
     const project = addMissingOptionalProjectFields(brokenProject);
     const curPatch = Project.getPatchByPathUnsafe('@/main', project);
@@ -1536,7 +1540,7 @@ describe('Project', () => {
 
   describe('getPatchDependencies', () => {
     it('lists all patches used in a given patch and their dependencies', () => {
-      const blinking = Helper.loadXodball('./fixtures/blinking.xodball');
+      const blinking = Helper.loadSolderball('./fixtures/blinking.solderball');
       const deps = Project.getPatchDependencies('@/main', blinking);
 
       assert.deepEqual(deps, [
@@ -1559,7 +1563,7 @@ describe('Project', () => {
 
   describe('getPinsForNode', () => {
     it('returns valid Pins for valid Patch & Node', () => {
-      const project = Helper.loadXodball('./fixtures/blinking.xodball');
+      const project = Helper.loadSolderball('./fixtures/blinking.solderball');
       const curPatch = Project.getPatchByPathUnsafe('@/main', project);
       const node = Patch.getNodeByIdUnsafe('BJ4l0cVdKe', curPatch);
       const pins = Project.getPinsForNode(node, curPatch, project);
@@ -1582,8 +1586,8 @@ describe('Project', () => {
       });
     });
     it('returns dead Pins for Node with broken input Links', () => {
-      const brokenProject = Helper.loadXodball(
-        './fixtures/broken-project.xodball'
+      const brokenProject = Helper.loadSolderball(
+        './fixtures/broken-project.solderball'
       );
       const curPatch = Project.getPatchByPathUnsafe('@/main', brokenProject);
       const node = Patch.getNodeByIdUnsafe('brokenNodeInLinks', curPatch);
@@ -1603,8 +1607,8 @@ describe('Project', () => {
       });
     });
     it('returns dead Pins for Node with broken output Links', () => {
-      const brokenProject = Helper.loadXodball(
-        './fixtures/broken-project.xodball'
+      const brokenProject = Helper.loadSolderball(
+        './fixtures/broken-project.solderball'
       );
       const curPatch = Project.getPatchByPathUnsafe('@/main', brokenProject);
       const node = Patch.getNodeByIdUnsafe('brokenNodeOutLinks', curPatch);
@@ -1618,8 +1622,8 @@ describe('Project', () => {
       });
     });
     it('returns dead Pins for valid Node with broken PinKey', () => {
-      const brokenProject = Helper.loadXodball(
-        './fixtures/broken-project.xodball'
+      const brokenProject = Helper.loadSolderball(
+        './fixtures/broken-project.solderball'
       );
       const curPatch = Project.getPatchByPathUnsafe('@/main', brokenProject);
       const node = Patch.getNodeByIdUnsafe('validNodeId', curPatch);
@@ -1632,7 +1636,7 @@ describe('Project', () => {
       });
     });
     it('returns valid Pins for variadic Node with arityLevel === 4 and unlabeled pins', () => {
-      const project = Helper.loadXodball('./fixtures/variadics.xodball');
+      const project = Helper.loadSolderball('./fixtures/variadics.solderball');
       const curPatch = Project.getPatchByPathUnsafe('@/main', project);
       const node = Patch.getNodeByIdUnsafe('HytU4ZsDz', curPatch);
       const pins = Project.getPinsForNode(node, curPatch, project);
@@ -1661,7 +1665,7 @@ describe('Project', () => {
       });
     });
     it('returns valid Pins for variadic Node with arityLevel === 2 and labeled pins', () => {
-      const project = Helper.loadXodball('./fixtures/variadics.xodball');
+      const project = Helper.loadSolderball('./fixtures/variadics.solderball');
       const curPatch = Project.getPatchByPathUnsafe('@/main', project);
       const node = Patch.getNodeByIdUnsafe('S1z24-iPG', curPatch);
       const pins = Project.getPinsForNode(node, curPatch, project);
@@ -1683,7 +1687,7 @@ describe('Project', () => {
       });
     });
     it('returns valid Pins for variadic Node with arityLevel === 3 and labeled pins with numbers and ariteStep === 2', () => {
-      const project = Helper.loadXodball('./fixtures/variadics.xodball');
+      const project = Helper.loadSolderball('./fixtures/variadics.solderball');
       const curPatch = Project.getPatchByPathUnsafe('@/main', project);
       const node = Patch.getNodeByIdUnsafe('SkTgS-ovf', curPatch);
       const pins = Project.getPinsForNode(node, curPatch, project);
@@ -1806,9 +1810,11 @@ describe('Project', () => {
 
   describe('changeNodeTypeUnsafe', () => {
     it('changes node type even if some links will become invalid', () => {
-      const project = Helper.loadXodball('./fixtures/change-node-type.xodball');
-      const expected = Helper.loadXodball(
-        './fixtures/change-node-type.expected.xodball'
+      const project = Helper.loadSolderball(
+        './fixtures/change-node-type.solderball'
+      );
+      const expected = Helper.loadSolderball(
+        './fixtures/change-node-type.expected.solderball'
       );
 
       const actual = Project.changeNodeTypeUnsafe(

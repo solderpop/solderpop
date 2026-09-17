@@ -1,6 +1,5 @@
 import R from 'ramda';
 import React from 'react';
-import { HotKeys } from 'react-hotkeys';
 import * as XP from 'sdp-project';
 
 import { EDITOR_MODE } from '../../../constants.js';
@@ -124,7 +123,7 @@ const changingArityLevel = {
     )(api.props.nodes);
 
     return (
-      <HotKeys className="PatchWrapper" handlers={{}}>
+      <div className="PatchWrapper" tabIndex={-1}>
         <PatchSVG
           onMouseMove={bindApi(api, this.onMouseMove)}
           onMouseUp={bindApi(api, this.onMouseUp)}
@@ -165,7 +164,7 @@ const changingArityLevel = {
             />
           </g>
         </PatchSVG>
-      </HotKeys>
+      </div>
     );
   },
 };

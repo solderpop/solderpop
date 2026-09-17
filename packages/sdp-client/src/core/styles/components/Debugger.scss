@@ -117,17 +117,11 @@
     .simulation-button {
       @include deploymentPanelButton();
       font-size: 16px; //To look the same size as neighbor icons
-      &:before {
-        // Compensate optical center of the icon inside the button
-        display: block;
-        margin-top: -4px;
-      }
     }
     .close-button {
       @include deploymentPanelButton();
 
-      &::before {
-        line-height: 24px;
+      svg {
         opacity: 0.4;
       }
     }

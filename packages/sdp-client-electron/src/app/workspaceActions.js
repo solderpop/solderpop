@@ -4,7 +4,7 @@ import path from 'path';
 
 import * as XP from 'sdp-project';
 import {
-  getPathToXodProject,
+  getPathToSdpProject,
   spawnWorkspaceFile,
   saveAll,
   validateWorkspace,
@@ -143,7 +143,7 @@ export const saveLibraries = R.curry((event, payload) =>
 // :: (Path -> ()) -> Path -> Promise Project Error
 export const loadProjectByPath = R.curry(
   async (updateProjectPath, pathToOpen) => {
-    const projectPath = await getPathToXodProject(pathToOpen);
+    const projectPath = await getPathToSdpProject(pathToOpen);
     return R.composeP(
       R.tap(() => updateProjectPath(projectPath)),
       loadProject(R.__, projectPath),
@@ -205,8 +205,8 @@ export const onLoadProject = R.curry((updateProjectPath, send, pathToOpen) =>
 // :: (Path -> ()) -> (String -> a -> ()) -> (() -> Path) -> Path -> Promise Project Error
 export const onSelectProject = R.curry(
   async (updateProjectPath, send, pathGetter, projectMeta) => {
-    const projectXodPath = getFilePath(projectMeta);
-    const projectPath = await getPathToXodProject(projectXodPath);
+    const projectSdpPath = getFilePath(projectMeta);
+    const projectPath = await getPathToSdpProject(projectSdpPath);
 
     return pathGetter()
       .then((wsPath) =>

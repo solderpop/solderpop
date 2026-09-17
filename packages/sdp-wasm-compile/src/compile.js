@@ -67,7 +67,7 @@ export const writeSources = async (buildDir, programCode) => {
   ]);
 };
 
-export const wrapCompileError = err =>
+export const wrapCompileError = (err) =>
   Promise.reject(
     createError('WASM_COMPILATION_ERROR', {
       message: err.message,

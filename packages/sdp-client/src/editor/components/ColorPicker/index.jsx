@@ -45,9 +45,13 @@ class ColorPicker extends React.Component {
     this.commitInputs = this.commitInputs.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!R.equals(this.state.color, nextProps.color)) {
-      this.setState(getStateColors(nextProps.color));
+  componentDidUpdate() {
+    // Compares against state (not prevProps): color can drift from props
+    // between renders (e.g. mid-drag before the debounced onChange lands
+    // back as a prop), and this should only resync when the prop is
+    // actually out of step with what's currently shown.
+    if (!R.equals(this.state.color, this.props.color)) {
+      this.setState(getStateColors(this.props.color));
     }
   }
 

@@ -125,7 +125,7 @@ export { default as expandVariadicNodes } from './expandVariadicNodes.js';
 export { default as expandVariadicPassNodes } from './expandVariadicPassNodes.js';
 export * from './patchPathUtils.js';
 export * from './versionUtils.js';
-export * from './xodball.js';
+export * from './solderball.js';
 export * from './typeDeduction.js';
 export * from './TypeDeduction_Js.bs.js';
 export { default as autoresolveTypes } from './autoresolveTypes.js';

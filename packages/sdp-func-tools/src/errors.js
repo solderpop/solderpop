@@ -48,7 +48,7 @@ export const prependTraceToError = def(
           foldEither((e) => {
             // We have to reassign stack to the new Error object
             // to keep the stack trace to place where error really occured
-            // eslint-disable-next-line no-param-reassign
+
             e.stack = err.stack;
             return Either.Left(e);
           }, Either.of),

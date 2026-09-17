@@ -29,6 +29,7 @@ class TabsItem extends React.Component {
 
   setRef(ref) {
     this.ref = ref;
+    if (this.props.dndRef) this.props.dndRef(ref);
   }
 
   scrollIntoView() {
@@ -57,14 +58,19 @@ class TabsItem extends React.Component {
 
   render() {
     const { type, label, isActive } = this.props.data;
+    const { style, dndAttributes, dndListeners, isSorting } = this.props;
 
     return (
       <li
         ref={this.setRef}
+        style={style}
         className={cn('TabsItem', `TabsItem--${type}`, {
           'is-active': isActive,
+          'is-sorting': isSorting,
         })}
         onMouseDown={this.handleMouseDown}
+        {...dndAttributes}
+        {...dndListeners}
       >
         <span className="tab-name">{label}</span>
         <span className="tab-close" onMouseDown={this.handleClose}>
@@ -88,6 +94,11 @@ TabsItem.propTypes = {
   data: TabsDataPropType,
   onClick: PropTypes.func,
   onClose: PropTypes.func,
+  dndRef: PropTypes.func,
+  style: PropTypes.object,
+  dndAttributes: PropTypes.object,
+  dndListeners: PropTypes.object,
+  isSorting: PropTypes.bool,
 };
 
 export default TabsItem;

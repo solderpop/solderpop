@@ -16,26 +16,27 @@ const options = {
   distance: 1000,
   maxPatternLength: 32,
   minMatchCharLength: 2,
+  // Fuse.js requires these to sum to <= 1;
   keys: [
     {
       name: 'path',
-      weight: 0.1,
+      weight: 0.087,
     },
     {
       name: 'keywords',
-      weight: 0.2,
+      weight: 0.174,
     },
     {
       name: 'lib',
-      weight: 0.05,
+      weight: 0.043,
     },
     {
       name: 'description',
-      weight: 0.3,
+      weight: 0.261,
     },
     {
       name: 'fullDescription',
-      weight: 0.5,
+      weight: 0.435,
     },
   ],
 };

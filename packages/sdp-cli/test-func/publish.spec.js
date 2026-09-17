@@ -1,14 +1,21 @@
-import { test } from '@oclif/test';
-import chai from 'chai';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import process from 'process';
 import fs from 'fs-extra';
-import { bundledWorkspacePath, createWorkingDirectory } from './helpers.js';
+import nock from 'nock';
+import { runCommand } from '@oclif/test';
+import chai from 'chai';
+import {
+  bundledWorkspacePath,
+  createWorkingDirectory,
+  stripOclifTestTsWarning,
+  withEnv,
+} from './helpers.js';
 
 const { assert } = chai;
 
-// save process.exit for unmocking
-const { exit } = process;
+// see test-func/help.spec.js for why this is needed
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 // save tty status
 const { isTTY } = process.stdout;
@@ -95,312 +102,330 @@ const postVersionEndpointFailed409 = (api) =>
   api.post(/users\/.*\/libs\/.*\/versions/).reply(409);
 
 const its = (wd) => {
-  const stdMock = test.stdout().stderr();
-
-  stdMock
-    .env({ XOD_USERNAME: username })
-    .env({ XOD_PASSWORD: password })
-    .command(['publish'])
-    .it(
-      `cannot find project without argument, prints error to stderr, non-zero exit code`,
-      async (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be emply');
-        assert.match(
-          ctx.stderr,
-          /could not find project directory/,
-          'stderr must be with error'
-        );
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
-      }
-    );
-
-  stdMock
-    .env({ XOD_USERNAME: username })
-    .env({ XOD_PASSWORD: password })
-    .command([
-      'publish',
-      path.resolve(wd, 'kajsdhflkjsdhflkjashldkfjlkjasdfkjl'),
-    ])
-    .it('fails when wrong path to project, exits with non-zero code', (ctx) => {
-      assert.equal(ctx.stdout, '', 'stdout must be emply');
+  it(`cannot find project without argument, prints error to stderr, non-zero exit code`, () =>
+    withEnv({ XOD_USERNAME: username, XOD_PASSWORD: password }, async () => {
+      const { stdout, stderr, error } = await runCommand(['publish'], {
+        root,
+      });
+      assert.equal(stdout, '', 'stdout must be emply');
       assert.match(
-        ctx.stderr,
-        /Invalid file path/,
+        stderr,
+        /could not find project directory/,
         'stderr must be with error'
       );
-      assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
-    });
+      assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
+    }));
 
-  stdMock
-    .nock(`http://pm.${apiSuffix}`, postAuthEndpointFailed)
-    .nock(`http://pm.${apiSuffix}`, getUserEndpoint)
-    .nock(`http://pm.${apiSuffix}`, getLibEndpoint)
-    .env({ XOD_USERNAME: username })
-    .env({ XOD_PASSWORD: password })
-    .env({ XOD_API: apiSuffix })
-    .env({ XOD_ONBEHALF: onBehalfUsername })
-    .command(['publish', projectPath])
-    .it(
-      `can't authenticate, stderr with error, stdin is empty, non-zero exit`,
-      (ctx) => {
+  it('fails when wrong path to project, exits with non-zero code', () =>
+    withEnv({ XOD_USERNAME: username, XOD_PASSWORD: password }, async () => {
+      const { stdout, stderr, error } = await runCommand(
+        ['publish', path.resolve(wd, 'kajsdhflkjsdhflkjashldkfjlkjasdfkjl')],
+        { root }
+      );
+      assert.equal(stdout, '', 'stdout must be emply');
+      assert.match(stderr, /Invalid file path/, 'stderr must be with error');
+      assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
+    }));
+
+  it(`can't authenticate, stderr with error, stdin is empty, non-zero exit`, () =>
+    withEnv(
+      {
+        XOD_USERNAME: username,
+        XOD_PASSWORD: password,
+        XOD_API: apiSuffix,
+        XOD_ONBEHALF: onBehalfUsername,
+      },
+      async () => {
+        postAuthEndpointFailed(nock(`http://pm.${apiSuffix}`));
+        getUserEndpoint(nock(`http://pm.${apiSuffix}`));
+        getLibEndpoint(nock(`http://pm.${apiSuffix}`));
+        const { stdout, stderr, error } = await runCommand(
+          ['publish', projectPath],
+          { root }
+        );
         // sorry, when TTY is off some mocking bug happens
         if (process.stdout.isTTY) {
-          assert.equal(ctx.stdout, '', 'stdout must be empty');
+          assert.equal(stdout, '', 'stdout must be empty');
         }
-        assert.include(ctx.stderr, 'Forbidden', 'stderr must be with error');
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
+        assert.include(stderr, 'Forbidden', 'stderr must be with error');
+        assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
       }
-    );
+    ));
 
-  stdMock
-    .nock(`http://pm.${apiSuffix}`, postAuthEndpoint)
-    .nock(`http://pm.${apiSuffix}`, getUserEndpointFailed404)
-    .nock(`http://pm.${apiSuffix}`, getLibEndpoint)
-    .env({ XOD_USERNAME: username })
-    .env({ XOD_PASSWORD: password })
-    .env({ XOD_API: apiSuffix })
-    .env({ XOD_ONBEHALF: onBehalfUsername })
-    .command(['publish', projectPath])
-    .it(
-      `can't publish because user not found, stderr with error, stdin is empty, non-zero exit`,
-      (ctx) => {
-        // sorry, when TTY is off some mocking bug happens
+  it(`can't publish because user not found, stderr with error, stdin is empty, non-zero exit`, () =>
+    withEnv(
+      {
+        XOD_USERNAME: username,
+        XOD_PASSWORD: password,
+        XOD_API: apiSuffix,
+        XOD_ONBEHALF: onBehalfUsername,
+      },
+      async () => {
+        postAuthEndpoint(nock(`http://pm.${apiSuffix}`));
+        getUserEndpointFailed404(nock(`http://pm.${apiSuffix}`));
+        getLibEndpoint(nock(`http://pm.${apiSuffix}`));
+        const { stdout, stderr, error } = await runCommand(
+          ['publish', projectPath],
+          { root }
+        );
         if (process.stdout.isTTY) {
-          assert.equal(ctx.stdout, '', 'stdout must be empty');
+          assert.equal(stdout, '', 'stdout must be empty');
         }
-        assert.match(ctx.stderr, /Unknown user/, 'stderr must be with error');
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
+        assert.match(stderr, /Unknown user/, 'stderr must be with error');
+        assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
       }
-    );
+    ));
 
-  stdMock
-    .nock(`http://pm.${apiSuffix}`, postAuthEndpoint)
-    .nock(`http://pm.${apiSuffix}`, getUserEndpointFailed500)
-    .nock(`http://pm.${apiSuffix}`, getLibEndpoint)
-    .env({ XOD_USERNAME: username })
-    .env({ XOD_PASSWORD: password })
-    .env({ XOD_API: apiSuffix })
-    .env({ XOD_ONBEHALF: onBehalfUsername })
-    .command(['publish', projectPath])
-    .it(
-      `can't publish because of failed fetch of user, stderr with error, stdin is empty, non-zero exit`,
-      (ctx) => {
-        // sorry, when TTY is off some mocking bug happens
+  it(`can't publish because of failed fetch of user, stderr with error, stdin is empty, non-zero exit`, () =>
+    withEnv(
+      {
+        XOD_USERNAME: username,
+        XOD_PASSWORD: password,
+        XOD_API: apiSuffix,
+        XOD_ONBEHALF: onBehalfUsername,
+      },
+      async () => {
+        postAuthEndpoint(nock(`http://pm.${apiSuffix}`));
+        getUserEndpointFailed500(nock(`http://pm.${apiSuffix}`));
+        getLibEndpoint(nock(`http://pm.${apiSuffix}`));
+        const { stdout, stderr, error } = await runCommand(
+          ['publish', projectPath],
+          { root }
+        );
         if (process.stdout.isTTY) {
-          assert.equal(ctx.stdout, '', 'stdout must be empty');
+          assert.equal(stdout, '', 'stdout must be empty');
         }
-        assert.match(ctx.stderr, /Can't get user/, 'stderr must be with error');
+        assert.match(stderr, /Can't get user/, 'stderr must be with error');
         assert.match(
-          ctx.stderr,
+          stderr,
           /Internal Server Error/,
           'stderr must be with error'
         );
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
+        assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
       }
-    );
+    ));
 
-  stdMock
-    .nock(`http://pm.${apiSuffix}`, postAuthEndpoint)
-    .nock(`http://pm.${apiSuffix}`, getUserEndpointAnotherWithoutTrust)
-    .nock(`http://pm.${apiSuffix}`, getLibEndpoint)
-    .env({ XOD_USERNAME: username })
-    .env({ XOD_PASSWORD: password })
-    .env({ XOD_API: apiSuffix })
-    .env({ XOD_ONBEHALF: onBehalfUsername })
-    .command(['publish', projectPath])
-    .it(
-      `can't publish because of target users not trusts current user, stderr with error, stdin is empty, non-zero exit`,
-      (ctx) => {
-        // sorry, when TTY is off some mocking bug happens
+  it(`can't publish because of target users not trusts current user, stderr with error, stdin is empty, non-zero exit`, () =>
+    withEnv(
+      {
+        XOD_USERNAME: username,
+        XOD_PASSWORD: password,
+        XOD_API: apiSuffix,
+        XOD_ONBEHALF: onBehalfUsername,
+      },
+      async () => {
+        postAuthEndpoint(nock(`http://pm.${apiSuffix}`));
+        getUserEndpointAnotherWithoutTrust(nock(`http://pm.${apiSuffix}`));
+        getLibEndpoint(nock(`http://pm.${apiSuffix}`));
+        const { stdout, stderr, error } = await runCommand(
+          ['publish', projectPath],
+          { root }
+        );
         if (process.stdout.isTTY) {
-          assert.equal(ctx.stdout, '', 'stdout must be empty');
+          assert.equal(stdout, '', 'stdout must be empty');
         }
-        assert.match(ctx.stderr, /access/, 'stderr must be with error');
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
+        assert.match(stderr, /access/, 'stderr must be with error');
+        assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
       }
-    );
+    ));
 
-  stdMock
-    .nock(`http://pm.${apiSuffix}`, postAuthEndpoint)
-    .nock(`http://pm.${apiSuffix}`, getUserEndpointAnother)
-    .nock(`http://pm.${apiSuffix}`, getLibEndpointFailed404)
-    .nock(`http://pm.${apiSuffix}`, putLibEndpointFailed)
-    .env({ XOD_USERNAME: username })
-    .env({ XOD_PASSWORD: password })
-    .env({ XOD_API: apiSuffix })
-    .env({ XOD_ONBEHALF: onBehalfUsername })
-    .command(['publish', projectPath])
-    .it(
-      `can't publish because of library not found and can't put new one, stderr with error, stdin is empty, non-zero exit`,
-      (ctx) => {
-        // sorry, when TTY is off some mocking bug happens
+  it(`can't publish because of library not found and can't put new one, stderr with error, stdin is empty, non-zero exit`, () =>
+    withEnv(
+      {
+        XOD_USERNAME: username,
+        XOD_PASSWORD: password,
+        XOD_API: apiSuffix,
+        XOD_ONBEHALF: onBehalfUsername,
+      },
+      async () => {
+        postAuthEndpoint(nock(`http://pm.${apiSuffix}`));
+        getUserEndpointAnother(nock(`http://pm.${apiSuffix}`));
+        getLibEndpointFailed404(nock(`http://pm.${apiSuffix}`));
+        putLibEndpointFailed(nock(`http://pm.${apiSuffix}`));
+        const { stdout, stderr, error } = await runCommand(
+          ['publish', projectPath],
+          { root }
+        );
         if (process.stdout.isTTY) {
-          assert.equal(ctx.stdout, '', 'stdout must be empty');
+          assert.equal(stdout, '', 'stdout must be empty');
         }
-        assert.match(ctx.stderr, /Not Found/, 'stderr must be with error');
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
+        assert.match(stderr, /Not Found/, 'stderr must be with error');
+        assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
       }
-    );
+    ));
 
-  stdMock
-    .nock(`http://pm.${apiSuffix}`, postAuthEndpoint)
-    .nock(`http://pm.${apiSuffix}`, getUserEndpointAnother)
-    .nock(`http://pm.${apiSuffix}`, getLibEndpointFailed500)
-    .env({ XOD_USERNAME: username })
-    .env({ XOD_PASSWORD: password })
-    .env({ XOD_API: apiSuffix })
-    .env({ XOD_ONBEHALF: onBehalfUsername })
-    .command(['publish', projectPath])
-    .it(
-      `can't publish because of can't get library, stderr with error, stdin is empty, non-zero exit`,
-      (ctx) => {
-        // sorry, when TTY is off some mocking bug happens
+  it(`can't publish because of can't get library, stderr with error, stdin is empty, non-zero exit`, () =>
+    withEnv(
+      {
+        XOD_USERNAME: username,
+        XOD_PASSWORD: password,
+        XOD_API: apiSuffix,
+        XOD_ONBEHALF: onBehalfUsername,
+      },
+      async () => {
+        postAuthEndpoint(nock(`http://pm.${apiSuffix}`));
+        getUserEndpointAnother(nock(`http://pm.${apiSuffix}`));
+        getLibEndpointFailed500(nock(`http://pm.${apiSuffix}`));
+        const { stdout, stderr, error } = await runCommand(
+          ['publish', projectPath],
+          { root }
+        );
         if (process.stdout.isTTY) {
-          assert.equal(ctx.stdout, '', 'stdout must be empty');
+          assert.equal(stdout, '', 'stdout must be empty');
         }
         assert.match(
-          ctx.stderr,
+          stderr,
           /Internal Server Error/,
           'stderr must be with error'
         );
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
+        assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
       }
-    );
+    ));
 
-  stdMock
-    .nock(`http://pm.${apiSuffix}`, postAuthEndpoint)
-    .nock(`http://pm.${apiSuffix}`, getUserEndpointAnother)
-    .nock(`http://pm.${apiSuffix}`, getLibEndpointFailed404)
-    .nock(`http://pm.${apiSuffix}`, putLibEndpointFailed403)
-    .env({ XOD_USERNAME: username })
-    .env({ XOD_PASSWORD: password })
-    .env({ XOD_API: apiSuffix })
-    .env({ XOD_ONBEHALF: onBehalfUsername })
-    .command(['publish', projectPath])
-    .it(
-      `can't publish because of library not found and access denied on creating, stderr with error, stdin is empty, non-zero exit`,
-      (ctx) => {
-        // sorry, when TTY is off some mocking bug happens
+  it(`can't publish because of library not found and access denied on creating, stderr with error, stdin is empty, non-zero exit`, () =>
+    withEnv(
+      {
+        XOD_USERNAME: username,
+        XOD_PASSWORD: password,
+        XOD_API: apiSuffix,
+        XOD_ONBEHALF: onBehalfUsername,
+      },
+      async () => {
+        postAuthEndpoint(nock(`http://pm.${apiSuffix}`));
+        getUserEndpointAnother(nock(`http://pm.${apiSuffix}`));
+        getLibEndpointFailed404(nock(`http://pm.${apiSuffix}`));
+        putLibEndpointFailed403(nock(`http://pm.${apiSuffix}`));
+        const { stdout, stderr, error } = await runCommand(
+          ['publish', projectPath],
+          { root }
+        );
         if (process.stdout.isTTY) {
-          assert.equal(ctx.stdout, '', 'stdout must be empty');
+          assert.equal(stdout, '', 'stdout must be empty');
         }
-        assert.match(ctx.stderr, /access/, 'stderr must be with error');
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
+        assert.match(stderr, /access/, 'stderr must be with error');
+        assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
       }
-    );
+    ));
 
-  stdMock
-    .nock(`http://pm.${apiSuffix}`, postAuthEndpoint)
-    .nock(`http://pm.${apiSuffix}`, getUserEndpointAnother)
-    .nock(`http://pm.${apiSuffix}`, getLibEndpointFailed404)
-    .nock(`http://pm.${apiSuffix}`, putLibEndpoint)
-    .nock(`http://pm.${apiSuffix}`, postVersionEndpointFailed)
-    .env({ XOD_USERNAME: username })
-    .env({ XOD_PASSWORD: password })
-    .env({ XOD_API: apiSuffix })
-    .env({ XOD_ONBEHALF: onBehalfUsername })
-    .command(['publish', projectPath])
-    .it(
-      `can't publish because post version return unknown error, stderr with error, stdin is empty, non-zero exit`,
-      (ctx) => {
-        // sorry, when TTY is off some mocking bug happens
+  it(`can't publish because post version return unknown error, stderr with error, stdin is empty, non-zero exit`, () =>
+    withEnv(
+      {
+        XOD_USERNAME: username,
+        XOD_PASSWORD: password,
+        XOD_API: apiSuffix,
+        XOD_ONBEHALF: onBehalfUsername,
+      },
+      async () => {
+        postAuthEndpoint(nock(`http://pm.${apiSuffix}`));
+        getUserEndpointAnother(nock(`http://pm.${apiSuffix}`));
+        getLibEndpointFailed404(nock(`http://pm.${apiSuffix}`));
+        putLibEndpoint(nock(`http://pm.${apiSuffix}`));
+        postVersionEndpointFailed(nock(`http://pm.${apiSuffix}`));
+        const { stdout, stderr, error } = await runCommand(
+          ['publish', projectPath],
+          { root }
+        );
         if (process.stdout.isTTY) {
-          assert.equal(ctx.stdout, '', 'stdout must be empty');
+          assert.equal(stdout, '', 'stdout must be empty');
         }
-        assert.match(ctx.stderr, /Can't publish/, 'stderr must be with error');
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
+        assert.match(stderr, /Can't publish/, 'stderr must be with error');
+        assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
       }
-    );
+    ));
 
-  stdMock
-    .nock(`http://pm.${apiSuffix}`, postAuthEndpoint)
-    .nock(`http://pm.${apiSuffix}`, getUserEndpointAnother)
-    .nock(`http://pm.${apiSuffix}`, getLibEndpointFailed404)
-    .nock(`http://pm.${apiSuffix}`, putLibEndpoint)
-    .nock(`http://pm.${apiSuffix}`, postVersionEndpointFailed409)
-    .env({ XOD_USERNAME: username })
-    .env({ XOD_PASSWORD: password })
-    .env({ XOD_API: apiSuffix })
-    .env({ XOD_ONBEHALF: onBehalfUsername })
-    .command(['publish', projectPath])
-    .it(
-      `can't publish because version exists, stderr with error, stdin is empty, non-zero exit`,
-      (ctx) => {
-        // sorry, when TTY is off some mocking bug happens
+  it(`can't publish because version exists, stderr with error, stdin is empty, non-zero exit`, () =>
+    withEnv(
+      {
+        XOD_USERNAME: username,
+        XOD_PASSWORD: password,
+        XOD_API: apiSuffix,
+        XOD_ONBEHALF: onBehalfUsername,
+      },
+      async () => {
+        postAuthEndpoint(nock(`http://pm.${apiSuffix}`));
+        getUserEndpointAnother(nock(`http://pm.${apiSuffix}`));
+        getLibEndpointFailed404(nock(`http://pm.${apiSuffix}`));
+        putLibEndpoint(nock(`http://pm.${apiSuffix}`));
+        postVersionEndpointFailed409(nock(`http://pm.${apiSuffix}`));
+        const { stdout, stderr, error } = await runCommand(
+          ['publish', projectPath],
+          { root }
+        );
         if (process.stdout.isTTY) {
-          assert.equal(ctx.stdout, '', 'stdout must be empty');
+          assert.equal(stdout, '', 'stdout must be empty');
         }
-        assert.match(ctx.stderr, /exists/, 'stderr must be with error');
-        assert.notEqual(process.exitCode, 0, 'exit code must be non-zero');
+        assert.match(stderr, /exists/, 'stderr must be with error');
+        assert.notEqual(error?.oclif?.exit, 0, 'exit code must be non-zero');
       }
-    );
+    ));
 
-  stdMock
-    .nock(`https://pm.${apiSuffixDefault}`, postAuthEndpoint)
-    .nock(`https://pm.${apiSuffixDefault}`, getUserEndpoint)
-    .nock(`https://pm.${apiSuffixDefault}`, getLibEndpoint)
-    .nock(`https://pm.${apiSuffixDefault}`, postVersionEndpoint)
-    .command([
-      'publish',
-      `--username=${username}`,
-      `--password=${password}`,
-      projectPath,
-    ])
-    .it(
-      `can publish library when good username and password from flag and default api suffix, stderr with messages, stdout is empty, exits with zero code`,
-      (ctx) => {
-        // sorry, when TTY is off some mocking bug happens
-        if (process.stdout.isTTY) {
-          assert.equal(ctx.stdout, '', 'stdout must be empty');
-        }
-        assert.notEqual(ctx.stderr, '', 'stdout must be with messages');
-        assert.equal(process.exitCode, 0, 'exit code must be zero');
-      }
+  it(`can publish library when good username and password from flag and default api suffix, stderr with messages, stdout is empty, exits with zero code`, async () => {
+    postAuthEndpoint(nock(`https://pm.${apiSuffixDefault}`));
+    getUserEndpoint(nock(`https://pm.${apiSuffixDefault}`));
+    getLibEndpoint(nock(`https://pm.${apiSuffixDefault}`));
+    postVersionEndpoint(nock(`https://pm.${apiSuffixDefault}`));
+    const { stdout, stderr, error } = await runCommand(
+      [
+        'publish',
+        `--username=${username}`,
+        `--password=${password}`,
+        projectPath,
+      ],
+      { root }
     );
+    if (process.stdout.isTTY) {
+      assert.equal(stdout, '', 'stdout must be empty');
+    }
+    assert.notEqual(stderr, '', 'stdout must be with messages');
+    assert.equal(error?.oclif?.exit, 0, 'exit code must be zero');
+  });
 
-  stdMock
-    .nock(`http://pm.${apiSuffix}`, postAuthEndpoint)
-    .nock(`http://pm.${apiSuffix}`, getUserEndpointAnother)
-    .nock(`http://pm.${apiSuffix}`, getLibEndpointFailed404)
-    .nock(`http://pm.${apiSuffix}`, putLibEndpoint)
-    .nock(`http://pm.${apiSuffix}`, postVersionEndpoint)
-    .command([
-      'publish',
-      `--username=${username}`,
-      `--password=${password}`,
-      `--api=${apiSuffix}`,
-      `--on-behalf=${onBehalfUsername}`,
-      `--quiet`,
-      projectPath,
-    ])
-    .it(
-      `can publish library on behalf when good username, password from flag set, non-standart api from flag, on-behalf user from flag with with correct trusts, quiet, stderr is empty, stdout is empty, exits with zero code`,
-      (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
-        assert.equal(ctx.stderr, '', 'stderr must be empty');
-        assert.equal(process.exitCode, 0, 'exit code must be zero');
-      }
+  it(`can publish library on behalf when good username, password from flag set, non-standart api from flag, on-behalf user from flag with with correct trusts, quiet, stderr is empty, stdout is empty, exits with zero code`, async () => {
+    postAuthEndpoint(nock(`http://pm.${apiSuffix}`));
+    getUserEndpointAnother(nock(`http://pm.${apiSuffix}`));
+    getLibEndpointFailed404(nock(`http://pm.${apiSuffix}`));
+    putLibEndpoint(nock(`http://pm.${apiSuffix}`));
+    postVersionEndpoint(nock(`http://pm.${apiSuffix}`));
+    const { stdout, stderr, error } = await runCommand(
+      [
+        'publish',
+        `--username=${username}`,
+        `--password=${password}`,
+        `--api=${apiSuffix}`,
+        `--on-behalf=${onBehalfUsername}`,
+        `--quiet`,
+        projectPath,
+      ],
+      { root }
     );
+    assert.equal(stdout, '', 'stdout must be empty');
+    assert.equal(stderr, '', 'stderr must be empty');
+    assert.equal(error?.oclif?.exit, 0, 'exit code must be zero');
+  });
 
-  stdMock
-    .nock(`http://pm.${apiSuffix}`, postAuthEndpoint)
-    .nock(`http://pm.${apiSuffix}`, getUserEndpointAnother)
-    .nock(`http://pm.${apiSuffix}`, getLibEndpointFailed404)
-    .nock(`http://pm.${apiSuffix}`, putLibEndpoint)
-    .nock(`http://pm.${apiSuffix}`, postVersionEndpoint)
-    .env({ XOD_USERNAME: username })
-    .env({ XOD_PASSWORD: password })
-    .env({ XOD_API: apiSuffix })
-    .env({ XOD_ONBEHALF: onBehalfUsername })
-    .command(['publish', `--quiet`, projectPath])
-    .it(
-      `can publish library on behalf when good username, password from flag set, non-standart api from flag, on-behalf user from flag with with correct trusts, quiet, stderr is empty, stdout is empty, exits with zero code (flags from ENV)`,
-      (ctx) => {
-        assert.equal(ctx.stdout, '', 'stdout must be empty');
-        assert.equal(ctx.stderr, '', 'stderr must be empty');
-        assert.equal(process.exitCode, 0, 'exit code must be zero');
+  it(`can publish library on behalf when good username, password from flag set, non-standart api from flag, on-behalf user from flag with with correct trusts, quiet, stderr is empty, stdout is empty, exits with zero code (flags from ENV)`, () =>
+    withEnv(
+      {
+        XOD_USERNAME: username,
+        XOD_PASSWORD: password,
+        XOD_API: apiSuffix,
+        XOD_ONBEHALF: onBehalfUsername,
+      },
+      async () => {
+        postAuthEndpoint(nock(`http://pm.${apiSuffix}`));
+        getUserEndpointAnother(nock(`http://pm.${apiSuffix}`));
+        getLibEndpointFailed404(nock(`http://pm.${apiSuffix}`));
+        putLibEndpoint(nock(`http://pm.${apiSuffix}`));
+        postVersionEndpoint(nock(`http://pm.${apiSuffix}`));
+        const { stdout, stderr, error } = await runCommand(
+          ['publish', `--quiet`, projectPath],
+          { root }
+        );
+        assert.equal(stdout, '', 'stdout must be empty');
+        assert.equal(stderr, '', 'stderr must be empty');
+        assert.equal(error?.oclif?.exit, 0, 'exit code must be zero');
       }
-    );
+    ));
 };
 
 describe('sdpc publish', () => {
@@ -409,6 +434,8 @@ describe('sdpc publish', () => {
 
   // create working directory
   before(() => fs.ensureDirSync(wd));
+
+  afterEach(() => nock.cleanAll());
 
   // remove working directory
   // unmock TTY status
@@ -419,87 +446,51 @@ describe('sdpc publish', () => {
   });
 
   describe('common', () => {
-    // mock process.exit
-    beforeEach(() => {
-      process.exit = (code) => {
-        process.exitCode = code;
-      };
+    it(`shows help in stdout, doesn't print to stderr, exits with 0`, async () => {
+      const { stdout, stderr } = await runCommand(['publish', '--help'], {
+        root,
+      });
+      assert.include(stdout, 'PROJECT', 'PROJECT argument not found');
+      assert.include(stdout, '--help', '--help flag not found');
+      assert.include(stdout, '--password', '--password flag not found');
+      assert.include(stdout, '--quiet', '--quiet flag not found');
+      assert.include(stdout, '--username', '--username flag not found');
+      assert.include(stdout, '--version', '--version flag not found');
+      assert.include(stdout, '--api', '--api flag not found');
+      assert.include(stdout, '--on-behalf', '--on-behalf flag not found');
+      assert.equal(
+        stripOclifTestTsWarning(stderr),
+        '',
+        'stderr should be emply'
+      );
     });
 
-    // unmock process.exit
-    afterEach(() => {
-      process.exit = exit;
+    it(`shows version in stdout, doesn't print to stderr and exits with 0`, async () => {
+      const { stdout, stderr } = await runCommand(['publish', '--version'], {
+        root,
+      });
+      assert.include(stdout, 'sdp-cli', 'version string not found');
+      assert.equal(
+        stripOclifTestTsWarning(stderr),
+        '',
+        'stderr should be emply'
+      );
     });
-
-    test
-      .stdout()
-      .stderr()
-      .command(['publish', '--help'])
-      .catch(/EEXIT: 0/)
-      .it(
-        `shows help in stdout, doesn't print to stderr, exits with 0`,
-        (ctx) => {
-          assert.include(ctx.stdout, 'PROJECT', 'PROJECT argument not found');
-          assert.include(ctx.stdout, '--help', '--help flag not found');
-          assert.include(ctx.stdout, '--password', '--password flag not found');
-          assert.include(ctx.stdout, '--quiet', '--quiet flag not found');
-          assert.include(ctx.stdout, '--username', '--username flag not found');
-          assert.include(ctx.stdout, '--version', '--version flag not found');
-          assert.include(ctx.stdout, '--api', '--api flag not found');
-          assert.include(
-            ctx.stdout,
-            '--on-behalf',
-            '--on-behalf flag not found'
-          );
-          assert.equal(ctx.stderr, '', 'stderr should be emply');
-        }
-      );
-
-    test
-      .stdout()
-      .stderr()
-      .command(['publish', '--version'])
-      .catch(/EEXIT: 0/)
-      .it(
-        `shows version in stdout, doesn't print to stderr and exits with 0`,
-        (ctx) => {
-          assert.include(ctx.stdout, 'sdp-cli', 'version string not found');
-          assert.equal(ctx.stderr, '', 'stderr should be emply');
-        }
-      );
   });
 
   describe('TTY', () => {
-    // mock process.exit and tty
-    beforeEach(() => {
+    before(() => {
       process.stdout.isTTY = true;
       process.stderr.isTTY = true;
-      process.exit = (code) => {
-        process.exitCode = code;
-      };
-    });
-
-    // unmock process.exit
-    afterEach(() => {
-      process.exit = exit;
     });
 
     its(wd);
   });
 
   describe('no TTY', () => {
-    // mock process.exit and tty
-    beforeEach(() => {
+    before(() => {
       process.stdout.isTTY = false;
       process.stderr.isTTY = false;
-      process.exit = (code) => {
-        process.exitCode = code;
-      };
-    });
-
-    // unmock process.exit
-    afterEach(() => {
-      process.exit = exit;
     });
 
     its(wd);

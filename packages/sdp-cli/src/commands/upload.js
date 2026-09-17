@@ -1,9 +1,7 @@
-/* eslint-disable no-param-reassign */
-import { exit } from 'process';
 import R from 'ramda';
 import fs from 'fs-extra';
 import chalk from 'chalk';
-import { flags } from '@oclif/command';
+import { Flags } from '@oclif/core';
 import * as xdb from 'sdp-deploy-bin';
 import BaseCommand from '../baseCommand.js';
 import * as commonArgs from '../args.js';
@@ -26,7 +24,7 @@ const stripMessage = compose(
 
 class UploadCommand extends BaseCommand {
   async run() {
-    this.parseArgv(UploadCommand);
+    await this.parseArgv(UploadCommand);
     await this.ensureWorkspace();
     await this.parseEntrypoint();
     const { board, debug, port, workspace, quiet } = this.flags;
@@ -95,23 +93,27 @@ class UploadCommand extends BaseCommand {
         await fs.remove(ctx.sketchDir);
         this.info('Done!');
       })
-      .then(() => exit(0))
+      .then(() => this.exit(0))
       .catch((err) => {
-        if (messages) this.info(messages.join('\n'));
+        if (err.oclif?.exit !== undefined) {
+          throw err;
+        }
+
+        if (messages) {
+          this.info(messages.join('\n'));
+        }
         this.printError(this.patchArduinoCliError(err));
-        return exit((err.payload || err).code || 100);
+        return this.exit((err.payload || err).code || 100);
       });
   }
 }
 
-UploadCommand.description = 'uploads a XOD program to the board';
-
+UploadCommand.description = 'uploads a SDP program to the board';
 UploadCommand.usage = 'upload [options] [entrypoint]';
-
 UploadCommand.flags = {
   ...BaseCommand.flags,
   ...pick(['board', 'debug', 'workspace'], myFlags),
-  port: flags.string({
+  port: Flags.string({
     char: 'p',
     description: 'port to use for upload',
     env: 'XOD_PORT',
@@ -120,8 +122,7 @@ UploadCommand.flags = {
   }),
 };
 
-UploadCommand.args = [commonArgs.entrypoint];
-
+UploadCommand.args = { entrypoint: commonArgs.entrypoint };
 UploadCommand.examples = [
   'Compile a program using the current patch as entry point, upload to ttyACM1\n' +
     '$ sdpc upload -b arduino:avr:uno -p /dev/ttyACM1\n',
