@@ -16,15 +16,7 @@ import PopupInstallApp from '../components/PopupInstallApp.jsx';
 const DEFAULT_CANVAS_WIDTH = 800;
 const DEFAULT_CANVAS_HEIGHT = 600;
 
-const applyTheme = (colors) => {
-  if (!colors || typeof document === 'undefined') return;
-  R.forEachObjIndexed((value, key) => {
-    const cssKey = `--theme-${key
-      .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
-      .toLowerCase()}`;
-    document.documentElement.style.setProperty(cssKey, value);
-  });
-};
+const { applyTheme } = client.theme;
 
 class App extends client.App {
   constructor(props) {
@@ -336,9 +328,6 @@ class App extends client.App {
         ),
         onClick(items.toggleHelp, this.props.actions.toggleHelp),
         onClick(items.toggleDebugger, this.props.actions.toggleDebugger),
-        onClick(items.toggleAccountPane, () =>
-          this.props.actions.togglePanel(client.PANEL_IDS.ACCOUNT)
-        ),
         items.separator,
         onClick(items.themeSettings, this.showThemeSettingsPopup),
         items.separator,

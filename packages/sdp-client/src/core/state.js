@@ -4,7 +4,7 @@ import projectState from '../project/state.js';
 import debuggerState from '../debugger/state.js';
 import projectBrowserState from '../projectBrowser/state.js';
 import hintingState from '../hinting/state.js';
-import { INITIAL_STATE as themeState } from '../theme/state.js';
+import { INITIAL_STATE as themeState } from '../theme/state.ts';
 
 export default {
   user: userState,

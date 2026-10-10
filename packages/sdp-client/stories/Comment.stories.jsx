@@ -1,5 +1,5 @@
 import React from 'react';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 
 import '../src/core/styles/main.scss';
 import Comment from '../src/project/components/Comment.jsx';
@@ -7,8 +7,8 @@ import Comment from '../src/project/components/Comment.jsx';
 const baseProps = {
   id: 'my_comment_1',
   content: '',
-  size: { width: 150, height: 100 },
-  position: { x: 40, y: 30 },
+  pxSize: { width: 150, height: 100 },
+  pxPosition: { x: 40, y: 30 },
   isSelected: false,
   isGhost: false,
   isDragged: false,
@@ -66,6 +66,6 @@ export const MarkdownContent = () => (
   <Comment
     {...baseProps}
     content={markdownContent}
-    size={{ width: 350, height: 420 }}
+    pxSize={{ width: 350, height: 420 }}
   />
 );

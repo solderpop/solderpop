@@ -39,6 +39,7 @@ import {
 } from './emsdkInstaller.js';
 import migrateArduinoPackages from './migrateArduinoPackages.js';
 import * as settings from './settings.js';
+import { ensureUserDirs } from './userDirs.ts';
 import {
   errorToPlainObject,
   IS_DEV,
@@ -231,6 +232,11 @@ configureAutoUpdater(autoUpdater, log);
 
 const onReady = () => {
   settings.setDefaults();
+  try {
+    ensureUserDirs();
+  } catch (err) {
+    log.warn('Could not create ~/.solderpop folders:', err);
+  }
 
   subscribeToRemoteAction(EVENTS.SAVE_ALL, WA.subscribeToSaveAll(store));
 

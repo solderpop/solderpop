@@ -27,7 +27,9 @@ export const Basic = () => (
   <LibSuggester
     onInstallLibrary={(lib) => {
       // eslint-disable-next-line
-      alert(`Library "${lib.owner}/${lib.libname}@${lib.version}" will be installed!`);
+      alert(
+        `Library "${lib.owner}/${lib.libname}@${lib.version}" will be installed!`
+      );
     }}
   />
 );

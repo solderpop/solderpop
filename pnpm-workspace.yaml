@@ -22,6 +22,10 @@ overrides:
   # Force one instance each.
   '@codemirror/state': '^6.7.2'
   '@codemirror/view': '^6.43.10'
+  # Hold at 6.x: TS 7 (Go-native) drops the JS compiler API typescript-eslint
+  # needs until 7.1. Also stops storybook/postcss-loader's `typescript: '*'`
+  # peers from auto-installing 7.x.
+  typescript: '^6.0.3'
 
 # Packages with an install/postinstall script that pnpm blocks by default
 # (supply-chain hardening — see https://pnpm.io/settings/build#allowbuilds).

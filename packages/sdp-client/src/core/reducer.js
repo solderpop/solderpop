@@ -12,7 +12,7 @@ import popupsReducer from '../popups/reducer.js';
 import debuggerReducer from '../debugger/reducer.js';
 import hintingReducer from '../hinting/reducer.js';
 import workersReducer from '../workers/reducer.js';
-import themeReducer from '../theme/reducer.js';
+import themeReducer from '../theme/reducer.ts';
 
 import keepIntegrityAfterNavigatingHistory from './keepIntegrityAfterNavigatingHistory.js';
 import trackLastSavedChanges from './trackLastSavedChanges.js';

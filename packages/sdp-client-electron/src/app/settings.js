@@ -98,6 +98,16 @@ export const getUploadTarget = R.view(uploadTarget);
 
 // =============================================================================
 //
+// Theme setters & getters
+//
+// =============================================================================
+const currentTheme = R.lensProp('theme');
+
+export const setCurrentTheme = R.set(currentTheme);
+export const getCurrentTheme = R.view(currentTheme);
+
+// =============================================================================
+//
 // Export default
 //
 // =============================================================================

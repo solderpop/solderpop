@@ -15,9 +15,8 @@ import * as ProcessActions from './processes/actions.js';
 import * as ProjectBrowserActions from './projectBrowser/actions.js';
 import * as PopupActions from './popups/actions.js';
 import * as DebuggerActions from './debugger/actions.js';
-import * as ThemeActions from './theme/actions.js';
-import * as ThemeActionTypes from './theme/actionTypes.js';
-import * as ThemeSelectors from './theme/selectors.js';
+import * as ThemeActions from './theme/actions.ts';
+import * as ThemeSelectors from './theme/selectors.ts';
 
 import {
   INSTALL_ARDUINO_DEPENDENCIES,
@@ -88,8 +87,7 @@ import {
 import initialState from './core/state.js';
 import { default as deriveProjectName } from './utils/deriveProjectName.js';
 
-import themeReducer from './theme/reducer.js';
-import { INITIAL_STATE as themeInitialState } from './theme/state.js';
+import { themeApi } from './theme/index.ts';
 import ThemeSettingsPopup from './theme/components/ThemeSettingsPopup.jsx';
 
 export { default as ThemeSettingsPopup } from './theme/components/ThemeSettingsPopup.jsx';
@@ -224,11 +222,7 @@ export default {
   DEBUG_SESSION_STARTED,
   TETHERING_INET_CREATED,
   theme: {
-    actions: ThemeActions,
-    actionTypes: ThemeActionTypes,
-    selectors: ThemeSelectors,
-    reducer: themeReducer,
-    state: themeInitialState,
+    ...themeApi,
     components: { ThemeSettingsPopup },
   },
   ThemeSettingsPopup,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 
 import '../src/core/styles/main.scss';
 import SnackBarMessage from '../src/messages/components/SnackBarMessage.jsx';
@@ -72,7 +72,13 @@ const notificationWithButton = {
 
 export default {
   title: 'SnackBarMessage',
-  decorators: [(Story) => <div><Story /></div>],
+  decorators: [
+    (Story) => (
+      <div>
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export const Error_ = () => <SnackBarMessage message={errMsg} />;

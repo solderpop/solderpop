@@ -24,8 +24,6 @@ class WelcomeDialog extends React.Component {
   constructor(props) {
     super(props);
 
-    // Opt-in, not opt-out: unchecked by default so nobody gets a
-    // ~300 MB download just for opening the IDE to look around.
     this.state = { enableSimulation: false };
 
     this.onClose = this.onClose.bind(this);
@@ -78,7 +76,7 @@ class WelcomeDialog extends React.Component {
     if (!this.props.isVisible) return null;
 
     const { currentTheme, themes } = this.props;
-    const { chromeBg } = themes[currentTheme].colors;
+    const chromeBg = themes[currentTheme].colors['window.background'];
     const lockupSrc =
       relativeLuminance(chromeBg) < 0.5 ? lockupDark : lockupLight;
 

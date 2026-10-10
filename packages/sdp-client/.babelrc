@@ -1,3 +1,8 @@
 {
-  "presets": ["@babel/preset-react", ["@babel/preset-env", { "modules": false }]]
+  "presets": [
+    "@babel/preset-react",
+    ["@babel/preset-env", { "modules": false }],
+    "@babel/preset-typescript"
+  ],
+  "plugins": ["../../tools/babel-plugin-rewrite-ts-imports.cjs"]
 }

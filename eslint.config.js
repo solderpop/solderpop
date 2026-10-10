@@ -4,6 +4,7 @@ const globals = require('globals');
 const mochaPlugin = require('eslint-plugin-mocha');
 const prettierPlugin = require('eslint-plugin-prettier');
 const sdpFpPlugin = require('./tools/eslint-plugin-sdp-fp/index.js');
+const tseslint = require('typescript-eslint');
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
@@ -235,5 +236,30 @@ module.exports = [
     // test harder to trace back to the module it's testing.
     files: ['packages/belt-holes/test/**/*.js'],
     rules: { camelcase: 'off' },
+  },
+  ...tseslint.configs.recommended.map((config) => ({
+    ...config,
+    files: ['**/*.ts', '**/*.tsx'],
+  })),
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    rules: {
+      // TS checks these itself, and the base rules misfire on type syntax.
+      'no-undef': 'off',
+      'no-unused-vars': 'off',
+      'no-use-before-define': 'off',
+      'no-shadow': 'off',
+      '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^_', ignoreRestSiblings: true }],
+      '@typescript-eslint/no-shadow': 'error',
+      'import/prefer-default-export': 'off',
+      // Assertion signatures (chai's `assert`) need an annotated,
+      // non-destructured declaration.
+      'prefer-destructuring': 'off',
+      'import/no-extraneous-dependencies': ['error', { devDependencies: ['**/test/**', '**/tools/**'] }],
+      // Babel rewrites these to .js on build (rewriteImportExtensions).
+      'import/extensions': ['error', 'ignorePackages', {
+        js: 'always', jsx: 'always', ts: 'always', tsx: 'always',
+      }],
+    },
   },
 ];

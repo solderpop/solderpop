@@ -1,0 +1,411 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://solderpop.io/schemas/theme.schema.json",
+  "title": "SolderPop IDE theme",
+  "description": "Colour theme for the SolderPop IDE. Missing colours fall back to the built-in theme of the same \"type\".",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "colors"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "id": {
+      "description": "Unique id; also the file name (<id>.json).",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "name": {
+      "description": "Name shown in the theme picker.",
+      "type": "string"
+    },
+    "author": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "type": {
+      "description": "Picks the built-in theme used for any missing colour.",
+      "enum": [
+        "dark",
+        "light"
+      ],
+      "default": "dark"
+    },
+    "colors": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "window.background": {
+          "title": "Window background",
+          "description": "Main window frame and any panel without a more specific background.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "window.foreground": {
+          "title": "Default text",
+          "description": "Text colour used wherever no more specific foreground is set.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "window.titleBar.background": {
+          "title": "Title bar",
+          "description": "Title bar strip at the top of the window and panel headers.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "window.border": {
+          "title": "Borders & separators",
+          "description": "Lines between panels, menubar bottom border, sidebar edges.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "dialog.light.background": {
+          "title": "Light dialog background",
+          "description": "Background of light modal dialogs (e.g. confirmations).",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "menubar.background": {
+          "title": "Menubar background",
+          "description": "Top menubar and its dropdown menus.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "menubar.foreground": {
+          "title": "Menubar text",
+          "description": "Menu titles, dropdown items and hotkey hints.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "menubar.item.hover.background": {
+          "title": "Menu item hover",
+          "description": "Menu title or dropdown item under the mouse.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "menubar.item.active.background": {
+          "title": "Open menu background",
+          "description": "Top-level menu title while its dropdown is open.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "menubar.item.active.foreground": {
+          "title": "Open menu text",
+          "description": "Top-level menu title text while its dropdown is open.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "tabs.background": {
+          "title": "Tab strip background",
+          "description": "Strip behind the open patch tabs.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "tabs.item.inactive.background": {
+          "title": "Inactive tab",
+          "description": "Patch tabs that are not currently shown. The active tab uses the canvas background.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "tabs.item.hover.background": {
+          "title": "Tab hover",
+          "description": "Inactive patch tab under the mouse.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "tabs.item.foreground": {
+          "title": "Tab text",
+          "description": "Inactive tab titles. The active tab title uses the accent colour.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "sidebar.background": {
+          "title": "Sidebar background",
+          "description": "Project browser, inspector and helpbox panels.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "sidebar.foreground": {
+          "title": "Sidebar text",
+          "description": "Patch names, inspector labels and other sidebar text.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "sidebar.subtitle.foreground": {
+          "title": "Sidebar secondary text",
+          "description": "Secondary lines such as library names and patch descriptions.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "sidebar.item.hover.background": {
+          "title": "Sidebar row hover",
+          "description": "Project browser row under the mouse.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "sidebar.item.selected.background": {
+          "title": "Sidebar selected row",
+          "description": "Selected project browser row.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "sidebar.item.selected.hover.background": {
+          "title": "Sidebar selected row hover",
+          "description": "Selected project browser row under the mouse.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "workspace.background": {
+          "title": "Empty workspace",
+          "description": "Area shown when no patch is open.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "canvas.background": {
+          "title": "Canvas background",
+          "description": "Patch canvas, also used for the active patch tab.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "canvas.gridlines": {
+          "title": "Canvas grid",
+          "description": "Grid lines drawn on the patch canvas.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "canvas.highlight": {
+          "title": "Hover highlight",
+          "description": "Outline and handles of hovered nodes, pins, links and comments.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "node.body.background": {
+          "title": "Node body",
+          "description": "Fill of node rectangles on the canvas.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "node.border": {
+          "title": "Node outline",
+          "description": "Outline of nodes and the pin connectors drawn on them.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "node.title.foreground": {
+          "title": "Node title",
+          "description": "Node name text drawn inside the node.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "node.watch.foreground": {
+          "title": "Watch node value",
+          "description": "Live value text shown inside watch nodes.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "node.pin.background": {
+          "title": "Pin fill",
+          "description": "Fill of pin circles.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "node.pin.label": {
+          "title": "Pin label",
+          "description": "Pin names next to pin circles.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "comment.foreground": {
+          "title": "Comment text",
+          "description": "Text of comment blocks on the canvas.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "comment.resizeHandle": {
+          "title": "Comment resize handle",
+          "description": "Corner handle used to resize comment blocks.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "input.background": {
+          "title": "Input background",
+          "description": "Text fields, dropdowns and inspector widgets.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "input.foreground": {
+          "title": "Input text",
+          "description": "Text typed into inputs.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "input.border": {
+          "title": "Input border",
+          "description": "Border of inputs and buttons.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "input.option.highlighted.background": {
+          "title": "Highlighted option",
+          "description": "Keyboard-highlighted option in dropdowns and autocomplete lists.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "button.dark.background": {
+          "title": "Dark button",
+          "description": "Default buttons in dialogs and panels.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "button.dark.hover.background": {
+          "title": "Dark button hover",
+          "description": "Dark button under the mouse.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "button.dark.foreground": {
+          "title": "Dark button text",
+          "description": "Label of dark buttons.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "button.light.background": {
+          "title": "Light button",
+          "description": "Buttons on light dialogs.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "button.light.foreground": {
+          "title": "Light button text",
+          "description": "Label of light buttons.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "deployPanel.background": {
+          "title": "Panel background",
+          "description": "Deployment / debugger panel at the bottom of the window.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "deployPanel.foreground": {
+          "title": "Panel text",
+          "description": "Log output and labels in the deployment panel.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "deployPanel.titleBar.background": {
+          "title": "Panel title bar",
+          "description": "Header strip of the deployment panel.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "deployPanel.titleBar.foreground": {
+          "title": "Panel title text",
+          "description": "Title and toolbar icons in the deployment panel header.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "deployPanel.tabs.background": {
+          "title": "Panel tabs",
+          "description": "Tab strip (Installation, Compiler, Uploader, …) in the deployment panel.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "deployPanel.item.hover.background": {
+          "title": "Panel hover",
+          "description": "Tabs and toolbar buttons in the deployment panel under the mouse.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "deployPanel.input.background": {
+          "title": "Serial input background",
+          "description": "Serial monitor input field.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "deployPanel.input.foreground": {
+          "title": "Serial input text",
+          "description": "Text typed into the serial monitor input.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "accent.primary": {
+          "title": "Accent / selection",
+          "description": "Brand accent: selected nodes and links, active tab title, focused inputs.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "error.accent": {
+          "title": "Error",
+          "description": "Outlines, badges and backgrounds that mark errors.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        },
+        "error.foreground": {
+          "title": "Error text",
+          "description": "Error message text.",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "format": "color"
+        }
+      }
+    }
+  }
+}

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import '../src/core/styles/main.scss';
 import PatchGroup from '../src/projectBrowser/components/PatchGroup.jsx';
 

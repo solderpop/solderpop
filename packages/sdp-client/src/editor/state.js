@@ -57,12 +57,6 @@ export default {
       sidebar: SIDEBAR_IDS.RIGHT,
       size: 0.5,
     },
-    [PANEL_IDS.ACCOUNT]: {
-      index: 2,
-      maximized: false,
-      sidebar: SIDEBAR_IDS.RIGHT,
-      size: 0.5,
-    },
     [PANEL_IDS.DEPLOYMENT]: {
       index: 0,
       maximized: false,

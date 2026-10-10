@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStore as createReduxStore, combineReducers } from 'redux';
 import { Provider, connect } from 'react-redux';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 
 import Debugger from '../src/debugger/containers/Debugger.jsx';
 import DebuggerReducer from '../src/debugger/reducer.js';
@@ -124,9 +124,10 @@ const startDebugSession = (store) => {
         type: 'system',
         message: 'Debug session has been started! (system message)',
       },
-      {},
-      {},
-      {},
+      {}, // nodeIdsMap
+      {}, // nodePinKeysMap
+      [], // tableLogNodeIds
+      {}, // pinsAffectedByErrorRaisers
       '@/main'
     )
   );

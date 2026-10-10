@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import React from 'react';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 
 import { PIN_TYPE } from 'sdp-project';
 
@@ -184,7 +184,13 @@ const containerStyle = {
 
 export default {
   title: 'Inspector',
-  decorators: [(Story) => <div style={containerStyle}><Story /></div>],
+  decorators: [
+    (Story) => (
+      <div style={containerStyle}>
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export const NoSelection = () => <Inspector {...baseProps} />;

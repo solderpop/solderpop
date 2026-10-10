@@ -1,5 +1,5 @@
 import React from 'react';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 
 import '../src/core/styles/main.scss';
 import Pin from '../src/project/components/Pin.jsx';
@@ -25,11 +25,7 @@ export default {
   decorators: [
     (Story) => (
       <PatchSVG>
-        <rect
-          width={pinCenter.x * 2}
-          height={pinCenter.y * 2}
-          fill="#676767"
-        />
+        <rect width={pinCenter.x * 2} height={pinCenter.y * 2} fill="#676767" />
         <line
           x1={pinCenter.x}
           y1="0"

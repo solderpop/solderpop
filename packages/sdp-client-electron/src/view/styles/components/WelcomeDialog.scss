@@ -5,15 +5,15 @@
 // a theme right there, so it should preview that choice live. Scoping the
 // override to `.welcome-dialog` keeps ThemeSettingsPopup untouched.
 .welcome-dialog.theme-window {
-  background-color: var(--theme-chrome-bg, #fff);
-  color: var(--theme-text, #1f2933);
+  background-color: var(--theme-window-background, #fff);
+  color: var(--theme-window-foreground, #1f2933);
 }
 
 .welcome-dialog .theme-window-footer {
   display: flex;
   justify-content: flex-end;
   padding: 14px 24px;
-  border-top: 1px solid var(--theme-chrome-outlines, #eef1f3);
+  border-top: 1px solid var(--theme-window-border, #eef1f3);
 }
 
 .welcome-title {
@@ -25,7 +25,7 @@
   font-size: 18px;
   font-weight: 600;
   text-align: center;
-  color: var(--theme-text, #1e2a38);
+  color: var(--theme-window-foreground, #1e2a38);
 
   .welcome-title-lockup {
     height: 48px;
@@ -37,7 +37,7 @@
   margin: 0 0 20px;
   font-size: 13px;
   line-height: 1.5;
-  color: var(--theme-text, #5c6b7a);
+  color: var(--theme-window-foreground, #5c6b7a);
   opacity: 0.75;
 }
 
@@ -48,7 +48,7 @@
 .welcome-option {
   margin-top: 20px;
   padding-top: 20px;
-  border-top: 1px solid var(--theme-chrome-outlines, #eef1f3);
+  border-top: 1px solid var(--theme-window-border, #eef1f3);
 }
 
 .welcome-checkbox {
@@ -57,12 +57,12 @@
   gap: 8px;
   font-size: 13px;
   line-height: 1.5;
-  color: var(--theme-text, #334155);
+  color: var(--theme-window-foreground, #334155);
   cursor: pointer;
 
   input {
     margin: 3px 0 0;
-    accent-color: var(--theme-selected, #ff6b6b);
+    accent-color: var(--theme-accent-primary, #ff6b6b);
     cursor: pointer;
   }
 }

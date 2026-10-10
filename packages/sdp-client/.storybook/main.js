@@ -7,8 +7,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const assetsPath = path.resolve(__dirname, '..', 'src/core/assets');
 
 export default {
-  stories: ['../stories/**/*.stories.jsx'],
-  addons: ['@storybook/addon-actions', '@storybook/addon-webpack5-compiler-babel'],
+  stories: ['../stories/**/*.stories.@(jsx|tsx)'],
+  addons: ['@storybook/addon-webpack5-compiler-babel'],
   framework: {
     name: '@storybook/react-webpack5',
     options: {},

@@ -4,156 +4,15 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as R from 'ramda';
 
-import * as actions from '../actions.js';
-import * as selectors from '../selectors.js';
+import * as actions from '../actions.ts';
+import * as selectors from '../selectors.ts';
+import { COLORS, COLOR_GROUPS } from '../colorRegistry.ts';
+import { HEX_COLOR } from '../themeFile.ts';
 
-const COLOR_LABELS = {
-  chromeBg: 'Window background',
-  chromeTitleBg: 'Title bar',
-  chromeOutlines: 'Window outlines',
-  chromeLightBg: 'Light chrome',
-  text: 'Base text',
-  menubarBg: 'Menubar background',
-  menubarText: 'Menubar text',
-  menubarActiveBg: 'Active menu background',
-  menubarActiveText: 'Active menu text',
-  menubarHoverBg: 'Menu hover',
-  tabBg: 'Tabs background',
-  tabItemBg: 'Inactive tab',
-  tabText: 'Tab text',
-  sidebarBg: 'Sidebar background',
-  sidebarHoverBg: 'Sidebar hover',
-  sidebarSelectedBg: 'Sidebar selected',
-  sidebarSelectedHoverBg: 'Selected hover',
-  sidebarText: 'Sidebar text',
-  sidebarSubtitle: 'Sidebar subtitle',
-  workspaceBg: 'Workspace background',
-  canvasBg: 'Canvas background',
-  canvasGridlines: 'Canvas gridlines',
-  canvasFace: 'Canvas face',
-  canvasFaceLight: 'Canvas face (light)',
-  canvasFaceText: 'Canvas face text',
-  nodeFill: 'Node fill',
-  nodeLabel: 'Node label',
-  nodeOutlines: 'Node outlines',
-  pinBg: 'Pin fill',
-  pinLabel: 'Pin label',
-  commentText: 'Comment text',
-  highlight: 'Highlight',
-  inputBg: 'Input background',
-  inputText: 'Input text',
-  inputBorder: 'Input border',
-  darkButtonBg: 'Dark button',
-  darkButtonHoverBg: 'Dark button hover',
-  darkButtonText: 'Dark button text',
-  lightButtonBg: 'Light button',
-  lightButtonText: 'Light button text',
-  selected: 'Accent / selection',
-  error: 'Error',
-  errorText: 'Error text',
-  deployPanelBg: 'Deployment panel background',
-  deployPanelText: 'Deployment panel text',
-  deployPanelTitleBg: 'Deployment panel title bar',
-  deployPanelTitleText: 'Deployment panel title text',
-  deployPanelTabBg: 'Deployment panel tabs',
-  deployPanelHoverBg: 'Deployment panel hover',
-  deployPanelInputBg: 'Deployment panel input',
-  deployPanelInputText: 'Deployment panel input text',
-};
-
-const COLOR_GROUPS = [
-  {
-    key: 'window',
-    label: 'Window & Chrome',
-    keys: [
-      'chromeBg',
-      'chromeTitleBg',
-      'chromeOutlines',
-      'chromeLightBg',
-      'text',
-    ],
-  },
-  {
-    key: 'menubar',
-    label: 'Menubar & Tabs',
-    keys: [
-      'menubarBg',
-      'menubarText',
-      'menubarActiveBg',
-      'menubarActiveText',
-      'menubarHoverBg',
-      'tabBg',
-      'tabItemBg',
-      'tabText',
-    ],
-  },
-  {
-    key: 'sidebar',
-    label: 'Sidebar',
-    keys: [
-      'sidebarBg',
-      'sidebarHoverBg',
-      'sidebarSelectedBg',
-      'sidebarSelectedHoverBg',
-      'sidebarText',
-      'sidebarSubtitle',
-    ],
-  },
-  {
-    key: 'canvas',
-    label: 'Canvas & Nodes',
-    keys: [
-      'workspaceBg',
-      'canvasBg',
-      'canvasGridlines',
-      'canvasFace',
-      'canvasFaceLight',
-      'canvasFaceText',
-      'nodeFill',
-      'nodeLabel',
-      'nodeOutlines',
-      'pinBg',
-      'pinLabel',
-      'commentText',
-      'highlight',
-    ],
-  },
-  {
-    key: 'inputs',
-    label: 'Inputs & Buttons',
-    keys: [
-      'inputBg',
-      'inputText',
-      'inputBorder',
-      'darkButtonBg',
-      'darkButtonHoverBg',
-      'darkButtonText',
-      'lightButtonBg',
-      'lightButtonText',
-    ],
-  },
-  {
-    key: 'deployment',
-    label: 'Deployment Panel',
-    keys: [
-      'deployPanelBg',
-      'deployPanelText',
-      'deployPanelTitleBg',
-      'deployPanelTitleText',
-      'deployPanelTabBg',
-      'deployPanelHoverBg',
-      'deployPanelInputBg',
-      'deployPanelInputText',
-    ],
-  },
-  {
-    key: 'status',
-    label: 'Accents & Status',
-    keys: ['selected', 'error', 'errorText'],
-  },
-];
-
-const HEX_COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
+const COLORS_BY_GROUP = COLOR_GROUPS.map((group) => ({
+  ...group,
+  colors: COLORS.filter((c) => c.group === group.id),
+}));
 
 class ThemeSettingsPopup extends React.PureComponent {
   constructor(props) {
@@ -254,7 +113,7 @@ class ThemeSettingsPopup extends React.PureComponent {
     this.setState({
       hexDrafts: R.assoc(colorKey, value, this.state.hexDrafts),
     });
-    if (HEX_COLOR_REGEX.test(value)) {
+    if (HEX_COLOR.test(value)) {
       this.handleColorChange(colorKey, value);
     }
   }
@@ -278,6 +137,16 @@ class ThemeSettingsPopup extends React.PureComponent {
 
   renderThemeSelector() {
     const { currentTheme, themes } = this.props;
+    const [bundled, user] = R.partition(
+      (theme) => theme.source === 'bundled',
+      R.values(themes)
+    );
+    const renderOption = (theme) => (
+      <option key={theme.id} value={theme.id}>
+        {theme.name}
+      </option>
+    );
+    const isUserTheme = themes[currentTheme].source === 'user';
 
     return (
       <div className="theme-selector">
@@ -289,12 +158,20 @@ class ThemeSettingsPopup extends React.PureComponent {
             value={currentTheme}
             onChange={(e) => this.handleThemeChange(e.target.value)}
           >
-            {R.toPairs(themes).map(([themeKey, theme]) => (
-              <option key={themeKey} value={themeKey}>
-                {theme.name}
-              </option>
-            ))}
+            <optgroup label="Built-in">{bundled.map(renderOption)}</optgroup>
+            {user.length > 0 && (
+              <optgroup label="Custom">{user.map(renderOption)}</optgroup>
+            )}
           </select>
+          {isUserTheme && (
+            <button
+              type="button"
+              className="theme-delete"
+              onClick={() => this.props.actions.deleteTheme(currentTheme)}
+            >
+              Delete
+            </button>
+          )}
         </div>
       </div>
     );
@@ -302,38 +179,43 @@ class ThemeSettingsPopup extends React.PureComponent {
 
   renderColorGroups() {
     const { currentTheme, themes } = this.props;
-    const { colors } = themes[currentTheme];
+    const { colors, source, name } = themes[currentTheme];
 
     return (
       <div className="color-groups">
-        {COLOR_GROUPS.map((group) => (
-          <div key={group.key} className="color-group">
+        {source === 'bundled' && (
+          <p className="color-groups-note">
+            {name} is a built-in theme. Changing a colour saves your edits as
+            a new custom theme.
+          </p>
+        )}
+        {COLORS_BY_GROUP.map((group) => (
+          <div key={group.id} className="color-group">
             <h4>{group.label}</h4>
             <div className="color-list">
-              {group.keys.map((colorKey) => {
-                const label = COLOR_LABELS[colorKey] || colorKey;
-                const colorValue = colors[colorKey];
-                const hexValue = this.state.hexDrafts[colorKey] || colorValue;
+              {group.colors.map(({ key, label, description }) => {
+                const colorValue = colors[key];
+                const hexValue = this.state.hexDrafts[key] || colorValue;
 
                 return (
-                  <div key={colorKey} className="color-item">
+                  <div key={key} className="color-item" title={description}>
                     <button
                       type="button"
                       className="color-swatch"
                       style={{ backgroundColor: colorValue }}
                       aria-label={`Pick color for ${label}`}
-                      title={label}
-                      onClick={() => this.openColorPicker(colorKey)}
+                      onClick={() => this.openColorPicker(key)}
                     />
-                    <span className="color-name">{label}</span>
+                    <span className="color-name">
+                      {label}
+                      <span className="color-description">{description}</span>
+                    </span>
                     <input
                       type="text"
                       className="color-hex"
                       value={hexValue}
                       aria-label={`${label} hex value`}
-                      onChange={(e) =>
-                        this.handleHexChange(colorKey, e.target.value)
-                      }
+                      onChange={(e) => this.handleHexChange(key, e.target.value)}
                     />
                     <input
                       type="color"
@@ -341,11 +223,9 @@ class ThemeSettingsPopup extends React.PureComponent {
                       value={colorValue}
                       aria-label={`${label} color picker`}
                       ref={(el) => {
-                        this.colorInputs[colorKey] = el;
+                        this.colorInputs[key] = el;
                       }}
-                      onChange={(e) =>
-                        this.handleColorChange(colorKey, e.target.value)
-                      }
+                      onChange={(e) => this.handleColorChange(key, e.target.value)}
                     />
                   </div>
                 );
@@ -366,8 +246,8 @@ class ThemeSettingsPopup extends React.PureComponent {
         <div
           className="preview-panel"
           style={{
-            backgroundColor: colors.chromeBg,
-            color: colors.text,
+            backgroundColor: colors['window.background'],
+            color: colors['window.foreground'],
           }}
         >
           <p className="preview-title">Theme preview</p>
@@ -377,15 +257,19 @@ class ThemeSettingsPopup extends React.PureComponent {
           <span
             className="preview-node"
             style={{
-              color: colors.nodeLabel,
-              borderColor: colors.nodeOutlines,
+              color: colors['node.title.foreground'],
+              backgroundColor: colors['node.body.background'],
+              borderColor: colors['node.border'],
             }}
           >
             node
           </span>
           <span
             className="preview-error"
-            style={{ color: colors.error, borderColor: colors.error }}
+            style={{
+              color: colors['error.foreground'],
+              borderColor: colors['error.accent'],
+            }}
           >
             error
           </span>

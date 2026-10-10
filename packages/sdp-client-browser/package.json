@@ -10,7 +10,8 @@
     "clean:dist": "rimraf ./dist ./tutorialProject.json",
     "benchmark": "node -r babel-register ./benchmark/index.js",
     "test-func": "mocha --color --timeout 90000 --bail test-func/bootstrap.js test-func/**/*.spec.js",
-    "dev": "pnpm run build:tutorial-project && webpack-dev-server --watch --color --hot --config webpack.config.dev.cjs"
+    "dev": "pnpm run build:tutorial-project && webpack-dev-server --watch --color --hot --config webpack.config.dev.cjs",
+    "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
     "babel-polyfill": "^6.16.0",
@@ -22,16 +23,18 @@
     "react-skylight": "git+https://github.com/xodio/react-skylight.git#6dc266edc5198d0d1a6feb57f329826e782ec967",
     "redux": "^5.0.1",
     "redux-thunk": "^3.1.0",
-    "url-parse": "^1.2.0",
     "sdp-arduino": "workspace:*",
     "sdp-client": "workspace:*",
     "sdp-func-tools": "workspace:*",
-    "sdp-project": "workspace:*"
+    "sdp-project": "workspace:*",
+    "url-parse": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
     "@babel/preset-env": "^7.29.7",
     "@babel/preset-react": "^7.29.7",
+    "@babel/preset-typescript": "^7.29.7",
+    "@welldone-software/why-did-you-render": "^10.0.1",
     "babel-loader": "^10.1.1",
     "chai": "^4.1.2",
     "css-loader": "^7.1.4",
@@ -41,15 +44,14 @@
     "postcss-loader": "^8.2.1",
     "puppeteer": "^25.9.0",
     "sass-loader": "^17.0.0",
+    "sdp-fs": "workspace:*",
     "source-map-loader": "^5.0.0",
     "style-loader": "^4.0.0",
     "webpack": "^5.109.2",
     "webpack-cli": "^7.2.2",
     "webpack-dev-server": "^6.0.0",
     "webpack-merge": "^6.0.1",
-    "worker-loader": "^3.0.8",
-    "@welldone-software/why-did-you-render": "^10.0.1",
-    "sdp-fs": "workspace:*"
+    "worker-loader": "^3.0.8"
   },
   "author": "SolderPop <contact@solderpop.io>",
   "license": "AGPL-3.0"

@@ -29,7 +29,7 @@
   }
 
   .titlebar {
-    background-color: var(--theme-deploy-panel-title-bg, $coal-bright);
+    background-color: var(--theme-deploy-panel-title-bar-background, $coal-bright);
 
     display: flex;
     flex-direction: row;
@@ -43,7 +43,7 @@
 
       .title {
         margin-left: 7px;
-        color: var(--theme-deploy-panel-title-text, $light-grey-bright);
+        color: var(--theme-deploy-panel-title-bar-foreground, $light-grey-bright);
       }
 
       .progress {
@@ -82,20 +82,20 @@
       border: none;
       outline: none;
       cursor: pointer;
-      color: var(--theme-deploy-panel-title-text, #aaa);
+      color: var(--theme-deploy-panel-title-bar-foreground, #aaa);
 
       &:hover {
-        color: var(--theme-deploy-panel-title-text, #aaa);
-        background: var(--theme-deploy-panel-hover-bg, #444);
+        color: var(--theme-deploy-panel-title-bar-foreground, #aaa);
+        background: var(--theme-deploy-panel-item-hover-background, #444);
       }
     }
 
     .abort-process-button {
       display: inline-block;
       @include deploymentPanelButton();
-      color: var(--theme-error-text, $red-bright);
+      color: var(--theme-error-foreground, $red-bright);
       &:hover {
-        color: var(--theme-error-text, $red-bright);
+        color: var(--theme-error-foreground, $red-bright);
       }
     }
     .quick-upload-button {
@@ -131,7 +131,7 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    background-color: var(--theme-deploy-panel-tab-bg, $grey);
+    background-color: var(--theme-deploy-panel-tabs-background, $grey);
 
     .tab {
       display: inline-block;
@@ -141,7 +141,7 @@
 
       &.active {
         cursor: default;
-        border-bottom: 2px solid var(--theme-selected, $cyan);
+        border-bottom: 2px solid var(--theme-accent-primary, $cyan);
       }
     }
 
@@ -150,7 +150,7 @@
       display: inline-block;
 
       .fa {
-        color: var(--theme-deploy-panel-text, $chalk);
+        color: var(--theme-deploy-panel-foreground, $chalk);
         border: 0;
         background: transparent;
 
@@ -159,7 +159,7 @@
         padding: 4px .5ex 4px;
 
         &:hover {
-          background-color: var(--theme-deploy-panel-hover-bg, $dark);
+          background-color: var(--theme-deploy-panel-item-hover-background, $dark);
         }
 
         &:disabled {
@@ -177,7 +177,7 @@
     position: relative;
     height: 165px;
 
-    background: var(--theme-deploy-panel-bg, $sidebar-color-bg);
+    background: var(--theme-deploy-panel-background, $sidebar-color-bg);
     border-left: 1px solid $color-canvas-background;
   }
 
@@ -240,8 +240,8 @@
       width: 100%;
       line-height: 18px;
       padding: 1px 3px;
-      color: var(--theme-deploy-panel-input-text, $chalk-bright); // like in the implementation editor
-      background: var(--theme-deploy-panel-input-bg, $blackberry-shadow);
+      color: var(--theme-deploy-panel-input-foreground, $chalk-bright); // like in the implementation editor
+      background: var(--theme-deploy-panel-input-background, $blackberry-shadow);
       border: 1px solid var(--theme-input-border, $grey-light);
       font-family: $font-family-mono;
     }
@@ -255,15 +255,15 @@
       background: linear-gradient(
         to right,
         rgba(255,255,255,0) 0%,
-        var(--theme-deploy-panel-input-bg, $blackberry-shadow) 35%,
-        var(--theme-deploy-panel-input-bg, $blackberry-shadow) 100%
+        var(--theme-deploy-panel-input-background, $blackberry-shadow) 35%,
+        var(--theme-deploy-panel-input-background, $blackberry-shadow) 100%
       );
-      color: var(--theme-deploy-panel-input-text, $chalk-bright);
+      color: var(--theme-deploy-panel-input-foreground, $chalk-bright);
       border: 0;
       font-weight: bold;
 
       &:hover {
-        color: var(--theme-selected, $cyan);
+        color: var(--theme-accent-primary, $cyan);
         cursor: pointer;
       }
 

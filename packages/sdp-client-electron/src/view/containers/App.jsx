@@ -103,15 +103,7 @@ const AUTOSAVE_INTERVAL_MS = 2 * 60 * 1000;
 
 const { ThemeSettingsPopup } = client.theme.components;
 
-const applyTheme = (colors) => {
-  if (!colors || typeof document === 'undefined') return;
-  R.forEachObjIndexed((value, key) => {
-    const cssKey = `--theme-${key
-      .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
-      .toLowerCase()}`;
-    document.documentElement.style.setProperty(cssKey, value);
-  }, colors);
-};
+const { applyTheme } = client.theme;
 
 const defaultState = {
   size: client.getViewableSize(DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT),
@@ -880,9 +872,6 @@ class App extends client.App {
         client.menu.onClick(
           client.menu.items.toggleDebugger,
           this.props.actions.toggleDebugger
-        ),
-        client.menu.onClick(client.menu.items.toggleAccountPane, () =>
-          this.props.actions.togglePanel(client.PANEL_IDS.ACCOUNT)
         ),
         { type: 'separator' },
         client.menu.onClick(

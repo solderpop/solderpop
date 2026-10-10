@@ -123,6 +123,27 @@
   padding: 0 4px;
 }
 
+.color-groups-note {
+  margin: 0 0 14px;
+  font-size: 12px;
+  color: $grey-light;
+}
+
+.theme-delete {
+  padding: 7px 12px;
+  font-size: 12px;
+  font-family: $font-family-normal;
+  color: $red;
+  background: none;
+  border: 1px solid $light-grey;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $red;
+  }
+}
+
 .advanced-section {
   border-top: 1px solid #eef1f3;
   padding-top: 16px;
@@ -218,6 +239,14 @@
   font-size: 12px;
   color: $coal;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.color-description {
+  display: block;
+  font-size: 10px;
+  color: $grey-light;
   overflow: hidden;
   text-overflow: ellipsis;
 }

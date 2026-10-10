@@ -6,7 +6,13 @@ import '../src/core/styles/main.scss';
 
 export default {
   title: 'Modal (SkyLight)',
-  decorators: [(Story) => <div><Story /></div>],
+  decorators: [
+    (Story) => (
+      <div>
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export const Default = () => (
@@ -51,7 +57,11 @@ export const WithSomeLightContent = () => (
 
 export const WithSomeCode = () => (
   <SkyLightStateless isVisible title="Transpiled code">
-    <textarea className="Codebox" value="console.log('Hello world');" />
+    <textarea
+      className="Codebox"
+      value="console.log('Hello world');"
+      readOnly
+    />
     <div className="ModalBody ModalBody--light">
       <div className="ModalFooter">
         <button className="Button Button--light">Copy</button>

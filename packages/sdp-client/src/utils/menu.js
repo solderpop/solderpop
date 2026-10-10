@@ -134,9 +134,6 @@ const rawItems = {
     label: 'Toggle Deployment Pane',
     command: COMMAND.TOGGLE_DEBUGGER,
   },
-  toggleAccountPane: {
-    label: 'Toggle Account Pane',
-  },
   toggleProjectBrowser: {
     label: 'Toggle Project Browser',
   },

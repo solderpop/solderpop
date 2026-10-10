@@ -12,7 +12,6 @@ import debounce from 'throttle-debounce/debounce.js';
 
 import HelpPanel from './HelpPanel.jsx';
 import Inspector from '../components/Inspector.jsx';
-import AccountPane from '../../user/containers/AccountPane.jsx';
 import ProjectBrowser from '../../projectBrowser/containers/ProjectBrowser.jsx';
 import SidebarSwitches from '../components/SidebarSwitches.jsx';
 
@@ -74,7 +73,6 @@ class Sidebar extends React.Component {
     this.renderProjectBrowser = this.renderProjectBrowser.bind(this);
     this.renderInspector = this.renderInspector.bind(this);
     this.renderHelpbar = this.renderHelpbar.bind(this);
-    this.renderAccountPane = this.renderAccountPane.bind(this);
     this.renderPanel = this.renderPanel.bind(this);
 
     this.resizePanelsAction = debounce(300, this.props.actions.resizePanels);
@@ -178,17 +176,6 @@ class Sidebar extends React.Component {
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  renderAccountPane(settings) {
-    return (
-      <AccountPane
-        key={PANEL_IDS.ACCOUNT}
-        sidebarId={settings.sidebar}
-        autohide={settings.autohide}
-      />
-    );
-  }
-
   renderPanel(panelSettings) {
     return R.cond([
       sidebarPanelRenderer(
@@ -197,7 +184,6 @@ class Sidebar extends React.Component {
       ),
       sidebarPanelRenderer(PANEL_IDS.INSPECTOR, this.renderInspector),
       sidebarPanelRenderer(PANEL_IDS.HELPBAR, this.renderHelpbar),
-      sidebarPanelRenderer(PANEL_IDS.ACCOUNT, this.renderAccountPane),
     ])(panelSettings);
   }
 
@@ -219,7 +205,6 @@ class Sidebar extends React.Component {
           id={this.props.id}
           panels={this.props.panels}
           onTogglePanel={this.props.actions.togglePanel}
-          isLoggedIn={this.props.userAuthorised}
         />
         {maximizedPanels.length > 1 && (
           <ReflexContainer className="Sidebar-content" orientation="horizontal">

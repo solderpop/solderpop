@@ -51,7 +51,7 @@ module.exports = pkgDir => ({
     publicPath: '',
   },
   resolve: {
-    extensions: ['.js', '.json', '.jsx'],
+    extensions: ['.js', '.json', '.jsx', '.ts', '.tsx'],
     alias: {
       handlebars: 'handlebars/dist/handlebars.js',
       /** @see {@link http://stackoverflow.com/a/32444088} */
@@ -67,10 +67,14 @@ module.exports = pkgDir => ({
       },
       {
         include: pkgpath(pkgDir, 'src'),
-        test: /\.jsx?$/,
+        test: /\.[jt]sx?$/,
         loader: 'babel-loader',
         options: {
-          presets: ['@babel/preset-react', '@babel/preset-env'],
+          presets: [
+            '@babel/preset-react',
+            '@babel/preset-env',
+            '@babel/preset-typescript',
+          ],
         },
       },
       {

@@ -6,7 +6,7 @@
   justify-content: center;
   flex-grow: 1;
 
-  background-color: var(--theme-workspace-bg, $dark-deep);
+  background-color: var(--theme-workspace-background, $dark-deep);
 
   .logo {
     width: 25%;
@@ -18,7 +18,7 @@
     }
 
     .logo-main {
-      fill: var(--theme-selected, $coral);
+      fill: var(--theme-accent-primary, $coral);
     }
 
     .logo-shine {
@@ -29,7 +29,7 @@
     .logo-ring,
     .logo-stroke {
       fill: none;
-      stroke: var(--theme-selected, $coral);
+      stroke: var(--theme-accent-primary, $coral);
     }
 
     .logo-stroke {

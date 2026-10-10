@@ -13,13 +13,7 @@ import {
 const getShowHideTooltipMessage = (panelName, maximized) =>
   maximized ? `Hide ${panelName}` : `Show ${panelName}`;
 
-function SidebarSwitches({
-  id,
-  isMinimized,
-  panels,
-  onTogglePanel,
-  isLoggedIn = false,
-}) {
+function SidebarSwitches({ id, isMinimized, panels, onTogglePanel }) {
   const panelsForThisSidebar = getPanelsBySidebarId(id, panels);
   const maximizedPanels = filterMaximized(panelsForThisSidebar);
 
@@ -33,7 +27,6 @@ function SidebarSwitches({
   const onToggleProjectBrowserPanel = () =>
     onTogglePanel(PANEL_IDS.PROJECT_BROWSER);
   const onToggleInspectorPanel = () => onTogglePanel(PANEL_IDS.INSPECTOR);
-  const onToggleAccountPanel = () => onTogglePanel(PANEL_IDS.ACCOUNT);
   const ontoggleHelpPanel = () => onTogglePanel(PANEL_IDS.HELPBAR);
 
   return (
@@ -54,16 +47,6 @@ function SidebarSwitches({
               className={`inspector ${maximized && 'selected'}`}
               title={getShowHideTooltipMessage('Inspector', maximized)}
               onClick={onToggleInspectorPanel}
-            />
-          )),
-          sidebarPanelRenderer(PANEL_IDS.ACCOUNT, ({ maximized }) => (
-            <button
-              key="account"
-              className={`account ${maximized && 'selected'} ${
-                !isLoggedIn && 'not-logged-in'
-              }`}
-              title={getShowHideTooltipMessage('Account Pane', maximized)}
-              onClick={onToggleAccountPanel}
             />
           )),
           sidebarPanelRenderer(PANEL_IDS.HELPBAR, ({ maximized }) => (
@@ -94,7 +77,6 @@ SidebarSwitches.propTypes = {
     })
   ),
   onTogglePanel: PropTypes.func.isRequired,
-  isLoggedIn: PropTypes.bool,
 };
 
 export default SidebarSwitches;

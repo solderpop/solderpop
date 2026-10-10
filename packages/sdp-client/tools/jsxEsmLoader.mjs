@@ -19,13 +19,21 @@ import { transformSync } from '@babel/core';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 
+// .ts/.tsx go through Babel too rather than Node's built-in type stripping,
+// which rejects .tsx and non-erasable syntax (enums, parameter properties).
+const TRANSFORMED = /\.(jsx|tsx?)$/;
+
 export async function load(url, context, nextLoad) {
-  if (url.endsWith('.jsx')) {
+  if (TRANSFORMED.test(url)) {
     const filePath = fileURLToPath(url);
     const source = readFileSync(filePath, 'utf8');
     const { code } = transformSync(source, {
       filename: filePath,
-      presets: ['@babel/preset-react', ['@babel/preset-env', { modules: false }]],
+      presets: [
+        '@babel/preset-react',
+        ['@babel/preset-env', { modules: false }],
+        '@babel/preset-typescript',
+      ],
       babelrc: false,
       configFile: false,
     });
