@@ -7,7 +7,7 @@
   "scripts": {
     "bootstrap": "pnpm install",
     "benchmark:browser": "turbo run benchmark --filter=sdp-client-browser...",
-    "build": "turbo run build",
+    "build": "pnpm run build",
     "build:browser": "turbo run build --filter=sdp-client-browser...",
     "build:cli": "turbo run build --filter=sdp-cli...",
     "build:electron": "turbo run build --filter=sdp-client-electron...",

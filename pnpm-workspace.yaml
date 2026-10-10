@@ -101,18 +101,3 @@ patchedDependencies:
   react-custom-scroll@3.2.2: patches/react-custom-scroll@3.2.2.patch
   react-remarkable@1.1.3: patches/react-remarkable@1.1.3.patch
   react-skylight@0.4.2: patches/react-skylight@0.4.2.patch
-
-# rc-menu (was git+https://github.com/xodio/menu.git#npm, a xodio-org
-# fork) is vendored at vendor/rc-menu instead — see that directory and
-# packages/sdp-client/package.json. pnpm shells out to a real `npm
-# install` in a temp dir to "prepare" any git-hosted dependency, which
-# reads the package.json straight off disk — this bypasses both
-# allowBuilds and a .pnpmfile.cjs readPackage hook (tried both; neither
-# intercepts that step). The fork's own package.json's "prepublish":
-# "rc-tools run guard" is a legacy pre-publish safety check, not the
-# actual build (lib/ is already committed, "main" points straight at it),
-# and hard-fails under modern Node (old graceful-fs + `natives` package
-# references `primordials`, removed from Node's internal fs.js).
-# Vendoring the exact pinned commit with just that one script stripped
-# was the only mechanism that actually worked — same code, zero
-# behavior change, no external repo needed.

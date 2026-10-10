@@ -49,7 +49,6 @@
     "prop-types": "^15.5.10",
     "ramda": "^0.24.1",
     "ramda-fantasy": "^0.8.0",
-    "rc-menu": "file:../../vendor/rc-menu",
     "rc-progress": "^2.1.2",
     "react": "^19.2.8",
     "react-autosuggest": "git+https://github.com/xodio/react-autosuggest.git#7850ec32e40ea9c4750269ac4f08aa0b051bb86c",

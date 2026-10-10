@@ -40,6 +40,14 @@ export const WithSubmenu = () => {
         { key: 2, label: 'Child 1.2', hotkey: 'ctrl+alt+del' },
         { key: 3, type: 'separator' },
         { key: 4, label: 'Child 1.3' },
+        {
+          key: 5,
+          label: 'Nested',
+          submenu: [
+            { key: 1, label: 'Child 1.5.1' },
+            { key: 2, label: 'Disabled', enabled: false },
+          ],
+        },
       ],
     },
     {

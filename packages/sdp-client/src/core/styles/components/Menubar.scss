@@ -14,8 +14,8 @@
   }
 }
 
-// below are styles for rc-menu component (https://github.com/react-component/menu)
-// extracted from styles that were included in package, then slightly modified
+// Styles for utils/components/Menubar.jsx. Class names follow the
+// rc-menu component it replaced.
 $menu-root-class: '.Menubar';
 
 #{$menu-root-class} {
@@ -55,28 +55,24 @@ $menu-root-class: '.Menubar';
     display: none;
   }
 
-  &-collapse {
-    overflow: hidden;
-
-    &-active {
-      transition: height 0.3s ease-out;
-    }
+  &-submenu {
+    position: relative;
   }
 
-  &-item-group-list {
-    margin: 0;
-    padding: 0;
+  &-sub {
+    position: absolute;
+    z-index: 99999;
   }
 
-  &-submenu-active > &-submenu-title {
+  &-submenu:not(#{$menu-root-class}-submenu-disabled) > &-submenu-title:hover {
     background-color: $menubar-hover-bg;
   }
   &-submenu-open > &-submenu-title {
     color: $menubar-active-text;
     background-color: $menubar-active-bg;
   }
-  &-item-active > &-clickable-item,
-  &-item-active .menu-link {
+  &-item:not(#{$menu-root-class}-item-disabled):hover > &-clickable-item,
+  &-item:not(#{$menu-root-class}-item-disabled):hover .menu-link {
     color: $menubar-submenu-text;
     background-color: $menubar-submenu-hover-bg;
   }
@@ -87,6 +83,7 @@ $menu-root-class: '.Menubar';
 
   &-submenu-horizontal > & {
     top: 100%;
+    left: 0;
     min-width: 180px;
   }
 
@@ -121,16 +118,6 @@ $menu-root-class: '.Menubar';
     background-color: $menubar-submenu-separator;
   }
 
-  &-submenu {
-    &-popup {
-      position: absolute;
-      z-index: 99999;
-    }
-    > #{$menu-root-class} {
-      background-color: $menubar-submenu-bg;
-    }
-  }
-
   &-submenu > #{$menu-root-class} {
     background-color: $menubar-submenu-bg;
   }
@@ -146,7 +133,7 @@ $menu-root-class: '.Menubar';
   &-horizontal > &-item {
     float: left;
   }
-  &-horizontal > &-item-active {
+  &-horizontal > &-item:hover {
     color: $menubar-text;
   }
   &-horizontal:after {
@@ -162,23 +149,18 @@ $menu-root-class: '.Menubar';
     min-width: 180px;
     margin-left: 4px;
   }
-  &-vertical,
-  &-inline {
-    padding: 12px 0;
+  &-vertical > &-submenu > &-submenu-title {
+    padding: 5px 14px;
+
+    &:after {
+      content: '\25B8'; // ▸
+      float: right;
+      padding-left: 14px;
+    }
   }
 
   &-vertical#{$menu-root-class}-sub {
     padding: 5px 0;
     border: 1px solid $menubar-submenu-separator;
-  }
-  &-sub#{$menu-root-class}-inline {
-    padding: 0;
-
-    & > #{$menu-root-class}-item,
-    & > #{$menu-root-class}-submenu > #{$menu-root-class}-submenu-title {
-      padding-top: 8px;
-      padding-bottom: 8px;
-      padding-right: 0;
-    }
   }
 }
