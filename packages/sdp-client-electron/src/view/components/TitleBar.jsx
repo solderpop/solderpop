@@ -81,7 +81,7 @@ export default class TitleBar extends React.Component {
   }
 
   render() {
-    const { projectPath } = this.props;
+    const { projectPath, vcsWidget } = this.props;
     const title = projectPath ? `${projectPath} — ${APP_TITLE}` : APP_TITLE;
 
     return (
@@ -102,6 +102,7 @@ export default class TitleBar extends React.Component {
               ))}
             </nav>
           ) : null}
+          {vcsWidget ? <div className="TitleBar-vcs">{vcsWidget}</div> : null}
           <span className="TitleBar-title">{title}</span>
         </div>
         <div className="TitleBar-controls">
@@ -189,8 +190,10 @@ export default class TitleBar extends React.Component {
 
 TitleBar.propTypes = {
   projectPath: PropTypes.string,
+  vcsWidget: PropTypes.node,
 };
 
 TitleBar.defaultProps = {
   projectPath: null,
+  vcsWidget: null,
 };

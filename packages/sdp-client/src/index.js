@@ -43,6 +43,8 @@ import {
 import { SAVE_ALL, NODE_PROPERTY_UPDATED } from './project/actionTypes.js';
 
 import * as EditorConstants from './editor/constants.js';
+import SidebarPanel from './editor/components/SidebarPanel.jsx';
+import HostPanelsContext from './editor/hostPanels.js';
 import * as UtilsConstants from './utils/constants.js';
 import * as PopupConstants from './popups/constants.js';
 
@@ -145,6 +147,7 @@ export { default as PopupConfirm } from './utils/components/PopupConfirm.jsx';
 export { default as PopupPrompt } from './utils/components/PopupPrompt.jsx';
 export { default as PopupForm } from './utils/components/PopupForm.jsx';
 export { default as Toolbar } from './utils/components/Toolbar.jsx';
+export { SidebarPanel, HostPanelsContext };
 export { default as HotkeysScope } from './utils/components/HotkeysScope.jsx';
 export { default as SolderpopLogo } from './utils/components/SolderpopLogo.jsx';
 export { default as SolderpopLockup } from './utils/components/SolderpopLockup.jsx';
@@ -188,6 +191,8 @@ export default {
   SnackBar,
   Toolbar,
   HotkeysScope,
+  SidebarPanel,
+  HostPanelsContext,
   menu: MenuUtils,
   sanctuaryPropType,
   initialState,

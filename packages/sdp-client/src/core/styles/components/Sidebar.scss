@@ -93,6 +93,9 @@
     &.helppanel {
       @extend .icon-helppanel;
     }
+    &.vcs {
+      @extend .icon-vcs;
+    }
     &.account {
       @extend .icon-account;
       &.not-logged-in:before {

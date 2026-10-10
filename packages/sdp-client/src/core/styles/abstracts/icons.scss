@@ -29,6 +29,9 @@
 .icon-helppanel {
   @include icon('../assets/icons/help.svg');
 }
+.icon-vcs {
+  @include icon('../assets/icons/vcs.svg');
+}
 .icon-account {
   @include icon('../assets/icons/account.svg');
 }

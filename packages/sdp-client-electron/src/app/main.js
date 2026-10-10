@@ -48,6 +48,7 @@ import {
   getUserDataDir,
 } from './utils.js';
 import * as WA from './workspaceActions.js';
+import subscribeGitActions from './gitActions.js';
 import {
   subscribeOnCheckArduinoDependencies,
   subscribeOnInstallArduinoDependencies,
@@ -249,6 +250,7 @@ const onReady = () => {
   };
 
   WA.subscribeToWorkspaceEvents(ipcMain, store);
+  subscribeGitActions(store);
   subscribeCompileSimulation();
   subscribeOnCheckEmsdkInstalled();
   subscribeOnInstallEmsdk();

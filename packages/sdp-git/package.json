@@ -6,13 +6,16 @@
   "description": "SolderPop IDE: Version control for projects (semantic changes, partial commits, local history)",
   "author": "SolderPop <contact@solderpop.io>",
   "license": "AGPL-3.0",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
   },
   "scripts": {
-    "build": "echo 'sdp-git runs as TypeScript via Node type stripping, nothing to build'",
-    "clean:dist": "echo 'nothing to clean'",
+    "build": "tsc -p tsconfig.build.json",
+    "clean:dist": "rimraf ./dist",
     "typecheck": "tsc -p .",
     "test": "node --test test/*.test.ts"
   },
@@ -28,5 +31,9 @@
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^24.13.3",
     "typescript": "^7.0.2"
-  }
+  },
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ]
 }

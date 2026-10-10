@@ -791,6 +791,9 @@ importers:
       sdp-func-tools:
         specifier: workspace:*
         version: link:../sdp-func-tools
+      sdp-git:
+        specifier: workspace:*
+        version: link:../sdp-git
       sdp-project:
         specifier: workspace:*
         version: link:../sdp-project

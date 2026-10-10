@@ -15,6 +15,7 @@ import Inspector from '../components/Inspector.jsx';
 import AccountPane from '../../user/containers/AccountPane.jsx';
 import ProjectBrowser from '../../projectBrowser/containers/ProjectBrowser.jsx';
 import SidebarSwitches from '../components/SidebarSwitches.jsx';
+import HostPanelsContext from '../hostPanels.js';
 
 import * as EditorActions from '../actions.js';
 import * as EditorSelectors from '../selectors.js';
@@ -75,6 +76,7 @@ class Sidebar extends React.Component {
     this.renderInspector = this.renderInspector.bind(this);
     this.renderHelpbar = this.renderHelpbar.bind(this);
     this.renderAccountPane = this.renderAccountPane.bind(this);
+    this.renderHostPanel = this.renderHostPanel.bind(this);
     this.renderPanel = this.renderPanel.bind(this);
 
     this.resizePanelsAction = debounce(300, this.props.actions.resizePanels);
@@ -189,6 +191,13 @@ class Sidebar extends React.Component {
     );
   }
 
+  renderHostPanel([panelId, settings]) {
+    const hostPanel = this.context[panelId];
+    return hostPanel ? (
+      <React.Fragment key={panelId}>{hostPanel.render(settings)}</React.Fragment>
+    ) : null;
+  }
+
   renderPanel(panelSettings) {
     return R.cond([
       sidebarPanelRenderer(
@@ -198,6 +207,7 @@ class Sidebar extends React.Component {
       sidebarPanelRenderer(PANEL_IDS.INSPECTOR, this.renderInspector),
       sidebarPanelRenderer(PANEL_IDS.HELPBAR, this.renderHelpbar),
       sidebarPanelRenderer(PANEL_IDS.ACCOUNT, this.renderAccountPane),
+      [R.T, this.renderHostPanel],
     ])(panelSettings);
   }
 
@@ -247,6 +257,8 @@ class Sidebar extends React.Component {
     );
   }
 }
+
+Sidebar.contextType = HostPanelsContext;
 
 Sidebar.propTypes = {
   id: PropTypes.string.isRequired,

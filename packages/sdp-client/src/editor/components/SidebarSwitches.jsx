@@ -1,9 +1,10 @@
 import R from 'ramda';
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import cls from 'classnames';
 
 import { SIDEBAR_IDS, PANEL_IDS } from '../constants.js';
+import HostPanelsContext from '../hostPanels.js';
 import {
   sidebarPanelRenderer,
   getPanelsBySidebarId,
@@ -20,6 +21,7 @@ function SidebarSwitches({
   onTogglePanel,
   isLoggedIn = false,
 }) {
+  const hostPanels = useContext(HostPanelsContext);
   const panelsForThisSidebar = getPanelsBySidebarId(id, panels);
   const maximizedPanels = filterMaximized(panelsForThisSidebar);
 
@@ -74,6 +76,22 @@ function SidebarSwitches({
               onClick={ontoggleHelpPanel}
             />
           )),
+          [
+            ([panelId]) => Boolean(hostPanels[panelId]),
+            ([panelId, { maximized }]) => (
+              <button
+                key={panelId}
+                className={`${hostPanels[panelId].switchClassName} ${
+                  maximized && 'selected'
+                }`}
+                title={getShowHideTooltipMessage(
+                  hostPanels[panelId].title,
+                  maximized
+                )}
+                onClick={() => onTogglePanel(panelId)}
+              />
+            ),
+          ],
         ]),
         panelsForThisSidebar
       )}

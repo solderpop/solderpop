@@ -1,0 +1,221 @@
+// Colors fall back to the default theme when no custom theme is applied.
+$text: var(--theme-sidebar-text, #c7cfd6);
+$subtle: var(--theme-sidebar-subtitle, #8a97a3);
+$hover-bg: var(--theme-sidebar-hover-bg, #4c5f72);
+$outline: var(--theme-chrome-outlines, #1e2a38);
+$accent: var(--theme-selected, #ff6b6b);
+$input-bg: var(--theme-chrome-bg, #2c3e50);
+
+.TitleBar .TitleBar-vcs {
+  display: flex;
+  margin-left: 8px;
+  -webkit-app-region: no-drag;
+}
+
+.GitBranchWidget {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 24px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: #c7cfd6;
+  font-size: 12px;
+  cursor: pointer;
+
+  &:hover {
+    background: #283748;
+    color: #eef1f3;
+  }
+
+  &-icon {
+    width: 12px;
+    height: 12px;
+    background: url('../assets/vcs.svg') no-repeat center / contain;
+  }
+
+  &-sync {
+    color: #4ecdc4;
+  }
+
+  &--unavailable {
+    opacity: 0.6;
+  }
+
+  &-caret {
+    font-size: 9px;
+    opacity: 0.7;
+  }
+}
+
+.CommitPanel {
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &-content {
+    padding: 4px 0;
+    font-size: 12px;
+    color: $text;
+  }
+
+  &-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    height: 22px;
+    padding: 0 6px;
+    cursor: default;
+    white-space: nowrap;
+
+    &:hover {
+      background: $hover-bg;
+    }
+
+    input[type='checkbox'] {
+      margin: 0;
+    }
+  }
+
+  &-changes .CommitPanel-row {
+    padding-left: 20px;
+  }
+
+  &-disclosure {
+    width: 10px;
+    flex: 0 0 10px;
+    cursor: pointer;
+
+    &:before {
+      content: '▸';
+      font-size: 10px;
+      color: $subtle;
+    }
+
+    &--expanded:before {
+      content: '▾';
+    }
+
+    &--empty:before {
+      visibility: hidden;
+    }
+  }
+
+  &-groupName {
+    font-weight: bold;
+
+    &--active:after {
+      content: ' (active)';
+      font-weight: normal;
+      color: $subtle;
+    }
+  }
+
+  &-count,
+  &-summary {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: $subtle;
+  }
+
+  &-badge {
+    width: 14px;
+    flex: 0 0 14px;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+
+    &--added {
+      color: #4ecdc4;
+    }
+    &--modified {
+      color: #7b8db5;
+    }
+    &--deleted {
+      color: #fd6161;
+    }
+  }
+
+  &-name {
+    flex: 0 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &-details {
+    padding: 2px 0 4px 56px !important;
+    font-family: monospace;
+    font-size: 11px;
+    color: $text;
+
+    li {
+      line-height: 16px;
+      white-space: pre;
+    }
+  }
+
+  &-detail--cosmetic {
+    color: $subtle;
+  }
+
+  &-note {
+    padding: 4px 8px;
+    color: $subtle;
+    font-style: italic;
+  }
+
+  &-placeholder {
+    padding: 12px 8px;
+    color: $subtle;
+    text-align: center;
+
+    p {
+      margin: 0 0 10px;
+    }
+  }
+
+  &-commitBox {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-shrink: 0;
+    padding: 6px;
+    border-top: 2px solid $outline;
+  }
+
+  &-message {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 64px;
+    padding: 4px 6px;
+    resize: vertical;
+    border: 1px solid #8a97a3;
+    border-radius: 2px;
+    outline: none;
+    background: $input-bg;
+    color: $text;
+    font-family: inherit;
+    font-size: 12px;
+
+    &:focus {
+      border-color: $accent;
+    }
+  }
+
+  &-buttons {
+    display: flex;
+    gap: 6px;
+  }
+
+  &-commitButton:not(:disabled) {
+    border-color: $accent;
+  }
+
+  .SidebarPanel-toolbar .CommitPanel-refresh {
+    font-size: 14px;
+  }
+}

@@ -69,3 +69,5 @@ export const INSTALL_EMSDK = 'INSTALL_EMSDK';
 export const UNINSTALL_EMSDK = 'UNINSTALL_EMSDK';
 
 export const FIRST_LAUNCH = 'FIRST_LAUNCH';
+
+export const GIT_CALL = 'EVENT_GIT_CALL';

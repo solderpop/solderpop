@@ -49,6 +49,7 @@
     "sdp-deploy-bin": "workspace:*",
     "sdp-fs": "workspace:*",
     "sdp-func-tools": "workspace:*",
+    "sdp-git": "workspace:*",
     "sdp-project": "workspace:*",
     "sdp-tethering-inet": "workspace:*",
     "sdp-wasm-compile": "workspace:*"

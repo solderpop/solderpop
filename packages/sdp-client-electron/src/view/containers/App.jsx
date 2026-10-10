@@ -51,6 +51,9 @@ import PopupUploadConfig from '../../upload/components/PopupUploadConfig.jsx';
 import PopupConnectSerial from '../../upload/components/PopupConnectSerial.jsx';
 import { SaveProgressBar } from '../components/SaveProgressBar.jsx';
 import TitleBar from '../components/TitleBar.jsx';
+import { GitProvider } from '../../git/GitContext.jsx';
+import GitBranchWidget from '../../git/GitBranchWidget.jsx';
+import CommitPanel from '../../git/CommitPanel.jsx';
 
 import formatError from '../../shared/errorFormatter.js';
 import * as EVENTS from '../../shared/events.js';
@@ -103,6 +106,19 @@ const AUTOSAVE_INTERVAL_MS = 2 * 60 * 1000;
 
 const { ThemeSettingsPopup } = client.theme.components;
 
+const HOST_PANELS = {
+  [client.PANEL_IDS.VERSION_CONTROL]: {
+    title: 'Commit',
+    switchClassName: 'vcs',
+    render: (settings) => (
+      <CommitPanel
+        sidebarId={settings.sidebar}
+        autohide={Boolean(settings.autohide)}
+      />
+    ),
+  },
+};
+
 const applyTheme = (colors) => {
   if (!colors || typeof document === 'undefined') return;
   R.forEachObjIndexed((value, key) => {
@@ -151,6 +167,10 @@ class App extends client.App {
     this.onShowCodeArduino = this.onShowCodeArduino.bind(this);
     this.onRunSimulation = this.onRunSimulation.bind(this);
     this.onSave = this.onSave.bind(this);
+    this.saveBeforeCommit = this.saveBeforeCommit.bind(this);
+    this.showGitError = this.showGitError.bind(this);
+    this.showGitSuccess = this.showGitSuccess.bind(this);
+    this.showCommitPanel = this.showCommitPanel.bind(this);
     this.onSaveAs = this.onSaveAs.bind(this);
     this.onSaveCopyAs = this.onSaveCopyAs.bind(this);
     this.onAutosaveTick = this.onAutosaveTick.bind(this);
@@ -635,6 +655,26 @@ class App extends client.App {
     this.props.actions.addError(formatErrorMessage(error));
   }
 
+  saveBeforeCommit() {
+    if (!this.props.hasUnsavedChanges || !this.state.projectPath) {
+      return Promise.resolve();
+    }
+
+    return this.saveAs(this.state.projectPath, false, true);
+  }
+
+  showGitError(error) {
+    this.props.actions.addError(client.composeMessage('Git', error.message));
+  }
+
+  showGitSuccess(note) {
+    this.props.actions.addConfirmation(client.composeMessage('Git', note));
+  }
+
+  showCommitPanel() {
+    this.props.actions.maximizePanel(client.PANEL_IDS.VERSION_CONTROL);
+  }
+
   confirmUnsavedChanges(onConfirm) {
     if (!this.props.hasUnsavedChanges) {
       onConfirm();
@@ -1114,14 +1154,29 @@ class App extends client.App {
         disabledCommands={this.constructor.getDisabledCommands()}
         id="App"
       >
-        <TitleBar projectPath={this.state.projectPath} />
-        <client.Editor
-          size={this.state.size}
-          stopDebuggerSession={this.onStopDebuggerSessionClicked}
-          onUploadClick={this.onUploadToArduinoClicked}
-          onUploadAndDebugClick={this.onUploadToArduinoAndDebugClicked}
-          onRunSimulationClick={this.onRunSimulation}
-        />
+        <GitProvider
+          projectPath={this.state.projectPath}
+          revision={this.props.lastSavedProject}
+          saveProject={this.saveBeforeCommit}
+          onError={this.showGitError}
+          onSuccess={this.showGitSuccess}
+        >
+          <TitleBar
+            projectPath={this.state.projectPath}
+            vcsWidget={
+              <GitBranchWidget onShowCommitPanel={this.showCommitPanel} />
+            }
+          />
+          <client.HostPanelsContext.Provider value={HOST_PANELS}>
+            <client.Editor
+              size={this.state.size}
+              stopDebuggerSession={this.onStopDebuggerSessionClicked}
+              onUploadClick={this.onUploadToArduinoClicked}
+              onUploadAndDebugClick={this.onUploadToArduinoAndDebugClicked}
+              onRunSimulationClick={this.onRunSimulation}
+            />
+          </client.HostPanelsContext.Provider>
+        </GitProvider>
         {this.renderPopupShowCode()}
         {this.renderPopupUploadConfig()}
         {this.renderPopupConnectSerial()}
@@ -1288,6 +1343,7 @@ const mapDispatchToProps = (dispatch) => ({
       switchWorkspace: settingsActions.switchWorkspace,
       openProject: client.openProject,
       saveAll: actions.saveAll,
+      maximizePanel: client.maximizePanel,
       uploadToArduino: uploadActions.uploadToArduino,
       uploadToArduinoConfig: uploadActions.uploadToArduinoConfig,
       hideUploadConfigPopup: uploadActions.hideUploadConfigPopup,

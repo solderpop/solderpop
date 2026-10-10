@@ -57,6 +57,7 @@ function SidebarPanel({
   sidebarId,
   autohide,
   children,
+  footer = null,
   onScroll = noop,
 }) {
   return (
@@ -71,6 +72,7 @@ function SidebarPanel({
       <CustomScroll flex="1" onScroll={onScroll}>
         {children}
       </CustomScroll>
+      {footer}
     </div>
   );
 }
@@ -86,6 +88,7 @@ SidebarPanel.propTypes = {
     PropTypes.arrayOf(PropTypes.element),
   ]).isRequired,
   additionalButtons: PropTypes.arrayOf(PropTypes.element),
+  footer: PropTypes.node,
   onScroll: PropTypes.func,
 };
 

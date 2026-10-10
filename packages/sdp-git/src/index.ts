@@ -5,6 +5,9 @@ import { promisify, isDeepStrictEqual } from 'node:util';
 import fs from 'fs-extra';
 import * as SdpProject from 'sdp-project';
 import * as SdpFs from 'sdp-fs';
+import { ensureSdpDir } from './sdpDir.ts';
+
+export * from './changelists.ts';
 
 const execFileAsync = promisify(execFile);
 
@@ -866,8 +869,7 @@ export const localHistory = {
     project: Project,
     { label = 'save', keep = 200 } = {}
   ) => {
-    const dir = historyDir(projectDir);
-    await fs.ensureDir(dir);
+    const dir = await ensureSdpDir(projectDir, 'history');
 
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const safeLabel = label.replace(/[^a-z0-9_-]/gi, '_');
